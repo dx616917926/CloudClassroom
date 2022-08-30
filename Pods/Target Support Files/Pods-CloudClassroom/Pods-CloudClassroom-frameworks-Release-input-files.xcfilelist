@@ -1,0 +1,12 @@
+${PODS_ROOT}/Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework
+${PODS_ROOT}/AliPlayerSDK_iOS/AliyunPlayer.framework
+${PODS_ROOT}/AliPlayerSDK_iOS/alivcffmpeg.framework
+${PODS_ROOT}/AliPlayerSDK_iOS/AliyunMediaDownloader.framework
+${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework
+${BUILT_PRODUCTS_DIR}/HXViewHUD/HXViewHUD.framework
+${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework
+${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework
+${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework
+${BUILT_PRODUCTS_DIR}/SDAutoLayout/SDAutoLayout.framework
+${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
