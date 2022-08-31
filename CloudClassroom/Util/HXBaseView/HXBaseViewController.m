@@ -24,7 +24,7 @@
     }];
     self.sc_NavigationBarAnimateInvalid = YES;
     self.sc_navigationBar.leftBarButtonItem = self.leftBarItem;
-    self.view.backgroundColor = COLOR_WITH_ALPHA(0xF2F4FA, 1);
+    self.view.backgroundColor = COLOR_WITH_ALPHA(0xF9FAFE, 1);
 }
 
 
@@ -49,12 +49,12 @@
 -(UIStatusBarStyle)preferredStatusBarStyle{
     if (self.navigationController.viewControllers.count>1) {
         if (@available(iOS 13.0, *)) {
-            return UIStatusBarStyleDarkContent;
+            return UIStatusBarStyleLightContent;
         } else {
             return UIStatusBarStyleDefault;
         }
     }else{
-        return UIStatusBarStyleDefault;
+        return UIStatusBarStyleLightContent;
     }
    
 }

@@ -103,7 +103,7 @@
         NSArray *imgArr = @[@"tabbar_0",@"tabbar_1",@"tabbar_2"];
         NSArray *sImgArr = @[@"tabbarSelect_0",@"tabbarSelect_1",@"tabbarSelect_2"];
 
-        HXMainTabBar *mainTabBar = [[HXMainTabBar alloc]initWithTitArr:titArr imgArr:imgArr sImgArr:sImgArr];
+        HXMainTabBar *mainTabBar = [[HXMainTabBar alloc] initWithTitArr:titArr imgArr:imgArr sImgArr:sImgArr];
         mainTabBar.delegate = self;
         _mainTabBar = mainTabBar;
     }

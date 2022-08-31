@@ -10,6 +10,8 @@
 		040890F928BDAF5E007844E8 /* HXMainTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890F328BDAF5E007844E8 /* HXMainTabBar.m */; };
 		040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890F428BDAF5E007844E8 /* HXCustomBtn.m */; };
 		040890FB28BDAF5E007844E8 /* HXMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890F528BDAF5E007844E8 /* HXMainTabBarController.m */; };
+		040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */; };
+		0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0474D59528BF5D5400A22731 /* GBLoopView.m */; };
 		048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CA028BD9D89006EBAAE /* AppDelegate.m */; };
 		048B7CAA28BD9D89006EBAAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048B7CA828BD9D89006EBAAE /* Main.storyboard */; };
 		048B7CAC28BD9D8A006EBAAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048B7CAB28BD9D8A006EBAAE /* Assets.xcassets */; };
@@ -64,7 +66,6 @@
 		048B7D6728BDA20A006EBAAE /* ScrollViewFrameAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D2D28BDA20A006EBAAE /* ScrollViewFrameAccessor.m */; };
 		048B7D6828BDA20A006EBAAE /* HXPublicParamTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D3128BDA20A006EBAAE /* HXPublicParamTool.m */; };
 		048B7D6928BDA20A006EBAAE /* HXCommonUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D3428BDA20A006EBAAE /* HXCommonUtil.m */; };
-		048B7D6E28BDA5BA006EBAAE /* HXTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D6D28BDA5BA006EBAAE /* HXTabBarController.m */; };
 		048B7D7228BDA824006EBAAE /* HXLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7128BDA824006EBAAE /* HXLoginViewController.m */; };
 		048B7D7628BDA89B006EBAAE /* HXHomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7528BDA89B006EBAAE /* HXHomePageViewController.m */; };
 		048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7928BDA8F1006EBAAE /* HXLearnCenterViewController.m */; };
@@ -79,6 +80,10 @@
 		040890F628BDAF5E007844E8 /* HXMainTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXMainTabBar.h; sourceTree = "<group>"; };
 		040890F728BDAF5E007844E8 /* HXCustomBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXCustomBtn.h; sourceTree = "<group>"; };
 		040890F828BDAF5E007844E8 /* HXMainTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXMainTabBarController.h; sourceTree = "<group>"; };
+		040890FD28BDFD5F007844E8 /* HXCurrentLearCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCurrentLearCell.h; sourceTree = "<group>"; };
+		040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCurrentLearCell.m; sourceTree = "<group>"; };
+		0474D59528BF5D5400A22731 /* GBLoopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLoopView.m; sourceTree = "<group>"; };
+		0474D59628BF5D5400A22731 /* GBLoopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLoopView.h; sourceTree = "<group>"; };
 		048B7C9C28BD9D89006EBAAE /* CloudClassroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudClassroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		048B7C9F28BD9D89006EBAAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		048B7CA028BD9D89006EBAAE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -193,8 +198,6 @@
 		048B7D3428BDA20A006EBAAE /* HXCommonUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXCommonUtil.m; sourceTree = "<group>"; };
 		048B7D3528BDA20A006EBAAE /* HXCommonUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXCommonUtil.h; sourceTree = "<group>"; };
 		048B7D6A28BDA27A006EBAAE /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		048B7D6C28BDA5BA006EBAAE /* HXTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXTabBarController.h; sourceTree = "<group>"; };
-		048B7D6D28BDA5BA006EBAAE /* HXTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXTabBarController.m; sourceTree = "<group>"; };
 		048B7D7028BDA824006EBAAE /* HXLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXLoginViewController.h; sourceTree = "<group>"; };
 		048B7D7128BDA824006EBAAE /* HXLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXLoginViewController.m; sourceTree = "<group>"; };
 		048B7D7428BDA89B006EBAAE /* HXHomePageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXHomePageViewController.h; sourceTree = "<group>"; };
@@ -225,8 +228,6 @@
 			children = (
 				048B7C9F28BD9D89006EBAAE /* AppDelegate.h */,
 				048B7CA028BD9D89006EBAAE /* AppDelegate.m */,
-				048B7D6C28BDA5BA006EBAAE /* HXTabBarController.h */,
-				048B7D6D28BDA5BA006EBAAE /* HXTabBarController.m */,
 				048B7CA828BD9D89006EBAAE /* Main.storyboard */,
 				048B7CAB28BD9D8A006EBAAE /* Assets.xcassets */,
 				048B7CAD28BD9D8A006EBAAE /* LaunchScreen.storyboard */,
@@ -248,6 +249,24 @@
 				040890F528BDAF5E007844E8 /* HXMainTabBarController.m */,
 			);
 			path = HXCustomTabBar;
+			sourceTree = "<group>";
+		};
+		040890FC28BDFCD5007844E8 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				040890FD28BDFD5F007844E8 /* HXCurrentLearCell.h */,
+				040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		0474D59428BF5D5400A22731 /* GBLoopView */ = {
+			isa = PBXGroup;
+			children = (
+				0474D59628BF5D5400A22731 /* GBLoopView.h */,
+				0474D59528BF5D5400A22731 /* GBLoopView.m */,
+			);
+			path = GBLoopView;
 			sourceTree = "<group>";
 		};
 		048B7C9328BD9D89006EBAAE = {
@@ -295,6 +314,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				0474D59428BF5D5400A22731 /* GBLoopView */,
 				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				048B7CF528BDA209006EBAAE /* Category */,
 				048B7D2728BDA209006EBAAE /* CustomIOSAlertView */,
@@ -510,6 +530,7 @@
 		048B7D7328BDA889006EBAAE /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				040890FC28BDFCD5007844E8 /* view */,
 				048B7D7428BDA89B006EBAAE /* HXHomePageViewController.h */,
 				048B7D7528BDA89B006EBAAE /* HXHomePageViewController.m */,
 			);
@@ -732,14 +753,15 @@
 				048B7D3A28BDA20A006EBAAE /* HXCalendarCollectionViewFlowLayout.m in Sources */,
 				048B7D3928BDA20A006EBAAE /* HXCalendarDayItem.m in Sources */,
 				040890F928BDAF5E007844E8 /* HXMainTabBar.m in Sources */,
+				040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */,
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,
 				048B7D3F28BDA20A006EBAAE /* CXDatePickerView.m in Sources */,
-				048B7D6E28BDA5BA006EBAAE /* HXTabBarController.m in Sources */,
 				048B7D4B28BDA20A006EBAAE /* UIControl+BlocksKit.m in Sources */,
 				048B7D6128BDA20A006EBAAE /* HXPullRefreshViewController.m in Sources */,
 				048B7D5828BDA20A006EBAAE /* HXBaseURLSessionManager.m in Sources */,
 				048B7D5028BDA20A006EBAAE /* HXDictionary.m in Sources */,
+				0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */,
 				048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */,
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
 			);

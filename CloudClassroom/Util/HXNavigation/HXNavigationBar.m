@@ -40,7 +40,7 @@
         _backgroundAlpha = 1;
         self.imageView = [[UIImageView alloc] init];
         self.imageView.frame = (CGRect){0, 0, kScreenWidth, kNavigationBarHeight};
-        self.imageView.image = [UIImage imageWithColor:[UIColor whiteColor] size:self.bounds.size];
+        self.imageView.image = [UIImage imageWithColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) size:self.bounds.size];
         self.imageView.contentMode = UIViewContentModeScaleToFill;
         [self addSubview:self.imageView];
 //        self.lineView = [[UIView alloc] initWithFrame:(CGRect){0, kNavigationBarHeight, kScreenWidth, 0.5}];

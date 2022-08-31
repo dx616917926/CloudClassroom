@@ -61,11 +61,11 @@
         btn.imageView.sd_layout
         .topSpaceToView(btn, 5)
         .centerXEqualToView(btn)
-        .widthIs(20)
+        .widthIs(24)
         .heightEqualToWidth();
         
         btn.titleLabel.sd_layout
-        .topSpaceToView(btn.imageView, 5)
+        .topSpaceToView(btn.imageView, 3)
         .centerXEqualToView(btn)
         .widthRatioToView(btn, 1)
         .heightIs(17);
