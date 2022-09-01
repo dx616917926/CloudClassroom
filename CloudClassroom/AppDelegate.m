@@ -17,6 +17,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    //iOS 15 TableView sectionHeaderTopPadding 统一 处理
+    if (@available(iOS 15.0, *)) {
+      [UITableView appearance].sectionHeaderTopPadding = 0;
+    }
+    
     [self.window setRootViewController:self.mainTabBarController];
     
     return YES;

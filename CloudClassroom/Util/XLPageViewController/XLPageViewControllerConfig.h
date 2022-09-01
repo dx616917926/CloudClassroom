@@ -53,8 +53,6 @@ typedef NS_ENUM(NSInteger, XLPageShadowLineAlignment) {
     XLPageShadowLineAlignmentBottom = 0,
     XLPageShadowLineAlignmentCenter = 1,
     XLPageShadowLineAlignmentTop = 2,
-    XLPageShadowLineAlignmentTitleBottom = 3,
-    
 };
 
 
@@ -118,11 +116,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat titleViewHeight;
 
 /**
- 显示标题底部阴影 默认 NO
- */
-@property (nonatomic, assign) BOOL titleViewShadowShow;
-
-/**
  标题栏背景色 默认 透明
  */
 @property (nonatomic, strong) UIColor *titleViewBackgroundColor;
@@ -167,11 +160,6 @@ NS_ASSUME_NONNULL_BEGIN
  阴影颜色 默认 黑色
  */
 @property (nonatomic, strong) UIColor *shadowLineColor;
-
-/**
- 阴影颜色是否渐变 默认没有
- */
-@property (nonatomic, assign) BOOL isGradientColor;
 
 /**
  阴影末端形状 默认 XLPageShadowLineCapRound

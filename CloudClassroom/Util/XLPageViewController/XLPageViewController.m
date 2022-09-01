@@ -35,15 +35,12 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
 
 @end
 
-
 @interface XLPageViewController ()<UIPageViewControllerDelegate, UIPageViewControllerDataSource,UIScrollViewDelegate,XLPageTitleViewDataSrouce,XLPageTitleViewDelegate>
 
 //所有的子视图，都加载在contentView上
 @property (nonatomic, strong) XLPageContentView *contentView;
 //标题
 @property (nonatomic, strong) XLPageBasicTitleView *titleView;
-//阴影
-@property (nonatomic, strong) UIView *shadowView;
 //分页控制器
 @property (nonatomic, strong) UIPageViewController *pageVC;
 //ScrollView
@@ -104,15 +101,6 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
     UIView *topView = [[UIView alloc] init];
     [self.contentView addSubview:topView];
     
-    ///自己增加的阴影
-    if (self.config.titleViewShadowShow) {
-        self.shadowView = [[UIView alloc] init];
-        self.shadowView.backgroundColor = COLOR_WITH_ALPHA(0xffffff, 1);
-        [self.contentView addSubview:self.shadowView];
-        
-    }
-    
-    
     //创建标题
     self.titleView = [[XLPageBasicTitleView alloc] initWithConfig:config];
     if (config.titleViewStyle == XLPageTitleViewStyleSegmented) {
@@ -164,17 +152,6 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
         self.parentViewController.navigationItem.titleView = self.titleView;
     }
 }
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    NSArray *gestureArray = self.navigationController.view.gestureRecognizers;
-    // 当是侧滑手势的时候设置scrollview需要此手势失效即可
-    for (UIGestureRecognizer *gesture in gestureArray) {
-        if ([gesture isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
-            [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:gesture];
-            break;
-        }
-    }
-}
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -184,17 +161,7 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
     
     //更新标题位置
     self.titleView.frame = CGRectMake(0, 0, self.contentView.bounds.size.width, self.config.titleViewHeight);
-    if (self.config.titleViewShadowShow) {
-        self.shadowView.frame = CGRectMake(0, 0, self.contentView.bounds.size.width, self.config.titleViewHeight);
-        [self.contentView insertSubview:self.shadowView aboveSubview:self.pageVC.view];
-        [self.contentView insertSubview:self.titleView aboveSubview:self.shadowView];
-        self.shadowView.layer.shadowColor = COLOR_WITH_ALPHA(0x000000, 0.15).CGColor;
-        self.shadowView.layer.shadowOffset = CGSizeMake(0, 1);
-        self.shadowView.layer.shadowRadius = 6;
-        self.shadowView.layer.shadowOpacity = 1;
-        self.shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.shadowView.bounds].CGPath;
-    }
-
+    
     //更新pageVC位置
     self.pageVC.view.frame = CGRectMake(0, self.config.titleViewHeight, self.contentView.bounds.size.width, self.contentView.bounds.size.height - self.config.titleViewHeight);
     
@@ -408,15 +375,17 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
     }
     //设置当前展示VC
     __weak typeof(self)weakSelf = self;
-    self.view.userInteractionEnabled = NO;
+    [self.pageVC setViewControllers:@[[self viewControllerForIndex:index]] direction:direction animated:NO completion:^(BOOL finished) {
+        weakSelf.pageVCAnimating = NO;
+    }];
+    
     //延时是为了避免切换视图时有其它操作阻塞UI
+    self.view.userInteractionEnabled = NO;
     float delayTime = animated ? SetViewControllersMethodDelay : 0;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.pageVC setViewControllers:@[[self viewControllerForIndex:index]] direction:direction animated:animated completion:^(BOOL finished) {
-            weakSelf.pageVCAnimating = NO;
-            weakSelf.view.userInteractionEnabled = YES;
-        }];
+        weakSelf.view.userInteractionEnabled = YES;
     });
+    
     //标题居中
     self.titleView.selectedIndex = _selectedIndex;
     return YES;
@@ -504,12 +473,5 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
         [self.delegate pageViewController:self didSelectedAtIndex:index];
     }
 }
--(void)dealloc{
-    [self.contentView removeFromSuperview];
-    self.contentView = nil;
-    [self.childViewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj removeFromParentViewController];
-    }];
-    NSLog(@"XLPageViewController销毁了");
-}
+
 @end

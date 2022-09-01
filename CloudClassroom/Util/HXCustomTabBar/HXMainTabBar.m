@@ -38,8 +38,12 @@
 }
 -(void)creatSubView{
     
-    UIView *backV = [[UIView alloc]initWithFrame:CGRectMake(0, -1, kScreenWidth, kTabBarHeight)];
+    UIView *backV = [[UIView alloc] initWithFrame:CGRectMake(0, -1, kScreenWidth, kTabBarHeight)];
     backV.backgroundColor = [UIColor whiteColor];
+    backV.layer.shadowColor = COLOR_WITH_ALPHA(0xADB3CD, 0.12).CGColor;
+    backV.layer.shadowOffset = CGSizeMake(0,-2.5);
+    backV.layer.shadowOpacity = 1;
+    backV.layer.shadowRadius = 25;
     [self addSubview:backV];
     
 //      

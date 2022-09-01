@@ -12,6 +12,15 @@
 		040890FB28BDAF5E007844E8 /* HXMainTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890F528BDAF5E007844E8 /* HXMainTabBarController.m */; };
 		040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */; };
 		0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0474D59528BF5D5400A22731 /* GBLoopView.m */; };
+		048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EB828C043CD0077F40A /* HXShowMajorView.m */; };
+		048A0EBD28C0445B0077F40A /* HXMajorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EBC28C0445B0077F40A /* HXMajorModel.m */; };
+		048A0EC028C044830077F40A /* HXShowMajorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EBF28C044830077F40A /* HXShowMajorCell.m */; };
+		048A0EC628C058910077F40A /* HXOnlineLearnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EC528C058910077F40A /* HXOnlineLearnViewController.m */; };
+		048A0EC928C058BD0077F40A /* HXTeachPlanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EC828C058BD0077F40A /* HXTeachPlanViewController.m */; };
+		048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0ECB28C059050077F40A /* HXFaceTimeTableViewController.m */; };
+		048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0ECF28C05B1F0077F40A /* HXLearnCenterPageTitleCell.m */; };
+		048A0ED328C083610077F40A /* HXOnlineLearnShowTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0ED228C083610077F40A /* HXOnlineLearnShowTipView.m */; };
+		048A0ED728C09DBD0077F40A /* HXTeachPlanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0ED628C09DBD0077F40A /* HXTeachPlanCell.m */; };
 		048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CA028BD9D89006EBAAE /* AppDelegate.m */; };
 		048B7CAA28BD9D89006EBAAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 048B7CA828BD9D89006EBAAE /* Main.storyboard */; };
 		048B7CAC28BD9D8A006EBAAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 048B7CAB28BD9D8A006EBAAE /* Assets.xcassets */; };
@@ -84,6 +93,24 @@
 		040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCurrentLearCell.m; sourceTree = "<group>"; };
 		0474D59528BF5D5400A22731 /* GBLoopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLoopView.m; sourceTree = "<group>"; };
 		0474D59628BF5D5400A22731 /* GBLoopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLoopView.h; sourceTree = "<group>"; };
+		048A0EB728C043CD0077F40A /* HXShowMajorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXShowMajorView.h; sourceTree = "<group>"; };
+		048A0EB828C043CD0077F40A /* HXShowMajorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXShowMajorView.m; sourceTree = "<group>"; };
+		048A0EBB28C0445B0077F40A /* HXMajorModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMajorModel.h; sourceTree = "<group>"; };
+		048A0EBC28C0445B0077F40A /* HXMajorModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMajorModel.m; sourceTree = "<group>"; };
+		048A0EBE28C044830077F40A /* HXShowMajorCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXShowMajorCell.h; sourceTree = "<group>"; };
+		048A0EBF28C044830077F40A /* HXShowMajorCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXShowMajorCell.m; sourceTree = "<group>"; };
+		048A0EC428C058910077F40A /* HXOnlineLearnViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXOnlineLearnViewController.h; sourceTree = "<group>"; };
+		048A0EC528C058910077F40A /* HXOnlineLearnViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXOnlineLearnViewController.m; sourceTree = "<group>"; };
+		048A0EC728C058BD0077F40A /* HXTeachPlanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXTeachPlanViewController.h; sourceTree = "<group>"; };
+		048A0EC828C058BD0077F40A /* HXTeachPlanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXTeachPlanViewController.m; sourceTree = "<group>"; };
+		048A0ECA28C059050077F40A /* HXFaceTimeTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeTableViewController.h; sourceTree = "<group>"; };
+		048A0ECB28C059050077F40A /* HXFaceTimeTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeTableViewController.m; sourceTree = "<group>"; };
+		048A0ECE28C05B1F0077F40A /* HXLearnCenterPageTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXLearnCenterPageTitleCell.h; sourceTree = "<group>"; };
+		048A0ECF28C05B1F0077F40A /* HXLearnCenterPageTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXLearnCenterPageTitleCell.m; sourceTree = "<group>"; };
+		048A0ED128C083610077F40A /* HXOnlineLearnShowTipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXOnlineLearnShowTipView.h; sourceTree = "<group>"; };
+		048A0ED228C083610077F40A /* HXOnlineLearnShowTipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXOnlineLearnShowTipView.m; sourceTree = "<group>"; };
+		048A0ED528C09DBD0077F40A /* HXTeachPlanCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXTeachPlanCell.h; sourceTree = "<group>"; };
+		048A0ED628C09DBD0077F40A /* HXTeachPlanCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXTeachPlanCell.m; sourceTree = "<group>"; };
 		048B7C9C28BD9D89006EBAAE /* CloudClassroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudClassroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		048B7C9F28BD9D89006EBAAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		048B7CA028BD9D89006EBAAE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -256,6 +283,10 @@
 			children = (
 				040890FD28BDFD5F007844E8 /* HXCurrentLearCell.h */,
 				040890FE28BDFD5F007844E8 /* HXCurrentLearCell.m */,
+				048A0EB728C043CD0077F40A /* HXShowMajorView.h */,
+				048A0EB828C043CD0077F40A /* HXShowMajorView.m */,
+				048A0EBE28C044830077F40A /* HXShowMajorCell.h */,
+				048A0EBF28C044830077F40A /* HXShowMajorCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -267,6 +298,63 @@
 				0474D59528BF5D5400A22731 /* GBLoopView.m */,
 			);
 			path = GBLoopView;
+			sourceTree = "<group>";
+		};
+		048A0EBA28C0443A0077F40A /* model */ = {
+			isa = PBXGroup;
+			children = (
+				048A0EBB28C0445B0077F40A /* HXMajorModel.h */,
+				048A0EBC28C0445B0077F40A /* HXMajorModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		048A0EC128C0583B0077F40A /* 面授课表 */ = {
+			isa = PBXGroup;
+			children = (
+				048A0ECA28C059050077F40A /* HXFaceTimeTableViewController.h */,
+				048A0ECB28C059050077F40A /* HXFaceTimeTableViewController.m */,
+			);
+			path = "面授课表";
+			sourceTree = "<group>";
+		};
+		048A0EC228C0583B0077F40A /* 在线学习 */ = {
+			isa = PBXGroup;
+			children = (
+				048A0EC428C058910077F40A /* HXOnlineLearnViewController.h */,
+				048A0EC528C058910077F40A /* HXOnlineLearnViewController.m */,
+			);
+			path = "在线学习";
+			sourceTree = "<group>";
+		};
+		048A0EC328C0583B0077F40A /* 教学计划 */ = {
+			isa = PBXGroup;
+			children = (
+				048A0ED428C09D9C0077F40A /* view */,
+				048A0EC728C058BD0077F40A /* HXTeachPlanViewController.h */,
+				048A0EC828C058BD0077F40A /* HXTeachPlanViewController.m */,
+			);
+			path = "教学计划";
+			sourceTree = "<group>";
+		};
+		048A0ECD28C05A710077F40A /* view */ = {
+			isa = PBXGroup;
+			children = (
+				048A0ECE28C05B1F0077F40A /* HXLearnCenterPageTitleCell.h */,
+				048A0ECF28C05B1F0077F40A /* HXLearnCenterPageTitleCell.m */,
+				048A0ED128C083610077F40A /* HXOnlineLearnShowTipView.h */,
+				048A0ED228C083610077F40A /* HXOnlineLearnShowTipView.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		048A0ED428C09D9C0077F40A /* view */ = {
+			isa = PBXGroup;
+			children = (
+				048A0ED528C09DBD0077F40A /* HXTeachPlanCell.h */,
+				048A0ED628C09DBD0077F40A /* HXTeachPlanCell.m */,
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 		048B7C9328BD9D89006EBAAE = {
@@ -530,6 +618,7 @@
 		048B7D7328BDA889006EBAAE /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				048A0EBA28C0443A0077F40A /* model */,
 				040890FC28BDFCD5007844E8 /* view */,
 				048B7D7428BDA89B006EBAAE /* HXHomePageViewController.h */,
 				048B7D7528BDA89B006EBAAE /* HXHomePageViewController.m */,
@@ -540,6 +629,10 @@
 		048B7D7728BDA8C2006EBAAE /* 学习中心 */ = {
 			isa = PBXGroup;
 			children = (
+				048A0ECD28C05A710077F40A /* view */,
+				048A0EC228C0583B0077F40A /* 在线学习 */,
+				048A0EC328C0583B0077F40A /* 教学计划 */,
+				048A0EC128C0583B0077F40A /* 面授课表 */,
 				048B7D7828BDA8F1006EBAAE /* HXLearnCenterViewController.h */,
 				048B7D7928BDA8F1006EBAAE /* HXLearnCenterViewController.m */,
 			);
@@ -711,16 +804,19 @@
 				048B7D5B28BDA20A006EBAAE /* XLPageBasicTitleView.m in Sources */,
 				048B7D3828BDA20A006EBAAE /* HXCalendarContentView.m in Sources */,
 				048B7D6028BDA20A006EBAAE /* HXCommonWebViewController.m in Sources */,
+				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				048B7D3D28BDA20A006EBAAE /* HXCalendarCollectionCell.m in Sources */,
 				048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */,
 				048B7D6928BDA20A006EBAAE /* HXCommonUtil.m in Sources */,
 				048B7D6528BDA20A006EBAAE /* CustomIOSAlertView.m in Sources */,
+				048A0ED328C083610077F40A /* HXOnlineLearnShowTipView.m in Sources */,
 				048B7D5928BDA20A006EBAAE /* XLPageViewController.m in Sources */,
 				048B7CB228BD9D8A006EBAAE /* main.m in Sources */,
 				048B7D4328BDA20A006EBAAE /* HXNavigationPopAnimation.m in Sources */,
 				048B7D6728BDA20A006EBAAE /* ScrollViewFrameAccessor.m in Sources */,
 				048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */,
+				048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */,
 				048B7D3E28BDA20A006EBAAE /* HXCalendarAppearance.m in Sources */,
 				048B7D5328BDA20A006EBAAE /* UIColor+Extension.m in Sources */,
 				048B7D4528BDA20A006EBAAE /* HXNavigationPushAnimation.m in Sources */,
@@ -735,12 +831,15 @@
 				048B7D4128BDA20A006EBAAE /* CXDatePickerViewManager.m in Sources */,
 				040890FB28BDAF5E007844E8 /* HXMainTabBarController.m in Sources */,
 				048B7D4728BDA20A006EBAAE /* UIImage+Tint.m in Sources */,
+				048A0EC928C058BD0077F40A /* HXTeachPlanViewController.m in Sources */,
 				048B7D6228BDA20A006EBAAE /* HXNoDataTipView.m in Sources */,
 				048B7D5728BDA20A006EBAAE /* NSString+size.m in Sources */,
 				048B7D3B28BDA20A006EBAAE /* HXCalendarScrollView.m in Sources */,
 				048B7D5428BDA20A006EBAAE /* NSString+md5.m in Sources */,
 				048B7D5128BDA20A006EBAAE /* UIImage+Extension.m in Sources */,
+				048A0ED728C09DBD0077F40A /* HXTeachPlanCell.m in Sources */,
 				048B7D5528BDA20A006EBAAE /* NSDate+HXDate.m in Sources */,
+				048A0EC628C058910077F40A /* HXOnlineLearnViewController.m in Sources */,
 				048B7D6628BDA20A006EBAAE /* ViewFrameAccessor.m in Sources */,
 				048B7D6428BDA20A006EBAAE /* HXCheckUpdateTool.m in Sources */,
 				048B7D6828BDA20A006EBAAE /* HXPublicParamTool.m in Sources */,
@@ -749,6 +848,7 @@
 				048B7D4A28BDA20A006EBAAE /* HXNavigationController.m in Sources */,
 				048B7D7628BDA89B006EBAAE /* HXHomePageViewController.m in Sources */,
 				048B7D3C28BDA20A006EBAAE /* HXCalendarWeekDayView.m in Sources */,
+				048A0EC028C044830077F40A /* HXShowMajorCell.m in Sources */,
 				048B7D5A28BDA20A006EBAAE /* XLPageSegmentedTitleView.m in Sources */,
 				048B7D3A28BDA20A006EBAAE /* HXCalendarCollectionViewFlowLayout.m in Sources */,
 				048B7D3928BDA20A006EBAAE /* HXCalendarDayItem.m in Sources */,
@@ -760,10 +860,12 @@
 				048B7D4B28BDA20A006EBAAE /* UIControl+BlocksKit.m in Sources */,
 				048B7D6128BDA20A006EBAAE /* HXPullRefreshViewController.m in Sources */,
 				048B7D5828BDA20A006EBAAE /* HXBaseURLSessionManager.m in Sources */,
+				048A0EBD28C0445B0077F40A /* HXMajorModel.m in Sources */,
 				048B7D5028BDA20A006EBAAE /* HXDictionary.m in Sources */,
 				0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */,
 				048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */,
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
+				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -925,6 +1027,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.edu-edu.cloudclassroom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -956,6 +1059,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.edu-edu.cloudclassroom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

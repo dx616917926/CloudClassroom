@@ -104,9 +104,6 @@
 //底部分割线
 @property (nonatomic, strong) UIView *separatorLine;
 
-//底部分割线
-@property (nonatomic, strong) UIView *separatorShadow;
-
 //cell的模型
 @property (nonatomic, strong) NSMutableArray *cellModels;
 
@@ -123,13 +120,9 @@
 
 - (void)initTitleViewWithConfig:(XLPageViewControllerConfig *)config {
     
-   
-    
     self.cellModels = [[NSMutableArray alloc] init];
     
     self.config = config;
-    
-    
     
     self.layout = [[XLPageBasicTitleViewFolowLayout alloc] init];
     self.layout.alignment = self.config.titleViewAlignment;
@@ -152,18 +145,9 @@
     self.separatorLine.hidden = config.separatorLineHidden;
     [self addSubview:self.separatorLine];
     
-    
-    
-    
     self.shadowLine = [[UIView alloc] init];
     self.shadowLine.bounds = CGRectMake(0, 0, self.config.shadowLineWidth, self.config.shadowLineHeight);
     self.shadowLine.backgroundColor = config.shadowLineColor;
-    if (config.isGradientColor) {//自己增加的
-        UIImageView *gradientImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.config.shadowLineWidth, self.config.shadowLineHeight)];
-        gradientImageView.image = [UIImage imageNamed:@"gradient_line"];
-        gradientImageView.contentMode = UIViewContentModeScaleToFill;
-        [self.shadowLine addSubview:gradientImageView];
-    }
     self.shadowLine.layer.cornerRadius =  self.config.shadowLineHeight/2.0f;
     if (self.config.shadowLineCap == XLPageShadowLineCapSquare) {
         self.shadowLine.layer.cornerRadius = 0;
@@ -186,7 +170,7 @@
     self.collectionView.frame = CGRectMake(0, 0, collectionW, self.bounds.size.height);
     
     self.separatorLine.frame = CGRectMake(0, self.bounds.size.height - self.config.separatorLineHeight, self.bounds.size.width, self.config.separatorLineHeight);
-
+    
     [self fixShadowLineCenter];
     [self.collectionView sendSubviewToBack:self.shadowLine];
     [self bringSubviewToFront:self.separatorLine];
@@ -367,9 +351,6 @@
     }
     if (self.config.shadowLineAlignment == XLPageShadowLineAlignmentCenter) {
         centerY = CGRectGetMidY(cellFrame);
-    }
-    if (self.config.shadowLineAlignment == XLPageShadowLineAlignmentTitleBottom) {
-        centerY = CGRectGetMidY(cellFrame)+self.config.titleSelectedFont.lineHeight/2+5;
     }
     return CGPointMake(centerX, centerY);
 }

@@ -8,6 +8,7 @@
 #import "HXHomePageViewController.h"
 #import "HXCurrentLearCell.h"
 #import "GBLoopView.h"
+#import "HXShowMajorView.h"
 
 @interface HXHomePageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -38,6 +39,9 @@
 @property(nonatomic,strong) NSMutableArray *bujuArray;
 @property(nonatomic,strong) NSMutableArray *bujuBtns;
 
+@property(nonatomic,strong) HXShowMajorView *showMajorView;
+
+
 @end
 
 @implementation HXHomePageViewController
@@ -49,6 +53,27 @@
     [self createUI];
    
     
+}
+
+
+#pragma mark - Event
+-(void)handleMiddleClick:(UIButton *)sender{
+    
+    
+}
+
+//选择考专业
+-(void)selectMajor:(UIButton *)sender{
+//    if (self.examDateList.count<=0) return;
+//    self.showMajorView.dataArray = self.examDateList;
+    [self.showMajorView show];
+    ///选择回调
+    WeakSelf(weakSelf);
+    self.showMajorView.selectMajorCallBack = ^(BOOL isRefresh, HXMajorModel * _Nonnull selectMajorModel) {
+        if (isRefresh){
+            
+        }
+    };
 }
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
@@ -149,7 +174,7 @@
     .heightIs(18);
     
     self.bkSchooldLabel.sd_layout
-    .topSpaceToView(self.headImageView, 20)
+    .topSpaceToView(self.headImageView, 30)
     .leftEqualToView(self.headImageView)
     .widthIs(70)
     .heightIs(20);
@@ -161,7 +186,7 @@
     .heightRatioToView(self.bkSchooldLabel, 1);
     
     self.bkMajorLabel.sd_layout
-    .topSpaceToView(self.bkSchooldLabel, 15)
+    .topSpaceToView(self.bkSchooldLabel, 13)
     .leftEqualToView(self.bkSchooldLabel)
     .rightEqualToView(self.bkSchooldLabel)
     .heightRatioToView(self.bkSchooldLabel, 1);
@@ -310,6 +335,7 @@
         [_bkMajorContentBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_bkMajorContentBtn setImage:[UIImage imageNamed:@"whiteright_arrow"] forState:UIControlStateNormal];
         [_bkMajorContentBtn setTitle:@"行政管理" forState:UIControlStateNormal];
+        [_bkMajorContentBtn addTarget:self action:@selector(selectMajor:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bkMajorContentBtn;
 }
@@ -525,5 +551,11 @@
     return _baoDaoBtn;
 }
 
+-(HXShowMajorView *)showMajorView{
+    if (!_showMajorView) {
+        _showMajorView = [[HXShowMajorView alloc] init];
+    }
+    return _showMajorView;
+}
 
 @end

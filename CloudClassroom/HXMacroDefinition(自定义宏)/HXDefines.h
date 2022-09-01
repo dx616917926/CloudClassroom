@@ -46,7 +46,7 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //底部边距
 #define kScreenBottomMargin        (IS_iPhoneX?34:0) //屏幕底部边距  iPhone X边距34，其它的0
 //tabbar高度
-#define kTabBarHeight              ((IS_iPhoneX)?83:49)      //tabbar高度  iPhone X高83，其它的高49
+#define kTabBarHeight              ((IS_iPhoneX&&!IS_IPAD)?83:49)      //tabbar高度  iPhone X高83，其它的高49
 
 
 
@@ -76,9 +76,13 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 ///自定义颜色
 #define COLOR_WITH_ALPHA(colorValue, alphaValue) [UIColor colorWithRed:((float)((colorValue & 0xFF0000) >> 16))/255.0 green:((float)((colorValue & 0xFF00) >> 8))/255.0 blue:((float)(colorValue & 0xFF))/255.0 alpha:alphaValue]
 
+//通用视图控制器背景颜色
+#define VCBackgroundColor   COLOR_WITH_ALPHA(0xECF0FB, 1)
+
 //自定义字体
 #define HXFont(fontSize)      [UIFont systemFontOfSize:fontSize];
 #define HXBoldFont(fontSize)  [UIFont boldSystemFontOfSize:fontSize];
+
 
 
 // 美工的标准375

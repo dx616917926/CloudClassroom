@@ -24,7 +24,7 @@
     }];
     self.sc_NavigationBarAnimateInvalid = YES;
     self.sc_navigationBar.leftBarButtonItem = self.leftBarItem;
-    self.view.backgroundColor = COLOR_WITH_ALPHA(0xF9FAFE, 1);
+    self.view.backgroundColor = VCBackgroundColor;
 }
 
 

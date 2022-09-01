@@ -143,7 +143,7 @@
     
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textColor = COLOR_WITH_ALPHA(0x2C2C2E,1);
+        _titleLabel.textColor = COLOR_WITH_ALPHA(0xFFFFFF,1);
         [_titleLabel setFont:[UIFont boldSystemFontOfSize:17]];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
