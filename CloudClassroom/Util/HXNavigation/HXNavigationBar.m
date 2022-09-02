@@ -94,29 +94,29 @@
     
     if (_leftBarButtonItem) {
         _leftBarButtonItem.view.x = 0;
-        _leftBarButtonItem.view.centerY = kStatusBarHeight+22;
+        _leftBarButtonItem.view.centerY = kStatusBarHeight+20;
     }
     
     if (_rightBarButtonItem) {
         _rightBarButtonItem.view.x = kScreenWidth - _rightBarButtonItem.view.width;
-        _rightBarButtonItem.view.centerY = kStatusBarHeight+22;
+        _rightBarButtonItem.view.centerY = kStatusBarHeight+20;
     }
     if (_customRigthView) {
         _customRigthView.x = kScreenWidth - _customRigthView.width;
-        _customRigthView.centerY = kStatusBarHeight+22;
+        _customRigthView.centerY = kStatusBarHeight+20;
     }
     if (_titleLabel) {
         [_titleLabel sizeToFit];
         NSUInteger otherButtonWidth = self.leftBarButtonItem.view.width + self.rightBarButtonItem.view.width;
         _titleLabel.width = kScreenWidth - otherButtonWidth - 20;
-        _titleLabel.centerY = kStatusBarHeight+22;
+        _titleLabel.centerY = kStatusBarHeight+20;
         _titleLabel.centerX = kScreenWidth/2;
     }
     
     if (_titleView) {
         NSUInteger otherButtonWidth = self.leftBarButtonItem.view.width + self.rightBarButtonItem.view.width;
         _titleView.width = kScreenWidth - otherButtonWidth ;
-        _titleView.centerY = kStatusBarHeight+22;
+        _titleView.centerY = kStatusBarHeight+20;
         _titleView.x = self.leftBarButtonItem.view.right;
     }
 }
@@ -154,7 +154,7 @@
     [_titleLabel sizeToFit];
     NSUInteger otherButtonWidth = self.leftBarButtonItem.view.width + self.rightBarButtonItem.view.width;
     _titleLabel.width = kScreenWidth - otherButtonWidth - 20;
-    _titleLabel.centerY = kStatusBarHeight+22;
+    _titleLabel.centerY = kStatusBarHeight+20;
     _titleLabel.centerX = kScreenWidth/2;
 }
 
@@ -171,7 +171,7 @@
     if (titleView) {
         NSUInteger otherButtonWidth = self.leftBarButtonItem.view.width + self.rightBarButtonItem.view.width;
         _titleView.width = kScreenWidth - otherButtonWidth ;
-        _titleView.centerY = kStatusBarHeight+22;
+        _titleView.centerY = kStatusBarHeight+20;
         _titleView.x = self.leftBarButtonItem.view.right;
         [self addSubview:titleView];
     }
@@ -183,7 +183,7 @@
     
     if (leftBarButtonItem) {
         leftBarButtonItem.view.x = 0;
-        leftBarButtonItem.view.centerY = kStatusBarHeight+22;
+        leftBarButtonItem.view.centerY = kStatusBarHeight+20;
         [self addSubview:leftBarButtonItem.view];
     }
     
@@ -196,7 +196,7 @@
     
     if (rightBarButtonItem) {
         rightBarButtonItem.view.x = kScreenWidth - rightBarButtonItem.view.width;
-        rightBarButtonItem.view.centerY = kStatusBarHeight+22;
+        rightBarButtonItem.view.centerY = kStatusBarHeight+20;
         [self addSubview:rightBarButtonItem.view];
     }
     
@@ -206,7 +206,7 @@
     [_customRigthView removeFromSuperview];
     if (customRigthView) {
         customRigthView.x = kScreenWidth - customRigthView.width;
-        customRigthView.centerY = kStatusBarHeight+22;
+        customRigthView.centerY = kStatusBarHeight+20;
         [self addSubview:customRigthView];
     }
 }

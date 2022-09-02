@@ -18,7 +18,7 @@
     // Do any additional setup after loading the view.
 
     WeakSelf(weakSelf);
-    self.leftBarItem = [[HXBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navi_blackback"] style:HXBarButtonItemStyleCustom handler:^(id sender) {
+    self.leftBarItem = [[HXBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"navi_whiteback"] style:HXBarButtonItemStyleCustom handler:^(id sender) {
         StrongSelf(strongSelf);
         [strongSelf.navigationController popViewControllerAnimated:YES];
     }];

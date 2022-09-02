@@ -6,10 +6,14 @@
 //
 
 #import "HXOnlineLearnViewController.h"
+#import "HXKeJianLearnViewController.h"//课件学习
+#import "HXPingShiZuoYeViewController.h"//平时作业
+#import "HXQIMoKaoShiViewController.h"//期末考试
+#import "HXStudyReportViewController.h"//学习报告
 #import "HXCurrentLearCell.h"
 #import "HXOnlineLearnShowTipView.h"
 
-@interface HXOnlineLearnViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface HXOnlineLearnViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
 
 @property(nonatomic,strong) UIView *topView;
 @property(nonatomic,strong) UIButton *ganTanBtn;
@@ -64,6 +68,51 @@
     [onlineLearnShowTipView show];
 }
 
+#pragma mark -<HXCurrentLearCellDelegate> flag:  8000:课件学习    8001:平时作业   8002:期末考试   8003:答疑室   8004:学习报告  8005:班级排名   8006:得分
+-(void)handleClickEvent:(NSInteger)flag{
+    
+    switch (flag) {
+        case 8000:
+        {
+            HXKeJianLearnViewController *vc = [[HXKeJianLearnViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 8001:
+        {
+            HXPingShiZuoYeViewController *vc = [[HXPingShiZuoYeViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 8002:
+        {
+            HXQIMoKaoShiViewController *vc = [[HXQIMoKaoShiViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 8003:
+        {
+           
+        }
+            break;
+        case 8004:
+        {
+            HXStudyReportViewController *vc = [[HXStudyReportViewController alloc] init];
+            vc.sc_navigationBarHidden = YES;//隐藏导航栏
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -87,6 +136,7 @@
     if (!cell) {
         cell = [[HXCurrentLearCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:currentLearCellIdentifier];
     }
+    cell.delegate = self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

@@ -65,6 +65,15 @@
     return self;
 }
 
+#pragma mark -Event
+-(void)clickEvent:(UIControl *)sender{
+    NSInteger tag = sender.tag;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(handleClickEvent:)]) {
+        [self.delegate handleClickEvent:tag];
+    }
+}
+
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -380,6 +389,8 @@
         [_keJianBtn setImage:[UIImage imageNamed:@"kejian_icon"] forState:UIControlStateNormal];
         [_keJianBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_keJianBtn setTitle:@"课件学习" forState:UIControlStateNormal];
+        _keJianBtn.tag = 8000;
+        [_keJianBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _keJianBtn;
 }
@@ -403,6 +414,8 @@
         [_zuoYeBtn setImage:[UIImage imageNamed:@"zuoye_icon"] forState:UIControlStateNormal];
         [_zuoYeBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_zuoYeBtn setTitle:@"平时作业" forState:UIControlStateNormal];
+        _zuoYeBtn.tag = 8001;
+        [_zuoYeBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _zuoYeBtn;
 }
@@ -426,6 +439,8 @@
         [_kaoShiBtn setImage:[UIImage imageNamed:@"kaoshi_icon"] forState:UIControlStateNormal];
         [_kaoShiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_kaoShiBtn setTitle:@"期末考试" forState:UIControlStateNormal];
+        _kaoShiBtn.tag = 8002;
+        [_kaoShiBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _kaoShiBtn;
 }
@@ -449,6 +464,8 @@
         [_daYiShiBtn setImage:[UIImage imageNamed:@"dayishi_icon"] forState:UIControlStateNormal];
         [_daYiShiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_daYiShiBtn setTitle:@"答疑室" forState:UIControlStateNormal];
+        _daYiShiBtn.tag = 8003;
+        [_daYiShiBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _daYiShiBtn;
 }
@@ -478,6 +495,8 @@
         _xueXiBaoGaoView = [[UIControl alloc] init];
         _xueXiBaoGaoView.backgroundColor = [UIColor whiteColor];
         _xueXiBaoGaoView.clipsToBounds = YES;
+        _xueXiBaoGaoView.tag = 8004;
+        [_xueXiBaoGaoView addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _xueXiBaoGaoView;
 }
@@ -521,6 +540,8 @@
         _rankView = [[UIControl alloc] init];
         _rankView.backgroundColor = [UIColor whiteColor];
         _rankView.clipsToBounds = YES;
+        _rankView.tag = 8005;
+        [_rankView addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _rankView;
 }
@@ -563,6 +584,8 @@
         _scoreView = [[UIControl alloc] init];
         _scoreView.backgroundColor = [UIColor whiteColor];
         _scoreView.clipsToBounds = YES;
+        _scoreView.tag = 8006;
+        [_scoreView addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _scoreView;
 }
