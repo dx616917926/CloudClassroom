@@ -10,6 +10,7 @@
 #import "HXPingShiZuoYeViewController.h"//平时作业
 #import "HXQIMoKaoShiViewController.h"//期末考试
 #import "HXStudyReportViewController.h"//学习报告
+#import "HXClassRankViewController.h"//班级排名
 #import "HXCurrentLearCell.h"
 #import "HXOnlineLearnShowTipView.h"
 
@@ -101,6 +102,14 @@
         case 8004:
         {
             HXStudyReportViewController *vc = [[HXStudyReportViewController alloc] init];
+            vc.sc_navigationBarHidden = YES;//隐藏导航栏
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 8005:
+        {
+            HXClassRankViewController *vc = [[HXClassRankViewController alloc] init];
             vc.sc_navigationBarHidden = YES;//隐藏导航栏
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];

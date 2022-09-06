@@ -131,7 +131,7 @@
     .rightSpaceToView(self.startKaoShiBtn, 12)
     .widthIs(108)
     .heightRatioToView(self.startKaoShiBtn, 1);
-    
+    self.chechRecordBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.tipLabel.sd_layout
     .centerYEqualToView(self.startKaoShiBtn)

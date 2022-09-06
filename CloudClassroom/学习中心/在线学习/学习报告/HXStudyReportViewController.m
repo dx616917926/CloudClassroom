@@ -8,6 +8,7 @@
 #import "HXStudyReportViewController.h"
 #import "UIView+TransitionColor.h"
 #import "HXStudyReportKeJianCell.h"
+#import "HXStudyReportZuoYeCell.h"
 
 @interface HXStudyReportViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -61,27 +62,39 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 2;
 }
 
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 178;
+    if (indexPath.row%2==0) {
+        return 178;
+    }else{
+        return 359;
+    }
 }
-
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *studyReportKeJianCellIdentifier = @"HXStudyReportKeJianCellIdentifier";
-    HXStudyReportKeJianCell *cell = [tableView dequeueReusableCellWithIdentifier:studyReportKeJianCellIdentifier];
-    if (!cell) {
-        cell = [[HXStudyReportKeJianCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportKeJianCellIdentifier];
+    HXStudyReportKeJianCell *studyReportKeJianCell = [tableView dequeueReusableCellWithIdentifier:studyReportKeJianCellIdentifier];
+    
+    static NSString *studyReportZuoYeCellIdentifier = @"HXStudyReportZuoYeCellIdentifier";
+    HXStudyReportZuoYeCell *studyReportZuoYeCell = [tableView dequeueReusableCellWithIdentifier:studyReportZuoYeCellIdentifier];
+    
+    if (indexPath.row%2==0) {
+        studyReportKeJianCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        studyReportKeJianCell = [[HXStudyReportKeJianCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportKeJianCellIdentifier];
+        return studyReportKeJianCell;
+    }else{
+        studyReportZuoYeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        studyReportZuoYeCell = [[HXStudyReportZuoYeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportZuoYeCellIdentifier];
+        return studyReportZuoYeCell;
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
+    
 }
 
 
