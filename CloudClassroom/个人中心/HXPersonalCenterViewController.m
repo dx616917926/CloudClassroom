@@ -7,6 +7,7 @@
 
 #import "HXPersonalCenterViewController.h"
 #import "HXPersonalInforViewController.h"//个人信息
+#import "HXMyMessageViewController.h"//我的消息
 #import "HXZaiXianXuanKeViewController.h"//在线选课
 #import "UIImage+Extension.h"
 
@@ -73,7 +74,9 @@
     switch (flag) {
         case 3000://我的消息
         {
-           
+            HXMyMessageViewController *vc = [[HXMyMessageViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3001://证件照上传

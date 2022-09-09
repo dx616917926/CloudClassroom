@@ -65,7 +65,7 @@
     self.bigBackGroundView.sd_layout
     .centerXEqualToView(self)
     .centerYEqualToView(self)
-    .widthIs(_kpw(335))
+    .widthIs(_kpw(300))
     .heightIs(316);
     self.bigBackGroundView.sd_cornerRadius = @5;
     

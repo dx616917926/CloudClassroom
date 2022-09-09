@@ -6,7 +6,7 @@
 //
 
 #import "HXShowMoneyDetailsrView.h"
-#import "HXShowMajorCell.h"
+#import "HXXuanKeMoneyDetailCell.h"
 
 @interface HXShowMoneyDetailsrView ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -15,6 +15,10 @@
 @property(nonatomic,strong) UILabel *titleLabel;
 @property(nonatomic,strong) UITableView *tableView;
 @property(nonatomic,strong) UIControl *dismissControl;
+
+@property(nonatomic,strong) UIView *tableFooterView;
+@property(nonatomic,strong) UILabel *heJiLabel;
+@property(nonatomic,strong) UILabel *totalPriceLabel;
 
 //记录初始选择
 @property(nonatomic,assign) NSInteger selectIndex;
@@ -151,16 +155,16 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 54;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *showMajorCellIdentifier = @"HXShowMajorCellIdentifier";
-    HXShowMajorCell *cell = [tableView dequeueReusableCellWithIdentifier:showMajorCellIdentifier];
+    static NSString *xuanKeMoneyDetailCellIdentifier = @"HXXuanKeMoneyDetailCellIdentifier";
+    HXXuanKeMoneyDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:xuanKeMoneyDetailCellIdentifier];
     if (!cell) {
-        cell = [[HXShowMajorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:showMajorCellIdentifier];
+        cell = [[HXXuanKeMoneyDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xuanKeMoneyDetailCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -186,6 +190,7 @@
         _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         _tableView.scrollIndicatorInsets = _tableView.contentInset;
         _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.tableFooterView = self.tableFooterView;
     }
     return _tableView;
     
@@ -220,12 +225,60 @@
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
+        _titleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
         _titleLabel.font = HXBoldFont(15);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.text = @"金额明细";
     }
     return _titleLabel;
+}
+
+
+-(UIView *)tableFooterView{
+    if (!_tableFooterView) {
+        _tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 54)];
+        _tableFooterView.backgroundColor = UIColor.whiteColor;
+        [_tableFooterView addSubview:self.heJiLabel];
+        [_tableFooterView addSubview:self.totalPriceLabel];
+        
+        self.totalPriceLabel.sd_layout
+        .centerYEqualToView(_tableFooterView)
+        .rightSpaceToView(_tableFooterView, 16)
+        .widthIs(80)
+        .heightIs(20);
+        
+        self.heJiLabel.sd_layout
+        .centerYEqualToView(_tableFooterView)
+        .leftSpaceToView(_tableFooterView, 16)
+        .rightSpaceToView(self.totalPriceLabel, 16)
+        .heightIs(20);
+        
+    }
+    return _tableFooterView;
+}
+
+
+- (UILabel *)heJiLabel{
+    if (!_heJiLabel) {
+        _heJiLabel = [[UILabel alloc] init];
+        _heJiLabel.font = HXBoldFont(15);
+        _heJiLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _heJiLabel.text = @"合计";
+    }
+    return _heJiLabel;
+}
+
+
+- (UILabel *)totalPriceLabel{
+    if (!_totalPriceLabel) {
+        _totalPriceLabel = [[UILabel alloc] init];
+        _totalPriceLabel.font = HXBoldFont(14);
+        _totalPriceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
+        _totalPriceLabel.textAlignment = NSTextAlignmentRight;
+        _totalPriceLabel.isAttributedContent = YES;
+        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"100." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥100.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    }
+    return _totalPriceLabel;
 }
 
 @end
