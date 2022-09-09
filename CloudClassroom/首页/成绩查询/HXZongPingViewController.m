@@ -6,6 +6,7 @@
 //
 
 #import "HXZongPingViewController.h"
+#import "HXScoreDetailsViewController.h"
 #import "HXZongPingCell.h"
 
 @interface HXZongPingViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -71,6 +72,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    HXScoreDetailsViewController *vc = [[HXScoreDetailsViewController alloc] init];
+    vc.sc_navigationBarHidden = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - UI

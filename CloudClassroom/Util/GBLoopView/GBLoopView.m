@@ -63,6 +63,11 @@
 {
     [self setBackgroundColor:color];
 }
+
+-(void)setTextColor:(UIColor *)color{
+    tickerLabel.textColor= color;
+}
+
 -(void)animateCurrentTickerString
 {
     NSString *currentString = [_tickerArrs objectAtIndex:currentIndex];

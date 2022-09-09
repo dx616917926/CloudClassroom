@@ -107,7 +107,7 @@
     [self.bigBackgroundView addSubview:self.scoreView];
     [self.scoreView addSubview:self.scoreBtn];
     [self.scoreView addSubview:self.scoreContentLabel];
-    [self.scoreView addSubview:self.scoreArrow];
+    
     
     
     self.bigBackgroundView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(6, 12, 6, 12));
@@ -327,16 +327,12 @@
     
     
     self.scoreContentLabel.sd_layout
-    .centerXEqualToView(self.scoreView).offset(-2)
+    .centerXEqualToView(self.scoreView).offset(4)
     .topSpaceToView(self.scoreBtn, 8)
     .heightIs(17);
     [self.scoreContentLabel setSingleLineAutoResizeWithMaxWidth:40];
     
-    self.scoreArrow.sd_layout
-    .centerYEqualToView(self.scoreContentLabel)
-    .leftSpaceToView(self.scoreContentLabel, 5)
-    .widthIs(4)
-    .heightIs(7);
+    
     
 }
 
@@ -607,6 +603,7 @@
 - (UILabel *)scoreContentLabel{
     if (!_scoreContentLabel) {
         _scoreContentLabel = [[UILabel alloc] init];
+        _scoreContentLabel.textAlignment = NSTextAlignmentCenter;
         _scoreContentLabel.font =HXBoldFont(12);
         _scoreContentLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
         _scoreContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"86" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content: @"86分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
@@ -614,13 +611,6 @@
     return _scoreContentLabel;
 }
 
-- (UIImageView *)scoreArrow{
-    if (!_scoreArrow) {
-        _scoreArrow = [[UIImageView alloc] init];
-        _scoreArrow.image = [UIImage imageNamed:@"blackright_arrow"];
-    }
-    return _scoreArrow;
-}
 
 
 @end

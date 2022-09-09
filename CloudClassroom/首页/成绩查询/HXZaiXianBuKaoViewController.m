@@ -6,6 +6,7 @@
 //
 
 #import "HXZaiXianBuKaoViewController.h"
+#import "HXScoreDetailsViewController.h"
 #import "HXZaiXianXueQiCell.h"
 #import "HXZaiXianCell.h"
 
@@ -97,6 +98,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    HXScoreDetailsViewController *vc = [[HXScoreDetailsViewController alloc] init];
+    vc.sc_navigationBarHidden = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 #pragma mark - UI

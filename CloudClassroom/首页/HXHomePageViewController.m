@@ -7,6 +7,7 @@
 
 #import "HXHomePageViewController.h"
 #import "HXScoreQueryViewController.h"//成绩查询
+#import "HXMyBuKaoViewController.h"//我的补考
 #import "HXKeJianLearnViewController.h"//课件学习
 #import "HXPingShiZuoYeViewController.h"//平时作业
 #import "HXQIMoKaoShiViewController.h"//期末考试
@@ -17,6 +18,8 @@
 #import "HXShowMajorView.h"
 
 @interface HXHomePageViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
+
+
 
 //顶部个人信息栏
 @property(nonatomic,strong) UIImageView *topBgImageView;
@@ -85,7 +88,9 @@
             break;
         case 5003:
         {
-           
+            HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 5004:

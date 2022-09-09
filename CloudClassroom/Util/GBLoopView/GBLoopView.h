@@ -53,6 +53,10 @@ static UIInterfaceOrientation lastOrientation;
  */
 -(void)setBackColor:(UIColor *)color;
 /**
+ *  设置文字颜色
+ */
+-(void)setTextColor:(UIColor *)color;
+/**
  *  开启
  */
 -(void)start;

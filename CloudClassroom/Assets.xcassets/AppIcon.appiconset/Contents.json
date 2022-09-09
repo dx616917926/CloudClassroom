@@ -37,11 +37,13 @@
       "size" : "40x40"
     },
     {
+      "filename" : "120_120-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+      "filename" : "180_180.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
@@ -83,11 +85,13 @@
       "size" : "40x40"
     },
     {
+      "filename" : "76-76.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
+      "filename" : "152-152.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
