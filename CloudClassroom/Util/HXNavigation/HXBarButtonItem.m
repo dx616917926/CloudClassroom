@@ -37,7 +37,7 @@
         UIButton *button = [[UIButton alloc] init];
         [button setTitle:title forState:UIControlStateNormal];
         [button.titleLabel setFont:[UIFont systemFontOfSize:17]];
-        [button setTitleColor:COLOR_WITH_ALPHA(0x5699FF, 1) forState:UIControlStateNormal];
+        [button setTitleColor:COLOR_WITH_ALPHA(0xFFFFFF, 1) forState:UIControlStateNormal];
         [button sizeToFit];
         button.height = 44;
         button.width += 30;

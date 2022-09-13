@@ -20,6 +20,8 @@ target 'CloudClassroom' do
   pod 'HXViewHUD', '~> 0.2.0'
 
   pod 'SDAutoLayout', '~> 2.2.1'
+  
+  pod 'IQKeyboardManager', '~> 6.5.6'
 
   #从5.4.7.1开始需要license证书哦⚠️
   pod 'AliPlayerSDK_iOS', '~> 5.4.7.1'

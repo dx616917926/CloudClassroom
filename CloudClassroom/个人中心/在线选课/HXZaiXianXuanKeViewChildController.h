@@ -9,7 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^ControlScrollBlock) (BOOL scrollEnabled);
+
 @interface HXZaiXianXuanKeViewChildController : HXBaseViewController
+
+@property (nonatomic,copy) ControlScrollBlock controlScrollBlock;
 
 @end
 

@@ -69,6 +69,8 @@
     [self.pageViewController registerClass:HXLearnCenterPageTitleCell.class forTitleViewCellWithReuseIdentifier:@"HXLearnCenterPageTitleCell"];
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
+    
+    
 }
 
 #pragma mark -
@@ -76,6 +78,9 @@
 - (UIViewController *)pageViewController:(XLPageViewController *)pageViewController viewControllerForIndex:(NSInteger)index {
     if (index==0) {
         HXZaiXianXuanKeViewChildController *zaiXianXuanKeViewChildVc = [[HXZaiXianXuanKeViewChildController alloc] init];
+        zaiXianXuanKeViewChildVc.controlScrollBlock = ^(BOOL scrollEnabled) {
+            self.pageViewController.scrollEnabled = scrollEnabled;
+        };
         return zaiXianXuanKeViewChildVc;
     }else if (index==1) {
         HXYiJiaoFeiViewController *yiJiaoFeiVC = [[HXYiJiaoFeiViewController alloc] init];

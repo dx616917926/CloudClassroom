@@ -50,6 +50,10 @@
     WeakSelf(weakSelf);
     self.showMoneyDetailsrView.callBack = ^{
         weakSelf.checkDetailsBtn.selected = weakSelf.showMoneyDetailsrView.isShow;
+        //控制父视图的滚动
+        if (weakSelf.controlScrollBlock) {
+            weakSelf.controlScrollBlock(!weakSelf.showMoneyDetailsrView.isShow);
+        }
     };
     
     if (!self.showMoneyDetailsrView.isShow) {

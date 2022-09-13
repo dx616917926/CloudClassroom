@@ -161,7 +161,7 @@
     .topSpaceToView(self.topBgImageView, kStatusBarHeight)
     .centerXEqualToView(self.topBgImageView)
     .widthIs(100)
-    .heightIs(23);
+    .heightIs(kNavigationBarHeight-kStatusBarHeight);
     
     self.backBtn.sd_layout
     .centerYEqualToView(self.titleLabel)

@@ -84,6 +84,35 @@
 }
 
 /**
+ 属性化文字
+ @param needStringArray             需要属性化的文字数组
+ @param needAttributedDic      添加的属性
+ @param content                所有文本
+ @param defaultAttributedDic   默认的属性
+ @return 属性化文字
+ */
++ (NSMutableAttributedString *)getAttributedStringWithArray:(NSArray<NSString *> *)needStringArray needAttributed:(NSDictionary *)needAttributedDic content:(NSString *)content defaultAttributed:(NSDictionary *)defaultAttributedDic{
+    if ([HXCommonUtil isNull:content]||needStringArray.count==0) {
+        return nil;
+    }
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:content];
+    ///添加默认属性
+    if (defaultAttributedDic!=nil&&![HXCommonUtil isNull:content]) {
+        [attributedString addAttributes:defaultAttributedDic range:NSMakeRange(0, content.length)];
+    }
+    
+    for (NSString *needString in needStringArray) {
+        if (needAttributedDic!=nil&&![HXCommonUtil isNull:needString]) {
+            ///需要属性化的范围
+            NSRange range =  [content rangeOfString:needString];
+            ///添加属性
+            [attributedString addAttributes:needAttributedDic range:range];
+        }
+    }
+    return attributedString;
+}
+
+/**
  图片质量压缩到某一范围内，如果后面用到多，可以抽成分类或者工具类,这里压缩递减比二分的运行时间长，二分可以限制下限。
  */
 + (UIImage *)compressImageSize:(UIImage *)image toByte:(NSUInteger)maxLength{

@@ -14,6 +14,13 @@
 		0425A25F28CB281600DA81BD /* HXMyMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0425A25E28CB281600DA81BD /* HXMyMessageCell.m */; };
 		0436510428C1F3CE0009ED38 /* UIView+TransitionColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0436510328C1F3CD0009ED38 /* UIView+TransitionColor.m */; };
 		0436510728C205380009ED38 /* HXStudyReportKeJianCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0436510628C205380009ED38 /* HXStudyReportKeJianCell.m */; };
+		045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F217A28D052B6007023D7 /* HXSchoolVerifyViewController.m */; };
+		045F218728D05948007023D7 /* light_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 045F217E28D05948007023D7 /* light_green@2x.png */; };
+		045F218828D05948007023D7 /* QRCodeReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218228D05948007023D7 /* QRCodeReaderViewController.m */; };
+		045F218928D05948007023D7 /* QRCodeReaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218328D05948007023D7 /* QRCodeReaderView.m */; };
+		045F218A28D05948007023D7 /* QRCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218528D05948007023D7 /* QRCodeReader.m */; };
+		045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218628D05948007023D7 /* UIImage+QRCode.m */; };
+		045F218F28D06753007023D7 /* HXUploadIDPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */; };
 		046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */; };
 		046E3F3928CB230B00FF188A /* HXMyMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */; };
 		0471DE7328C6DA300071FECE /* HXZaiXianXueQiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */; };
@@ -114,6 +121,7 @@
 		04A1FED428C9C50E00626409 /* HXZaiXianXuanKeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FED328C9C50E00626409 /* HXZaiXianXuanKeCell.m */; };
 		04A1FED728C9D9E600626409 /* HXYiJiaoFeiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FED628C9D9E600626409 /* HXYiJiaoFeiCell.m */; };
 		04A1FEDA28C9E3DA00626409 /* HXShowMoneyDetailsrView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FED928C9E3DA00626409 /* HXShowMoneyDetailsrView.m */; };
+		04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */; };
 		7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +140,20 @@
 		0436510328C1F3CD0009ED38 /* UIView+TransitionColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TransitionColor.m"; sourceTree = "<group>"; };
 		0436510528C205380009ED38 /* HXStudyReportKeJianCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudyReportKeJianCell.h; sourceTree = "<group>"; };
 		0436510628C205380009ED38 /* HXStudyReportKeJianCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXStudyReportKeJianCell.m; sourceTree = "<group>"; };
+		045F217928D052B6007023D7 /* HXSchoolVerifyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSchoolVerifyViewController.h; sourceTree = "<group>"; };
+		045F217A28D052B6007023D7 /* HXSchoolVerifyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXSchoolVerifyViewController.m; sourceTree = "<group>"; };
+		045F217D28D05948007023D7 /* QRCodeReaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReaderView.h; sourceTree = "<group>"; };
+		045F217E28D05948007023D7 /* light_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "light_green@2x.png"; sourceTree = "<group>"; };
+		045F217F28D05948007023D7 /* QRCodeReaderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReaderDelegate.h; sourceTree = "<group>"; };
+		045F218028D05948007023D7 /* UIImage+QRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+QRCode.h"; sourceTree = "<group>"; };
+		045F218128D05948007023D7 /* QRCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReader.h; sourceTree = "<group>"; };
+		045F218228D05948007023D7 /* QRCodeReaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeReaderViewController.m; sourceTree = "<group>"; };
+		045F218328D05948007023D7 /* QRCodeReaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeReaderView.m; sourceTree = "<group>"; };
+		045F218428D05948007023D7 /* QRCodeReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReaderViewController.h; sourceTree = "<group>"; };
+		045F218528D05948007023D7 /* QRCodeReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeReader.m; sourceTree = "<group>"; };
+		045F218628D05948007023D7 /* UIImage+QRCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+QRCode.m"; sourceTree = "<group>"; };
+		045F218D28D06753007023D7 /* HXUploadIDPhotoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXUploadIDPhotoViewController.h; sourceTree = "<group>"; };
+		045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXUploadIDPhotoViewController.m; sourceTree = "<group>"; };
 		046E3F3428CACB3000FF188A /* HXXuanKeMoneyDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXXuanKeMoneyDetailCell.h; sourceTree = "<group>"; };
 		046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXuanKeMoneyDetailCell.m; sourceTree = "<group>"; };
 		046E3F3728CB230B00FF188A /* HXMyMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageViewController.h; sourceTree = "<group>"; };
@@ -336,6 +358,8 @@
 		04A1FED628C9D9E600626409 /* HXYiJiaoFeiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXYiJiaoFeiCell.m; sourceTree = "<group>"; };
 		04A1FED828C9E3DA00626409 /* HXShowMoneyDetailsrView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXShowMoneyDetailsrView.h; sourceTree = "<group>"; };
 		04A1FED928C9E3DA00626409 /* HXShowMoneyDetailsrView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXShowMoneyDetailsrView.m; sourceTree = "<group>"; };
+		04DA873D28D0828C00FAFE93 /* HXFanKuiYouWuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFanKuiYouWuViewController.h; sourceTree = "<group>"; };
+		04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFanKuiYouWuViewController.m; sourceTree = "<group>"; };
 		3698F3FD4136E7326F9EC5ED /* Pods-CloudClassroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudClassroom.debug.xcconfig"; path = "Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom.debug.xcconfig"; sourceTree = "<group>"; };
 		7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CloudClassroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FF646E517525E29FE5182E5 /* Pods-CloudClassroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudClassroom.release.xcconfig"; path = "Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom.release.xcconfig"; sourceTree = "<group>"; };
@@ -393,6 +417,34 @@
 				048A0EBF28C044830077F40A /* HXShowMajorCell.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		045F217C28D05948007023D7 /* QRCodeReaderViewController */ = {
+			isa = PBXGroup;
+			children = (
+				045F217E28D05948007023D7 /* light_green@2x.png */,
+				045F218128D05948007023D7 /* QRCodeReader.h */,
+				045F218528D05948007023D7 /* QRCodeReader.m */,
+				045F217F28D05948007023D7 /* QRCodeReaderDelegate.h */,
+				045F217D28D05948007023D7 /* QRCodeReaderView.h */,
+				045F218328D05948007023D7 /* QRCodeReaderView.m */,
+				045F218428D05948007023D7 /* QRCodeReaderViewController.h */,
+				045F218228D05948007023D7 /* QRCodeReaderViewController.m */,
+				045F218028D05948007023D7 /* UIImage+QRCode.h */,
+				045F218628D05948007023D7 /* UIImage+QRCode.m */,
+			);
+			path = QRCodeReaderViewController;
+			sourceTree = "<group>";
+		};
+		045F218C28D066FC007023D7 /* 证件照上传 */ = {
+			isa = PBXGroup;
+			children = (
+				045F218D28D06753007023D7 /* HXUploadIDPhotoViewController.h */,
+				045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */,
+				04DA873D28D0828C00FAFE93 /* HXFanKuiYouWuViewController.h */,
+				04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */,
+			);
+			path = "证件照上传";
 			sourceTree = "<group>";
 		};
 		0474D59428BF5D5400A22731 /* GBLoopView */ = {
@@ -568,6 +620,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				045F217C28D05948007023D7 /* QRCodeReaderViewController */,
 				0474D59428BF5D5400A22731 /* GBLoopView */,
 				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				048B7CF528BDA209006EBAAE /* Category */,
@@ -779,6 +832,8 @@
 			children = (
 				048B7D7028BDA824006EBAAE /* HXLoginViewController.h */,
 				048B7D7128BDA824006EBAAE /* HXLoginViewController.m */,
+				045F217928D052B6007023D7 /* HXSchoolVerifyViewController.h */,
+				045F217A28D052B6007023D7 /* HXSchoolVerifyViewController.m */,
 			);
 			path = "登录";
 			sourceTree = "<group>";
@@ -812,6 +867,7 @@
 		048B7D7B28BDA927006EBAAE /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				045F218C28D066FC007023D7 /* 证件照上传 */,
 				04A1FEC728C9BD8000626409 /* 在线选课 */,
 				04A1FEC528C9BD8000626409 /* 我的消息 */,
 				04A1FEB728C981A600626409 /* 个人信息 */,
@@ -1071,6 +1127,7 @@
 				048B7CAA28BD9D89006EBAAE /* Main.storyboard in Resources */,
 				048B7D4828BDA20A006EBAAE /* launch_logo@3x.png in Resources */,
 				0490BBB228C884400095FF39 /* launchscreen_logo.png in Resources */,
+				045F218728D05948007023D7 /* light_green@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1151,6 +1208,7 @@
 				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				048B7D3D28BDA20A006EBAAE /* HXCalendarCollectionCell.m in Sources */,
+				045F218928D05948007023D7 /* QRCodeReaderView.m in Sources */,
 				048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */,
 				048B7D6928BDA20A006EBAAE /* HXCommonUtil.m in Sources */,
 				048B7D6528BDA20A006EBAAE /* CustomIOSAlertView.m in Sources */,
@@ -1170,6 +1228,7 @@
 				0425A25F28CB281600DA81BD /* HXMyMessageCell.m in Sources */,
 				0490DDA928C1D693009BA325 /* HXQIMoKaoShiViewController.m in Sources */,
 				048B7D5328BDA20A006EBAAE /* UIColor+Extension.m in Sources */,
+				045F218F28D06753007023D7 /* HXUploadIDPhotoViewController.m in Sources */,
 				048B7D4528BDA20A006EBAAE /* HXNavigationPushAnimation.m in Sources */,
 				048B7D7E28BDA944006EBAAE /* HXPersonalCenterViewController.m in Sources */,
 				0490BBB028C8799C0095FF39 /* HXMyBuKaoCell.m in Sources */,
@@ -1213,6 +1272,8 @@
 				0471DE7628C6DD510071FECE /* HXZaiXianCell.m in Sources */,
 				048B7D7628BDA89B006EBAAE /* HXHomePageViewController.m in Sources */,
 				04A1FED728C9D9E600626409 /* HXYiJiaoFeiCell.m in Sources */,
+				045F218A28D05948007023D7 /* QRCodeReader.m in Sources */,
+				045F218828D05948007023D7 /* QRCodeReaderViewController.m in Sources */,
 				048B7D3C28BDA20A006EBAAE /* HXCalendarWeekDayView.m in Sources */,
 				048A0EC028C044830077F40A /* HXShowMajorCell.m in Sources */,
 				048B7D5A28BDA20A006EBAAE /* XLPageSegmentedTitleView.m in Sources */,
@@ -1220,11 +1281,13 @@
 				048B7D3928BDA20A006EBAAE /* HXCalendarDayItem.m in Sources */,
 				040890F928BDAF5E007844E8 /* HXMainTabBar.m in Sources */,
 				040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */,
+				045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */,
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,
 				048B7D3F28BDA20A006EBAAE /* CXDatePickerView.m in Sources */,
 				0475F90B28C5F2BD00CCBA07 /* HXZongPingCell.m in Sources */,
 				048B7D4B28BDA20A006EBAAE /* UIControl+BlocksKit.m in Sources */,
+				04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */,
 				0490DD9A28C191CC009BA325 /* HXKeJianLearnViewController.m in Sources */,
 				048B7D6128BDA20A006EBAAE /* HXPullRefreshViewController.m in Sources */,
 				048B7D5828BDA20A006EBAAE /* HXBaseURLSessionManager.m in Sources */,
@@ -1238,6 +1301,7 @@
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
 				0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */,
 				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
+				045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */,
 				0475F90528C5EF2B00CCBA07 /* HXZongPingViewController.m in Sources */,
 				0475F8F828C5993800CCBA07 /* HXClassRankViewController.m in Sources */,
 			);
@@ -1388,6 +1452,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "学历教育云课堂";
+				INFOPLIST_KEY_NSCameraUsageDescription = "要在APP中扫描二维码，请点击\"好\"。";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "要在APP中上传照片、查看照片、保存照片，请点击\"好\"。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "要在APP中上传照片、查看照片、保存照片，请点击\"好\"。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1420,6 +1487,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "学历教育云课堂";
+				INFOPLIST_KEY_NSCameraUsageDescription = "要在APP中扫描二维码，请点击\"好\"。";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "要在APP中上传照片、查看照片、保存照片，请点击\"好\"。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "要在APP中上传照片、查看照片、保存照片，请点击\"好\"。";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
