@@ -8,7 +8,8 @@
 #ifndef HXDefines_h
 #define HXDefines_h
 
-
+//人脸识别声音
+#define CloseFaceLivenessSound   @"closeFaceLivenessSound"
 
 #define NETWORK_AVAILIABLE ([[AFNetworkReachabilityManager sharedManager] isReachable])
 #define NETWORK_ViaWWAN    ([[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])

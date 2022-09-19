@@ -11,6 +11,7 @@
 #import "HXUploadIDPhotoViewController.h"//证件照上传
 #import "HXZaiXianXuanKeViewController.h"//在线选课
 #import "UIImage+Extension.h"
+#import "HXFaceRecognitionView.h"
 
 @interface HXPersonalCenterViewController ()<UIScrollViewDelegate>
 
@@ -89,7 +90,9 @@
             break;
         case 3002://人脸识别
         {
-            
+            HXFaceRecognitionView *faceView = [[HXFaceRecognitionView alloc] init];
+            faceView.status = HXFaceRecognitionStatusSimulate;
+            [faceView showInViewController:self];
         }
             break;
         case 3003://修改密码
@@ -107,6 +110,11 @@
             HXZaiXianXuanKeViewController *vc = [[HXZaiXianXuanKeViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 3006://设置
+        {
+            
         }
             break;
             
@@ -160,7 +168,7 @@
     self.titleLabel.sd_layout
     .topSpaceToView(self.navBarView, kStatusBarHeight)
     .centerXEqualToView(self.navBarView)
-    .widthIs(100)
+    .widthIs(200)
     .heightIs(kNavigationBarHeight-kStatusBarHeight);
     
     self.mainScrollView.sd_layout
@@ -532,7 +540,8 @@
             [@{@"title":@"人脸识别",@"iconName":@"facerecognition_icon",@"handleEventTag":@(3002),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"修改密码",@"iconName":@"changepwd_icon",@"handleEventTag":@(3003),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"资料下载",@"iconName":@"ziliaodownload_icon",@"handleEventTag":@(3004),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"在线选课",@"iconName":@"zaixianxuabke_icon",@"handleEventTag":@(3005),@"isShow":@(1)} mutableCopy]
+            [@{@"title":@"在线选课",@"iconName":@"zaixianxuabke_icon",@"handleEventTag":@(3005),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"设置",@"iconName":@"setting_icon",@"handleEventTag":@(3006),@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _middleBujuArray;

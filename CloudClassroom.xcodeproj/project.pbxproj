@@ -33,6 +33,15 @@
 		0475F90528C5EF2B00CCBA07 /* HXZongPingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90428C5EF2B00CCBA07 /* HXZongPingViewController.m */; };
 		0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90728C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m */; };
 		0475F90B28C5F2BD00CCBA07 /* HXZongPingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90A28C5F2BD00CCBA07 /* HXZongPingCell.m */; };
+		047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 047D23B628D1729000514C1C /* HXFaceRecognitionView.m */; };
+		047D23C028D1746100514C1C /* idl-key.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BA28D1746100514C1C /* idl-key.face-ios */; };
+		047D23C128D1746100514C1C /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BC28D1746100514C1C /* idl-license.face-ios */; };
+		047D23C228D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BD28D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle */; };
+		047D23C328D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BE28D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle */; };
+		047D23C428D1A24B00514C1C /* IDLFaceSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 047D23B928D1746100514C1C /* IDLFaceSDK.framework */; };
+		047D23C528D1A24B00514C1C /* IDLFaceSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 047D23B928D1746100514C1C /* IDLFaceSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0480D9E228D2C68A00BA4CE2 /* HXFaceConfigObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0480D9E028D2C68A00BA4CE2 /* HXFaceConfigObject.m */; };
+		0480D9E428D303B700BA4CE2 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0480D9E328D3038B00BA4CE2 /* libc++.tbd */; };
 		048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EB828C043CD0077F40A /* HXShowMajorView.m */; };
 		048A0EBD28C0445B0077F40A /* HXMajorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EBC28C0445B0077F40A /* HXMajorModel.m */; };
 		048A0EC028C044830077F40A /* HXShowMajorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 048A0EBF28C044830077F40A /* HXShowMajorCell.m */; };
@@ -125,6 +134,20 @@
 		7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		047D23C628D1A24B00514C1C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				047D23C528D1A24B00514C1C /* IDLFaceSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		040890F328BDAF5E007844E8 /* HXMainTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXMainTabBar.m; sourceTree = "<group>"; };
 		040890F428BDAF5E007844E8 /* HXCustomBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXCustomBtn.m; sourceTree = "<group>"; };
@@ -178,6 +201,17 @@
 		0475F90728C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZaiXianBuKaoViewController.m; sourceTree = "<group>"; };
 		0475F90928C5F2BD00CCBA07 /* HXZongPingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZongPingCell.h; sourceTree = "<group>"; };
 		0475F90A28C5F2BD00CCBA07 /* HXZongPingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZongPingCell.m; sourceTree = "<group>"; };
+		047D23B528D1729000514C1C /* HXFaceRecognitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceRecognitionView.h; sourceTree = "<group>"; };
+		047D23B628D1729000514C1C /* HXFaceRecognitionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceRecognitionView.m; sourceTree = "<group>"; };
+		047D23B928D1746100514C1C /* IDLFaceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IDLFaceSDK.framework; sourceTree = "<group>"; };
+		047D23BA28D1746100514C1C /* idl-key.face-ios */ = {isa = PBXFileReference; lastKnownFileType = file; path = "idl-key.face-ios"; sourceTree = "<group>"; };
+		047D23BB28D1746100514C1C /* FaceParameterConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceParameterConfig.h; sourceTree = "<group>"; };
+		047D23BC28D1746100514C1C /* idl-license.face-ios */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "idl-license.face-ios"; sourceTree = "<group>"; };
+		047D23BD28D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.model.faceSDK.bundle; sourceTree = "<group>"; };
+		047D23BE28D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = com.baidu.idl.face.faceSDK.bundle; sourceTree = "<group>"; };
+		0480D9E028D2C68A00BA4CE2 /* HXFaceConfigObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFaceConfigObject.m; sourceTree = "<group>"; };
+		0480D9E128D2C68A00BA4CE2 /* HXFaceConfigObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXFaceConfigObject.h; sourceTree = "<group>"; };
+		0480D9E328D3038B00BA4CE2 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048A0EB728C043CD0077F40A /* HXShowMajorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXShowMajorView.h; sourceTree = "<group>"; };
 		048A0EB828C043CD0077F40A /* HXShowMajorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXShowMajorView.m; sourceTree = "<group>"; };
 		048A0EBB28C0445B0077F40A /* HXMajorModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMajorModel.h; sourceTree = "<group>"; };
@@ -370,6 +404,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0480D9E428D303B700BA4CE2 /* libc++.tbd in Frameworks */,
+				047D23C428D1A24B00514C1C /* IDLFaceSDK.framework in Frameworks */,
 				7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +549,30 @@
 			path = view;
 			sourceTree = "<group>";
 		};
+		047D23B428D1726A00514C1C /* 人脸识别 */ = {
+			isa = PBXGroup;
+			children = (
+				0480D9E128D2C68A00BA4CE2 /* HXFaceConfigObject.h */,
+				0480D9E028D2C68A00BA4CE2 /* HXFaceConfigObject.m */,
+				047D23B528D1729000514C1C /* HXFaceRecognitionView.h */,
+				047D23B628D1729000514C1C /* HXFaceRecognitionView.m */,
+			);
+			path = "人脸识别";
+			sourceTree = "<group>";
+		};
+		047D23B828D1746100514C1C /* BDFaceSDK */ = {
+			isa = PBXGroup;
+			children = (
+				047D23B928D1746100514C1C /* IDLFaceSDK.framework */,
+				047D23BA28D1746100514C1C /* idl-key.face-ios */,
+				047D23BB28D1746100514C1C /* FaceParameterConfig.h */,
+				047D23BC28D1746100514C1C /* idl-license.face-ios */,
+				047D23BD28D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle */,
+				047D23BE28D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle */,
+			);
+			path = BDFaceSDK;
+			sourceTree = "<group>";
+		};
 		048A0EBA28C0443A0077F40A /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,6 +680,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				047D23B828D1746100514C1C /* BDFaceSDK */,
 				045F217C28D05948007023D7 /* QRCodeReaderViewController */,
 				0474D59428BF5D5400A22731 /* GBLoopView */,
 				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
@@ -800,11 +861,11 @@
 		048B7D2A28BDA209006EBAAE /* FrameAccessor */ = {
 			isa = PBXGroup;
 			children = (
+				048B7D2F28BDA20A006EBAAE /* FrameAccessor.h */,
 				048B7D2B28BDA20A006EBAAE /* ScrollViewFrameAccessor.h */,
-				048B7D2C28BDA20A006EBAAE /* ViewFrameAccessor.m */,
 				048B7D2D28BDA20A006EBAAE /* ScrollViewFrameAccessor.m */,
 				048B7D2E28BDA20A006EBAAE /* ViewFrameAccessor.h */,
-				048B7D2F28BDA20A006EBAAE /* FrameAccessor.h */,
+				048B7D2C28BDA20A006EBAAE /* ViewFrameAccessor.m */,
 			);
 			path = FrameAccessor;
 			sourceTree = "<group>";
@@ -867,6 +928,7 @@
 		048B7D7B28BDA927006EBAAE /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				047D23B428D1726A00514C1C /* 人脸识别 */,
 				045F218C28D066FC007023D7 /* 证件照上传 */,
 				04A1FEC728C9BD8000626409 /* 在线选课 */,
 				04A1FEC528C9BD8000626409 /* 我的消息 */,
@@ -1046,6 +1108,7 @@
 		583E0E98BBAEC2425220FE09 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0480D9E328D3038B00BA4CE2 /* libc++.tbd */,
 				7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */,
 			);
 			name = Frameworks;
@@ -1073,6 +1136,7 @@
 				048B7C9A28BD9D89006EBAAE /* Resources */,
 				1A91BB957E61E0ACB59BDE8D /* [CP] Embed Pods Frameworks */,
 				C845C4398C73AF5185ABDECC /* [CP] Copy Pods Resources */,
+				047D23C628D1A24B00514C1C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1124,9 +1188,13 @@
 				048B7D4928BDA20A006EBAAE /* launch_logo@2x.png in Resources */,
 				048B7CAF28BD9D8A006EBAAE /* LaunchScreen.storyboard in Resources */,
 				048B7CAC28BD9D8A006EBAAE /* Assets.xcassets in Resources */,
+				047D23C028D1746100514C1C /* idl-key.face-ios in Resources */,
 				048B7CAA28BD9D89006EBAAE /* Main.storyboard in Resources */,
+				047D23C128D1746100514C1C /* idl-license.face-ios in Resources */,
 				048B7D4828BDA20A006EBAAE /* launch_logo@3x.png in Resources */,
+				047D23C228D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle in Resources */,
 				0490BBB228C884400095FF39 /* launchscreen_logo.png in Resources */,
+				047D23C328D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle in Resources */,
 				045F218728D05948007023D7 /* light_green@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1240,6 +1308,7 @@
 				048B7D5F28BDA20A006EBAAE /* HXBaseViewController.m in Sources */,
 				0490BBAD28C879020095FF39 /* HXMyBuKaoViewController.m in Sources */,
 				048B7D3628BDA20A006EBAAE /* HXCalendarManager.m in Sources */,
+				0480D9E228D2C68A00BA4CE2 /* HXFaceConfigObject.m in Sources */,
 				0475F8F428C587DB00CCBA07 /* HXStudyReportZuoYeCell.m in Sources */,
 				048B7D4128BDA20A006EBAAE /* CXDatePickerViewManager.m in Sources */,
 				040890FB28BDAF5E007844E8 /* HXMainTabBarController.m in Sources */,
@@ -1298,6 +1367,7 @@
 				048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */,
 				046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */,
 				0490DDA528C1D40C009BA325 /* HXPingShiZuoYeViewController.m in Sources */,
+				047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */,
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
 				0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */,
 				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
@@ -1445,9 +1515,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development: Shuo Li (55J4Q86345)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = S6PPR257T5;
+				DEVELOPMENT_TEAM = 2VGBX82LNP;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CloudClassroom/Util/BDFaceSDK",
+				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
@@ -1466,8 +1542,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.edu-edu.cloudclassroom";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu-edu.gaojijiao";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "高继教--developer";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1480,9 +1557,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Huaxia Dadi Long-distance Education Network Service Co., Ltd.";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = S6PPR257T5;
+				DEVELOPMENT_TEAM = 2VGBX82LNP;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CloudClassroom/Util/BDFaceSDK",
+				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
@@ -1501,8 +1584,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.edu-edu.cloudclassroom";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu-edu.gaojijiao";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "高继教--Distribution";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";

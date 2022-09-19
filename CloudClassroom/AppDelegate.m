@@ -8,7 +8,8 @@
 #import "AppDelegate.h"
 #import "HXLoginViewController.h"
 #import "IQKeyboardManager.h"
-
+#import "IDLFaceSDK/IDLFaceSDK.h"
+#import "FaceParameterConfig.h"
 
 @interface AppDelegate ()
 
@@ -65,6 +66,11 @@
     manager.shouldShowToolbarPlaceholder = NO;
     manager.keyboardDistanceFromTextField = IS_iPhoneX?50:40;/// 键盘距离文本输入框距离
     
+    //注册百度活体检测SDK
+    NSString* licensePath = [NSString stringWithFormat:@"%@.%@", FACE_LICENSE_NAME, FACE_LICENSE_SUFFIX ];
+    [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath andRemoteAuthorize:true];
+    NSLog(@"canWork = %d",[[FaceSDKManager sharedInstance] canWork]);
+    NSLog(@"version = %@",[[FaceSDKManager sharedInstance] getVersion]);
 }
 
 
