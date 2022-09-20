@@ -65,6 +65,7 @@
     config.shadowLineHidden = true;
     self.pageViewController = [[XLPageViewController alloc] initWithConfig:config];
     self.pageViewController.view.frame =CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight-kTabBarHeight);
+    self.pageViewController.bounces = NO;
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self;
     [self.pageViewController registerClass:HXLearnCenterPageTitleCell.class forTitleViewCellWithReuseIdentifier:@"HXLearnCenterPageTitleCell"];

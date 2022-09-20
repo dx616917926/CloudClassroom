@@ -10,6 +10,7 @@
 #import "HXMyMessageViewController.h"//我的消息
 #import "HXUploadIDPhotoViewController.h"//证件照上传
 #import "HXZaiXianXuanKeViewController.h"//在线选课
+#import "HXSettingViewController.h"//设置
 #import "UIImage+Extension.h"
 #import "HXFaceRecognitionView.h"
 
@@ -113,6 +114,18 @@
         }
             break;
         case 3006://设置
+        {
+            HXSettingViewController *vc = [[HXSettingViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 3007://资料上传
+        {
+            
+        }
+            break;
+        case 3008://毕业登记表
         {
             
         }
@@ -601,8 +614,8 @@
     if (!_bottomBujuArray) {
         _bottomBujuArray = [NSMutableArray array];
         [_bottomBujuArray addObjectsFromArray:@[
-            [@{@"title":@"资料上传",@"iconName":@"ziliaoupload_icon",@"handleEventTag":@(3006),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业登记表",@"iconName":@"dengjibiao_icon",@"handleEventTag":@(3007),@"isShow":@(1)} mutableCopy]
+            [@{@"title":@"资料上传",@"iconName":@"ziliaoupload_icon",@"handleEventTag":@(3007),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业登记表",@"iconName":@"dengjibiao_icon",@"handleEventTag":@(3008),@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _bottomBujuArray;

@@ -1,23 +1,23 @@
 //
-//  HXScoreQueryViewController.m
+//  HXPaymentQueryViewController.m
 //  CloudClassroom
 //
-//  Created by mac on 2022/9/5.
+//  Created by mac on 2022/9/19.
 //
 
-#import "HXScoreQueryViewController.h"
+#import "HXPaymentQueryViewController.h"
 #import "XLPageViewController.h"
-#import "HXZongPingViewController.h"//总评成绩
-#import "HXZaiXianBuKaoViewController.h"//在线补考成绩
+#import "HXXueFeiViewController.h"//学费
+#import "HXWangKeZiYuanFeiViewController.h"//网课资源费
 #import "HXLearnCenterPageTitleCell.h"
 
-@interface HXScoreQueryViewController ()<XLPageViewControllerDelegate,XLPageViewControllerDataSrouce>
+@interface HXPaymentQueryViewController ()<XLPageViewControllerDelegate,XLPageViewControllerDataSrouce>
 
 @property (nonatomic, strong) XLPageViewController *pageViewController;
 
 @end
 
-@implementation HXScoreQueryViewController
+@implementation HXPaymentQueryViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,7 +38,7 @@
 #pragma mark - UI
 -(void)createUI{
     
-    self.sc_navigationBar.title = @"成绩查询";
+    self.sc_navigationBar.title = @"缴费查询";
     //初始化控制器
     [self initPageViewController];
 }
@@ -65,22 +65,24 @@
     self.pageViewController = [[XLPageViewController alloc] initWithConfig:config];
     self.pageViewController.view.frame =CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight);
     
+    self.pageViewController.bounces = NO;
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self;
     [self.pageViewController registerClass:HXLearnCenterPageTitleCell.class forTitleViewCellWithReuseIdentifier:@"HXLearnCenterPageTitleCell"];
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
+    
 }
 
 #pragma mark -
 #pragma mark TableViewDelegate&DataSource
 - (UIViewController *)pageViewController:(XLPageViewController *)pageViewController viewControllerForIndex:(NSInteger)index {
     if (index==0) {
-        HXZongPingViewController *zongPingVc = [[HXZongPingViewController alloc] init];
-        return zongPingVc;
+        HXXueFeiViewController *vc = [[HXXueFeiViewController alloc] init];
+        return vc;
     }else if (index==1) {
-        HXZaiXianBuKaoViewController *zaiXianBuKaoVC = [[HXZaiXianBuKaoViewController alloc] init];
-        return zaiXianBuKaoVC;
+        HXWangKeZiYuanFeiViewController *vc = [[HXWangKeZiYuanFeiViewController alloc] init];
+        return vc;
     }
     return nil;
 }
@@ -106,8 +108,9 @@
 #pragma mark -
 #pragma mark 标题数据
 - (NSArray *)titles {
-    return @[@"总评成绩",@"在线补考成绩"];
+    return @[@"学费",@"网课资源费"];
 }
 
 @end
+
 

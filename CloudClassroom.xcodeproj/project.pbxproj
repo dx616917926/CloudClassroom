@@ -33,6 +33,13 @@
 		0475F90528C5EF2B00CCBA07 /* HXZongPingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90428C5EF2B00CCBA07 /* HXZongPingViewController.m */; };
 		0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90728C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m */; };
 		0475F90B28C5F2BD00CCBA07 /* HXZongPingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F90A28C5F2BD00CCBA07 /* HXZongPingCell.m */; };
+		0478DA5728D7FB8B00B645DE /* HXSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA5628D7FB8B00B645DE /* HXSettingViewController.m */; };
+		0478DA5B28D83A3D00B645DE /* HXFunctionCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA5A28D83A3D00B645DE /* HXFunctionCenterViewController.m */; };
+		0478DA6028D8471700B645DE /* HXPaymentQueryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA5F28D8471700B645DE /* HXPaymentQueryViewController.m */; };
+		0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA6228D847A000B645DE /* HXXueFeiViewController.m */; };
+		0478DA6628D847D700B645DE /* HXWangKeZiYuanFeiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA6528D847D700B645DE /* HXWangKeZiYuanFeiViewController.m */; };
+		0478DA6928D84FEB00B645DE /* HXXueFeiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA6828D84FEB00B645DE /* HXXueFeiCell.m */; };
+		0478DA6C28D8634900B645DE /* HXWangKeZiYuanFeiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0478DA6B28D8634900B645DE /* HXWangKeZiYuanFeiCell.m */; };
 		047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 047D23B628D1729000514C1C /* HXFaceRecognitionView.m */; };
 		047D23C028D1746100514C1C /* idl-key.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BA28D1746100514C1C /* idl-key.face-ios */; };
 		047D23C128D1746100514C1C /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BC28D1746100514C1C /* idl-license.face-ios */; };
@@ -201,6 +208,20 @@
 		0475F90728C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZaiXianBuKaoViewController.m; sourceTree = "<group>"; };
 		0475F90928C5F2BD00CCBA07 /* HXZongPingCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZongPingCell.h; sourceTree = "<group>"; };
 		0475F90A28C5F2BD00CCBA07 /* HXZongPingCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZongPingCell.m; sourceTree = "<group>"; };
+		0478DA5528D7FB8B00B645DE /* HXSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSettingViewController.h; sourceTree = "<group>"; };
+		0478DA5628D7FB8B00B645DE /* HXSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXSettingViewController.m; sourceTree = "<group>"; };
+		0478DA5928D83A3D00B645DE /* HXFunctionCenterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFunctionCenterViewController.h; sourceTree = "<group>"; };
+		0478DA5A28D83A3D00B645DE /* HXFunctionCenterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFunctionCenterViewController.m; sourceTree = "<group>"; };
+		0478DA5E28D8471700B645DE /* HXPaymentQueryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPaymentQueryViewController.h; sourceTree = "<group>"; };
+		0478DA5F28D8471700B645DE /* HXPaymentQueryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPaymentQueryViewController.m; sourceTree = "<group>"; };
+		0478DA6128D847A000B645DE /* HXXueFeiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXXueFeiViewController.h; sourceTree = "<group>"; };
+		0478DA6228D847A000B645DE /* HXXueFeiViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXueFeiViewController.m; sourceTree = "<group>"; };
+		0478DA6428D847D700B645DE /* HXWangKeZiYuanFeiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXWangKeZiYuanFeiViewController.h; sourceTree = "<group>"; };
+		0478DA6528D847D700B645DE /* HXWangKeZiYuanFeiViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXWangKeZiYuanFeiViewController.m; sourceTree = "<group>"; };
+		0478DA6728D84FEB00B645DE /* HXXueFeiCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXXueFeiCell.h; sourceTree = "<group>"; };
+		0478DA6828D84FEB00B645DE /* HXXueFeiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXueFeiCell.m; sourceTree = "<group>"; };
+		0478DA6A28D8634900B645DE /* HXWangKeZiYuanFeiCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXWangKeZiYuanFeiCell.h; sourceTree = "<group>"; };
+		0478DA6B28D8634900B645DE /* HXWangKeZiYuanFeiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXWangKeZiYuanFeiCell.m; sourceTree = "<group>"; };
 		047D23B528D1729000514C1C /* HXFaceRecognitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceRecognitionView.h; sourceTree = "<group>"; };
 		047D23B628D1729000514C1C /* HXFaceRecognitionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceRecognitionView.m; sourceTree = "<group>"; };
 		047D23B928D1746100514C1C /* IDLFaceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IDLFaceSDK.framework; sourceTree = "<group>"; };
@@ -545,6 +566,49 @@
 				0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */,
 				0471DE7428C6DD510071FECE /* HXZaiXianCell.h */,
 				0471DE7528C6DD510071FECE /* HXZaiXianCell.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		0478DA5428D7FB5500B645DE /* 设置 */ = {
+			isa = PBXGroup;
+			children = (
+				0478DA5528D7FB8B00B645DE /* HXSettingViewController.h */,
+				0478DA5628D7FB8B00B645DE /* HXSettingViewController.m */,
+			);
+			path = "设置";
+			sourceTree = "<group>";
+		};
+		0478DA5828D83A0600B645DE /* 功能中心 */ = {
+			isa = PBXGroup;
+			children = (
+				0478DA5928D83A3D00B645DE /* HXFunctionCenterViewController.h */,
+				0478DA5A28D83A3D00B645DE /* HXFunctionCenterViewController.m */,
+			);
+			path = "功能中心";
+			sourceTree = "<group>";
+		};
+		0478DA5C28D846BB00B645DE /* 缴费查询 */ = {
+			isa = PBXGroup;
+			children = (
+				0478DA5D28D846FC00B645DE /* view */,
+				0478DA5E28D8471700B645DE /* HXPaymentQueryViewController.h */,
+				0478DA5F28D8471700B645DE /* HXPaymentQueryViewController.m */,
+				0478DA6128D847A000B645DE /* HXXueFeiViewController.h */,
+				0478DA6228D847A000B645DE /* HXXueFeiViewController.m */,
+				0478DA6428D847D700B645DE /* HXWangKeZiYuanFeiViewController.h */,
+				0478DA6528D847D700B645DE /* HXWangKeZiYuanFeiViewController.m */,
+			);
+			path = "缴费查询";
+			sourceTree = "<group>";
+		};
+		0478DA5D28D846FC00B645DE /* view */ = {
+			isa = PBXGroup;
+			children = (
+				0478DA6728D84FEB00B645DE /* HXXueFeiCell.h */,
+				0478DA6828D84FEB00B645DE /* HXXueFeiCell.m */,
+				0478DA6A28D8634900B645DE /* HXWangKeZiYuanFeiCell.h */,
+				0478DA6B28D8634900B645DE /* HXWangKeZiYuanFeiCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -904,8 +968,10 @@
 			children = (
 				040890FC28BDFCD5007844E8 /* view */,
 				048A0EBA28C0443A0077F40A /* model */,
+				0478DA5C28D846BB00B645DE /* 缴费查询 */,
 				0475F8FE28C5ED4D00CCBA07 /* 成绩查询 */,
 				0475F8FC28C5ED4D00CCBA07 /* 我的补考 */,
+				0478DA5828D83A0600B645DE /* 功能中心 */,
 				048B7D7428BDA89B006EBAAE /* HXHomePageViewController.h */,
 				048B7D7528BDA89B006EBAAE /* HXHomePageViewController.m */,
 			);
@@ -928,6 +994,7 @@
 		048B7D7B28BDA927006EBAAE /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				0478DA5428D7FB5500B645DE /* 设置 */,
 				047D23B428D1726A00514C1C /* 人脸识别 */,
 				045F218C28D066FC007023D7 /* 证件照上传 */,
 				04A1FEC728C9BD8000626409 /* 在线选课 */,
@@ -1274,6 +1341,7 @@
 				0475F8FB28C5D35D00CCBA07 /* HXClassRankCell.m in Sources */,
 				048B7D6028BDA20A006EBAAE /* HXCommonWebViewController.m in Sources */,
 				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
+				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				048B7D3D28BDA20A006EBAAE /* HXCalendarCollectionCell.m in Sources */,
 				045F218928D05948007023D7 /* QRCodeReaderView.m in Sources */,
@@ -1291,7 +1359,9 @@
 				04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */,
 				048B7D6728BDA20A006EBAAE /* ScrollViewFrameAccessor.m in Sources */,
 				048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */,
+				0478DA5B28D83A3D00B645DE /* HXFunctionCenterViewController.m in Sources */,
 				048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */,
+				0478DA6028D8471700B645DE /* HXPaymentQueryViewController.m in Sources */,
 				048B7D3E28BDA20A006EBAAE /* HXCalendarAppearance.m in Sources */,
 				0425A25F28CB281600DA81BD /* HXMyMessageCell.m in Sources */,
 				0490DDA928C1D693009BA325 /* HXQIMoKaoShiViewController.m in Sources */,
@@ -1313,6 +1383,7 @@
 				048B7D4128BDA20A006EBAAE /* CXDatePickerViewManager.m in Sources */,
 				040890FB28BDAF5E007844E8 /* HXMainTabBarController.m in Sources */,
 				0490DDA228C1AD12009BA325 /* HXPingShiZuoYeCell.m in Sources */,
+				0478DA6C28D8634900B645DE /* HXWangKeZiYuanFeiCell.m in Sources */,
 				048B7D4728BDA20A006EBAAE /* UIImage+Tint.m in Sources */,
 				04A1FED428C9C50E00626409 /* HXZaiXianXuanKeCell.m in Sources */,
 				048A0EC928C058BD0077F40A /* HXTeachPlanViewController.m in Sources */,
@@ -1331,6 +1402,7 @@
 				0490DDB028C1E0A0009BA325 /* HXStudyReportViewController.m in Sources */,
 				048B7D6628BDA20A006EBAAE /* ViewFrameAccessor.m in Sources */,
 				048B7D6428BDA20A006EBAAE /* HXCheckUpdateTool.m in Sources */,
+				0478DA6928D84FEB00B645DE /* HXXueFeiCell.m in Sources */,
 				04A1FECE28C9C04800626409 /* HXZaiXianXuanKeViewChildController.m in Sources */,
 				048B7D6828BDA20A006EBAAE /* HXPublicParamTool.m in Sources */,
 				046E3F3928CB230B00FF188A /* HXMyMessageViewController.m in Sources */,
@@ -1354,6 +1426,7 @@
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,
 				048B7D3F28BDA20A006EBAAE /* CXDatePickerView.m in Sources */,
+				0478DA5728D7FB8B00B645DE /* HXSettingViewController.m in Sources */,
 				0475F90B28C5F2BD00CCBA07 /* HXZongPingCell.m in Sources */,
 				048B7D4B28BDA20A006EBAAE /* UIControl+BlocksKit.m in Sources */,
 				04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */,
@@ -1363,6 +1436,7 @@
 				048A0EBD28C0445B0077F40A /* HXMajorModel.m in Sources */,
 				0475F90228C5EE3600CCBA07 /* HXScoreQueryViewController.m in Sources */,
 				048B7D5028BDA20A006EBAAE /* HXDictionary.m in Sources */,
+				0478DA6628D847D700B645DE /* HXWangKeZiYuanFeiViewController.m in Sources */,
 				0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */,
 				048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */,
 				046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */,

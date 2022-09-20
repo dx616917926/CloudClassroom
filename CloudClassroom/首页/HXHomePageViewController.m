@@ -6,8 +6,12 @@
 //
 
 #import "HXHomePageViewController.h"
+
+#import "HXPaymentQueryViewController.h"//缴费查询
 #import "HXScoreQueryViewController.h"//成绩查询
 #import "HXMyBuKaoViewController.h"//我的补考
+#import "HXFunctionCenterViewController.h"//更多
+
 #import "HXKeJianLearnViewController.h"//课件学习
 #import "HXPingShiZuoYeViewController.h"//平时作业
 #import "HXQIMoKaoShiViewController.h"//期末考试
@@ -76,7 +80,9 @@
             break;
         case 5001:
         {
-            
+            HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 5002:
@@ -101,6 +107,18 @@
         case 5005:
         {
            
+        }
+            break;
+        case 5006:
+        {
+           
+        }
+            break;
+        case 5007:
+        {
+            HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
             
