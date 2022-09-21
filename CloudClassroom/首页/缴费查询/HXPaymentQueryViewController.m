@@ -64,7 +64,6 @@
     config.shadowLineHidden = true;
     self.pageViewController = [[XLPageViewController alloc] initWithConfig:config];
     self.pageViewController.view.frame =CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight);
-    
     self.pageViewController.bounces = NO;
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self;

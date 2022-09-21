@@ -153,6 +153,18 @@ typedef void(^XLContentScollBlock)(BOOL scrollEnabled);
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    NSArray *gestureArray = self.navigationController.view.gestureRecognizers;
+    // 当是侧滑手势的时候设置scrollview需要此手势失效即可
+    for (UIGestureRecognizer *gesture in gestureArray) {
+        if ([gesture isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+            [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:gesture];
+            break;
+        }
+    }
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     

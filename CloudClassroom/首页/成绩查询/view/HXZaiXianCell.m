@@ -41,11 +41,10 @@
 
 
 #pragma mark - Setter
--(void)setIndex:(NSInteger)index{
-    _index = index;
-    self.bottomLine.hidden = NO;
+-(void)setIsFirst:(BOOL)isFirst{
+    _isFirst = isFirst;
     self.bigBackgroundView.layer.mask = nil;
-    if (index==0) {
+    if (isFirst) {
         //圆角
        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(8 ,8)];
        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -53,10 +52,16 @@
        maskLayer.path = maskPath.CGPath;
        self.bigBackgroundView.layer.mask = maskLayer;
     }
-    if (index==4) {
+    
+}
+
+-(void)setIsLast:(BOOL)isLast{
+    _isLast = isLast;
+    self.bottomLine.hidden = NO;
+    if (isLast) {
         self.bottomLine.hidden = YES;
         //圆角
-       UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(10 ,10)];
+       UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(8 ,8)];
        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
        maskLayer.frame =self.bigBackgroundView.bounds;
        maskLayer.path = maskPath.CGPath;

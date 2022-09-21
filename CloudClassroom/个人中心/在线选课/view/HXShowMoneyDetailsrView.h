@@ -17,6 +17,8 @@ typedef void (^CallBack)(void);
 @property(nonatomic,strong) NSArray *dataArray;
 
 @property(nonatomic,assign) BOOL isShow;
+//是否有学期
+@property(nonatomic,assign) BOOL isHaveXueQi;
 
 @property(nonatomic,copy) CallBack callBack;
 

@@ -53,6 +53,10 @@
     }];
 }
 
+-(void)setIsHaveXueQi:(BOOL)isHaveXueQi{
+    _isHaveXueQi = isHaveXueQi;
+}
+
 
 #pragma mark - Public Method
 -(void)show{
@@ -166,6 +170,7 @@
     if (!cell) {
         cell = [[HXXuanKeMoneyDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xuanKeMoneyDetailCellIdentifier];
     }
+    cell.isHaveXueQi = self.isHaveXueQi;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

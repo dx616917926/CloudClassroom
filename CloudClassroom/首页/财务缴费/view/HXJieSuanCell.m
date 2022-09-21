@@ -1,23 +1,23 @@
 //
-//  HXXuanKeMoneyDetailCell.m
+//  HXJieSuanCell.m
 //  CloudClassroom
 //
-//  Created by mac on 2022/9/9.
+//  Created by mac on 2022/9/21.
 //
 
-#import "HXXuanKeMoneyDetailCell.h"
+#import "HXJieSuanCell.h"
 
-@interface HXXuanKeMoneyDetailCell ()
+@interface HXJieSuanCell ()
 
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UIButton *xueQiBtn;
-@property(nonatomic,strong) UILabel *courseNameLabel;
+@property(nonatomic,strong) UILabel *titleLabel;
 @property(nonatomic,strong) UILabel *priceLabel;
 
 
 @end
 
-@implementation HXXuanKeMoneyDetailCell
+@implementation HXJieSuanCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -44,24 +44,59 @@
     _isHaveXueQi = isHaveXueQi;
     if (!isHaveXueQi) {
         self.xueQiBtn.sd_layout.widthIs(0);
-        self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 0);
+        self.titleLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 0);
     }else{
         self.xueQiBtn.sd_layout.widthIs(50);
-        self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 8);
+        self.titleLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 8);
     }
 }
 
+
+#pragma mark - Setter
+-(void)setIsFirst:(BOOL)isFirst{
+    _isFirst = isFirst;
+    self.bigBackgroundView.layer.mask = nil;
+    if (isFirst) {
+        //圆角
+       UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(8 ,8)];
+       CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+       maskLayer.frame =self.bigBackgroundView.bounds;
+       maskLayer.path = maskPath.CGPath;
+       self.bigBackgroundView.layer.mask = maskLayer;
+    }
+    
+}
+
+-(void)setIsLast:(BOOL)isLast{
+    _isLast = isLast;
+    if (isLast) {
+        //圆角
+       UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(8 ,8)];
+       CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+       maskLayer.frame =self.bigBackgroundView.bounds;
+       maskLayer.path = maskPath.CGPath;
+       self.bigBackgroundView.layer.mask = maskLayer;
+    }
+}
+
+
 #pragma mark - UI
 -(void)createUI{
+    
+    self.contentView.backgroundColor = VCBackgroundColor;
+    self.backgroundColor =VCBackgroundColor;
 
     [self.contentView addSubview:self.bigBackgroundView];
     [self.bigBackgroundView addSubview:self.xueQiBtn];
-    [self.bigBackgroundView addSubview:self.courseNameLabel];
+    [self.bigBackgroundView addSubview:self.titleLabel];
     [self.bigBackgroundView addSubview:self.priceLabel];
     
-    self.bigBackgroundView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    self.bigBackgroundView.sd_cornerRadius = @8;
-    
+    self.bigBackgroundView.sd_layout
+    .topEqualToView(self.contentView)
+    .leftSpaceToView(self.contentView, 12)
+    .widthIs(kScreenWidth-24)
+    .heightIs(50);
+
 
     self.priceLabel.sd_layout
     .centerYEqualToView(self.bigBackgroundView)
@@ -76,7 +111,7 @@
     .heightIs(21);
     self.xueQiBtn.sd_cornerRadius=@2;
     
-    self.courseNameLabel.sd_layout
+    self.titleLabel.sd_layout
     .centerYEqualToView(self.bigBackgroundView)
     .leftSpaceToView(self.xueQiBtn, 8)
     .rightSpaceToView(self.priceLabel, 16)
@@ -107,14 +142,14 @@
     return _xueQiBtn;
 }
 
-- (UILabel *)courseNameLabel{
-    if (!_courseNameLabel) {
-        _courseNameLabel = [[UILabel alloc] init];
-        _courseNameLabel.font = HXBoldFont(15);
-        _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"马克思主义基本原理概论";
+- (UILabel *)titleLabel{
+    if (!_titleLabel) {
+        _titleLabel = [[UILabel alloc] init];
+        _titleLabel.font = HXBoldFont(15);
+        _titleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _titleLabel.text = @"学杂费";
     }
-    return _courseNameLabel;
+    return _titleLabel;
 }
 
 
@@ -122,7 +157,7 @@
     if (!_priceLabel) {
         _priceLabel = [[UILabel alloc] init];
         _priceLabel.font = HXBoldFont(14);
-        _priceLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _priceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _priceLabel.textAlignment = NSTextAlignmentRight;
         _priceLabel.isAttributedContent = YES;
         _priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"50." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥50.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
@@ -132,4 +167,5 @@
 
 
 @end
+
 

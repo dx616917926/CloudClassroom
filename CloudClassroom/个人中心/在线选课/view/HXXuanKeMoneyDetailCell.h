@@ -10,6 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXXuanKeMoneyDetailCell : UITableViewCell
+//是否有学期
+@property(nonatomic,assign) BOOL isHaveXueQi;
 
 @end
 

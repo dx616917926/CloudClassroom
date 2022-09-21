@@ -6,7 +6,7 @@
 //
 
 #import "HXHomePageViewController.h"
-
+#import "HXFinancePaymentViewController.h"//财务缴费
 #import "HXPaymentQueryViewController.h"//缴费查询
 #import "HXScoreQueryViewController.h"//成绩查询
 #import "HXMyBuKaoViewController.h"//我的补考
@@ -20,6 +20,7 @@
 #import "HXCurrentLearCell.h"
 #import "GBLoopView.h"
 #import "HXShowMajorView.h"
+#import "HXDegreeEnglishShowView.h"
 
 @interface HXHomePageViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
 
@@ -73,48 +74,53 @@
 -(void)handleMiddleClick:(UIButton *)sender{
     NSInteger tag = sender.tag;
     switch (tag) {
-        case 5000:
+        case 5000://财务缴费
         {
+            HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
            
         }
             break;
-        case 5001:
+        case 5001://缴费查询
         {
             HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 5002:
+        case 5002://成绩查询
         {
             HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 5003:
+        case 5003://我的补考
         {
             HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
-        case 5004:
+        case 5004://毕业论文
         {
            
         }
             break;
-        case 5005:
+        case 5005://学位英语
+        {
+            HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
+            degreeEnglishShowView.type = WeiKaiFangBaoMingType;
+            [degreeEnglishShowView show];
+        }
+            break;
+        case 5006://我的直播
         {
            
         }
             break;
-        case 5006:
-        {
-           
-        }
-            break;
-        case 5007:
+        case 5007://更多
         {
             HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;

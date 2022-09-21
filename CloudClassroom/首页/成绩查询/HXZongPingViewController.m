@@ -65,7 +65,8 @@
         cell = [[HXZongPingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:zongPingCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.index = indexPath.row;
+    cell.isFirst = (indexPath.row==0);
+    cell.isLast = (indexPath.row==4);
     return cell;
 }
 

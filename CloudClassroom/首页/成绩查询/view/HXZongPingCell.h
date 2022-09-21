@@ -11,7 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXZongPingCell : UITableViewCell
 
-@property(nonatomic,assign) NSInteger index;
+//是否第一和最后
+@property(nonatomic,assign) BOOL isFirst;
+@property(nonatomic,assign) BOOL isLast;
 
 @end
 
