@@ -16,6 +16,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.noDataTipView.tipTitle = @"暂无面授课表～";
+    self.noDataTipView.frame = CGRectMake(0, 16, kScreenWidth, kScreenHeight);
+    [self.view addSubview:self.noDataTipView];
 }
 
 /*

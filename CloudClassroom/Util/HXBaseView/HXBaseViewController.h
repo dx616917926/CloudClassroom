@@ -7,11 +7,15 @@
 
 #import <UIKit/UIKit.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXBaseViewController : UIViewController
+
 @property (nonatomic, strong) HXBarButtonItem *leftBarItem;
 @property(nonatomic,assign,readonly)BOOL isLogin;
+
+@property(nonatomic,strong) HXNoDataTipView *noDataTipView;
 
 @end
 

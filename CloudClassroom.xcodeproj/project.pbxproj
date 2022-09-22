@@ -23,6 +23,21 @@
 		045F218F28D06753007023D7 /* HXUploadIDPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */; };
 		046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */; };
 		046E3F3928CB230B00FF188A /* HXMyMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */; };
+		0470DC2628DC0EB7007A25DC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0470DC0A28DC0EB7007A25DC /* LICENSE */; };
+		0470DC2728DC0EB7007A25DC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0470DC0B28DC0EB7007A25DC /* README.md */; };
+		0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1028DC0EB7007A25DC /* VIMediaCacheWorker.m */; };
+		0470DC2928DC0EB7007A25DC /* VICacheConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1528DC0EB7007A25DC /* VICacheConfiguration.m */; };
+		0470DC2A28DC0EB7007A25DC /* VICacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1628DC0EB7007A25DC /* VICacheManager.m */; };
+		0470DC2B28DC0EB7007A25DC /* VICacheAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1728DC0EB7007A25DC /* VICacheAction.m */; };
+		0470DC2C28DC0EB7007A25DC /* VICacheSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1928DC0EB7007A25DC /* VICacheSessionManager.m */; };
+		0470DC2D28DC0EB7007A25DC /* NSString+VIMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1A28DC0EB7007A25DC /* NSString+VIMD5.m */; };
+		0470DC2E28DC0EB7007A25DC /* VIContentInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1C28DC0EB7007A25DC /* VIContentInfo.m */; };
+		0470DC2F28DC0EB7007A25DC /* VIResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1D28DC0EB7007A25DC /* VIResourceLoader.m */; };
+		0470DC3028DC0EB7007A25DC /* VIMediaDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC1E28DC0EB7007A25DC /* VIMediaDownloader.m */; };
+		0470DC3128DC0EB7007A25DC /* VIResourceLoadingRequestWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC2328DC0EB7007A25DC /* VIResourceLoadingRequestWorker.m */; };
+		0470DC3228DC0EB7007A25DC /* VIResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC2428DC0EB7007A25DC /* VIResourceLoaderManager.m */; };
+		0470DC3628DC0FB4007A25DC /* HXFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC3528DC0FB4007A25DC /* HXFileManager.m */; };
+		0470DC3928DC0FFD007A25DC /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC3828DC0FFD007A25DC /* Utilities.m */; };
 		0471DE7328C6DA300071FECE /* HXZaiXianXueQiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */; };
 		0471DE7628C6DD510071FECE /* HXZaiXianCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7528C6DD510071FECE /* HXZaiXianCell.m */; };
 		0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0474D59528BF5D5400A22731 /* GBLoopView.m */; };
@@ -93,7 +108,6 @@
 		048B7D4F28BDA20A006EBAAE /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CF628BDA209006EBAAE /* NSString+Base64.m */; };
 		048B7D5028BDA20A006EBAAE /* HXDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CF928BDA209006EBAAE /* HXDictionary.m */; };
 		048B7D5128BDA20A006EBAAE /* UIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CFB28BDA209006EBAAE /* UIImage+Extension.m */; };
-		048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7CFE28BDA209006EBAAE /* HXFileManager.m */; };
 		048B7D5328BDA20A006EBAAE /* UIColor+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D0028BDA209006EBAAE /* UIColor+Extension.m */; };
 		048B7D5428BDA20A006EBAAE /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D0328BDA209006EBAAE /* NSString+md5.m */; };
 		048B7D5528BDA20A006EBAAE /* NSDate+HXDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D0428BDA209006EBAAE /* NSDate+HXDate.m */; };
@@ -193,6 +207,35 @@
 		046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXuanKeMoneyDetailCell.m; sourceTree = "<group>"; };
 		046E3F3728CB230B00FF188A /* HXMyMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageViewController.h; sourceTree = "<group>"; };
 		046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMyMessageViewController.m; sourceTree = "<group>"; };
+		0470DC0A28DC0EB7007A25DC /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		0470DC0B28DC0EB7007A25DC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0470DC0D28DC0EB7007A25DC /* VIMediaCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaCache.h; sourceTree = "<group>"; };
+		0470DC0F28DC0EB7007A25DC /* VICacheAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheAction.h; sourceTree = "<group>"; };
+		0470DC1028DC0EB7007A25DC /* VIMediaCacheWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIMediaCacheWorker.m; sourceTree = "<group>"; };
+		0470DC1128DC0EB7007A25DC /* VICacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheManager.h; sourceTree = "<group>"; };
+		0470DC1228DC0EB7007A25DC /* VICacheConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheConfiguration.h; sourceTree = "<group>"; };
+		0470DC1328DC0EB7007A25DC /* NSString+VIMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+VIMD5.h"; sourceTree = "<group>"; };
+		0470DC1428DC0EB7007A25DC /* VICacheSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VICacheSessionManager.h; sourceTree = "<group>"; };
+		0470DC1528DC0EB7007A25DC /* VICacheConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheConfiguration.m; sourceTree = "<group>"; };
+		0470DC1628DC0EB7007A25DC /* VICacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheManager.m; sourceTree = "<group>"; };
+		0470DC1728DC0EB7007A25DC /* VICacheAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheAction.m; sourceTree = "<group>"; };
+		0470DC1828DC0EB7007A25DC /* VIMediaCacheWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaCacheWorker.h; sourceTree = "<group>"; };
+		0470DC1928DC0EB7007A25DC /* VICacheSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VICacheSessionManager.m; sourceTree = "<group>"; };
+		0470DC1A28DC0EB7007A25DC /* NSString+VIMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+VIMD5.m"; sourceTree = "<group>"; };
+		0470DC1C28DC0EB7007A25DC /* VIContentInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIContentInfo.m; sourceTree = "<group>"; };
+		0470DC1D28DC0EB7007A25DC /* VIResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoader.m; sourceTree = "<group>"; };
+		0470DC1E28DC0EB7007A25DC /* VIMediaDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIMediaDownloader.m; sourceTree = "<group>"; };
+		0470DC1F28DC0EB7007A25DC /* VIResourceLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoaderManager.h; sourceTree = "<group>"; };
+		0470DC2028DC0EB7007A25DC /* VIResourceLoadingRequestWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoadingRequestWorker.h; sourceTree = "<group>"; };
+		0470DC2128DC0EB7007A25DC /* VIResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIResourceLoader.h; sourceTree = "<group>"; };
+		0470DC2228DC0EB7007A25DC /* VIContentInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIContentInfo.h; sourceTree = "<group>"; };
+		0470DC2328DC0EB7007A25DC /* VIResourceLoadingRequestWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoadingRequestWorker.m; sourceTree = "<group>"; };
+		0470DC2428DC0EB7007A25DC /* VIResourceLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIResourceLoaderManager.m; sourceTree = "<group>"; };
+		0470DC2528DC0EB7007A25DC /* VIMediaDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIMediaDownloader.h; sourceTree = "<group>"; };
+		0470DC3428DC0FB4007A25DC /* HXFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXFileManager.h; sourceTree = "<group>"; };
+		0470DC3528DC0FB4007A25DC /* HXFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFileManager.m; sourceTree = "<group>"; };
+		0470DC3728DC0FFD007A25DC /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		0470DC3828DC0FFD007A25DC /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
 		0471DE7128C6DA300071FECE /* HXZaiXianXueQiCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZaiXianXueQiCell.h; sourceTree = "<group>"; };
 		0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZaiXianXueQiCell.m; sourceTree = "<group>"; };
 		0471DE7428C6DD510071FECE /* HXZaiXianCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZaiXianCell.h; sourceTree = "<group>"; };
@@ -331,7 +374,6 @@
 		048B7CFB28BDA209006EBAAE /* UIImage+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extension.m"; sourceTree = "<group>"; };
 		048B7CFC28BDA209006EBAAE /* Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rotation.h; sourceTree = "<group>"; };
 		048B7CFD28BDA209006EBAAE /* NSString+size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+size.h"; sourceTree = "<group>"; };
-		048B7CFE28BDA209006EBAAE /* HXFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFileManager.m; sourceTree = "<group>"; };
 		048B7CFF28BDA209006EBAAE /* NSString+HXString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HXString.h"; sourceTree = "<group>"; };
 		048B7D0028BDA209006EBAAE /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
 		048B7D0128BDA209006EBAAE /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
@@ -340,7 +382,6 @@
 		048B7D0428BDA209006EBAAE /* NSDate+HXDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HXDate.m"; sourceTree = "<group>"; };
 		048B7D0528BDA209006EBAAE /* HXDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXDictionary.h; sourceTree = "<group>"; };
 		048B7D0628BDA209006EBAAE /* NSString+HXString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HXString.m"; sourceTree = "<group>"; };
-		048B7D0728BDA209006EBAAE /* HXFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXFileManager.h; sourceTree = "<group>"; };
 		048B7D0828BDA209006EBAAE /* NSString+size.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+size.m"; sourceTree = "<group>"; };
 		048B7D0A28BDA209006EBAAE /* HXBaseURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXBaseURLSessionManager.m; sourceTree = "<group>"; };
 		048B7D0B28BDA209006EBAAE /* HXBaseURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXBaseURLSessionManager.h; sourceTree = "<group>"; };
@@ -517,6 +558,73 @@
 				04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */,
 			);
 			path = "证件照上传";
+			sourceTree = "<group>";
+		};
+		0470DC0928DC0EB7007A25DC /* VIMediaCache */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC0A28DC0EB7007A25DC /* LICENSE */,
+				0470DC0B28DC0EB7007A25DC /* README.md */,
+				0470DC0C28DC0EB7007A25DC /* VIMediaCache */,
+			);
+			path = VIMediaCache;
+			sourceTree = "<group>";
+		};
+		0470DC0C28DC0EB7007A25DC /* VIMediaCache */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC0D28DC0EB7007A25DC /* VIMediaCache.h */,
+				0470DC0E28DC0EB7007A25DC /* Cache */,
+				0470DC1B28DC0EB7007A25DC /* ResourceLoader */,
+			);
+			path = VIMediaCache;
+			sourceTree = "<group>";
+		};
+		0470DC0E28DC0EB7007A25DC /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC0F28DC0EB7007A25DC /* VICacheAction.h */,
+				0470DC1028DC0EB7007A25DC /* VIMediaCacheWorker.m */,
+				0470DC1128DC0EB7007A25DC /* VICacheManager.h */,
+				0470DC1228DC0EB7007A25DC /* VICacheConfiguration.h */,
+				0470DC1328DC0EB7007A25DC /* NSString+VIMD5.h */,
+				0470DC1428DC0EB7007A25DC /* VICacheSessionManager.h */,
+				0470DC1528DC0EB7007A25DC /* VICacheConfiguration.m */,
+				0470DC1628DC0EB7007A25DC /* VICacheManager.m */,
+				0470DC1728DC0EB7007A25DC /* VICacheAction.m */,
+				0470DC1828DC0EB7007A25DC /* VIMediaCacheWorker.h */,
+				0470DC1928DC0EB7007A25DC /* VICacheSessionManager.m */,
+				0470DC1A28DC0EB7007A25DC /* NSString+VIMD5.m */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		0470DC1B28DC0EB7007A25DC /* ResourceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC1C28DC0EB7007A25DC /* VIContentInfo.m */,
+				0470DC1D28DC0EB7007A25DC /* VIResourceLoader.m */,
+				0470DC1E28DC0EB7007A25DC /* VIMediaDownloader.m */,
+				0470DC1F28DC0EB7007A25DC /* VIResourceLoaderManager.h */,
+				0470DC2028DC0EB7007A25DC /* VIResourceLoadingRequestWorker.h */,
+				0470DC2128DC0EB7007A25DC /* VIResourceLoader.h */,
+				0470DC2228DC0EB7007A25DC /* VIContentInfo.h */,
+				0470DC2328DC0EB7007A25DC /* VIResourceLoadingRequestWorker.m */,
+				0470DC2428DC0EB7007A25DC /* VIResourceLoaderManager.m */,
+				0470DC2528DC0EB7007A25DC /* VIMediaDownloader.h */,
+			);
+			path = ResourceLoader;
+			sourceTree = "<group>";
+		};
+		0470DC3328DC0F97007A25DC /* HXFileManager */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC3728DC0FFD007A25DC /* Utilities.h */,
+				0470DC3828DC0FFD007A25DC /* Utilities.m */,
+				0470DC3428DC0FB4007A25DC /* HXFileManager.h */,
+				0470DC3528DC0FB4007A25DC /* HXFileManager.m */,
+			);
+			path = HXFileManager;
 			sourceTree = "<group>";
 		};
 		0474D59428BF5D5400A22731 /* GBLoopView */ = {
@@ -799,6 +907,8 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				0470DC3328DC0F97007A25DC /* HXFileManager */,
+				0470DC0928DC0EB7007A25DC /* VIMediaCache */,
 				047D23B828D1746100514C1C /* BDFaceSDK */,
 				045F217C28D05948007023D7 /* QRCodeReaderViewController */,
 				0474D59428BF5D5400A22731 /* GBLoopView */,
@@ -891,8 +1001,6 @@
 			children = (
 				048B7D0528BDA209006EBAAE /* HXDictionary.h */,
 				048B7CF928BDA209006EBAAE /* HXDictionary.m */,
-				048B7D0728BDA209006EBAAE /* HXFileManager.h */,
-				048B7CFE28BDA209006EBAAE /* HXFileManager.m */,
 				048B7CF828BDA209006EBAAE /* NSDate+HXDate.h */,
 				048B7D0428BDA209006EBAAE /* NSDate+HXDate.m */,
 				048B7D0128BDA209006EBAAE /* NSString+Base64.h */,
@@ -917,8 +1025,8 @@
 		048B7D0928BDA209006EBAAE /* HXHTTPSessionManager */ = {
 			isa = PBXGroup;
 			children = (
-				048B7D0A28BDA209006EBAAE /* HXBaseURLSessionManager.m */,
 				048B7D0B28BDA209006EBAAE /* HXBaseURLSessionManager.h */,
+				048B7D0A28BDA209006EBAAE /* HXBaseURLSessionManager.m */,
 			);
 			path = HXHTTPSessionManager;
 			sourceTree = "<group>";
@@ -992,8 +1100,8 @@
 		048B7D3028BDA20A006EBAAE /* HXPublicParamTool */ = {
 			isa = PBXGroup;
 			children = (
-				048B7D3128BDA20A006EBAAE /* HXPublicParamTool.m */,
 				048B7D3228BDA20A006EBAAE /* HXPublicParamTool.h */,
+				048B7D3128BDA20A006EBAAE /* HXPublicParamTool.m */,
 			);
 			path = HXPublicParamTool;
 			sourceTree = "<group>";
@@ -1310,6 +1418,7 @@
 			files = (
 				04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */,
 				048B7D4928BDA20A006EBAAE /* launch_logo@2x.png in Resources */,
+				0470DC2628DC0EB7007A25DC /* LICENSE in Resources */,
 				048B7CAF28BD9D8A006EBAAE /* LaunchScreen.storyboard in Resources */,
 				048B7CAC28BD9D8A006EBAAE /* Assets.xcassets in Resources */,
 				047D23C028D1746100514C1C /* idl-key.face-ios in Resources */,
@@ -1317,6 +1426,7 @@
 				047D23C128D1746100514C1C /* idl-license.face-ios in Resources */,
 				048B7D4828BDA20A006EBAAE /* launch_logo@3x.png in Resources */,
 				047D23C228D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle in Resources */,
+				0470DC2728DC0EB7007A25DC /* README.md in Resources */,
 				0490BBB228C884400095FF39 /* launchscreen_logo.png in Resources */,
 				047D23C328D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle in Resources */,
 				045F218728D05948007023D7 /* light_green@2x.png in Resources */,
@@ -1389,7 +1499,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0470DC2C28DC0EB7007A25DC /* VICacheSessionManager.m in Sources */,
 				04A1FEC428C995E700626409 /* HXPersonalInforModel.m in Sources */,
+				0470DC3628DC0FB4007A25DC /* HXFileManager.m in Sources */,
+				0470DC2928DC0EB7007A25DC /* VICacheConfiguration.m in Sources */,
 				048B7D5E28BDA20A006EBAAE /* XLPageViewControllerUtil.m in Sources */,
 				048B7D4F28BDA20A006EBAAE /* NSString+Base64.m in Sources */,
 				048B7D5B28BDA20A006EBAAE /* XLPageBasicTitleView.m in Sources */,
@@ -1399,6 +1512,7 @@
 				0479599C28DADC67001F8BC6 /* HXFinancePaymentViewController.m in Sources */,
 				048B7D6028BDA20A006EBAAE /* HXCommonWebViewController.m in Sources */,
 				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
+				0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				048B7D3D28BDA20A006EBAAE /* HXCalendarCollectionCell.m in Sources */,
@@ -1418,6 +1532,7 @@
 				048B7D6728BDA20A006EBAAE /* ScrollViewFrameAccessor.m in Sources */,
 				048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */,
 				0478DA5B28D83A3D00B645DE /* HXFunctionCenterViewController.m in Sources */,
+				0470DC2B28DC0EB7007A25DC /* VICacheAction.m in Sources */,
 				048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */,
 				0478DA6028D8471700B645DE /* HXPaymentQueryViewController.m in Sources */,
 				048B7D3E28BDA20A006EBAAE /* HXCalendarAppearance.m in Sources */,
@@ -1433,6 +1548,7 @@
 				047959A528DAEF16001F8BC6 /* HXDegreeEnglishShowView.m in Sources */,
 				048B7D3728BDA20A006EBAAE /* HXCircleView.m in Sources */,
 				048B7D6328BDA20A006EBAAE /* HXBaseTableViewCell.m in Sources */,
+				0470DC2E28DC0EB7007A25DC /* VIContentInfo.m in Sources */,
 				048B7D4228BDA20A006EBAAE /* HXBarButtonItem.m in Sources */,
 				048B7D5D28BDA20A006EBAAE /* XLPageTitleCell.m in Sources */,
 				048B7D5F28BDA20A006EBAAE /* HXBaseViewController.m in Sources */,
@@ -1447,6 +1563,7 @@
 				048B7D4728BDA20A006EBAAE /* UIImage+Tint.m in Sources */,
 				04A1FED428C9C50E00626409 /* HXZaiXianXuanKeCell.m in Sources */,
 				048A0EC928C058BD0077F40A /* HXTeachPlanViewController.m in Sources */,
+				0470DC3928DC0FFD007A25DC /* Utilities.m in Sources */,
 				04A1FEDA28C9E3DA00626409 /* HXShowMoneyDetailsrView.m in Sources */,
 				048B7D6228BDA20A006EBAAE /* HXNoDataTipView.m in Sources */,
 				048B7D5728BDA20A006EBAAE /* NSString+size.m in Sources */,
@@ -1460,6 +1577,8 @@
 				0490DDAC28C1D6DF009BA325 /* HXQiMoKaoShiCell.m in Sources */,
 				048A0EC628C058910077F40A /* HXOnlineLearnViewController.m in Sources */,
 				0490DDB028C1E0A0009BA325 /* HXStudyReportViewController.m in Sources */,
+				0470DC3128DC0EB7007A25DC /* VIResourceLoadingRequestWorker.m in Sources */,
+				0470DC2F28DC0EB7007A25DC /* VIResourceLoader.m in Sources */,
 				0479599F28DADE7D001F8BC6 /* HXFinancePaymentCell.m in Sources */,
 				048B7D6628BDA20A006EBAAE /* ViewFrameAccessor.m in Sources */,
 				048B7D6428BDA20A006EBAAE /* HXCheckUpdateTool.m in Sources */,
@@ -1484,6 +1603,7 @@
 				048B7D3928BDA20A006EBAAE /* HXCalendarDayItem.m in Sources */,
 				040890F928BDAF5E007844E8 /* HXMainTabBar.m in Sources */,
 				040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */,
+				0470DC2A28DC0EB7007A25DC /* VICacheManager.m in Sources */,
 				045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */,
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,
@@ -1492,6 +1612,7 @@
 				0475F90B28C5F2BD00CCBA07 /* HXZongPingCell.m in Sources */,
 				048B7D4B28BDA20A006EBAAE /* UIControl+BlocksKit.m in Sources */,
 				04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */,
+				0470DC2D28DC0EB7007A25DC /* NSString+VIMD5.m in Sources */,
 				0490DD9A28C191CC009BA325 /* HXKeJianLearnViewController.m in Sources */,
 				048B7D6128BDA20A006EBAAE /* HXPullRefreshViewController.m in Sources */,
 				048B7D5828BDA20A006EBAAE /* HXBaseURLSessionManager.m in Sources */,
@@ -1500,14 +1621,15 @@
 				048B7D5028BDA20A006EBAAE /* HXDictionary.m in Sources */,
 				0478DA6628D847D700B645DE /* HXWangKeZiYuanFeiViewController.m in Sources */,
 				0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */,
-				048B7D5228BDA20A006EBAAE /* HXFileManager.m in Sources */,
 				046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */,
 				0490DDA528C1D40C009BA325 /* HXPingShiZuoYeViewController.m in Sources */,
 				047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */,
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
 				0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */,
 				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
+				0470DC3028DC0EB7007A25DC /* VIMediaDownloader.m in Sources */,
 				045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */,
+				0470DC3228DC0EB7007A25DC /* VIResourceLoaderManager.m in Sources */,
 				0475F90528C5EF2B00CCBA07 /* HXZongPingViewController.m in Sources */,
 				0475F8F828C5993800CCBA07 /* HXClassRankViewController.m in Sources */,
 			);
@@ -1585,7 +1707,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1637,7 +1759,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1677,13 +1799,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu-edu.gaojijiao";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "高继教--developer";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Debug;
 		};
@@ -1719,13 +1842,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "edu-edu.gaojijiao";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "高继教--Distribution";
 				RESOURCES_TARGETED_DEVICE_FAMILY = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Release;
 		};

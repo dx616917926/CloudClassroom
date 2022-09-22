@@ -27,7 +27,12 @@
     self.view.backgroundColor = VCBackgroundColor;
 }
 
-
+-(HXNoDataTipView *)noDataTipView{
+    if (!_noDataTipView) {
+        _noDataTipView = [[HXNoDataTipView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight)];
+    }
+    return _noDataTipView;
+}
 
 - (instancetype)init
 {

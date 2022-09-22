@@ -7,6 +7,7 @@
 //
 
 #import "HXFileManager.h"
+#import "Utilities.h"
 
 @implementation HXFileManager
 
@@ -38,7 +39,77 @@
     return [manager fileExistsAtPath:path];
 }
 
-	+ (void)calculateSizeWithCompletionBlock:(HXFileManagerCalculateSizeBlock)completionBlock {
++(NSString*)userNamePath
+{
+    NSFileManager *filemgr = [NSFileManager new];
+    static NSString *Folder;
+    
+    NSString *Dir = [self appDocumentsPath];
+    NSString *path = [Utilities MD5StringWithKey:@"HX"];
+    Folder = [Dir stringByAppendingPathComponent:path];
+    
+    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath:Folder];
+    if (exist) {
+        return Folder;
+    }
+    
+    NSError *error = nil;
+    if(![filemgr createDirectoryAtPath:Folder withIntermediateDirectories:YES attributes:nil error:&error]) {
+        NSLog(@"Failed to create cache directory at %@", Folder);
+        Folder = nil;
+    }else
+    {
+        [self addSkipBackupAttributeToItemAtPath:Folder];
+    }
+    
+    return Folder;
+}
+
++(NSString*)userNameRelativePath
+{
+    NSFileManager *filemgr = [NSFileManager new];
+    static NSString *Folder;
+    
+    NSString *Dir = [self appDocumentsPath];
+    NSString *path = [Utilities MD5StringWithKey:@"HX"];
+    Folder = [Dir stringByAppendingPathComponent:path];
+    
+    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath:Folder];
+    if (exist) {
+        return path;
+    }
+    
+    NSError *error = nil;
+    if(![filemgr createDirectoryAtPath:Folder withIntermediateDirectories:YES attributes:nil error:&error]) {
+        NSLog(@"Failed to create cache directory at %@", Folder);
+    }else
+    {
+        [self addSkipBackupAttributeToItemAtPath:Folder];
+    }
+    
+    return path;
+}
+
+
++ (BOOL)addSkipBackupAttributeToItemAtPath:(NSString *)filePathString
+{
+    NSURL* URL= [NSURL fileURLWithPath: filePathString];
+    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath:[URL path]];
+    if (!exist) {
+        NSLog(@"file not exist: %@",filePathString);
+        return NO;
+    }
+    
+    NSError *error = nil;
+    BOOL success = [URL setResourceValue: [NSNumber numberWithBool: YES]
+                                  forKey: NSURLIsExcludedFromBackupKey error: &error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [URL lastPathComponent], error);
+    }
+    return success;
+}
+
++ (void)calculateSizeWithCompletionBlock:(HXFileManagerCalculateSizeBlock)completionBlock {
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     
@@ -71,5 +142,4 @@
         }
     });
 }
-
 @end

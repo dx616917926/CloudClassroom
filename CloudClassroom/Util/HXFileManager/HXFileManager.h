@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 typedef void(^HXFileManagerCalculateSizeBlock)(NSUInteger fileCount, NSUInteger totalSize);
 
 @interface HXFileManager : NSObject
@@ -40,7 +41,23 @@ typedef void(^HXFileManagerCalculateSizeBlock)(NSUInteger fileCount, NSUInteger 
 + (BOOL)isFileExsitInDocuments:(NSString *)aPath;
 
 /**
-  计算缓存目录的大小
+ *  获取、创建用户名目录
+ *
+ *  @return aPath
+ */
++(NSString*)userNamePath;
+
+/**
+ *  获取、创建用户名相对路径
+ *
+ *  @return aPath
+ */
++(NSString*)userNameRelativePath;
+
+
+
+/**
+ 计算缓存目录的大小
  */
 + (void)calculateSizeWithCompletionBlock:(HXFileManagerCalculateSizeBlock)completionBlock;
 

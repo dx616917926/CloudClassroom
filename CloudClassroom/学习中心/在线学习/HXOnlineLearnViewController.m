@@ -14,6 +14,7 @@
 #import "HXCurrentLearCell.h"
 #import "HXOnlineLearnShowTipView.h"
 
+
 @interface HXOnlineLearnViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
 
 @property(nonatomic,strong) UIView *topView;
@@ -21,7 +22,6 @@
 @property(nonatomic,strong) UIButton *currentXueQiBtn;
 @property(nonatomic,strong) UIButton *allXueQiBtn;
 @property(nonatomic,strong) UIButton *selectXueQiBtn;
-
 @property(nonatomic,strong) UITableView *mainTableView;
 
 
@@ -60,6 +60,13 @@
     sender.titleLabel.font = HXBoldFont(15);
     [sender setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
     self.selectXueQiBtn = sender;
+    
+    if (sender==self.allXueQiBtn) {
+        [self.view addSubview:self.noDataTipView];
+        self.noDataTipView.tipTitle = @"暂无网课～";
+    }else{
+        [self.noDataTipView removeFromSuperview];
+    }
     
 }
 
@@ -197,6 +204,7 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.view, 0);
+    [self.mainTableView updateLayout];
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
@@ -205,6 +213,8 @@
     MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     self.mainTableView.mj_footer = footer;
     self.mainTableView.mj_footer.hidden = YES;
+    
+    self.noDataTipView.frame = self.mainTableView.frame;
 }
 
 #pragma mark -LazyLoad

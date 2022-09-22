@@ -27,5 +27,6 @@
 #import "UIImage+Extension.h"
 #import "MJRefresh.h"
 #import "MJExtension.h"
+#import "HXNoDataTipView.h"
 
 #endif /* PrefixHeader_pch */

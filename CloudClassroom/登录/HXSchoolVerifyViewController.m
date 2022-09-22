@@ -188,6 +188,7 @@
         _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_backBtn setImage:[UIImage imageNamed:@"navi_blackback"] forState:UIControlStateNormal];
         [_backBtn addTarget:self action:@selector(popBack) forControlEvents:UIControlEventTouchUpInside];
+        _backBtn.hidden = !self.canGoBack;
     }
     return _backBtn;
 }

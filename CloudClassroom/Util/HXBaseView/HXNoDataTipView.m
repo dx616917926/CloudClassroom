@@ -7,6 +7,8 @@
 
 #import "HXNoDataTipView.h"
 
+
+
 @interface HXNoDataTipView ()
 
 @property(nonatomic,strong) UIImageView *tipImageView;
@@ -18,9 +20,8 @@
 
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.clipsToBounds = YES;
-        self.tipTitle = @"暂无数据~";
         [self createUI];
     }
     return self;
@@ -28,21 +29,40 @@
 
 
 #pragma mark - setter
+-(void)setType:(NoDataType)type{
+    _type = type;
+    switch (type) {
+        case NoType:
+            self.tipImageView.image = [UIImage imageNamed:@"nodata_icon"];
+            break;
+        case NoType2:
+            self.tipImageView.image = [UIImage imageNamed:@"nodata_icon2"];
+            break;
+        case NoType3:
+            self.tipImageView.image = [UIImage imageNamed:@"nodata_icon3"];
+            break;
+            
+        default:
+            break;
+    }
+}
 -(void)setTipImage:(UIImage *)tipImage{
+    _tipImage = tipImage;
     self.tipImageView.image = tipImage;
     self.tipImageView.sd_layout
-    .widthIs(_kpw(tipImage.size.width))
-    .heightIs(_kpw(tipImage.size.height));
+    .widthIs(tipImage.size.width)
+    .heightIs(tipImage.size.width);
     [self.tipImageView updateLayout];
 }
 
 -(void)setTipTitle:(NSString *)tipTitle{
+    _tipTitle = tipTitle;
     self.tipLabel.text = tipTitle;
 }
 
 -(void)setTipImageViewOffset:(NSInteger)tipImageViewOffset{
     _tipImageViewOffset = tipImageViewOffset;
-    self.tipImageView.sd_layout.topSpaceToView(self, _kpw(tipImageViewOffset));
+    self.tipImageView.sd_layout.topSpaceToView(self, tipImageViewOffset);
     [self.tipImageView updateLayout];
 }
 
@@ -60,14 +80,14 @@
     [self addSubview:self.tipLabel];
     
     self.tipImageView.sd_layout
-    .topSpaceToView(self, _kpw(86))
+    .topSpaceToView(self, 114)
     .centerXEqualToView(self)
-    .widthIs(_kpw(375))
-    .heightIs(_kpw(110));
+    .widthIs(180)
+    .heightIs(120);
     [self.tipImageView updateLayout];
     
     self.tipLabel.sd_layout
-    .topSpaceToView(self.tipImageView, 8)
+    .topSpaceToView(self.tipImageView, 30)
     .leftSpaceToView(self, 20)
     .rightSpaceToView(self, 20)
     .autoHeightRatio(0);
@@ -87,10 +107,10 @@
     if (!_tipLabel) {
         _tipLabel = [[UILabel alloc] init];
         _tipLabel.textAlignment = NSTextAlignmentCenter;
-        _tipLabel.font = HXFont(12);
-        _tipLabel.textColor = COLOR_WITH_ALPHA(0xA9A9A9, 1);
+        _tipLabel.font = HXFont(13);
+        _tipLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
         _tipLabel.numberOfLines = 0;
-        _tipLabel.text = self.tipTitle;
+        _tipLabel.text = @"暂无数据~";;
     }
     return _tipLabel;
 }

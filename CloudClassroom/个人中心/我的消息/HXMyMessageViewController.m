@@ -72,6 +72,10 @@
     .rightEqualToView(self.view)
     .bottomEqualToView(self.view);
     
+    self.noDataTipView.tipTitle = @"暂无消息～";
+    self.noDataTipView.type = NoType3;
+   
+    
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
     header.automaticallyChangeAlpha = YES;

@@ -89,6 +89,10 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.view, 0);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"暂无考试成绩～";
+    self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];

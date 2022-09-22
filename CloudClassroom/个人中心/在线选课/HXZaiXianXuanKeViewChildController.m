@@ -237,6 +237,7 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.bottomView, 0);
+    [self.mainTableView updateLayout];
     
     
     [self.loopView setTickerArrs:@[@"在报考之前，务必看清专业和层次，仔细选择要报考的课程"]];
@@ -249,6 +250,11 @@
 //    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
 //    self.mainTableView.mj_footer = footer;
 //    self.mainTableView.mj_footer.hidden = YES;
+    
+    
+    self.noDataTipView.tipTitle = @"暂无购买课程～";
+    self.noDataTipView.frame = self.mainTableView.frame;
+    
 }
 
 #pragma mark -LazyLoad

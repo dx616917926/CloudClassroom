@@ -95,6 +95,11 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.view, 0);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"您还未购买网课资源~";
+    self.noDataTipView.frame = self.mainTableView.frame;
+    [self.view addSubview:self.noDataTipView];
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];

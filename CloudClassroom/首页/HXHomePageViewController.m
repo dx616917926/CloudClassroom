@@ -256,7 +256,7 @@
     .topSpaceToView(self.view, 0)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
-    .heightIs(528*kScreenWidth/750.0);
+    .heightIs(0.704*kScreenWidth);
     
     
     
@@ -264,7 +264,7 @@
     .topSpaceToView(self.topBgImageView, 0)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
-    .heightIs(328*kScreenWidth/750.0);
+    .heightIs(0.437*kScreenWidth);
     
     self.mainTableView.sd_layout
     .topSpaceToView(self.topBgImageView, 0)

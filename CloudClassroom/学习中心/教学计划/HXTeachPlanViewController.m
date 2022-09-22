@@ -24,6 +24,7 @@
     
     //UI
     [self createUI];
+    
 }
 
 
@@ -85,6 +86,10 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.view, 0);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"暂无教学计划～";
+    self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
@@ -128,7 +133,6 @@
     }
     return _mainTableView;
 }
-
 
 
 @end

@@ -6,6 +6,8 @@
 //
 
 #import "HXSettingViewController.h"
+#import "HXFileManager.h"
+#import "VICacheManager.h"
 
 @interface HXSettingViewController ()
 
@@ -57,10 +59,56 @@
     
     //UI
     [self createUI];
+    //计算缓存
+    [self calculateChuCach];
 }
 
 
 #pragma mark - Event
+//清除缓存
+-(void)qinChuCach{
+    [self.view showLoadingWithMessage:@"清除缓存中……"];
+    [VICacheManager cleanAllCacheWithError:nil];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * path = [paths firstObject];
+    if ([fileManager fileExistsAtPath:path]) {
+        NSArray *childerFiles=[fileManager subpathsAtPath:path];
+        for (NSString *fileName in childerFiles) {
+            //如有需要，加入条件，过滤掉不想删除的文件
+            NSString *absolutePath=[path stringByAppendingPathComponent:fileName];
+            [fileManager removeItemAtPath:absolutePath error:nil];
+        }
+    }
+    [self.view showSuccessWithMessage:@"清除完毕！"];
+    
+    [self calculateChuCach];
+}
+
+//计算缓存
+-(void)calculateChuCach{
+    WeakSelf(weakSelf);
+    [HXFileManager calculateSizeWithCompletionBlock:^(NSUInteger fileCount, NSUInteger totalSize) {
+        //
+        NSUInteger totalSize2 = [VICacheManager calculateCachedSizeWithError:nil];
+        NSString *fileSizeStr = [NSByteCountFormatter stringFromByteCount:totalSize+totalSize2
+                                                        countStyle:NSByteCountFormatterCountStyleFile];
+        if ([fileSizeStr containsString:@"Zero"]) {
+            weakSelf.qinChuCachContentLabel.text = @"0 KB";
+        }else{
+            weakSelf.qinChuCachContentLabel.text = [NSString stringWithFormat:@"%@", fileSizeStr];
+        }
+    }];
+}
+
+/// 开启人脸识别提示音  默认NO
+- (void)enableFaceSound:(UISwitch *)st {
+    [HXUserDefaults setBool:!st.on forKey:CloseFaceLivenessSound];
+    [HXUserDefaults synchronize];
+}
+
+//退出登录
 -(void)logOut:(UIButton *)sender{
     
 }
@@ -291,6 +339,7 @@
     if (!_qinChuCachControl) {
         _qinChuCachControl = [[UIControl alloc] init];
         _qinChuCachControl.backgroundColor = UIColor.whiteColor;
+        [_qinChuCachControl addTarget:self action:@selector(qinChuCach) forControlEvents:UIControlEventTouchUpInside];
     }
     return _qinChuCachControl;
 }
@@ -321,7 +370,6 @@
         _qinChuCachContentLabel.textAlignment = NSTextAlignmentRight;
         _qinChuCachContentLabel.font = HXFont(13);
         _qinChuCachContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _qinChuCachContentLabel.text = @"1.7MB";
     }
     return _qinChuCachContentLabel;
 }
@@ -378,7 +426,7 @@
         _checkUpdateContentLabel.textAlignment = NSTextAlignmentRight;
         _checkUpdateContentLabel.font = HXFont(13);
         _checkUpdateContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _checkUpdateContentLabel.text = @"V 3.7.2";
+        _checkUpdateContentLabel.text = [NSString stringWithFormat:@"V %@",APP_VERSION];
     }
     return _checkUpdateContentLabel;
 }
@@ -482,6 +530,8 @@
         _faceBtn = [[UISwitch alloc] init];
         _faceBtn.onTintColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
         _faceBtn.thumbTintColor = UIColor.whiteColor;
+        _faceBtn.on = ![HXUserDefaults boolForKey:CloseFaceLivenessSound];
+        [_faceBtn addTarget:self action:@selector(enableFaceSound:) forControlEvents:UIControlEventValueChanged];
     }
     return _faceBtn;
 }

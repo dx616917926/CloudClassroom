@@ -45,6 +45,10 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomEqualToView(self.view);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"暂无补考课程～";
+    self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
@@ -53,6 +57,9 @@
     MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     self.mainTableView.mj_footer = footer;
     self.mainTableView.mj_footer.hidden = YES;
+    
+   
+   
     
 }
 

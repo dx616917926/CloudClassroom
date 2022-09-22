@@ -43,6 +43,11 @@
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomEqualToView(self.view);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"暂无购买课程～";
+    self.noDataTipView.frame = self.mainTableView.frame;
+
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];

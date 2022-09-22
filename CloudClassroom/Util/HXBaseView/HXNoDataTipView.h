@@ -9,8 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HXNoDataTipView : UIView
+typedef enum : NSUInteger {
+    NoType,
+    NoType2,
+    NoType3,
+} NoDataType;
 
+@interface HXNoDataTipView : UIView
+@property(nonatomic,assign) NoDataType type;
 @property(nonatomic,strong) UIImage *tipImage;
 @property(nonatomic,strong) NSString *tipTitle;
 @property(nonatomic,assign) NSInteger tipImageViewOffset;

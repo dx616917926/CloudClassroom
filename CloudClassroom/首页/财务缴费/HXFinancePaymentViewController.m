@@ -209,6 +209,9 @@
     .bottomSpaceToView(self.bottomView, 0);
     
     
+    self.noDataTipView.tipTitle = @"暂无缴费内容～";
+    
+    
     
     // 刷新
 //    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
