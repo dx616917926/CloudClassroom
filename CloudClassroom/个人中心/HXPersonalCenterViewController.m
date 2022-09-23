@@ -10,6 +10,7 @@
 #import "HXMyMessageViewController.h"//我的消息
 #import "HXUploadIDPhotoViewController.h"//证件照上传
 #import "HXModifyPwdViewController.h"//修改密码
+#import "HXZiLiaoDownLoadViewController.h"//资料下载
 #import "HXZaiXianXuanKeViewController.h"//在线选课
 #import "HXSettingViewController.h"//设置
 #import "UIImage+Extension.h"
@@ -106,7 +107,9 @@
             break;
         case 3004://资料下载
         {
-            
+            HXZiLiaoDownLoadViewController *vc = [[HXZiLiaoDownLoadViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3005://在线选课
