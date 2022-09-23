@@ -9,6 +9,7 @@
 #import "UIView+TransitionColor.h"
 #import "HXSchoolVerifyViewController.h"
 #import "AppDelegate.h"
+#import "SDWebImage.h"
 
 @interface HXLoginViewController ()<UITextFieldDelegate>
 
@@ -55,7 +56,11 @@
 
 #pragma mark - Event
 -(void)loginButtonClick:(UIButton *)sender{
-    
+    [HXPublicParamTool sharedInstance].isLogin = YES;
+    //发送登录成功的通知
+    [HXNotificationCenter postNotificationName:LOGINSUCCESS object:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
     [[[UIApplication sharedApplication].delegate window] setRootViewController:[(AppDelegate*)[UIApplication sharedApplication].delegate mainTabBarController]];
     
 }
@@ -66,11 +71,12 @@
     vc.canGoBack = YES;
     [self.navigationController pushViewController:vc animated:YES];
     WeakSelf(weakSelf);
-    vc.scanSuccessBlock = ^{
+    vc.scanSuccessBlock = ^(HXSchoolModel * _Nonnull school) {
         weakSelf.bottomBgImageView.hidden = YES;
         weakSelf.pingTaiLabel.hidden = NO;
-        weakSelf.schoolNameLabel.text = @"长沙理工大学";
-        weakSelf.schoolLogoImageView.image = [UIImage imageNamed:@"ligong_icon"];
+        weakSelf.schoolNameLabel.text = school.schoolName_Cn;
+        [weakSelf.schoolLogoImageView sd_setImageWithURL:[NSURL URLWithString:school.schoolLogoUrl] placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
+        [weakSelf.schoolBgImageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"defaultshcoolbg_icon"] options:SDWebImageRefreshCached];
     };
 }
 
@@ -136,11 +142,11 @@
     .bottomEqualToView(self.view)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
-    .heightIs(213);
+    .heightIs(_kph(213+kScreenBottomMargin));
     
     [self.schoolBgImageView updateLayout];
     
-    [self.schoolBgImageView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xF5F7FE, 1) endColor:COLOR_WITH_ALPHA(0xF5F7FE, 0)];
+    [self.schoolBgImageView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xF5F7FE, 1) endColor:COLOR_WITH_ALPHA(0xF5F7FE, 0.2)];
     
     self.mainScrollView.sd_layout
     .topSpaceToView(self.navBarView, 0)
@@ -252,6 +258,16 @@
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.containerView bottomMargin:50];
     
+    //默认有值
+    HXSchoolModel *defaultSchool = [HXPublicParamTool sharedInstance].currentSchoolModel;
+    if (defaultSchool.schoolDomainURL.length>0) {
+        self.bottomBgImageView.hidden = YES;
+        self.pingTaiLabel.hidden = NO;
+        self.schoolNameLabel.text = defaultSchool.schoolName_Cn;
+        [self.schoolLogoImageView sd_setImageWithURL:[NSURL URLWithString:defaultSchool.schoolLogoUrl] placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
+        [self.schoolBgImageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"defaultshcoolbg_icon"] options:SDWebImageRefreshCached];
+    }
+    
 }
 
 -(UIView *)navBarView{
@@ -319,7 +335,7 @@
 -(UIImageView *)schoolBgImageView{
     if (!_schoolBgImageView) {
         _schoolBgImageView = [[UIImageView alloc] init];
-        _schoolBgImageView.image = [UIImage imageNamed:@"defaultshcoolbg_icon"];
+        _schoolBgImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _schoolBgImageView;
 }

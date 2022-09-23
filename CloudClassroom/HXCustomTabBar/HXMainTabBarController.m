@@ -69,9 +69,7 @@
     HXLoginViewController *loginVC = [[HXLoginViewController alloc]init];
     loginVC.sc_navigationBarHidden = YES;
     HXNavigationController *navVC = [[HXNavigationController alloc] initWithRootViewController:loginVC];
-    [self presentViewController:navVC animated:YES completion:^{
-        
-    }];
+    [self presentViewController:navVC animated:YES completion:nil];
 }
 
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "HXSchoolModel.h"
 
 @interface HXPublicParamTool : NSObject
 
@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSString *userId;
 //token
 @property (nonatomic, strong) NSString *accessToken;
+
+@property (nonatomic, strong) HXSchoolModel *currentSchoolModel;
 
 //退出登录
 - (void)logOut;

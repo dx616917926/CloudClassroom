@@ -110,7 +110,18 @@
 
 //退出登录
 -(void)logOut:(UIButton *)sender{
-    
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定退出此账号？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //退出登录--弹登录框！
+            [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
+        });
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alertC addAction:cancelAction];
+    [alertC addAction:confirmAction];
+    [self presentViewController:alertC animated:YES completion:nil];
 }
 
 #pragma mark - UI

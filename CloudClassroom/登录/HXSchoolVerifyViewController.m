@@ -8,6 +8,7 @@
 #import "HXSchoolVerifyViewController.h"
 #import "QRCodeReaderViewController.h"
 
+
 @interface HXSchoolVerifyViewController ()
 
 @property(nonatomic,strong) UIView *navBarView;
@@ -86,20 +87,11 @@
             }
             
             NSLog(@"二维码扫描结果：%@",dic);
-            //            HXSchoolObject *school = [HXSchoolObject mj_objectWithKeyValues:dic];
-            
+            HXSchoolModel *school = [HXSchoolModel mj_objectWithKeyValues:dic];
+            [HXPublicParamTool sharedInstance].currentSchoolModel = school;
             if (self.scanSuccessBlock) {
-                
-                //                BOOL success = [[HXDBManager defaultDBManager] saveSchoolInfoWithschoolObject:school];
-                if (1) {
-                    
-                    [weakqvc.navigationController popToRootViewControllerAnimated:YES];
-                    self.scanSuccessBlock();
-                }else{
-                    NSLog(@"学校数据保存失败!!!!");
-                    [weakqvc.navigationController popViewControllerAnimated:YES];
-                    [self.view showErrorWithMessage:@"未能识别此二维码"];
-                }
+                [weakqvc.navigationController popToRootViewControllerAnimated:YES];
+                self.scanSuccessBlock(school);
             }
         }];
         

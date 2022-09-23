@@ -6,10 +6,11 @@
 //
 
 #import "HXBaseViewController.h"
+#import "HXSchoolModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^scanSuccessBlock) (void);
+typedef void (^scanSuccessBlock) (HXSchoolModel *school);
 
 @interface HXSchoolVerifyViewController : HXBaseViewController
 

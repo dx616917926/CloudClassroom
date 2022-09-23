@@ -17,7 +17,7 @@
 
 @implementation HXPublicParamTool
 
-@synthesize isLogin = _isLogin , userId = _userId , accessToken = _accessToken;
+@synthesize isLogin = _isLogin , userId = _userId , accessToken = _accessToken , currentSchoolModel = _currentSchoolModel;
 
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
@@ -65,16 +65,28 @@
     return _userId;
 }
 
+-(void)setCurrentSchoolModel:(HXSchoolModel *)currentSchoolModel{
+    _currentSchoolModel = currentSchoolModel;
+    [self.userDefault setObject:[NSKeyedArchiver archivedDataWithRootObject:currentSchoolModel] forKey:@"currentSchoolModel"];
+}
+
+-(HXSchoolModel *)currentSchoolModel{
+    if (!_currentSchoolModel) {
+        _currentSchoolModel = [NSKeyedUnarchiver unarchiveObjectWithData:[HXUserDefaults objectForKey:@"currentSchoolModel"]];
+    }
+    return _currentSchoolModel;
+}
+
 
 - (void)logOut {
     
     //清除内存中数据
+    self.isLogin = NO;
     self.accessToken = nil;
     self.userId = nil;
+    self.currentSchoolModel = nil;
 
     //清除沙盒中数据
-    [self.userDefault removeObjectForKey:@"islogin"];
-    [self.userDefault removeObjectForKey:@"isLaunch"];
     [self.userDefault removeObjectForKey:KP_SERVER_KEY];
     [self.userDefault synchronize];
     

@@ -38,8 +38,10 @@
 		0470DC3228DC0EB7007A25DC /* VIResourceLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC2428DC0EB7007A25DC /* VIResourceLoaderManager.m */; };
 		0470DC3628DC0FB4007A25DC /* HXFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC3528DC0FB4007A25DC /* HXFileManager.m */; };
 		0470DC3928DC0FFD007A25DC /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC3828DC0FFD007A25DC /* Utilities.m */; };
+		0470DC4028DC5887007A25DC /* HXSchoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0470DC3F28DC5887007A25DC /* HXSchoolModel.m */; };
 		0471DE7328C6DA300071FECE /* HXZaiXianXueQiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */; };
 		0471DE7628C6DD510071FECE /* HXZaiXianCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7528C6DD510071FECE /* HXZaiXianCell.m */; };
+		047382EE28DD81870029EC99 /* HXModifyPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */; };
 		0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0474D59528BF5D5400A22731 /* GBLoopView.m */; };
 		0475F8F428C587DB00CCBA07 /* HXStudyReportZuoYeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F8F328C587DB00CCBA07 /* HXStudyReportZuoYeCell.m */; };
 		0475F8F828C5993800CCBA07 /* HXClassRankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F8F728C5993800CCBA07 /* HXClassRankViewController.m */; };
@@ -236,10 +238,14 @@
 		0470DC3528DC0FB4007A25DC /* HXFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFileManager.m; sourceTree = "<group>"; };
 		0470DC3728DC0FFD007A25DC /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
 		0470DC3828DC0FFD007A25DC /* Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		0470DC3E28DC5887007A25DC /* HXSchoolModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSchoolModel.h; sourceTree = "<group>"; };
+		0470DC3F28DC5887007A25DC /* HXSchoolModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXSchoolModel.m; sourceTree = "<group>"; };
 		0471DE7128C6DA300071FECE /* HXZaiXianXueQiCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZaiXianXueQiCell.h; sourceTree = "<group>"; };
 		0471DE7228C6DA300071FECE /* HXZaiXianXueQiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZaiXianXueQiCell.m; sourceTree = "<group>"; };
 		0471DE7428C6DD510071FECE /* HXZaiXianCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZaiXianCell.h; sourceTree = "<group>"; };
 		0471DE7528C6DD510071FECE /* HXZaiXianCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZaiXianCell.m; sourceTree = "<group>"; };
+		047382EC28DD81870029EC99 /* HXModifyPwdViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXModifyPwdViewController.h; sourceTree = "<group>"; };
+		047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXModifyPwdViewController.m; sourceTree = "<group>"; };
 		0474D59528BF5D5400A22731 /* GBLoopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLoopView.m; sourceTree = "<group>"; };
 		0474D59628BF5D5400A22731 /* GBLoopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLoopView.h; sourceTree = "<group>"; };
 		0475F8F228C587DB00CCBA07 /* HXStudyReportZuoYeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudyReportZuoYeCell.h; sourceTree = "<group>"; };
@@ -627,6 +633,32 @@
 			path = HXFileManager;
 			sourceTree = "<group>";
 		};
+		0470DC3D28DC583D007A25DC /* model */ = {
+			isa = PBXGroup;
+			children = (
+				0470DC3E28DC5887007A25DC /* HXSchoolModel.h */,
+				0470DC3F28DC5887007A25DC /* HXSchoolModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		047382EA28DD80DA0029EC99 /* 修改密码 */ = {
+			isa = PBXGroup;
+			children = (
+				047382EB28DD80DA0029EC99 /* view */,
+				047382EC28DD81870029EC99 /* HXModifyPwdViewController.h */,
+				047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */,
+			);
+			path = "修改密码";
+			sourceTree = "<group>";
+		};
+		047382EB28DD80DA0029EC99 /* view */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 		0474D59428BF5D5400A22731 /* GBLoopView */ = {
 			isa = PBXGroup;
 			children = (
@@ -883,6 +915,7 @@
 		048B7C9E28BD9D89006EBAAE /* CloudClassroom */ = {
 			isa = PBXGroup;
 			children = (
+				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				040890F128BDABEC007844E8 /* Supporting Files */,
 				048B7D7B28BDA927006EBAAE /* 个人中心 */,
 				048B7D7728BDA8C2006EBAAE /* 学习中心 */,
@@ -912,7 +945,6 @@
 				047D23B828D1746100514C1C /* BDFaceSDK */,
 				045F217C28D05948007023D7 /* QRCodeReaderViewController */,
 				0474D59428BF5D5400A22731 /* GBLoopView */,
-				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				048B7CF528BDA209006EBAAE /* Category */,
 				048B7D2728BDA209006EBAAE /* CustomIOSAlertView */,
 				048B7CD128BDA209006EBAAE /* CXDatePickerView */,
@@ -1118,6 +1150,7 @@
 		048B7D6F28BDA806006EBAAE /* 登录 */ = {
 			isa = PBXGroup;
 			children = (
+				0470DC3D28DC583D007A25DC /* model */,
 				048B7D7028BDA824006EBAAE /* HXLoginViewController.h */,
 				048B7D7128BDA824006EBAAE /* HXLoginViewController.m */,
 				045F217928D052B6007023D7 /* HXSchoolVerifyViewController.h */,
@@ -1159,12 +1192,13 @@
 		048B7D7B28BDA927006EBAAE /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
-				0478DA5428D7FB5500B645DE /* 设置 */,
-				047D23B428D1726A00514C1C /* 人脸识别 */,
-				045F218C28D066FC007023D7 /* 证件照上传 */,
-				04A1FEC728C9BD8000626409 /* 在线选课 */,
-				04A1FEC528C9BD8000626409 /* 我的消息 */,
 				04A1FEB728C981A600626409 /* 个人信息 */,
+				04A1FEC528C9BD8000626409 /* 我的消息 */,
+				045F218C28D066FC007023D7 /* 证件照上传 */,
+				047D23B428D1726A00514C1C /* 人脸识别 */,
+				047382EA28DD80DA0029EC99 /* 修改密码 */,
+				0478DA5428D7FB5500B645DE /* 设置 */,
+				04A1FEC728C9BD8000626409 /* 在线选课 */,
 				048B7D7C28BDA944006EBAAE /* HXPersonalCenterViewController.h */,
 				048B7D7D28BDA944006EBAAE /* HXPersonalCenterViewController.m */,
 			);
@@ -1501,6 +1535,7 @@
 			files = (
 				0470DC2C28DC0EB7007A25DC /* VICacheSessionManager.m in Sources */,
 				04A1FEC428C995E700626409 /* HXPersonalInforModel.m in Sources */,
+				047382EE28DD81870029EC99 /* HXModifyPwdViewController.m in Sources */,
 				0470DC3628DC0FB4007A25DC /* HXFileManager.m in Sources */,
 				0470DC2928DC0EB7007A25DC /* VICacheConfiguration.m in Sources */,
 				048B7D5E28BDA20A006EBAAE /* XLPageViewControllerUtil.m in Sources */,
@@ -1570,6 +1605,7 @@
 				048B7D3B28BDA20A006EBAAE /* HXCalendarScrollView.m in Sources */,
 				0436510728C205380009ED38 /* HXStudyReportKeJianCell.m in Sources */,
 				048B7D5428BDA20A006EBAAE /* NSString+md5.m in Sources */,
+				0470DC4028DC5887007A25DC /* HXSchoolModel.m in Sources */,
 				0471DE7328C6DA300071FECE /* HXZaiXianXueQiCell.m in Sources */,
 				048B7D5128BDA20A006EBAAE /* UIImage+Extension.m in Sources */,
 				048A0ED728C09DBD0077F40A /* HXTeachPlanCell.m in Sources */,
