@@ -72,6 +72,7 @@
     [self.navigationController pushViewController:vc animated:YES];
     WeakSelf(weakSelf);
     vc.scanSuccessBlock = ^(HXSchoolModel * _Nonnull school) {
+        [HXPublicParamTool sharedInstance].currentSchoolModel = school;
         weakSelf.bottomBgImageView.hidden = YES;
         weakSelf.pingTaiLabel.hidden = NO;
         weakSelf.schoolNameLabel.text = school.schoolName_Cn;

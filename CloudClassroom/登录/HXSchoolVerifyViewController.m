@@ -88,7 +88,6 @@
             
             NSLog(@"二维码扫描结果：%@",dic);
             HXSchoolModel *school = [HXSchoolModel mj_objectWithKeyValues:dic];
-            [HXPublicParamTool sharedInstance].currentSchoolModel = school;
             if (self.scanSuccessBlock) {
                 [weakqvc.navigationController popToRootViewControllerAnimated:YES];
                 self.scanSuccessBlock(school);

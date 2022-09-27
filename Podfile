@@ -19,6 +19,8 @@ target 'CloudClassroom' do
 
   pod 'HXViewHUD', '~> 0.2.0'
 
+  pod 'HXPhotoPicker', '~> 3.1.9'
+  
   pod 'SDAutoLayout', '~> 2.2.1'
   
   pod 'IQKeyboardManager', '~> 6.5.6'
