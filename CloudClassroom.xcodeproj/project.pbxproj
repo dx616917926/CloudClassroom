@@ -152,6 +152,7 @@
 		0490DDB028C1E0A0009BA325 /* HXStudyReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490DDAF28C1E0A0009BA325 /* HXStudyReportViewController.m */; };
 		049D570428E28D34009F09F2 /* HXZiLiaoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */; };
 		049D570728E28DDF009F09F2 /* HXZiLiaoUploadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D570628E28DDF009F09F2 /* HXZiLiaoUploadCell.m */; };
+		049D570A28E2C5FF009F09F2 /* HXXinXiYouWuShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D570928E2C5FF009F09F2 /* HXXinXiYouWuShowView.m */; };
 		04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */; };
 		04A1FEBE28C98B0400626409 /* HXPersonalInforCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */; };
 		04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04A1FEC028C98EB900626409 /* personalInfor.plist */; };
@@ -468,6 +469,8 @@
 		049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZiLiaoUploadViewController.m; sourceTree = "<group>"; };
 		049D570528E28DDF009F09F2 /* HXZiLiaoUploadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZiLiaoUploadCell.h; sourceTree = "<group>"; };
 		049D570628E28DDF009F09F2 /* HXZiLiaoUploadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZiLiaoUploadCell.m; sourceTree = "<group>"; };
+		049D570828E2C5FF009F09F2 /* HXXinXiYouWuShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXXinXiYouWuShowView.h; sourceTree = "<group>"; };
+		049D570928E2C5FF009F09F2 /* HXXinXiYouWuShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXinXiYouWuShowView.m; sourceTree = "<group>"; };
 		04A1FEB928C9820600626409 /* HXPersonalInforViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforViewController.h; sourceTree = "<group>"; };
 		04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPersonalInforViewController.m; sourceTree = "<group>"; };
 		04A1FEBC28C98B0400626409 /* HXPersonalInforCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforCell.h; sourceTree = "<group>"; };
@@ -946,14 +949,14 @@
 		048B7C9E28BD9D89006EBAAE /* CloudClassroom */ = {
 			isa = PBXGroup;
 			children = (
-				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				040890F128BDABEC007844E8 /* Supporting Files */,
+				048B7CB828BDA1BE006EBAAE /* HXMacroDefinition(自定义宏) */,
+				040890F228BDAF5E007844E8 /* HXCustomTabBar */,
 				048B7D7B28BDA927006EBAAE /* 个人中心 */,
 				048B7D7728BDA8C2006EBAAE /* 学习中心 */,
 				048B7D7328BDA889006EBAAE /* 首页 */,
 				048B7D6F28BDA806006EBAAE /* 登录 */,
 				048B7CBC28BDA209006EBAAE /* Util */,
-				048B7CB828BDA1BE006EBAAE /* HXMacroDefinition(自定义宏) */,
 			);
 			path = CloudClassroom;
 			sourceTree = "<group>";
@@ -1361,6 +1364,8 @@
 			children = (
 				04A1FEBC28C98B0400626409 /* HXPersonalInforCell.h */,
 				04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */,
+				049D570828E2C5FF009F09F2 /* HXXinXiYouWuShowView.h */,
+				049D570928E2C5FF009F09F2 /* HXXinXiYouWuShowView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1599,6 +1604,7 @@
 				0479599C28DADC67001F8BC6 /* HXFinancePaymentViewController.m in Sources */,
 				048B7D6028BDA20A006EBAAE /* HXCommonWebViewController.m in Sources */,
 				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
+				049D570A28E2C5FF009F09F2 /* HXXinXiYouWuShowView.m in Sources */,
 				0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,

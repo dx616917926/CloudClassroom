@@ -90,6 +90,7 @@
     cell.isFirst = (indexPath.row==0);
     cell.isLast = (indexPath.row==4);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.isHaveXueQi = self.isHaveXueQi;
     return cell;
 }
 

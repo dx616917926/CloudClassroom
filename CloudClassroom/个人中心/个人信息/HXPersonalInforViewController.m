@@ -7,6 +7,7 @@
 
 #import "HXPersonalInforViewController.h"
 #import "HXPersonalInforCell.h"
+#import "HXXinXiYouWuShowView.h"
 
 @interface HXPersonalInforViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -21,6 +22,10 @@
 @property(nonatomic,strong) UIView *containerView;
 @property(nonatomic,strong) UIImageView *headImageView;
 @property(nonatomic,strong) UILabel *basicInforLabel;
+
+@property(nonatomic,strong) UIView *tableFooterView;
+@property(nonatomic,strong) UIButton *xinXiYouWuBtn;
+@property(nonatomic,strong) UIButton *xinXiWuWuBtn;
 
 @property(nonatomic,strong) NSArray *basicInfoArray;
 @property(nonatomic,strong) NSArray *xuexiInfoArray;
@@ -56,6 +61,11 @@
 #pragma mark - Event
 -(void)popBack{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)showXinXiYouWuShowView{
+    HXXinXiYouWuShowView *xinXiYouWuShowView = [[HXXinXiYouWuShowView alloc] init];
+    [xinXiYouWuShowView show];
 }
 
 #pragma mark - <UIScrollViewDelegate>根据滑动距离来变化导航栏背景色的alpha
@@ -222,6 +232,7 @@
         _mainTableView.contentInset = UIEdgeInsetsMake(0, 0, kScreenBottomMargin, 0);
         _mainTableView.scrollIndicatorInsets = _mainTableView.contentInset;
         _mainTableView.tableHeaderView = self.tableHeaderView;
+        _mainTableView.tableFooterView = self.tableFooterView;
         _mainTableView.showsVerticalScrollIndicator = NO;
        
     }
@@ -334,5 +345,61 @@
     }
     return _basicInforLabel;
 }
+
+
+
+-(UIView *)tableFooterView{
+    if (!_tableFooterView) {
+        _tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 120)];
+        _tableFooterView.backgroundColor=UIColor.whiteColor;
+        _tableFooterView.clipsToBounds = YES;
+        [_tableFooterView addSubview:self.xinXiWuWuBtn];
+        [_tableFooterView addSubview:self.xinXiYouWuBtn];
+        
+       self.xinXiYouWuBtn.sd_layout
+        .topSpaceToView(_tableFooterView, 30)
+        .leftSpaceToView(_tableFooterView, _kpw(63))
+        .widthIs(113)
+        .heightIs(36);
+        self.xinXiYouWuBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+        
+        self.xinXiWuWuBtn.sd_layout
+         .centerYEqualToView(self.xinXiYouWuBtn)
+         .rightSpaceToView(_tableFooterView, _kpw(63))
+         .widthRatioToView(self.xinXiYouWuBtn, 1)
+         .heightRatioToView(self.xinXiYouWuBtn, 1);
+         self.xinXiWuWuBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    }
+    return _tableFooterView;
+}
+
+-(UIButton *)xinXiYouWuBtn{
+    if (!_xinXiYouWuBtn) {
+        _xinXiYouWuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _xinXiYouWuBtn.titleLabel.font = HXBoldFont(14);
+        _xinXiYouWuBtn.backgroundColor= UIColor.whiteColor;
+        _xinXiYouWuBtn.layer.borderWidth =1;
+        _xinXiYouWuBtn.layer.borderColor =COLOR_WITH_ALPHA(0x2E5BFD, 1).CGColor;
+        [_xinXiYouWuBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
+        [_xinXiYouWuBtn setTitle:@"信息有误" forState:UIControlStateNormal];
+        [_xinXiYouWuBtn setImage:[UIImage imageNamed:@"dacha_icon"] forState:UIControlStateNormal];
+        [_xinXiYouWuBtn addTarget:self action:@selector(showXinXiYouWuShowView) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _xinXiYouWuBtn;
+}
+
+-(UIButton *)xinXiWuWuBtn{
+    if (!_xinXiWuWuBtn) {
+        _xinXiWuWuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _xinXiWuWuBtn.titleLabel.font = HXBoldFont(14);
+        _xinXiWuWuBtn.backgroundColor= COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        [_xinXiWuWuBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_xinXiWuWuBtn setTitle:@"信息无误" forState:UIControlStateNormal];
+        [_xinXiWuWuBtn setImage:[UIImage imageNamed:@"dagou_icon"] forState:UIControlStateNormal];
+    }
+    return _xinXiWuWuBtn;
+}
+
 
 @end

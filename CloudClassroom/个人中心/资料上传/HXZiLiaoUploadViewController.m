@@ -36,6 +36,10 @@
     [self createUI];
 }
 
+-(void)dealloc{
+    
+}
+
 -(void)loadData{
     [self.mainTableView.mj_header endRefreshing];
 }

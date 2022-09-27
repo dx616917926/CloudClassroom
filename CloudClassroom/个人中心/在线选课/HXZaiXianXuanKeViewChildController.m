@@ -6,6 +6,7 @@
 //
 
 #import "HXZaiXianXuanKeViewChildController.h"
+#import "HXJieSuanViewController.h"
 #import "GBLoopView.h"
 #import "HXZaiXianXuanKeCell.h"
 #import "HXShowMoneyDetailsrView.h"
@@ -69,9 +70,13 @@
     if (self.showMoneyDetailsrView.isShow) {
         [self.showMoneyDetailsrView dismiss];
     }
-    
-    
+    HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
+    vc.isHaveXueQi = NO;
+    [self.navigationController pushViewController:vc animated:YES];
+
 }
+
+
 //全选
 -(void)allSelect:(UIControl *)sender{
     sender.selected = !sender.selected;

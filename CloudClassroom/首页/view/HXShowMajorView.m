@@ -133,7 +133,7 @@
     .topSpaceToView(self.titleLabel, 0)
     .leftEqualToView(self.bigBackGroundView)
     .rightEqualToView(self.bigBackGroundView)
-    .heightIs(1);
+    .heightIs(0.5);
     
     self.tableView.sd_layout
     .topSpaceToView(self.lineView, 0)

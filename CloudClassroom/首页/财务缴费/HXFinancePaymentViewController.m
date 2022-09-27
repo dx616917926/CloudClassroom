@@ -63,6 +63,7 @@
         [self.showMoneyDetailsrView dismiss];
     }
     HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
+    vc.isHaveXueQi = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 //全选
