@@ -13,6 +13,7 @@
 #import "HXZiLiaoDownLoadViewController.h"//资料下载
 #import "HXZaiXianXuanKeViewController.h"//在线选课
 #import "HXSettingViewController.h"//设置
+#import "HXZiLiaoUploadViewController.h"//资料上传
 #import "UIImage+Extension.h"
 #import "HXFaceRecognitionView.h"
 
@@ -128,7 +129,9 @@
             break;
         case 3007://资料上传
         {
-            
+            HXZiLiaoUploadViewController *vc = [[HXZiLiaoUploadViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3008://毕业登记表

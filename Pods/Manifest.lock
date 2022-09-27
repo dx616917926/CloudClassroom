@@ -21,6 +21,13 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
+  - GKCover (2.6.1)
+  - GKPhotoBrowser (2.1.9):
+    - GKPhotoBrowser/SD (= 2.1.9)
+  - GKPhotoBrowser/Core (2.1.9)
+  - GKPhotoBrowser/SD (2.1.9):
+    - GKPhotoBrowser/Core
+    - SDWebImage (~> 5.0)
   - HXPhotoPicker (3.1.9):
     - HXPhotoPicker/Default (= 3.1.9)
   - HXPhotoPicker/Default (3.1.9)
@@ -40,6 +47,8 @@ DEPENDENCIES:
   - AlipaySDK-iOS (~> 15.8.8)
   - AliPlayerSDK_iOS (~> 5.4.7.1)
   - FMDB (~> 2.6.2)
+  - GKCover (~> 2.6.0)
+  - GKPhotoBrowser (~> 2.1.9)
   - HXPhotoPicker (~> 3.1.9)
   - HXViewHUD (~> 0.2.0)
   - IQKeyboardManager (~> 6.5.6)
@@ -56,6 +65,8 @@ SPEC REPOS:
     - AlipaySDK-iOS
     - AliPlayerSDK_iOS
     - FMDB
+    - GKCover
+    - GKPhotoBrowser
     - HXPhotoPicker
     - HXViewHUD
     - IQKeyboardManager
@@ -71,6 +82,8 @@ SPEC CHECKSUMS:
   AlipaySDK-iOS: a07b6eafa847a5b29acb6c150ea16d9792d5d167
   AliPlayerSDK_iOS: f5214cba6536e635b21c0d625a438b05deecbadf
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  GKCover: 62c29b9db8ff38b854d2f128f1043f2a4edd9f96
+  GKPhotoBrowser: c45231edd9ec79f031c412c646af46419d997c97
   HXPhotoPicker: e1816ff27f17c3926f6e83aebbb9f4b329324f0b
   HXViewHUD: d27c1e93a43ad9c07924f582c4b3826f1032394f
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
@@ -81,6 +94,6 @@ SPEC CHECKSUMS:
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
 
-PODFILE CHECKSUM: b63787d1d771cc3ef58a08267d4e587b9c56e98b
+PODFILE CHECKSUM: 35748bc83f58fd07d28a40ab4e02d4416752c7b9
 
 COCOAPODS: 1.11.3

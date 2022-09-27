@@ -21,6 +21,10 @@ target 'CloudClassroom' do
 
   pod 'HXPhotoPicker', '~> 3.1.9'
   
+  pod 'GKPhotoBrowser', '~> 2.1.9'
+  
+  pod 'GKCover', '~> 2.6.0'
+  
   pod 'SDAutoLayout', '~> 2.2.1'
   
   pod 'IQKeyboardManager', '~> 6.5.6'

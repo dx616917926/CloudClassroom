@@ -150,6 +150,8 @@
 		0490DDA928C1D693009BA325 /* HXQIMoKaoShiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490DDA828C1D693009BA325 /* HXQIMoKaoShiViewController.m */; };
 		0490DDAC28C1D6DF009BA325 /* HXQiMoKaoShiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490DDAB28C1D6DF009BA325 /* HXQiMoKaoShiCell.m */; };
 		0490DDB028C1E0A0009BA325 /* HXStudyReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490DDAF28C1E0A0009BA325 /* HXStudyReportViewController.m */; };
+		049D570428E28D34009F09F2 /* HXZiLiaoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */; };
+		049D570728E28DDF009F09F2 /* HXZiLiaoUploadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D570628E28DDF009F09F2 /* HXZiLiaoUploadCell.m */; };
 		04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */; };
 		04A1FEBE28C98B0400626409 /* HXPersonalInforCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */; };
 		04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04A1FEC028C98EB900626409 /* personalInfor.plist */; };
@@ -462,6 +464,10 @@
 		0490DDAB28C1D6DF009BA325 /* HXQiMoKaoShiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXQiMoKaoShiCell.m; sourceTree = "<group>"; };
 		0490DDAE28C1E0A0009BA325 /* HXStudyReportViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudyReportViewController.h; sourceTree = "<group>"; };
 		0490DDAF28C1E0A0009BA325 /* HXStudyReportViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXStudyReportViewController.m; sourceTree = "<group>"; };
+		049D570228E28D34009F09F2 /* HXZiLiaoUploadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZiLiaoUploadViewController.h; sourceTree = "<group>"; };
+		049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZiLiaoUploadViewController.m; sourceTree = "<group>"; };
+		049D570528E28DDF009F09F2 /* HXZiLiaoUploadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZiLiaoUploadCell.h; sourceTree = "<group>"; };
+		049D570628E28DDF009F09F2 /* HXZiLiaoUploadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZiLiaoUploadCell.m; sourceTree = "<group>"; };
 		04A1FEB928C9820600626409 /* HXPersonalInforViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforViewController.h; sourceTree = "<group>"; };
 		04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPersonalInforViewController.m; sourceTree = "<group>"; };
 		04A1FEBC28C98B0400626409 /* HXPersonalInforCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforCell.h; sourceTree = "<group>"; };
@@ -1225,6 +1231,7 @@
 				04A1FEC728C9BD8000626409 /* 在线选课 */,
 				045F218C28D066FC007023D7 /* 证件照上传 */,
 				048B31ED28DDA7B000871C34 /* 资料下载 */,
+				049D570028E28CEE009F09F2 /* 资料上传 */,
 				048B7D7C28BDA944006EBAAE /* HXPersonalCenterViewController.h */,
 				048B7D7D28BDA944006EBAAE /* HXPersonalCenterViewController.m */,
 			);
@@ -1315,6 +1322,25 @@
 				0436510628C205380009ED38 /* HXStudyReportKeJianCell.m */,
 				0475F8F228C587DB00CCBA07 /* HXStudyReportZuoYeCell.h */,
 				0475F8F328C587DB00CCBA07 /* HXStudyReportZuoYeCell.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		049D570028E28CEE009F09F2 /* 资料上传 */ = {
+			isa = PBXGroup;
+			children = (
+				049D570128E28CEE009F09F2 /* view */,
+				049D570228E28D34009F09F2 /* HXZiLiaoUploadViewController.h */,
+				049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */,
+			);
+			path = "资料上传";
+			sourceTree = "<group>";
+		};
+		049D570128E28CEE009F09F2 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				049D570528E28DDF009F09F2 /* HXZiLiaoUploadCell.h */,
+				049D570628E28DDF009F09F2 /* HXZiLiaoUploadCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1576,6 +1602,7 @@
 				0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
+				049D570728E28DDF009F09F2 /* HXZiLiaoUploadCell.m in Sources */,
 				048B7D3D28BDA20A006EBAAE /* HXCalendarCollectionCell.m in Sources */,
 				045F218928D05948007023D7 /* QRCodeReaderView.m in Sources */,
 				048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */,
@@ -1592,6 +1619,7 @@
 				04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */,
 				048B7D6728BDA20A006EBAAE /* ScrollViewFrameAccessor.m in Sources */,
 				048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */,
+				049D570428E28D34009F09F2 /* HXZiLiaoUploadViewController.m in Sources */,
 				0478DA5B28D83A3D00B645DE /* HXFunctionCenterViewController.m in Sources */,
 				0470DC2B28DC0EB7007A25DC /* VICacheAction.m in Sources */,
 				048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */,
