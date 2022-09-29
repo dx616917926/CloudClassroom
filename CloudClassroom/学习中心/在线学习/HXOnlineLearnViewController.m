@@ -135,7 +135,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 4;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,6 +153,7 @@
         cell = [[HXCurrentLearCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:currentLearCellIdentifier];
     }
     cell.delegate = self;
+    cell.index=indexPath.row;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

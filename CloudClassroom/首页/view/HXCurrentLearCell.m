@@ -73,6 +73,19 @@
     }
 }
 
+#pragma mark -Setter
+-(void)setIndex:(NSInteger)index{
+    _index = index;
+    //移除所有按钮
+    [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+    NSMutableArray *btns = [NSMutableArray array];
+    [btns addObjectsFromArray:@[self.keJianBtn,self.zuoYeBtn,self.kaoShiBtn,self.daYiShiBtn]];
+    [btns removeObjectsInRange:NSMakeRange(0, index)];
+    [self.btnsContainerView sd_addSubviews:btns];
+    [self.btnsContainerView setupAutoWidthFlowItems:btns withPerRowItemsCount:btns.count verticalMargin:0 horizontalMargin:10 verticalEdgeInset:20 horizontalEdgeInset:20];
+}
 
 #pragma mark - UI
 -(void)createUI{
@@ -138,8 +151,8 @@
     .heightEqualToWidth();
     
     self.keJianStateBtn.sd_layout
-    .topEqualToView(self.keJianBtn).offset(-10)
-    .rightEqualToView(self.keJianBtn).offset(15)
+    .topEqualToView(self.keJianBtn.imageView).offset(-10)
+    .rightEqualToView(self.keJianBtn.imageView).offset(20)
     .widthIs(30)
     .heightIs(15);
     self.keJianStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
@@ -159,8 +172,8 @@
     .heightEqualToWidth();
     
     self.zuoYeStateBtn.sd_layout
-    .topEqualToView(self.zuoYeBtn).offset(-10)
-    .rightEqualToView(self.zuoYeBtn).offset(15)
+    .topEqualToView(self.zuoYeBtn.imageView).offset(-10)
+    .rightEqualToView(self.zuoYeBtn.imageView).offset(20)
     .widthIs(30)
     .heightIs(15);
     self.zuoYeStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
@@ -181,8 +194,8 @@
     .heightEqualToWidth();
     
     self.kaoShiStateBtn.sd_layout
-    .topEqualToView(self.kaoShiBtn).offset(-10)
-    .rightEqualToView(self.kaoShiBtn).offset(15)
+    .topEqualToView(self.kaoShiBtn.imageView).offset(-10)
+    .rightEqualToView(self.kaoShiBtn.imageView).offset(20)
     .widthIs(30)
     .heightIs(15);;
     self.kaoShiStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
@@ -201,8 +214,8 @@
     .heightEqualToWidth();
     
     self.daYiShiStateBtn.sd_layout
-    .topEqualToView(self.daYiShiBtn).offset(-10)
-    .rightEqualToView(self.daYiShiBtn).offset(15)
+    .topEqualToView(self.daYiShiBtn.imageView).offset(-10)
+    .rightEqualToView(self.daYiShiBtn.imageView).offset(20)
     .widthIs(30)
     .heightIs(15);
     self.daYiShiStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
@@ -213,7 +226,9 @@
     .rightEqualToView(self.daYiShiBtn)
     .heightIs(17);
     
-    [self.btnsContainerView setupAutoMarginFlowItems:@[self.keJianBtn,self.zuoYeBtn,self.kaoShiBtn,self.daYiShiBtn] withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+
+    
+    [self.btnsContainerView setupAutoWidthFlowItems:@[self.keJianBtn,self.zuoYeBtn,self.kaoShiBtn,self.daYiShiBtn] withPerRowItemsCount:4 verticalMargin:0 horizontalMargin:10 verticalEdgeInset:20 horizontalEdgeInset:20];
     
     self.lineView.sd_layout
     .topSpaceToView(self.btnsContainerView, 0)
@@ -333,7 +348,7 @@
     [self.scoreContentLabel setSingleLineAutoResizeWithMaxWidth:40];
     
     
-    
+   
 }
 
 

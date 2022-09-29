@@ -55,7 +55,7 @@
     config.titleViewInset = UIEdgeInsetsMake(0, 20, 0, 20);
     config.titleViewAlignment = XLPageTitleViewAlignmentCenter;
     //隐藏底部分割线
-    config.separatorLineHidden =YES;
+    config.separatorLineHidden =NO;
     ////设置标题颜色
     config.titleSelectedColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
     config.titleNormalColor = COLOR_WITH_ALPHA(0x333333, 1);;

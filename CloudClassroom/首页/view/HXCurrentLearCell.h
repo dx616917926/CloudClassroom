@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak) id<HXCurrentLearCellDelegate> delegate;
 
+@property(nonatomic, assign) NSInteger index;
+
 @end
 
 NS_ASSUME_NONNULL_END
