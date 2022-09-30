@@ -13,7 +13,7 @@
 @property(nonatomic,strong) UIImageView *titleIcon;
 @property(nonatomic,strong) UILabel *titleNameLabel;
 
-//最终得分
+//权重后得分
 @property(nonatomic,strong) UILabel *deFenTitleLabel;
 @property(nonatomic,strong) UILabel *deFenContentLabel;
 
@@ -120,7 +120,7 @@
         deFenTitleLabel.textAlignment = NSTextAlignmentCenter;
         deFenTitleLabel.font = HXFont(14);
         deFenTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        deFenTitleLabel.text = @"最终得分";
+        deFenTitleLabel.text = @"最高分";
         [view addSubview:deFenTitleLabel];
         
         UILabel *deFenContentLabel = [[UILabel alloc] init];
@@ -229,12 +229,10 @@
         _titleNameLabel = [[UILabel alloc] init];
         _titleNameLabel.font = HXBoldFont(15);
         _titleNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _titleNameLabel.text = @"课件学习(网络)";
+        _titleNameLabel.text = @"平时作业";
     }
     return _titleNameLabel;
 }
-
-
 
 
 - (UILabel *)deFenTitleLabel{
@@ -242,7 +240,7 @@
         _deFenTitleLabel = [[UILabel alloc] init];
         _deFenTitleLabel.font = HXFont(14);
         _deFenTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _deFenTitleLabel.text = @"最终得分";
+        _deFenTitleLabel.text = @"权重后得分";
     }
     return _deFenTitleLabel;
 }

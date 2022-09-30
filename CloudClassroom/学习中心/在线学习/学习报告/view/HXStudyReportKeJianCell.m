@@ -157,7 +157,7 @@
         _deFenTitleLabel = [[UILabel alloc] init];
         _deFenTitleLabel.font = HXFont(14);
         _deFenTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _deFenTitleLabel.text = @"最终得分";
+        _deFenTitleLabel.text = @"权重后得分";
     }
     return _deFenTitleLabel;
 }
@@ -180,7 +180,7 @@
         _maFenTitleLabel = [[UILabel alloc] init];
         _maFenTitleLabel.font = HXFont(14);
         _maFenTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _maFenTitleLabel.text = @"满分";
+        _maFenTitleLabel.text = @"学习分/满分";
     }
     return _maFenTitleLabel;
 }
@@ -191,7 +191,7 @@
         _maFenContentLabel.textAlignment = NSTextAlignmentRight;
         _maFenContentLabel.font = HXFont(15);
         _maFenContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _maFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"100" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content: @"100分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+        _maFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"65" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content: @"65/100分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
     }
     return _maFenContentLabel;
 }

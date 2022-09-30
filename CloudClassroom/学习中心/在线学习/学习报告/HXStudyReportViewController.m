@@ -62,14 +62,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 4;
 }
 
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row%2==0) {
+    if (indexPath.row<2) {
         return 178;
     }else{
         return 359;
@@ -85,7 +85,7 @@
     static NSString *studyReportZuoYeCellIdentifier = @"HXStudyReportZuoYeCellIdentifier";
     HXStudyReportZuoYeCell *studyReportZuoYeCell = [tableView dequeueReusableCellWithIdentifier:studyReportZuoYeCellIdentifier];
     
-    if (indexPath.row%2==0) {
+    if (indexPath.row<2) {
         studyReportKeJianCell.selectionStyle = UITableViewCellSelectionStyleNone;
         studyReportKeJianCell = [[HXStudyReportKeJianCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportKeJianCellIdentifier];
         return studyReportKeJianCell;
