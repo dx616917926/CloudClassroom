@@ -44,6 +44,16 @@
 		047382EE28DD81870029EC99 /* HXModifyPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */; };
 		0473F3AF28E530C90085DBE4 /* HXFaceTimeTableShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */; };
 		0473F3B328E53A5E0085DBE4 /* HXFaceTimeTableModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */; };
+		0473F3B628E577CB0085DBE4 /* HXCalendarViewShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B528E577CB0085DBE4 /* HXCalendarViewShowView.m */; };
+		0473F3C928E579610085DBE4 /* MCalendarCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B828E579610085DBE4 /* MCalendarCollectionCell.m */; };
+		0473F3CA28E579610085DBE4 /* MImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3BD28E579610085DBE4 /* MImageTitleButton.m */; };
+		0473F3CB28E579610085DBE4 /* CalendarConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3BF28E579610085DBE4 /* CalendarConfig.m */; };
+		0473F3CC28E579610085DBE4 /* MCalendarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3C028E579610085DBE4 /* MCalendarItem.m */; };
+		0473F3CD28E579610085DBE4 /* MCalendarTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3C228E579610085DBE4 /* MCalendarTitleView.m */; };
+		0473F3CE28E579610085DBE4 /* MCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3C328E579610085DBE4 /* MCalendarView.m */; };
+		0473F3CF28E579610085DBE4 /* NSDate+Calendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3C428E579610085DBE4 /* NSDate+Calendar.m */; };
+		0473F3D028E579610085DBE4 /* MCalendarShortView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3C628E579610085DBE4 /* MCalendarShortView.m */; };
+		0473F3D128E579610085DBE4 /* Calendar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0473F3C728E579610085DBE4 /* Calendar.bundle */; };
 		0474D59728BF5D5400A22731 /* GBLoopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0474D59528BF5D5400A22731 /* GBLoopView.m */; };
 		0475F8F428C587DB00CCBA07 /* HXStudyReportZuoYeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F8F328C587DB00CCBA07 /* HXStudyReportZuoYeCell.m */; };
 		0475F8F828C5993800CCBA07 /* HXClassRankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475F8F728C5993800CCBA07 /* HXClassRankViewController.m */; };
@@ -257,6 +267,25 @@
 		0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeTableShowView.m; sourceTree = "<group>"; };
 		0473F3B128E53A5E0085DBE4 /* HXFaceTimeTableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeTableModel.h; sourceTree = "<group>"; };
 		0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeTableModel.m; sourceTree = "<group>"; };
+		0473F3B428E577CB0085DBE4 /* HXCalendarViewShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCalendarViewShowView.h; sourceTree = "<group>"; };
+		0473F3B528E577CB0085DBE4 /* HXCalendarViewShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCalendarViewShowView.m; sourceTree = "<group>"; };
+		0473F3B828E579610085DBE4 /* MCalendarCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarCollectionCell.m; sourceTree = "<group>"; };
+		0473F3B928E579610085DBE4 /* MCalendarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCalendarItem.h; sourceTree = "<group>"; };
+		0473F3BA28E579610085DBE4 /* MCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCalendarView.h; sourceTree = "<group>"; };
+		0473F3BB28E579610085DBE4 /* MCalendarTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCalendarTitleView.h; sourceTree = "<group>"; };
+		0473F3BC28E579610085DBE4 /* MCalendarShortView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCalendarShortView.h; sourceTree = "<group>"; };
+		0473F3BD28E579610085DBE4 /* MImageTitleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageTitleButton.m; sourceTree = "<group>"; };
+		0473F3BE28E579610085DBE4 /* NSDate+Calendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Calendar.h"; sourceTree = "<group>"; };
+		0473F3BF28E579610085DBE4 /* CalendarConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarConfig.m; sourceTree = "<group>"; };
+		0473F3C028E579610085DBE4 /* MCalendarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarItem.m; sourceTree = "<group>"; };
+		0473F3C128E579610085DBE4 /* MCalendarCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCalendarCollectionCell.h; sourceTree = "<group>"; };
+		0473F3C228E579610085DBE4 /* MCalendarTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarTitleView.m; sourceTree = "<group>"; };
+		0473F3C328E579610085DBE4 /* MCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarView.m; sourceTree = "<group>"; };
+		0473F3C428E579610085DBE4 /* NSDate+Calendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Calendar.m"; sourceTree = "<group>"; };
+		0473F3C528E579610085DBE4 /* MImageTitleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MImageTitleButton.h; sourceTree = "<group>"; };
+		0473F3C628E579610085DBE4 /* MCalendarShortView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarShortView.m; sourceTree = "<group>"; };
+		0473F3C728E579610085DBE4 /* Calendar.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Calendar.bundle; sourceTree = "<group>"; };
+		0473F3C828E579610085DBE4 /* CalendarConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarConfig.h; sourceTree = "<group>"; };
 		0474D59528BF5D5400A22731 /* GBLoopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBLoopView.m; sourceTree = "<group>"; };
 		0474D59628BF5D5400A22731 /* GBLoopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBLoopView.h; sourceTree = "<group>"; };
 		0475F8F228C587DB00CCBA07 /* HXStudyReportZuoYeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudyReportZuoYeCell.h; sourceTree = "<group>"; };
@@ -687,6 +716,8 @@
 				0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */,
 				0473F3AD28E530C90085DBE4 /* HXFaceTimeTableShowView.h */,
 				0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */,
+				0473F3B428E577CB0085DBE4 /* HXCalendarViewShowView.h */,
+				0473F3B528E577CB0085DBE4 /* HXCalendarViewShowView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -698,6 +729,30 @@
 				048A0ED228C083610077F40A /* HXOnlineLearnShowTipView.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		0473F3B728E579610085DBE4 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				0473F3C728E579610085DBE4 /* Calendar.bundle */,
+				0473F3C828E579610085DBE4 /* CalendarConfig.h */,
+				0473F3BF28E579610085DBE4 /* CalendarConfig.m */,
+				0473F3C128E579610085DBE4 /* MCalendarCollectionCell.h */,
+				0473F3B828E579610085DBE4 /* MCalendarCollectionCell.m */,
+				0473F3B928E579610085DBE4 /* MCalendarItem.h */,
+				0473F3C028E579610085DBE4 /* MCalendarItem.m */,
+				0473F3BC28E579610085DBE4 /* MCalendarShortView.h */,
+				0473F3C628E579610085DBE4 /* MCalendarShortView.m */,
+				0473F3BB28E579610085DBE4 /* MCalendarTitleView.h */,
+				0473F3C228E579610085DBE4 /* MCalendarTitleView.m */,
+				0473F3BA28E579610085DBE4 /* MCalendarView.h */,
+				0473F3C328E579610085DBE4 /* MCalendarView.m */,
+				0473F3C528E579610085DBE4 /* MImageTitleButton.h */,
+				0473F3BD28E579610085DBE4 /* MImageTitleButton.m */,
+				0473F3BE28E579610085DBE4 /* NSDate+Calendar.h */,
+				0473F3C428E579610085DBE4 /* NSDate+Calendar.m */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		0474D59428BF5D5400A22731 /* GBLoopView */ = {
@@ -1000,6 +1055,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				0473F3B728E579610085DBE4 /* Calendar */,
 				0470DC3328DC0F97007A25DC /* HXFileManager */,
 				0470DC0928DC0EB7007A25DC /* VIMediaCache */,
 				047D23B828D1746100514C1C /* BDFaceSDK */,
@@ -1024,25 +1080,25 @@
 		048B7CBD28BDA209006EBAAE /* HXCalendar */ = {
 			isa = PBXGroup;
 			children = (
-				048B7CBE28BDA209006EBAAE /* HXCalendarManager.m */,
-				048B7CBF28BDA209006EBAAE /* HXCircleView.m */,
-				048B7CC028BDA209006EBAAE /* HXCalendarWeekDayView.h */,
-				048B7CC128BDA209006EBAAE /* HXCalendarContentView.m */,
-				048B7CC228BDA209006EBAAE /* HXCalendarDayItem.m */,
-				048B7CC328BDA209006EBAAE /* HXCalendarCollectionCell.h */,
-				048B7CC428BDA209006EBAAE /* HXCalendarCollectionViewFlowLayout.m */,
-				048B7CC528BDA209006EBAAE /* HXCalendarScrollView.m */,
 				048B7CC628BDA209006EBAAE /* HXCalendarAppearance.h */,
-				048B7CC728BDA209006EBAAE /* HXCircleView.h */,
-				048B7CC828BDA209006EBAAE /* HXCalendarManager.h */,
-				048B7CC928BDA209006EBAAE /* HXCalendarEventSource.h */,
-				048B7CCA28BDA209006EBAAE /* HXCalendarDayItem.h */,
-				048B7CCB28BDA209006EBAAE /* HXCalendarContentView.h */,
-				048B7CCC28BDA209006EBAAE /* HXCalendarWeekDayView.m */,
-				048B7CCD28BDA209006EBAAE /* HXCalendarCollectionViewFlowLayout.h */,
-				048B7CCE28BDA209006EBAAE /* HXCalendarCollectionCell.m */,
 				048B7CCF28BDA209006EBAAE /* HXCalendarAppearance.m */,
+				048B7CC328BDA209006EBAAE /* HXCalendarCollectionCell.h */,
+				048B7CCE28BDA209006EBAAE /* HXCalendarCollectionCell.m */,
+				048B7CCD28BDA209006EBAAE /* HXCalendarCollectionViewFlowLayout.h */,
+				048B7CC428BDA209006EBAAE /* HXCalendarCollectionViewFlowLayout.m */,
+				048B7CCB28BDA209006EBAAE /* HXCalendarContentView.h */,
+				048B7CC128BDA209006EBAAE /* HXCalendarContentView.m */,
+				048B7CCA28BDA209006EBAAE /* HXCalendarDayItem.h */,
+				048B7CC228BDA209006EBAAE /* HXCalendarDayItem.m */,
+				048B7CC928BDA209006EBAAE /* HXCalendarEventSource.h */,
+				048B7CC828BDA209006EBAAE /* HXCalendarManager.h */,
+				048B7CBE28BDA209006EBAAE /* HXCalendarManager.m */,
 				048B7CD028BDA209006EBAAE /* HXCalendarScrollView.h */,
+				048B7CC528BDA209006EBAAE /* HXCalendarScrollView.m */,
+				048B7CC028BDA209006EBAAE /* HXCalendarWeekDayView.h */,
+				048B7CCC28BDA209006EBAAE /* HXCalendarWeekDayView.m */,
+				048B7CC728BDA209006EBAAE /* HXCircleView.h */,
+				048B7CBF28BDA209006EBAAE /* HXCircleView.m */,
 			);
 			path = HXCalendar;
 			sourceTree = "<group>";
@@ -1534,6 +1590,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */,
+				0473F3D128E579610085DBE4 /* Calendar.bundle in Resources */,
 				048B7D4928BDA20A006EBAAE /* launch_logo@2x.png in Resources */,
 				0470DC2628DC0EB7007A25DC /* LICENSE in Resources */,
 				048B7CAF28BD9D8A006EBAAE /* LaunchScreen.storyboard in Resources */,
@@ -1630,6 +1687,7 @@
 				0479599C28DADC67001F8BC6 /* HXFinancePaymentViewController.m in Sources */,
 				048B7D6028BDA20A006EBAAE /* HXCommonWebViewController.m in Sources */,
 				048A0ED028C05B1F0077F40A /* HXLearnCenterPageTitleCell.m in Sources */,
+				0473F3CA28E579610085DBE4 /* MImageTitleButton.m in Sources */,
 				049D570A28E2C5FF009F09F2 /* HXXinXiYouWuShowView.m in Sources */,
 				0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
@@ -1646,6 +1704,7 @@
 				048B7CB228BD9D8A006EBAAE /* main.m in Sources */,
 				04A1FECB28C9BDEE00626409 /* HXZaiXianXuanKeViewController.m in Sources */,
 				0436510428C1F3CE0009ED38 /* UIView+TransitionColor.m in Sources */,
+				0473F3CE28E579610085DBE4 /* MCalendarView.m in Sources */,
 				048B7D4328BDA20A006EBAAE /* HXNavigationPopAnimation.m in Sources */,
 				04A1FEBE28C98B0400626409 /* HXPersonalInforCell.m in Sources */,
 				04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */,
@@ -1653,6 +1712,7 @@
 				048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */,
 				049D570428E28D34009F09F2 /* HXZiLiaoUploadViewController.m in Sources */,
 				0478DA5B28D83A3D00B645DE /* HXFunctionCenterViewController.m in Sources */,
+				0473F3B628E577CB0085DBE4 /* HXCalendarViewShowView.m in Sources */,
 				0470DC2B28DC0EB7007A25DC /* VICacheAction.m in Sources */,
 				048A0EB928C043CD0077F40A /* HXShowMajorView.m in Sources */,
 				0478DA6028D8471700B645DE /* HXPaymentQueryViewController.m in Sources */,
@@ -1673,6 +1733,7 @@
 				048B7D4228BDA20A006EBAAE /* HXBarButtonItem.m in Sources */,
 				048B7D5D28BDA20A006EBAAE /* XLPageTitleCell.m in Sources */,
 				048B31F428DDA94900871C34 /* HXZiLiaoDownLoadCell.m in Sources */,
+				0473F3CB28E579610085DBE4 /* CalendarConfig.m in Sources */,
 				048B7D5F28BDA20A006EBAAE /* HXBaseViewController.m in Sources */,
 				0490BBAD28C879020095FF39 /* HXMyBuKaoViewController.m in Sources */,
 				048B7D3628BDA20A006EBAAE /* HXCalendarManager.m in Sources */,
@@ -1686,6 +1747,7 @@
 				04A1FED428C9C50E00626409 /* HXZaiXianXuanKeCell.m in Sources */,
 				048A0EC928C058BD0077F40A /* HXTeachPlanViewController.m in Sources */,
 				0470DC3928DC0FFD007A25DC /* Utilities.m in Sources */,
+				0473F3C928E579610085DBE4 /* MCalendarCollectionCell.m in Sources */,
 				04A1FEDA28C9E3DA00626409 /* HXShowMoneyDetailsrView.m in Sources */,
 				048B7D6228BDA20A006EBAAE /* HXNoDataTipView.m in Sources */,
 				048B7D5728BDA20A006EBAAE /* NSString+size.m in Sources */,
@@ -1711,6 +1773,7 @@
 				048B7D6828BDA20A006EBAAE /* HXPublicParamTool.m in Sources */,
 				046E3F3928CB230B00FF188A /* HXMyMessageViewController.m in Sources */,
 				048B7D7228BDA824006EBAAE /* HXLoginViewController.m in Sources */,
+				0473F3CD28E579610085DBE4 /* MCalendarTitleView.m in Sources */,
 				0490DD9E28C194B5009BA325 /* HXKeJianLearnCell.m in Sources */,
 				048B7D4428BDA20A006EBAAE /* UIViewController+HXNavigation.m in Sources */,
 				048B7D4A28BDA20A006EBAAE /* HXNavigationController.m in Sources */,
@@ -1720,7 +1783,9 @@
 				045F218A28D05948007023D7 /* QRCodeReader.m in Sources */,
 				045F218828D05948007023D7 /* QRCodeReaderViewController.m in Sources */,
 				048B7D3C28BDA20A006EBAAE /* HXCalendarWeekDayView.m in Sources */,
+				0473F3CC28E579610085DBE4 /* MCalendarItem.m in Sources */,
 				048A0EC028C044830077F40A /* HXShowMajorCell.m in Sources */,
+				0473F3CF28E579610085DBE4 /* NSDate+Calendar.m in Sources */,
 				047959AB28DB098C001F8BC6 /* HXJieSuanCell.m in Sources */,
 				048B7D5A28BDA20A006EBAAE /* XLPageSegmentedTitleView.m in Sources */,
 				048B7D3A28BDA20A006EBAAE /* HXCalendarCollectionViewFlowLayout.m in Sources */,
@@ -1753,6 +1818,7 @@
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
 				0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */,
 				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
+				0473F3D028E579610085DBE4 /* MCalendarShortView.m in Sources */,
 				0470DC3028DC0EB7007A25DC /* VIMediaDownloader.m in Sources */,
 				045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */,
 				0470DC3228DC0EB7007A25DC /* VIResourceLoaderManager.m in Sources */,

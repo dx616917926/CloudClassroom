@@ -6,8 +6,10 @@
 //
 
 #import "HXFaceTimeTableViewController.h"
+#import "HXCalendarViewShowView.h"
 #import "HXFaceTimeTableShowView.h"
 #import <objc/runtime.h>
+#import "NSDate+Calendar.h"
 
 const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
@@ -15,6 +17,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
 @property(nonatomic,strong) UIView *topView;
 @property(nonatomic,strong) UIButton *riQiBtn;
+@property(nonatomic,strong) UIButton *todayBtn;
 
 @property(nonatomic,strong) UIView *weekContainerView;
 
@@ -25,6 +28,10 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 @property(nonatomic,strong) UIView *columnContainerView1;
 
 @property(nonatomic,strong) NSMutableArray *items;
+
+@property(nonatomic,strong) HXCalendarViewShowView *calendarView;
+//选择日期
+@property (nonatomic, strong) NSDate *selectedDate;
 
 
 @end
@@ -52,12 +59,37 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         [self.items addObject:model];
     }
     
+    //默认当前日期
+    self.selectedDate = [NSDate date];
+    
     [self createUI];
 }
 
 
 #pragma mark - Event
 -(void)selectRiQi:(UIButton *)sender{
+    
+    self.calendarView.startDate = self.selectedDate;
+    [self.calendarView show];
+    WeakSelf(weakSelf);
+    self.calendarView.confirmBlock = ^(NSDate *date) {
+        weakSelf.selectedDate = date;
+        [weakSelf refreshUI];
+    };
+}
+
+//回到今天
+-(void)backToday:(UIButton *)sender{
+    self.selectedDate = [NSDate date];
+    self.calendarView.startDate = [NSDate date];
+    NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
+    [self.riQiBtn setTitle:str forState:UIControlStateNormal];
+}
+
+-(void)refreshUI{
+    
+    NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
+    [self.riQiBtn setTitle:str forState:UIControlStateNormal];
     
     for (int i=0; i<6; i++) {
         UIView *viewContainer =[self.mainScrollView viewWithTag:5000+i];
@@ -140,14 +172,14 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
 #pragma mark - UI
 -(void)createUI{
+    
     [self.view addSubview:self.topView];
     [self.topView addSubview:self.riQiBtn];
+    [self.topView addSubview:self.todayBtn];
     [self.view addSubview:self.mainScrollView];
     [self.view addSubview:self.weekContainerView];
     
     [self.mainScrollView addSubview:self.columnContainerView];
-    
-    
     
     self.topView.sd_layout
     .topSpaceToView(self.view, 0)
@@ -156,24 +188,33 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     .heightIs(44);
     
     self.riQiBtn.sd_layout
-    .centerXEqualToView(self.topView)
+    .leftSpaceToView(self.topView, 16)
     .centerYEqualToView(self.topView)
-    .heightIs(28);
+    .widthIs(_kpw(220))
+    .heightIs(32);
     self.riQiBtn.sd_cornerRadius=@2;
-    
-    self.riQiBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.riQiBtn)
-    .leftSpaceToView(self.riQiBtn, 8)
-    .heightIs(18);
-    [self.riQiBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:160];
     
     self.riQiBtn.imageView.sd_layout
     .centerYEqualToView(self.riQiBtn)
-    .leftSpaceToView(self.riQiBtn.titleLabel, 8)
+    .rightSpaceToView(self.riQiBtn, 6)
     .widthIs(13)
     .heightIs(13);
     
-    [self.riQiBtn setupAutoWidthWithRightView:self.riQiBtn.imageView rightMargin:6];
+    self.riQiBtn.titleLabel.sd_layout
+    .centerYEqualToView(self.riQiBtn)
+    .leftSpaceToView(self.riQiBtn, 6)
+    .rightSpaceToView(self.riQiBtn.imageView, 12)
+    .heightIs(18);
+    
+    
+    self.todayBtn.sd_layout
+    .rightSpaceToView(self.topView, 16)
+    .centerYEqualToView(self.topView)
+    .widthIs(_kpw(114))
+    .heightIs(32);
+    self.todayBtn.sd_cornerRadius=@2;
+    
+   
     
     NSArray *weeks = @[@" ",@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
     
@@ -308,11 +349,24 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         _riQiBtn.backgroundColor = COLOR_WITH_ALPHA(0xF4F6FA, 1);
         _riQiBtn.titleLabel.font = HXFont(13);
         [_riQiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_riQiBtn setTitle:@"9月28日 周三 第4周" forState:UIControlStateNormal];
         [_riQiBtn setImage:[UIImage imageNamed:@"set_arrow"] forState:UIControlStateNormal];
         [_riQiBtn addTarget:self action:@selector(selectRiQi:) forControlEvents:UIControlEventTouchUpInside];
+        NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
+        [_riQiBtn setTitle:str forState:UIControlStateNormal];
     }
     return _riQiBtn;
+}
+
+- (UIButton *)todayBtn{
+    if (!_todayBtn) {
+        _todayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _todayBtn.backgroundColor = COLOR_WITH_ALPHA(0xF4F6FA, 1);
+        _todayBtn.titleLabel.font = HXFont(13);
+        [_todayBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+        [_todayBtn setTitle:@"回到今天" forState:UIControlStateNormal];
+        [_todayBtn addTarget:self action:@selector(backToday:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _todayBtn;
 }
 
 -(UIView *)weekContainerView{
@@ -347,5 +401,11 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     return _columnContainerView;
 }
 
+-(HXCalendarViewShowView *)calendarView{
+    if (!_calendarView) {
+        _calendarView = [[HXCalendarViewShowView alloc] init];
+    }
+    return _calendarView;
+}
 
 @end
