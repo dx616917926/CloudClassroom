@@ -6,11 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXMajorModel.h"
+#import "HXMajorInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXShowMajorCell : UITableViewCell
+
+@property(nonatomic,strong) HXMajorInfoModel *majorInfoModel;
 
 @end
 

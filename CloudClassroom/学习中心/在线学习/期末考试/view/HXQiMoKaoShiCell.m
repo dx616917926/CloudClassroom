@@ -47,6 +47,32 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setKeJianOrExamInfoModel:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
+    
+    _keJianOrExamInfoModel = keJianOrExamInfoModel;
+    
+    [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+    
+    self.courseNameLabel.text = keJianOrExamInfoModel.termCourseName;
+    self.ciShuContentLabel.text = HXIntToString(keJianOrExamInfoModel.allowCount_CJ);
+    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",keJianOrExamInfoModel.finaltime,keJianOrExamInfoModel.finaltimeEnd];
+    self.tipLabel.hidden = [HXCommonUtil isNull:keJianOrExamInfoModel.showMessage];
+    self.tipLabel.text = keJianOrExamInfoModel.showMessage;
+    
+    self.chechRecordBtn.hidden = (keJianOrExamInfoModel.vr_CJ==1?NO:YES);
+    
+    ///是否能考试或者看课
+    if(keJianOrExamInfoModel.isCan==1){
+        self.startKaoShiBtn.enabled =YES;
+        self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+    }else{
+        self.startKaoShiBtn.enabled =NO;
+        self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    }
+    
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -136,7 +162,7 @@
     self.tipLabel.sd_layout
     .centerYEqualToView(self.startKaoShiBtn)
     .leftSpaceToView(self.bigBackgroundView, 14)
-    .rightSpaceToView(self.startKaoShiBtn, 20)
+    .rightSpaceToView(self.chechRecordBtn, 10)
     .heightIs(17);
     
 }
@@ -225,7 +251,6 @@
         _tipLabel.font = HXFont(12);
         _tipLabel.textColor = COLOR_WITH_ALPHA(0xEF5959, 1);
         _tipLabel.hidden = YES;
-        _tipLabel.text = @"您的考试次数已用完，不能继续考试";
     }
     return _tipLabel;
 }
@@ -239,6 +264,7 @@
         _chechRecordBtn.titleLabel.font = HXBoldFont(14);
         [_chechRecordBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
         [_chechRecordBtn setTitle:@"查看考试记录" forState:UIControlStateNormal];
+        _chechRecordBtn.hidden = YES;
     }
     return _chechRecordBtn;
 }

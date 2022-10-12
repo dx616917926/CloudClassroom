@@ -12,11 +12,15 @@
 #define  UMAPPKEY  @"612709d410c4020b03eed728"
 
 //微信授权
-#define kHXWechatOpenKey            @"wx4f5db3101ba7caf2"    
-#define UNIVERSAL_LINK              @"https://xsjy.hlw-study.com/minedu/"
+#define  kHXWechatOpenKey            @"wx4f5db3101ba7caf2"
+#define  UNIVERSAL_LINK              @"https://xsjy.hlw-study.com/minedu/"
 
 //默认主题
-#define Default_Theme HXThemeBlue  //蓝色
+#define  Default_Theme HXThemeBlue  //蓝色
+
+
+//md5密钥
+#define  Md5Key     @"1poiulk*&"
 
 
 #define     KP_SERVER_KEY         @"_KHX_URL_MAIN__"

@@ -247,9 +247,6 @@
     .rightEqualToView(self.bigBackGroundView)
     .bottomSpaceToView(self.bigBackGroundView, 0);
     
-    
-//    [self configGustures];
-
 }
 
 
@@ -426,10 +423,10 @@
     
     UISwipeGestureRecognizer *recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swapGestureRecognizer:)];
     recognizer.direction =  UISwipeGestureRecognizerDirectionLeft;
-    [self.bigBackGroundView addGestureRecognizer:recognizer];
+    [self.collectionView addGestureRecognizer:recognizer];
     recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swapGestureRecognizer:)];
     recognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    [self.bigBackGroundView addGestureRecognizer:recognizer];
+    [self.collectionView addGestureRecognizer:recognizer];
 }
 
 - (void)swapGestureRecognizer:(UISwipeGestureRecognizer *) recognizer {

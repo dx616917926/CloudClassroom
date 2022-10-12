@@ -17,10 +17,15 @@
 #import "HXQIMoKaoShiViewController.h"//期末考试
 #import "HXStudyReportViewController.h"//学习报告
 #import "HXClassRankViewController.h"//班级排名
+#import "SDWebImage.h"
 #import "HXCurrentLearCell.h"
 #import "GBLoopView.h"
 #import "HXShowMajorView.h"
 #import "HXDegreeEnglishShowView.h"
+#import "HXHomeStudentInfoModel.h"
+#import "HXMajorInfoModel.h"
+#import "HXMessageInfoModel.h"
+#import "HXHomeMenuModel.h"
 
 @interface HXHomePageViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
 
@@ -55,7 +60,10 @@
 
 @property(nonatomic,strong) HXShowMajorView *showMajorView;
 
+@property(nonatomic,strong) HXHomeStudentInfoModel *homeStudentInfoModel;
 
+@property(nonatomic,strong) NSMutableArray *majorArray;
+@property(nonatomic,strong) NSMutableArray *dataArray;
 @end
 
 @implementation HXHomePageViewController
@@ -65,97 +73,259 @@
     // Do any additional setup after loading the view.
     
     [self createUI];
-   
+    //获取首页公告信息
+    [self getHomeMessageInfo];
+    //
+    [self loadData];
+    //登录成功的通知
+    [HXNotificationCenter addObserver:self selector:@selector(loadData) name:LOGINSUCCESS object:nil];
+}
+
+-(void)loadData{
     
+    //获取首页信息
+    [self getHomeStudentInfo];
+    //获取首页专业信息
+    [self getHomeMajorInfo];
+    //获取首页菜单
+    [self getHomeMenu];
 }
 
 
-#pragma mark - Event
--(void)handleMiddleClick:(UIButton *)sender{
-    NSInteger tag = sender.tag;
-    switch (tag) {
-        case 5000://财务缴费
-        {
-            HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-           
+#pragma mark - 获取首页信息
+-(void)getHomeStudentInfo{
+    NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"major_id":HXSafeString(major_id)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            [self.headImageView sd_setImageWithURL:HXSafeURL(self.homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+            self.nameLabel.text = self.homeStudentInfoModel.name;
+            self.personIdLabel.text =self.homeStudentInfoModel.personId;
+            self.bkSchooldContentLabel.text = self.homeStudentInfoModel.subSchoolName;
+            [self.bkMajorContentBtn setTitle:self.homeStudentInfoModel.majorlongName forState:UIControlStateNormal];
         }
-            break;
-        case 5001://缴费查询
-        {
-            HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+    
+}
+
+#pragma mark - 获取首页专业信息
+-(void)getHomeMajorInfo{
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMajorInfo withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXMajorInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.majorArray removeAllObjects];
+            [self.majorArray addObjectsFromArray:list];
+            //登录获得的major_id
+            NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+             __block HXMajorInfoModel *selectMajorInfoModel = list.firstObject;
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMajorInfoModel *majorInfoModel = obj;
+                if([majorInfoModel.major_Id isEqualToString:major_id]){
+                    selectMajorInfoModel = majorInfoModel;
+                    *stop = YES;
+                    return;
+                }
+            }];
+            [HXPublicParamTool sharedInstance].currentSemesterid = selectMajorInfoModel.semesterid;
+            //获取当前学期学习列表
+            [self getOnlineCourseList:selectMajorInfoModel.semesterid];
         }
-            break;
-        case 5002://成绩查询
-        {
-            HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 获取学习列表(当前学期和全部学期)
+-(void)getOnlineCourseList:(NSString *)semesterid{
+    
+    //学期，如果是当前学期，则传具体的学期，如果是所有学期，则传0
+    NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(major_id),
+        @"term":HXSafeString(semesterid)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXSemesterModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            HXSemesterModel *semesterModel = list.firstObject;
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:semesterModel.courseList];
+            [self.mainTableView reloadData];
         }
-            break;
-        case 5003://我的补考
-        {
-            HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 5004://毕业论文
-        {
-           
-        }
-            break;
-        case 5005://学位英语
-        {
-            HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
-            degreeEnglishShowView.type = WeiKaiFangBaoMingType;
-            [degreeEnglishShowView show];
-        }
-            break;
-        case 5006://我的直播
-        {
-           
-        }
-            break;
-        case 5007://更多
-        {
-            HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+
+#pragma mark - 获取首页公告信息
+-(void)getHomeMessageInfo{
+    
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMessageInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXMessageInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            __block NSMutableArray *messageTitles = [NSMutableArray array];
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMessageInfoModel *model = obj;
+                [messageTitles addObject:model.messageTitle];
+            }];
             
-        default:
-            break;
+            [self.loopView setTickerArrs:messageTitles];
+            [self.loopView start];
+            
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+
+#pragma mark - 获取首页菜单
+-(void)getHomeMenu{
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXHomeMenuModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self refreshHomeMenuLayout:list];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 重新布局功能模块
+-(void)refreshHomeMenuLayout:(NSArray<HXHomeMenuModel*>*)list{
+    ///移除重新布局
+    [self.bujuBtns removeAllObjects];
+    [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    [self.bujuArray removeAllObjects];
+    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.isShow==1){
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
+            [btn sd_setImageWithURL:HXSafeURL([baseUreStr stringByAppendingString:obj.moduleIcon])  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnsContainerView addSubview:btn];
+            [self.bujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
+        }
+    }];
+        
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+}
+
+#pragma mark - Event
+-(void)handleHomeMenuClick:(UIButton *)sender{
+    
+    NSString *tittle = [sender titleForState:UIControlStateNormal];
+    
+    if([tittle isEqualToString:@"在线缴费"]){
+        HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"缴费查询"]){
+        HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"成绩查询"]){
+        HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"我的补考"]){
+        HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"毕业论文"]){
+        
+        
+    }else if([tittle isEqualToString:@"学位英语"]){
+        HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
+        degreeEnglishShowView.type = WeiKaiFangBaoMingType;
+        [degreeEnglishShowView show];
+    }else if([tittle isEqualToString:@"我的直播"]){
+        
+        
+    }else if([tittle isEqualToString:@"更多"]){
+        HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
 }
 
 //选择考专业
 -(void)selectMajor:(UIButton *)sender{
-//    if (self.examDateList.count<=0) return;
-//    self.showMajorView.dataArray = self.examDateList;
+    if (self.majorArray.count<=0) return;
+    self.showMajorView.dataArray = self.majorArray;
     [self.showMajorView show];
     ///选择回调
     WeakSelf(weakSelf);
-    self.showMajorView.selectMajorCallBack = ^(BOOL isRefresh, HXMajorModel * _Nonnull selectMajorModel) {
+    self.showMajorView.selectMajorCallBack = ^(BOOL isRefresh, HXMajorInfoModel * _Nonnull selectMajorModel, NSInteger idx) {
         if (isRefresh){
-            
+            //重新选定
+            [HXPublicParamTool sharedInstance].major_id = selectMajorModel.major_Id;
+            HXMajorInfoModel *majorInfoModel = weakSelf.majorArray[idx];
+            [weakSelf.bkMajorContentBtn setTitle:majorInfoModel.majorLongName forState:UIControlStateNormal];
+            [HXPublicParamTool sharedInstance].currentSemesterid = majorInfoModel.semesterid;
+            //获取学习列表(当前学期和全部学期)
+            [weakSelf getOnlineCourseList:majorInfoModel.semesterid];
+            //修改专业通知
+            [HXNotificationCenter postNotificationName:kChangeMajorSuccessNotification object:nil];
         }
     };
 }
 
 #pragma mark -<HXCurrentLearCellDelegate> flag:  8000:课件学习    8001:平时作业   8002:期末考试   8003:答疑室   8004:学习报告  8005:班级排名   8006:得分
--(void)handleClickEvent:(NSInteger)flag{
+-(void)handleClickEvent:(NSInteger)flag courseInfoModel:(nonnull HXCourseInfoModel *)courseInfoModel{
     
     switch (flag) {
         case 8000:
         {
             HXKeJianLearnViewController *vc = [[HXKeJianLearnViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -163,6 +333,7 @@
         {
             HXPingShiZuoYeViewController *vc = [[HXPingShiZuoYeViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -170,12 +341,13 @@
         {
             HXQIMoKaoShiViewController *vc = [[HXQIMoKaoShiViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 8003:
         {
-           
+            
         }
             break;
         case 8004:
@@ -183,6 +355,7 @@
             HXStudyReportViewController *vc = [[HXStudyReportViewController alloc] init];
             vc.sc_navigationBarHidden = YES;//隐藏导航栏
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -191,6 +364,7 @@
             HXClassRankViewController *vc = [[HXClassRankViewController alloc] init];
             vc.sc_navigationBarHidden = YES;//隐藏导航栏
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -206,7 +380,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 4;
+    return self.dataArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -223,8 +397,9 @@
     if (!cell) {
         cell = [[HXCurrentLearCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:currentLearCellIdentifier];
     }
-    cell.delegate = self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.delegate = self;
+    cell.courseInfoModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -253,112 +428,129 @@
     
     
     self.topBgImageView.sd_layout
-    .topSpaceToView(self.view, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(0.704*kScreenWidth);
+        .topSpaceToView(self.view, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .heightIs(0.704*kScreenWidth);
     
     
     
     self.bottomBgImageView.sd_layout
-    .topSpaceToView(self.topBgImageView, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(0.437*kScreenWidth);
+        .topSpaceToView(self.topBgImageView, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .heightIs(0.437*kScreenWidth);
     
     self.mainTableView.sd_layout
-    .topSpaceToView(self.topBgImageView, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomSpaceToView(self.view, kTabBarHeight);
+        .topSpaceToView(self.topBgImageView, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .bottomSpaceToView(self.view, kTabBarHeight);
     
     
     self.headImageView.sd_layout
-    .topSpaceToView(self.topBgImageView, 70)
-    .leftSpaceToView(self.topBgImageView, 40)
-    .widthIs(68)
-    .heightEqualToWidth();
+        .topSpaceToView(self.topBgImageView, 70)
+        .leftSpaceToView(self.topBgImageView, 40)
+        .widthIs(68)
+        .heightEqualToWidth();
     self.headImageView.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.welcomeLabel.sd_layout
-    .topEqualToView(self.headImageView)
-    .leftSpaceToView(self.headImageView, 24)
-    .rightSpaceToView(self.topBgImageView, 40)
-    .heightIs(17);
+        .topEqualToView(self.headImageView)
+        .leftSpaceToView(self.headImageView, 24)
+        .rightSpaceToView(self.topBgImageView, 40)
+        .heightIs(17);
     
     self.nameLabel.sd_layout
-    .topSpaceToView(self.welcomeLabel, 0)
-    .leftEqualToView(self.welcomeLabel)
-    .rightEqualToView(self.welcomeLabel)
-    .heightIs(28);
+        .topSpaceToView(self.welcomeLabel, 0)
+        .leftEqualToView(self.welcomeLabel)
+        .rightEqualToView(self.welcomeLabel)
+        .heightIs(28);
     
     self.personIdLabel.sd_layout
-    .topSpaceToView(self.nameLabel, 2)
-    .leftEqualToView(self.welcomeLabel)
-    .rightEqualToView(self.welcomeLabel)
-    .heightIs(18);
+        .topSpaceToView(self.nameLabel, 2)
+        .leftEqualToView(self.welcomeLabel)
+        .rightEqualToView(self.welcomeLabel)
+        .heightIs(18);
     
     self.bkSchooldLabel.sd_layout
-    .topSpaceToView(self.headImageView, 30)
-    .leftEqualToView(self.headImageView)
-    .widthIs(70)
-    .heightIs(20);
+        .topSpaceToView(self.headImageView, 30)
+        .leftEqualToView(self.headImageView)
+        .widthIs(70)
+        .heightIs(20);
     
     self.bkSchooldContentLabel.sd_layout
-    .centerYEqualToView(self.bkSchooldLabel)
-    .rightSpaceToView(self.topBgImageView, 40)
-    .leftSpaceToView(self.bkSchooldLabel, 20)
-    .heightRatioToView(self.bkSchooldLabel, 1);
+        .centerYEqualToView(self.bkSchooldLabel)
+        .rightSpaceToView(self.topBgImageView, 40)
+        .leftSpaceToView(self.bkSchooldLabel, 20)
+        .heightRatioToView(self.bkSchooldLabel, 1);
     
     self.bkMajorLabel.sd_layout
-    .topSpaceToView(self.bkSchooldLabel, 13)
-    .leftEqualToView(self.bkSchooldLabel)
-    .rightEqualToView(self.bkSchooldLabel)
-    .heightRatioToView(self.bkSchooldLabel, 1);
+        .topSpaceToView(self.bkSchooldLabel, 13)
+        .leftEqualToView(self.bkSchooldLabel)
+        .rightEqualToView(self.bkSchooldLabel)
+        .heightRatioToView(self.bkSchooldLabel, 1);
     
     self.bkMajorContentBtn.sd_layout
-    .centerYEqualToView(self.bkMajorLabel)
-    .rightEqualToView(self.bkSchooldContentLabel)
-    .leftEqualToView(self.bkSchooldContentLabel)
-    .heightRatioToView(self.bkSchooldContentLabel, 1);
+        .centerYEqualToView(self.bkMajorLabel)
+        .rightEqualToView(self.bkSchooldContentLabel)
+        .leftEqualToView(self.bkSchooldContentLabel)
+        .heightRatioToView(self.bkSchooldContentLabel, 1);
     
     self.bkMajorContentBtn.imageView.sd_layout
-    .rightEqualToView(self.bkMajorContentBtn)
-    .centerYEqualToView(self.bkMajorContentBtn)
-    .widthIs(9)
-    .heightEqualToWidth();
+        .rightEqualToView(self.bkMajorContentBtn)
+        .centerYEqualToView(self.bkMajorContentBtn)
+        .widthIs(9)
+        .heightEqualToWidth();
     
     self.bkMajorContentBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.bkMajorContentBtn)
-    .rightSpaceToView(self.bkMajorContentBtn.imageView, 5)
-    .leftEqualToView(self.bkMajorContentBtn)
-    .heightRatioToView(self.bkMajorContentBtn, 1);
+        .centerYEqualToView(self.bkMajorContentBtn)
+        .rightSpaceToView(self.bkMajorContentBtn.imageView, 5)
+        .leftEqualToView(self.bkMajorContentBtn)
+        .heightRatioToView(self.bkMajorContentBtn, 1);
     
     self.paoMaDengView.sd_layout
-    .bottomSpaceToView(self.topBgImageView, 12)
-    .leftSpaceToView(self.topBgImageView, 12)
-    .rightSpaceToView(self.topBgImageView, 12)
-    .heightIs(30);
+        .bottomSpaceToView(self.topBgImageView, 12)
+        .leftSpaceToView(self.topBgImageView, 12)
+        .rightSpaceToView(self.topBgImageView, 12)
+        .heightIs(30);
     self.paoMaDengView.sd_cornerRadius = @8;
     
     self.noticeImageView.sd_layout
-    .centerYEqualToView(self.paoMaDengView)
-    .leftSpaceToView(self.paoMaDengView, 0)
-    .widthIs(40)
-    .heightIs(16);
+        .centerYEqualToView(self.paoMaDengView)
+        .leftSpaceToView(self.paoMaDengView, 0)
+        .widthIs(40)
+        .heightIs(16);
     
     self.loopView.sd_layout
-    .centerYEqualToView(self.paoMaDengView)
-    .leftSpaceToView(self.noticeImageView, 5)
-    .rightSpaceToView(self.paoMaDengView, 5)
-    .heightIs(18);
+        .centerYEqualToView(self.paoMaDengView)
+        .leftSpaceToView(self.noticeImageView, 5)
+        .rightSpaceToView(self.paoMaDengView, 5)
+        .heightIs(18);
     
-    [self.loopView setTickerArrs:@[@"「学校通知」临近期末考试啦，同学们要抓紧复习呀..",@"长沙理工大学-行政管理-中国近代史纲要"]];
-    [self.loopView start];
+    
+    
+    // 刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainTableView.mj_header = header;
     
 }
 
 #pragma mark - LazyLoad
+-(NSMutableArray *)majorArray{
+    if(!_majorArray){
+        _majorArray = [NSMutableArray array];
+    }
+    return _majorArray;
+}
+
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
 -(UIImageView *)topBgImageView{
     if (!_topBgImageView) {
         _topBgImageView = [[UIImageView alloc] init];
@@ -382,6 +574,7 @@
 -(UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc] init];
+        _headImageView.contentMode = UIViewContentModeScaleAspectFill;
         _headImageView.clipsToBounds = YES;
         _headImageView.userInteractionEnabled = YES;
         _headImageView.layer.borderWidth = 2;
@@ -406,7 +599,7 @@
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = HXBoldFont(20);
         _nameLabel.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-        _nameLabel.text = @"张敏";
+        
     }
     return _nameLabel;
 }
@@ -416,7 +609,7 @@
         _personIdLabel = [[UILabel alloc] init];
         _personIdLabel.font = HXFont(13);
         _personIdLabel.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-        _personIdLabel.text = @"432195199210261245";
+        
     }
     return _personIdLabel;
 }
@@ -437,7 +630,7 @@
         _bkSchooldContentLabel.font = HXFont(14);
         _bkSchooldContentLabel.textAlignment = NSTextAlignmentRight;
         _bkSchooldContentLabel.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-        _bkSchooldContentLabel.text = @"长沙理工大学";
+        
     }
     return _bkSchooldContentLabel;
 }
@@ -459,7 +652,6 @@
         _bkMajorContentBtn.titleLabel.textAlignment = NSTextAlignmentRight;
         [_bkMajorContentBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_bkMajorContentBtn setImage:[UIImage imageNamed:@"whiteright_arrow"] forState:UIControlStateNormal];
-        [_bkMajorContentBtn setTitle:@"行政管理" forState:UIControlStateNormal];
         [_bkMajorContentBtn addTarget:self action:@selector(selectMajor:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _bkMajorContentBtn;
@@ -518,7 +710,7 @@
         _mainTableView.scrollIndicatorInsets = _mainTableView.contentInset;
         _mainTableView.tableHeaderView = self.tableHeaderView;
         _mainTableView.showsVerticalScrollIndicator = NO;
-       
+        
     }
     return _mainTableView;
 }
@@ -533,33 +725,33 @@
         [self.currentLearContainerView addSubview:self.currentLearLabel];
         
         self.btnsContainerView.sd_layout
-        .topSpaceToView(_tableHeaderView, 0)
-        .leftSpaceToView(_tableHeaderView, 12)
-        .rightSpaceToView(_tableHeaderView,12);
+            .topSpaceToView(_tableHeaderView, 0)
+            .leftSpaceToView(_tableHeaderView, 12)
+            .rightSpaceToView(_tableHeaderView,12);
         
         for (UIButton *btn in self.bujuBtns) {
             btn.sd_layout.heightIs(73);
             btn.imageView.sd_layout
-            .centerXEqualToView(btn)
-            .topSpaceToView(btn, 0)
-            .widthIs(47)
-            .heightEqualToWidth();
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
             
             btn.titleLabel.sd_layout
-            .bottomSpaceToView(btn, 0)
-            .leftEqualToView(btn)
-            .rightEqualToView(btn)
-            .heightIs(17);
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
         }
         
         [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
         self.btnsContainerView.sd_cornerRadius = @8;
         
         self.currentLearContainerView.sd_layout
-        .topSpaceToView(self.btnsContainerView, 16)
-        .leftEqualToView(_tableHeaderView)
-        .rightEqualToView(_tableHeaderView)
-        .heightIs(50);
+            .topSpaceToView(self.btnsContainerView, 16)
+            .leftEqualToView(_tableHeaderView)
+            .rightEqualToView(_tableHeaderView)
+            .heightIs(50);
         [self.currentLearContainerView updateLayout];
         
         
@@ -569,19 +761,19 @@
         cornerRadiusLayer.frame = self.currentLearContainerView.bounds;
         cornerRadiusLayer.path = cornerRadiusPath.CGPath;
         self.currentLearContainerView.layer.mask = cornerRadiusLayer;
-       
+        
         self.currentLearLabel.sd_layout
-        .centerYEqualToView(self.currentLearContainerView)
-        .leftSpaceToView(self.currentLearContainerView, 12)
-        .rightSpaceToView(self.currentLearContainerView, 12)
-        .heightIs(23);
+            .centerYEqualToView(self.currentLearContainerView)
+            .leftSpaceToView(self.currentLearContainerView, 12)
+            .rightSpaceToView(self.currentLearContainerView, 12)
+            .heightIs(23);
         
         
         self.baoDaoBtn.sd_layout
-        .topSpaceToView(self.btnsContainerView, 26)
-        .leftSpaceToView(_tableHeaderView, 12)
-        .rightSpaceToView(_tableHeaderView, 12)
-        .heightIs(40);
+            .topSpaceToView(self.btnsContainerView, 26)
+            .leftSpaceToView(_tableHeaderView, 12)
+            .rightSpaceToView(_tableHeaderView, 12)
+            .heightIs(40);
         self.baoDaoBtn.sd_cornerRadiusFromHeightRatio = @0.5;
         
         [_tableHeaderView setupAutoHeightWithBottomView:self.currentLearContainerView bottomMargin:0];
@@ -596,7 +788,7 @@
     if (!_bujuArray) {
         _bujuArray = [NSMutableArray array];
         [_bujuArray addObjectsFromArray:@[
-            [@{@"title":@"财务缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"handleEventTag":@(5001),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"handleEventTag":@(5002),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"handleEventTag":@(5003),@"isShow":@(1)} mutableCopy],
@@ -631,7 +823,7 @@
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(handleMiddleClick:) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
             [_btnsContainerView addSubview:btn];
             [self.bujuBtns addObject:btn];
         }

@@ -53,7 +53,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
@@ -68,28 +68,130 @@
 #pragma mark -Event
 -(void)clickEvent:(UIControl *)sender{
     NSInteger tag = sender.tag;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(handleClickEvent:)]) {
-        [self.delegate handleClickEvent:tag];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(handleClickEvent:courseInfoModel:)]) {
+        [self.delegate handleClickEvent:tag courseInfoModel:self.courseInfoModel];
     }
 }
 
 #pragma mark -Setter
--(void)setIndex:(NSInteger)index{
-    _index = index;
+-(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
+    _courseInfoModel = courseInfoModel;
+    
+    NSMutableArray *btns = [NSMutableArray array];
     //移除所有按钮
     [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj removeFromSuperview];
     }];
-    NSMutableArray *btns = [NSMutableArray array];
-    [btns addObjectsFromArray:@[self.keJianBtn,self.zuoYeBtn,self.kaoShiBtn,self.daYiShiBtn]];
-    [btns removeObjectsInRange:NSMakeRange(0, index)];
+    
+    if(courseInfoModel.showKJ==1){
+        [btns addObject:self.keJianBtn];
+    }
+    if(courseInfoModel.showZY==1){
+        [btns addObject:self.zuoYeBtn];
+    }
+    if(courseInfoModel.showQM==1){
+        [btns addObject:self.kaoShiBtn];
+    }
+    if(courseInfoModel.showDN==1){
+        [btns addObject:self.daYiShiBtn];
+    }
     [self.btnsContainerView sd_addSubviews:btns];
     [self.btnsContainerView setupAutoWidthFlowItems:btns withPerRowItemsCount:btns.count verticalMargin:0 horizontalMargin:10 verticalEdgeInset:20 horizontalEdgeInset:20];
+    
+    self.courseNameLabel.text = courseInfoModel.termCourseName;
+    [self.typeBtn setTitle:courseInfoModel.courseTypeName forState:UIControlStateNormal];
+    [self.keJianBtn setTitle:courseInfoModel.kjButtonName forState:UIControlStateNormal];
+    [self.zuoYeBtn setTitle:courseInfoModel.zyButtonName forState:UIControlStateNormal];
+    [self.kaoShiBtn setTitle:courseInfoModel.qmButtonName forState:UIControlStateNormal];
+    [self.daYiShiBtn setTitle:courseInfoModel.dnButtonName forState:UIControlStateNormal];
+    
+    if(courseInfoModel.kjScore>=80){
+        self.keJianStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
+        [self.keJianStateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+    }else if(courseInfoModel.kjScore<=50){
+        self.keJianStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xF8A528, 0.1);
+        [self.keJianStateBtn setTitleColor:COLOR_WITH_ALPHA(0xED4F4F, 1) forState:UIControlStateNormal];
+    }else{
+        self.keJianStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFDEDED, 1);
+        [self.keJianStateBtn setTitleColor:COLOR_WITH_ALPHA(0xF8A528, 1) forState:UIControlStateNormal];
+    }
+    
+    if(courseInfoModel.zyScore>=80){
+        self.zuoYeStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
+        [self.zuoYeStateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+    }else if(courseInfoModel.zyScore<60){
+        self.zuoYeStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xF8A528, 0.1);
+        [self.zuoYeStateBtn setTitleColor:COLOR_WITH_ALPHA(0xED4F4F, 1) forState:UIControlStateNormal];
+    }else{
+        self.zuoYeStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFDEDED, 1);
+        [self.zuoYeStateBtn setTitleColor:COLOR_WITH_ALPHA(0xF8A528, 1) forState:UIControlStateNormal];
+    }
+    
+    if(courseInfoModel.qmScore>=80){
+        self.kaoShiStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
+        [self.kaoShiStateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+    }else if(courseInfoModel.qmScore<60){
+        self.kaoShiStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xF8A528, 0.1);
+        [self.kaoShiStateBtn setTitleColor:COLOR_WITH_ALPHA(0xED4F4F, 1) forState:UIControlStateNormal];
+    }else{
+        self.kaoShiStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFDEDED, 1);
+        [self.kaoShiStateBtn setTitleColor:COLOR_WITH_ALPHA(0xF8A528, 1) forState:UIControlStateNormal];
+    }
+    
+    if(courseInfoModel.finalscore>=100){
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon6"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=80){
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon5"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=60){
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon4"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=20){
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon3"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=0){
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon2"] forState:UIControlStateNormal];
+    }else{
+        [self.scoreBtn setImage:[UIImage imageNamed:@"score_icon1"] forState:UIControlStateNormal];
+    }
+    
+    if(courseInfoModel.finalscore>=80){
+        [self.xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon4"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=60){
+        [self.xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon3"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.finalscore>=0){
+        [self.xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon2"] forState:UIControlStateNormal];
+    }else{
+        [self.xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon1"] forState:UIControlStateNormal];
+    }
+    
+    if(courseInfoModel.classRank<=20){
+        [self.rankBtn setImage:[UIImage imageNamed:@"rank_icon4"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.classRank<=50){
+        [self.rankBtn setImage:[UIImage imageNamed:@"rank_icon3"] forState:UIControlStateNormal];
+    }else if(courseInfoModel.classRank<=70){
+        [self.rankBtn setImage:[UIImage imageNamed:@"rank_icon2"] forState:UIControlStateNormal];
+    }else{
+        [self.rankBtn setImage:[UIImage imageNamed:@"rank_icon1"] forState:UIControlStateNormal];
+    }
+    
+    
+    [self.keJianStateBtn setTitle:[NSString stringWithFormat:@"%.0f%%",courseInfoModel.kjScore] forState:UIControlStateNormal];
+    [self.zuoYeStateBtn setTitle:[NSString stringWithFormat:@"%.0f分",courseInfoModel.zyScore] forState:UIControlStateNormal];
+    [self.kaoShiStateBtn setTitle:[NSString stringWithFormat:@"%.0f分",courseInfoModel.qmScore] forState:UIControlStateNormal];
+    
+    NSString *fenShu = [NSString stringWithFormat:@"%.0f",courseInfoModel.finalscore];
+    NSString *fenShuContent = [NSString stringWithFormat:@"%.0f分",courseInfoModel.finalscore];
+    
+    NSString *paiMing = [NSString stringWithFormat:@"%ld",(long)courseInfoModel.classRank];
+    NSString *paiMingContent = [NSString stringWithFormat:@"%ld名",(long)courseInfoModel.classRank];
+    
+    self.xueXiBaoGaoContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:fenShu needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content:fenShuContent  defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
+    self.rankContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:paiMing needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content:paiMingContent defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
+    self.scoreContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:fenShu needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content:fenShuContent defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
+    
 }
 
 #pragma mark - UI
 -(void)createUI{
-
+    
     self.contentView.backgroundColor = COLOR_WITH_ALPHA(0xECF0FB, 1);
     self.backgroundColor = COLOR_WITH_ALPHA(0xECF0FB, 1);
     
@@ -127,228 +229,234 @@
     self.bigBackgroundView.sd_cornerRadius = @8;
     
     self.typeBtn.sd_layout
-    .topSpaceToView(self.bigBackgroundView, 16)
-    .rightSpaceToView(self.bigBackgroundView, 16);
+        .topSpaceToView(self.bigBackgroundView, 16)
+        .rightSpaceToView(self.bigBackgroundView, 16);
     [self.typeBtn setupAutoSizeWithHorizontalPadding:5 buttonHeight:20];
     self.typeBtn.sd_cornerRadius = @2;
     
     self.courseNameLabel.sd_layout
-    .topSpaceToView(self.bigBackgroundView, 16)
-    .leftSpaceToView(self.bigBackgroundView, 16)
-    .rightSpaceToView(self.typeBtn, 20)
-    .heightIs(20);
-
+        .topSpaceToView(self.bigBackgroundView, 16)
+        .leftSpaceToView(self.bigBackgroundView, 16)
+        .rightSpaceToView(self.typeBtn, 20)
+        .heightIs(20);
+    
     self.btnsContainerView.sd_layout
-    .topSpaceToView(self.courseNameLabel,3)
-    .leftSpaceToView(self.bigBackgroundView, 0)
-    .rightSpaceToView(self.bigBackgroundView,0);
+        .topSpaceToView(self.courseNameLabel,3)
+        .leftSpaceToView(self.bigBackgroundView, 0)
+        .rightSpaceToView(self.bigBackgroundView,0);
     
     self.keJianBtn.sd_layout.heightIs(68);
     self.keJianBtn.imageView.sd_layout
-    .centerXEqualToView(self.keJianBtn)
-    .topSpaceToView(self.keJianBtn, 0)
-    .widthIs(47)
-    .heightEqualToWidth();
+        .centerXEqualToView(self.keJianBtn)
+        .topSpaceToView(self.keJianBtn, 0)
+        .widthIs(47)
+        .heightEqualToWidth();
     
     self.keJianStateBtn.sd_layout
-    .topEqualToView(self.keJianBtn.imageView).offset(-10)
-    .rightEqualToView(self.keJianBtn.imageView).offset(20)
-    .widthIs(30)
-    .heightIs(15);
+        .topEqualToView(self.keJianBtn.imageView).offset(-10)
+        .rightEqualToView(self.keJianBtn.imageView).offset(20)
+        .widthIs(30)
+        .heightIs(15);
     self.keJianStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     
     self.keJianBtn.titleLabel.sd_layout
-    .bottomSpaceToView(self.keJianBtn, 0)
-    .leftEqualToView(self.keJianBtn)
-    .rightEqualToView(self.keJianBtn)
-    .heightIs(17);
+        .bottomSpaceToView(self.keJianBtn, 0)
+        .leftEqualToView(self.keJianBtn)
+        .rightEqualToView(self.keJianBtn)
+        .heightIs(17);
     
     self.zuoYeBtn.sd_layout.heightRatioToView(self.keJianBtn, 1);
     self.zuoYeBtn.imageView.sd_layout
-    .centerXEqualToView(self.zuoYeBtn)
-    .topSpaceToView(self.zuoYeBtn, 0)
-    .widthIs(47)
-    .heightEqualToWidth();
+        .centerXEqualToView(self.zuoYeBtn)
+        .topSpaceToView(self.zuoYeBtn, 0)
+        .widthIs(47)
+        .heightEqualToWidth();
     
     self.zuoYeStateBtn.sd_layout
-    .topEqualToView(self.zuoYeBtn.imageView).offset(-10)
-    .rightEqualToView(self.zuoYeBtn.imageView).offset(20)
-    .widthIs(30)
-    .heightIs(15);
+        .topEqualToView(self.zuoYeBtn.imageView).offset(-10)
+        .rightEqualToView(self.zuoYeBtn.imageView).offset(20)
+        .widthIs(30)
+        .heightIs(15);
     self.zuoYeStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     
     self.zuoYeBtn.titleLabel.sd_layout
-    .bottomSpaceToView(self.zuoYeBtn, 0)
-    .leftEqualToView(self.zuoYeBtn)
-    .rightEqualToView(self.zuoYeBtn)
-    .heightIs(17);
+        .bottomSpaceToView(self.zuoYeBtn, 0)
+        .leftEqualToView(self.zuoYeBtn)
+        .rightEqualToView(self.zuoYeBtn)
+        .heightIs(17);
     
     
     self.kaoShiBtn.sd_layout.heightRatioToView(self.keJianBtn, 1);
     self.kaoShiBtn.imageView.sd_layout
-    .centerXEqualToView(self.kaoShiBtn)
-    .topSpaceToView(self.kaoShiBtn, 0)
-    .widthIs(47)
-    .heightEqualToWidth();
+        .centerXEqualToView(self.kaoShiBtn)
+        .topSpaceToView(self.kaoShiBtn, 0)
+        .widthIs(47)
+        .heightEqualToWidth();
     
     self.kaoShiStateBtn.sd_layout
-    .topEqualToView(self.kaoShiBtn.imageView).offset(-10)
-    .rightEqualToView(self.kaoShiBtn.imageView).offset(20)
-    .widthIs(30)
-    .heightIs(15);;
+        .topEqualToView(self.kaoShiBtn.imageView).offset(-10)
+        .rightEqualToView(self.kaoShiBtn.imageView).offset(20)
+        .widthIs(30)
+        .heightIs(15);;
     self.kaoShiStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.kaoShiBtn.titleLabel.sd_layout
-    .bottomSpaceToView(self.kaoShiBtn, 0)
-    .leftEqualToView(self.kaoShiBtn)
-    .rightEqualToView(self.kaoShiBtn)
-    .heightIs(17);
+        .bottomSpaceToView(self.kaoShiBtn, 0)
+        .leftEqualToView(self.kaoShiBtn)
+        .rightEqualToView(self.kaoShiBtn)
+        .heightIs(17);
     
     self.daYiShiBtn.sd_layout.heightRatioToView(self.keJianBtn, 1);
     self.daYiShiBtn.imageView.sd_layout
-    .centerXEqualToView(self.daYiShiBtn)
-    .topSpaceToView(self.daYiShiBtn, 0)
-    .widthIs(47)
-    .heightEqualToWidth();
+        .centerXEqualToView(self.daYiShiBtn)
+        .topSpaceToView(self.daYiShiBtn, 0)
+        .widthIs(47)
+        .heightEqualToWidth();
     
     self.daYiShiStateBtn.sd_layout
-    .topEqualToView(self.daYiShiBtn.imageView).offset(-10)
-    .rightEqualToView(self.daYiShiBtn.imageView).offset(20)
-    .widthIs(30)
-    .heightIs(15);
+        .topEqualToView(self.daYiShiBtn.imageView).offset(-10)
+        .rightEqualToView(self.daYiShiBtn.imageView).offset(20)
+        .widthIs(30)
+        .heightIs(15);
     self.daYiShiStateBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.daYiShiBtn.titleLabel.sd_layout
-    .bottomSpaceToView(self.daYiShiBtn, 0)
-    .leftEqualToView(self.daYiShiBtn)
-    .rightEqualToView(self.daYiShiBtn)
-    .heightIs(17);
+        .bottomSpaceToView(self.daYiShiBtn, 0)
+        .leftEqualToView(self.daYiShiBtn)
+        .rightEqualToView(self.daYiShiBtn)
+        .heightIs(17);
     
-
+    
     
     [self.btnsContainerView setupAutoWidthFlowItems:@[self.keJianBtn,self.zuoYeBtn,self.kaoShiBtn,self.daYiShiBtn] withPerRowItemsCount:4 verticalMargin:0 horizontalMargin:10 verticalEdgeInset:20 horizontalEdgeInset:20];
     
     self.lineView.sd_layout
-    .topSpaceToView(self.btnsContainerView, 0)
-    .leftEqualToView(self.bigBackgroundView)
-    .rightEqualToView(self.bigBackgroundView)
-    .heightIs(1);
+        .topSpaceToView(self.btnsContainerView, 0)
+        .leftEqualToView(self.bigBackgroundView)
+        .rightEqualToView(self.bigBackgroundView)
+        .heightIs(1);
     
     self.rankView.sd_layout
-    .centerXEqualToView(self.bigBackgroundView)
-    .topSpaceToView(self.lineView, 0)
-    .bottomEqualToView(self.bigBackgroundView)
-    .widthRatioToView(self.bigBackgroundView, 0.33);
+        .centerXEqualToView(self.bigBackgroundView)
+        .topSpaceToView(self.lineView, 0)
+        .bottomEqualToView(self.bigBackgroundView)
+        .widthRatioToView(self.bigBackgroundView, 0.33);
     
     self.xueXiBaoGaoView.sd_layout
-    .leftEqualToView(self.bigBackgroundView)
-    .rightSpaceToView(self.rankView, 0)
-    .topEqualToView(self.rankView)
-    .bottomEqualToView(self.rankView);
+        .leftEqualToView(self.bigBackgroundView)
+        .rightSpaceToView(self.rankView, 0)
+        .topEqualToView(self.rankView)
+        .bottomEqualToView(self.rankView);
     
     self.scoreView.sd_layout
-    .rightEqualToView(self.bigBackgroundView)
-    .leftSpaceToView(self.rankView, 0)
-    .topEqualToView(self.rankView)
-    .bottomEqualToView(self.rankView);
+        .rightEqualToView(self.bigBackgroundView)
+        .leftSpaceToView(self.rankView, 0)
+        .topEqualToView(self.rankView)
+        .bottomEqualToView(self.rankView);
     
     //班级排名
     self.rankBtn.sd_layout
-    .centerXEqualToView(self.rankView)
-    .topSpaceToView(self.rankView, 15)
-    .heightIs(18);
+        .centerXEqualToView(self.rankView)
+        .topSpaceToView(self.rankView, 15)
+        .heightIs(18);
     
     self.rankBtn.imageView.sd_layout
-    .centerYEqualToView(self.rankBtn)
-    .leftEqualToView(self.rankBtn)
-    .widthIs(18)
-    .heightEqualToWidth();
+        .centerYEqualToView(self.rankBtn)
+        .leftEqualToView(self.rankBtn)
+        .widthIs(18)
+        .heightEqualToWidth();
     
     self.rankBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.rankBtn)
-    .leftSpaceToView(self.rankBtn.imageView, 4)
-    .heightRatioToView(self.rankBtn, 1);
+        .centerYEqualToView(self.rankBtn)
+        .leftSpaceToView(self.rankBtn.imageView, 4)
+        .heightRatioToView(self.rankBtn, 1);
     [self.rankBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:70];
     
     [self.rankBtn setupAutoWidthWithRightView:self.rankBtn.titleLabel rightMargin:0];
     
     
     self.rankContentLabel.sd_layout
-    .centerXEqualToView(self.rankView).offset(-2)
-    .topSpaceToView(self.rankBtn, 8)
-    .heightIs(17);
-    [self.rankContentLabel setSingleLineAutoResizeWithMaxWidth:40];
+        .centerXEqualToView(self.rankView).offset(-10)
+        .topSpaceToView(self.rankBtn, 8)
+        .widthIs(40)
+        .heightIs(17);
+    self.rankContentLabel.isAttributedContent = YES;
+    
     
     self.rankArrow.sd_layout
-    .centerYEqualToView(self.rankContentLabel)
-    .leftSpaceToView(self.rankContentLabel, 5)
-    .widthIs(4)
-    .heightIs(7);
+        .centerYEqualToView(self.rankContentLabel)
+        .leftSpaceToView(self.rankContentLabel, 5)
+        .widthIs(4)
+        .heightIs(7);
     
     //学习报告
     self.xueXiBaoGaoBtn.sd_layout
-    .centerXEqualToView(self.xueXiBaoGaoView)
-    .topSpaceToView(self.xueXiBaoGaoView, 15)
-    .heightIs(18);
+        .centerXEqualToView(self.xueXiBaoGaoView)
+        .topSpaceToView(self.xueXiBaoGaoView, 15)
+        .heightIs(18);
     
     self.xueXiBaoGaoBtn.imageView.sd_layout
-    .centerYEqualToView(self.xueXiBaoGaoBtn)
-    .leftEqualToView(self.xueXiBaoGaoBtn)
-    .widthIs(18)
-    .heightEqualToWidth();
+        .centerYEqualToView(self.xueXiBaoGaoBtn)
+        .leftEqualToView(self.xueXiBaoGaoBtn)
+        .widthIs(18)
+        .heightEqualToWidth();
     
     self.xueXiBaoGaoBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.xueXiBaoGaoBtn)
-    .leftSpaceToView(self.xueXiBaoGaoBtn.imageView, 4)
-    .heightRatioToView(self.xueXiBaoGaoBtn, 1);
+        .centerYEqualToView(self.xueXiBaoGaoBtn)
+        .leftSpaceToView(self.xueXiBaoGaoBtn.imageView, 4)
+        .heightRatioToView(self.xueXiBaoGaoBtn, 1);
     [self.xueXiBaoGaoBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:70];
     
     [self.xueXiBaoGaoBtn setupAutoWidthWithRightView:self.xueXiBaoGaoBtn.titleLabel rightMargin:0];
     
     
     self.xueXiBaoGaoContentLabel.sd_layout
-    .centerXEqualToView(self.xueXiBaoGaoView).offset(-2)
-    .topSpaceToView(self.xueXiBaoGaoBtn, 8)
-    .heightIs(17);
-    [self.xueXiBaoGaoContentLabel setSingleLineAutoResizeWithMaxWidth:40];
+        .centerXEqualToView(self.xueXiBaoGaoView).offset(-10)
+        .topSpaceToView(self.xueXiBaoGaoBtn, 8)
+        .widthIs(40)
+        .heightIs(17);
+    self.xueXiBaoGaoContentLabel.isAttributedContent = YES;
+    
     
     self.xueXiBaoGaoArrow.sd_layout
-    .centerYEqualToView(self.xueXiBaoGaoContentLabel)
-    .leftSpaceToView(self.xueXiBaoGaoContentLabel, 5)
-    .widthIs(4)
-    .heightIs(7);
+        .centerYEqualToView(self.xueXiBaoGaoContentLabel)
+        .leftSpaceToView(self.xueXiBaoGaoContentLabel, 5)
+        .widthIs(4)
+        .heightIs(7);
     
     //得分
     self.scoreBtn.sd_layout
-    .centerXEqualToView(self.scoreView)
-    .topSpaceToView(self.scoreView, 15)
-    .heightIs(18);
+        .centerXEqualToView(self.scoreView)
+        .topSpaceToView(self.scoreView, 15)
+        .heightIs(18);
     
     self.scoreBtn.imageView.sd_layout
-    .centerYEqualToView(self.scoreBtn)
-    .leftEqualToView(self.scoreBtn)
-    .widthIs(18)
-    .heightEqualToWidth();
+        .centerYEqualToView(self.scoreBtn)
+        .leftEqualToView(self.scoreBtn)
+        .widthIs(18)
+        .heightEqualToWidth();
     
     self.scoreBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.scoreBtn)
-    .leftSpaceToView(self.scoreBtn.imageView, 4)
-    .heightRatioToView(self.scoreBtn, 1);
+        .centerYEqualToView(self.scoreBtn)
+        .leftSpaceToView(self.scoreBtn.imageView, 4)
+        .heightRatioToView(self.scoreBtn, 1);
     [self.scoreBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:70];
     
     [self.scoreBtn setupAutoWidthWithRightView:self.scoreBtn.titleLabel rightMargin:0];
     
     
     self.scoreContentLabel.sd_layout
-    .centerXEqualToView(self.scoreView).offset(4)
-    .topSpaceToView(self.scoreBtn, 8)
-    .heightIs(17);
-    [self.scoreContentLabel setSingleLineAutoResizeWithMaxWidth:40];
+        .centerXEqualToView(self.scoreView).offset(4)
+        .topSpaceToView(self.scoreBtn, 8)
+        .widthIs(40)
+        .heightIs(17);
+    self.scoreContentLabel.isAttributedContent = YES;
     
     
-   
+    
+    
 }
 
 
@@ -367,7 +475,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+        
     }
     return _courseNameLabel;
 }
@@ -378,7 +486,7 @@
         _typeBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAEFFF, 1);
         _typeBtn.titleLabel.font = HXFont(12);
         [_typeBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
-        [_typeBtn setTitle:@"专业课" forState:UIControlStateNormal];
+        
     }
     return _typeBtn;
 }
@@ -399,7 +507,6 @@
         _keJianBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_keJianBtn setImage:[UIImage imageNamed:@"kejian_icon"] forState:UIControlStateNormal];
         [_keJianBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_keJianBtn setTitle:@"课件学习" forState:UIControlStateNormal];
         _keJianBtn.tag = 8000;
         [_keJianBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -412,7 +519,7 @@
         _keJianStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xF8A528, 0.1);
         _keJianStateBtn.titleLabel.font = HXFont(10);
         [_keJianStateBtn setTitleColor:COLOR_WITH_ALPHA(0xF8A528, 1) forState:UIControlStateNormal];
-        [_keJianStateBtn setTitle:@"56%" forState:UIControlStateNormal];
+        
     }
     return _keJianStateBtn;
 }
@@ -424,7 +531,6 @@
         _zuoYeBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_zuoYeBtn setImage:[UIImage imageNamed:@"zuoye_icon"] forState:UIControlStateNormal];
         [_zuoYeBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_zuoYeBtn setTitle:@"平时作业" forState:UIControlStateNormal];
         _zuoYeBtn.tag = 8001;
         [_zuoYeBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -437,7 +543,7 @@
         _zuoYeStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFDEDED, 1);
         _zuoYeStateBtn.titleLabel.font = HXFont(10);
         [_zuoYeStateBtn setTitleColor:COLOR_WITH_ALPHA(0xED4F4F, 1) forState:UIControlStateNormal];
-        [_zuoYeStateBtn setTitle:@"12分" forState:UIControlStateNormal];
+        
     }
     return _zuoYeStateBtn;
 }
@@ -449,7 +555,6 @@
         _kaoShiBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_kaoShiBtn setImage:[UIImage imageNamed:@"kaoshi_icon"] forState:UIControlStateNormal];
         [_kaoShiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_kaoShiBtn setTitle:@"期末考试" forState:UIControlStateNormal];
         _kaoShiBtn.tag = 8002;
         [_kaoShiBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -462,7 +567,7 @@
         _kaoShiStateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
         _kaoShiStateBtn.titleLabel.font = HXFont(10);
         [_kaoShiStateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_kaoShiStateBtn setTitle:@"84分" forState:UIControlStateNormal];
+        
     }
     return _kaoShiStateBtn;
 }
@@ -474,7 +579,6 @@
         _daYiShiBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_daYiShiBtn setImage:[UIImage imageNamed:@"dayishi_icon"] forState:UIControlStateNormal];
         [_daYiShiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_daYiShiBtn setTitle:@"答疑室" forState:UIControlStateNormal];
         _daYiShiBtn.tag = 8003;
         [_daYiShiBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -488,6 +592,7 @@
         _daYiShiStateBtn.titleLabel.font = HXFont(10);
         [_daYiShiStateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
         [_daYiShiStateBtn setTitle:@"99+" forState:UIControlStateNormal];
+        _daYiShiStateBtn.hidden = YES;
     }
     return _daYiShiStateBtn;
 }
@@ -518,7 +623,7 @@
         _xueXiBaoGaoBtn.userInteractionEnabled = NO;
         _xueXiBaoGaoBtn.titleLabel.font = HXFont(13);
         _xueXiBaoGaoBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-        [_xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon"] forState:UIControlStateNormal];
+        [_xueXiBaoGaoBtn setImage:[UIImage imageNamed:@"xuexibaogao_icon4"] forState:UIControlStateNormal];
         [_xueXiBaoGaoBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_xueXiBaoGaoBtn setTitle:@"学习报告" forState:UIControlStateNormal];
     }
@@ -530,10 +635,9 @@
 - (UILabel *)xueXiBaoGaoContentLabel{
     if (!_xueXiBaoGaoContentLabel) {
         _xueXiBaoGaoContentLabel = [[UILabel alloc] init];
+        _xueXiBaoGaoContentLabel.textAlignment = NSTextAlignmentRight;
         _xueXiBaoGaoContentLabel.font = HXBoldFont(12);
         _xueXiBaoGaoContentLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _xueXiBaoGaoContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"9" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content: @"9分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
-
     }
     return _xueXiBaoGaoContentLabel;
 }
@@ -563,7 +667,7 @@
         _rankBtn.userInteractionEnabled = NO;
         _rankBtn.titleLabel.font = HXFont(13);
         _rankBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-        [_rankBtn setImage:[UIImage imageNamed:@"rank_icon"] forState:UIControlStateNormal];
+        [_rankBtn setImage:[UIImage imageNamed:@"rank_icon4"] forState:UIControlStateNormal];
         [_rankBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_rankBtn setTitle:@"班级排名" forState:UIControlStateNormal];
     }
@@ -575,9 +679,10 @@
 - (UILabel *)rankContentLabel{
     if (!_rankContentLabel) {
         _rankContentLabel = [[UILabel alloc] init];
+        _rankContentLabel.textAlignment = NSTextAlignmentRight;
         _rankContentLabel.font = HXBoldFont(12);
         _rankContentLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _rankContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"12" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content: @"12名" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
+        
     }
     return _rankContentLabel;
 }
@@ -607,7 +712,7 @@
         _scoreBtn.userInteractionEnabled = NO;
         _scoreBtn.titleLabel.font = HXFont(13);
         _scoreBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-        [_scoreBtn setImage:[UIImage imageNamed:@"score_icon1"] forState:UIControlStateNormal];
+        [_scoreBtn setImage:[UIImage imageNamed:@"score_icon6"] forState:UIControlStateNormal];
         [_scoreBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_scoreBtn setTitle:@"得分" forState:UIControlStateNormal];
     }
@@ -621,7 +726,6 @@
         _scoreContentLabel.textAlignment = NSTextAlignmentCenter;
         _scoreContentLabel.font =HXBoldFont(12);
         _scoreContentLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _scoreContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"86" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]} content: @"86分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:8]}];
     }
     return _scoreContentLabel;
 }

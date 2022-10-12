@@ -14,8 +14,11 @@
 #import "HXZaiXianXuanKeViewController.h"//在线选课
 #import "HXSettingViewController.h"//设置
 #import "HXZiLiaoUploadViewController.h"//资料上传
+#import "SDWebImage.h"
 #import "UIImage+Extension.h"
 #import "HXFaceRecognitionView.h"
+#import "HXHomeStudentInfoModel.h"
+
 
 @interface HXPersonalCenterViewController ()<UIScrollViewDelegate>
 
@@ -64,6 +67,28 @@
     
     //UI
     [self createUI];
+    //获取首页信息
+    [self getHomeStudentInfo];
+}
+
+#pragma mark - 获取首页信息
+-(void)getHomeStudentInfo{
+    NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"major_id":HXSafeString(major_id)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            HXHomeStudentInfoModel *homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            [self.headImageView sd_setImageWithURL:HXSafeURL(homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+            self.nameLabel.text = homeStudentInfoModel.name;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
 }
 
 #pragma mark -Event
@@ -417,6 +442,7 @@
 -(UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc] init];
+        _headImageView.contentMode = UIViewContentModeScaleAspectFill;
         _headImageView.clipsToBounds = YES;
         _headImageView.userInteractionEnabled = YES;
         _headImageView.layer.borderWidth = 2;
@@ -433,7 +459,7 @@
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = HXBoldFont(16);
         _nameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _nameLabel.text = @"张敏";
+        
     }
     return _nameLabel;
 }
@@ -443,7 +469,7 @@
         _xueHaoLabel = [[UILabel alloc] init];
         _xueHaoLabel.font = HXFont(13);
         _xueHaoLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _xueHaoLabel.text = @"学号 20220908";
+        _xueHaoLabel.text = [NSString stringWithFormat:@"学号 %@",[HXPublicParamTool sharedInstance].studentNo];
     }
     return _xueHaoLabel;
 }

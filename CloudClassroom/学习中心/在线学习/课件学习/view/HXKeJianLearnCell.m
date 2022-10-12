@@ -22,6 +22,8 @@
 //学习时间
 @property(nonatomic,strong) UILabel *timeTitleLabel;
 @property(nonatomic,strong) UILabel *timeContentLabel;
+//提示信息
+@property(nonatomic,strong) UILabel *tipLabel;
 
 @property(nonatomic,strong) UIButton *muLuBtn;
 @property(nonatomic,strong) UIButton *startLearnBtn;
@@ -49,6 +51,39 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setKeJianOrExamInfoModel:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
+    
+    _keJianOrExamInfoModel = keJianOrExamInfoModel;
+    
+    [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+    
+    self.courseNameLabel.text = keJianOrExamInfoModel.termCourseName;
+    
+    NSString *attributedStr = [NSString stringWithFormat: @"%ld /",(long)keJianOrExamInfoModel.learnTime];
+    NSString *content = [NSString stringWithFormat: @"%ld / %ld",(long)keJianOrExamInfoModel.learnTime,(long)keJianOrExamInfoModel.courseALlTime];
+    self.jinDuContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:attributedStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1)} content:content  defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1)}];
+    
+    self.teacherContentLabel.text = keJianOrExamInfoModel.author;
+    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",keJianOrExamInfoModel.finaltime,keJianOrExamInfoModel.finaltimeEnd];
+    self.tipLabel.hidden = [HXCommonUtil isNull:keJianOrExamInfoModel.showMessage];
+    self.tipLabel.text = keJianOrExamInfoModel.showMessage;
+    ///是否能考试或者看课
+    if(keJianOrExamInfoModel.isCan==1){
+        self.startLearnBtn.enabled =YES;
+        self.startLearnBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+    }else{
+        self.startLearnBtn.enabled =NO;
+        self.startLearnBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    }
+    
+    
+    
+}
+
+
+
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -64,6 +99,7 @@
     [self.bigBackgroundView addSubview:self.teacherContentLabel];
     [self.bigBackgroundView addSubview:self.timeTitleLabel];
     [self.bigBackgroundView addSubview:self.timeContentLabel];
+    [self.bigBackgroundView addSubview:self.tipLabel];
     [self.bigBackgroundView addSubview:self.muLuBtn];
     [self.bigBackgroundView addSubview:self.startLearnBtn];
     
@@ -145,6 +181,13 @@
     .widthIs(66)
     .heightIs(36);
     self.muLuBtn.sd_cornerRadiusFromHeightRatio = @0.5;
+    
+    self.tipLabel.sd_layout
+    .centerYEqualToView(self.startLearnBtn)
+    .leftSpaceToView(self.bigBackgroundView, 14)
+    .rightSpaceToView(self.muLuBtn, 10)
+    .heightIs(17);
+    
 }
 
 
@@ -163,7 +206,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+        
     }
     return _courseNameLabel;
 }
@@ -175,7 +218,7 @@
         _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
         _stateBtn.titleLabel.font = HXFont(12);
         [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+       
     }
     return _stateBtn;
 }
@@ -196,7 +239,7 @@
         _jinDuContentLabel.textAlignment = NSTextAlignmentRight;
         _jinDuContentLabel.font = HXFont(15);
         _jinDuContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _jinDuContentLabel.text = @"200 / 890";
+       
     }
     return _jinDuContentLabel;
 }
@@ -217,7 +260,7 @@
         _teacherContentLabel.textAlignment = NSTextAlignmentRight;
         _teacherContentLabel.font = HXFont(15);
         _teacherContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _teacherContentLabel.text = @"刘正";
+       
     }
     return _teacherContentLabel;
 }
@@ -238,9 +281,20 @@
         _timeContentLabel.textAlignment = NSTextAlignmentLeft;
         _timeContentLabel.font = HXFont(15);
         _timeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeContentLabel.text = @"2020.05.31 00:00   --   2022.06.31 23:59";
+        
     }
     return _timeContentLabel;
+}
+
+- (UILabel *)tipLabel{
+    if (!_tipLabel) {
+        _tipLabel = [[UILabel alloc] init];
+        _tipLabel.textAlignment = NSTextAlignmentLeft;
+        _tipLabel.font = HXFont(12);
+        _tipLabel.textColor = COLOR_WITH_ALPHA(0xEF5959, 1);
+        _tipLabel.hidden = YES;
+    }
+    return _tipLabel;
 }
 
 - (UIButton *)muLuBtn{

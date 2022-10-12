@@ -8,6 +8,7 @@
 
 #import "HXBaseURLSessionManager.h"
 #import "HXCheckUpdateTool.h"
+#import "NSString+md5.h"
 
 @implementation HXBaseURLSessionManager
 
@@ -16,14 +17,11 @@
     static HXBaseURLSessionManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *baseUreStr = ([HXCommonUtil isNull:KHXUserDefaultsForValue(KP_SERVER_KEY)] ? KHX_URL_MAIN : KHXUserDefaultsForValue(KP_SERVER_KEY));
+        NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
         _sharedClient = [[HXBaseURLSessionManager alloc] initWithBaseURL:HXSafeURL(baseUreStr)];
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
-        //请求头设置
-        NSString *version = [NSString stringWithFormat:@"%@_%@",kPlatformName,APP_BUILDVERSION];
-        [_sharedClient.requestSerializer  setValue:version forHTTPHeaderField:@"Version"];
-        _sharedClient.requestSerializer.timeoutInterval = 15;
-       
+        _sharedClient.requestSerializer.timeoutInterval = 30;
+        
     });
     
     return _sharedClient;
@@ -49,43 +47,28 @@
 {
     HXBaseURLSessionManager *client = [HXBaseURLSessionManager sharedClient];
     NSMutableDictionary * parameters = [NSMutableDictionary dictionary];
-    
-    [parameters setObject:userName forKey:@"username"];
+    [parameters setObject:userName forKey:@"userName"];
     [parameters setObject:pwd forKey:@"password"];
-   
     
     [client POST:HXPOST_LOGIN parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable dictionary) {
         
         NSLog(@"请求地址:%@",task.currentRequest.URL);
         NSLog(@"请求参数:%@",parameters);
         if(dictionary){
-            NSString*statusCode = [dictionary stringValueForKey:@"StatusCode"];
-            NSString*message = [dictionary stringValueForKey:@"Message"];
-            if ([statusCode isEqualToString:@"1000"]) {//StatusCode 1000登录失败，1001登录成功
-                [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
-                    [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
-                }];
-            }else if([statusCode isEqualToString:@"999"]){//999 强制更新
-                [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
-                    [[HXCheckUpdateTool sharedInstance] checkUpdate];
-                }];
-               
-            }else if(![dictionary boolValueForKey:@"Success"] ){
+            NSString*code = [dictionary stringValueForKey:@"code"];
+            NSString*message = [dictionary stringValueForKey:@"message"];
+            if(![dictionary boolValueForKey:@"success"]){
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message];
             }
-            NSDictionary *data = [dictionary dictionaryValueForKey:@"Data"];
-            NSString *userId = [data objectForKey:@"userId"];
-            [HXPublicParamTool sharedInstance].userId = userId;
             success(dictionary);
         }else{
             failure(nil);
         }
-
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         NSLog(@"请求地址:%@",task.currentRequest.URL);
         NSLog(@"请求参数:%@",parameters);
-        NSLog(@"获取personId失败！");
         failure(error.localizedDescription);
     }];
 }
@@ -95,9 +78,12 @@
                     success : (void (^)(NSDictionary* dictionary))success
                     failure : (void (^)(NSError *error))failure
 {
-
+    
     HXBaseURLSessionManager * client = [HXBaseURLSessionManager sharedClient];
-
+    
+    NSString *baseUreStr = [HXPublicParamTool sharedInstance].currentSchoolModel.schoolDomainURL;
+    [[self class] setBaseURLStr:baseUreStr];
+    
     NSMutableDictionary * parameters = [client commonParameters];
     
     [parameters addEntriesFromDictionary:nsDic];
@@ -106,18 +92,18 @@
         NSLog(@"请求地址:%@",task.currentRequest.URL);
         NSLog(@"请求参数:%@",parameters);
         if(dictionary){
-            NSString*statusCode = [dictionary stringValueForKey:@"StatusCode"];
-            NSString*message = [dictionary stringValueForKey:@"Message"];
-            if ([statusCode isEqualToString:@"1000"]) {//StatusCode 1000登录失败，1001登录成功
+            NSString*code = [dictionary stringValueForKey:@"code"];
+            NSString*message = [dictionary stringValueForKey:@"message"];
+            if ([code isEqualToString:@"1000"]) {//StatusCode 1000登录失败，1001登录成功
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
                     [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
                 }];
-            }else if([statusCode isEqualToString:@"999"]){//999 强制更新
+            }else if([code isEqualToString:@"999"]){//999 强制更新
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
                     [[HXCheckUpdateTool sharedInstance] checkUpdate];
                 }];
                 
-            }else if(![dictionary boolValueForKey:@"Success"] ){
+            }else if(![dictionary boolValueForKey:@"success"] ){
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message];
             }
             success(dictionary);
@@ -134,47 +120,65 @@
 }
 
 + (void)postDataWithNSString : (NSString *)actionUrlStr
-              withDictionary : (NSDictionary *) nsDic
+              withDictionary : (NSDictionary *)nsDic
                      success : (void (^)(NSDictionary* dictionary))success
                      failure : (void (^)(NSError *error))failure
 {
     HXBaseURLSessionManager * client = [HXBaseURLSessionManager sharedClient];
-    
-    NSMutableDictionary * parameters = [client commonParameters];
-    [parameters addEntriesFromDictionary:nsDic];
-    
+    //请求头设置
+    [client.requestSerializer  setValue:[HXPublicParamTool sharedInstance].token forHTTPHeaderField:@"Authorization"];
+    NSLog(@"=====token====:%@",[HXPublicParamTool sharedInstance].token);
+    //md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥，生成md5值。
+    NSMutableDictionary * parameters = [NSMutableDictionary dictionary];
+    if(nsDic!=nil){
+        NSString *md5Str = [self getMd5String:nsDic];
+        NSDictionary *md5Dic = @{@"md5":HXSafeString(md5Str)};
+        [parameters addEntriesFromDictionary:md5Dic];
+        [parameters addEntriesFromDictionary:nsDic];
+    }
     [client POST:actionUrlStr parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable dictionary) {
         
-        NSLog(@"请求地址:%@",task.currentRequest.URL);
-        NSLog(@"请求参数:%@",parameters);
-        NSString*statusCode = [dictionary stringValueForKey:@"StatusCode"];
-        NSString*message = [dictionary stringValueForKey:@"Message"];
-
+        NSLog(@"___请求地址___:%@",task.currentRequest.URL);
+        NSLog(@"=====请求参数====:%@",parameters);
+        //401:表示token失效   402:表示被踢，需要重新登录
+        NSString*code = [dictionary stringValueForKey:@"code"];
+        NSString*message = [dictionary stringValueForKey:@"message"];
         if(dictionary){
-            if ([statusCode isEqualToString:@"1000"]) {
+            if ([code isEqualToString:@"402"]) {//402表示被踢，需要重新登录
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
                     [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
                 }];
-            }else if([statusCode isEqualToString:@"999"]){//强制更新
-                [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
-                    [[HXCheckUpdateTool sharedInstance] checkUpdate];
+                success(dictionary);
+            }else if ([code isEqualToString:@"401"]) {//401表示token失效
+                //重新获取token,再次发起请求
+                [[self class] refreshTokeCallBack:^(bool sc) {
+                    if(sc){
+                        //刷新token，重新调取原来接口
+                        [[self class] postDataWithNSString:actionUrlStr withDictionary:nsDic success:^(NSDictionary * _Nonnull dictionary) {
+                            success(dictionary);
+                        } failure:^(NSError * _Nonnull error) {
+                            failure(error);
+                        }];
+                    }else{
+                        [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:@"获取数据失败，请刷新"];
+                        failure(nil);
+                    }
                 }];
-                
-            }else if(![dictionary boolValueForKey:@"Success"] ){
-                if (![HXCommonUtil isNull:message]) {
+            }else{
+                if (![dictionary boolValueForKey:@"success"]) {
                     [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message];
                 }
+                success(dictionary);
             }
-            success(dictionary);
         }else{
             failure(nil);
         }
-      
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求地址:%@",task.currentRequest.URL);
-        NSLog(@"请求参数:%@",parameters);
+        NSLog(@"___请求地址___:%@",task.currentRequest.URL);
+        NSLog(@"=====请求参数=====:%@",parameters);
         NSHTTPURLResponse *response = (NSHTTPURLResponse*)task.response;
-        NSLog(@"接口错误信息%@",response);
+        NSLog(@"++++++接口错误信息+++++++:%@",response);
         if (![HXCommonUtil isNull:[error localizedDescription]]) {
             [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:[error localizedDescription]];
         }
@@ -182,12 +186,41 @@
     }];
 }
 
+//刷新JWT的Token(如果返回false,则表示要重新登录)
++ (void)refreshTokeCallBack:(void (^)(bool success))callBack
+{
+    HXBaseURLSessionManager * client = [HXBaseURLSessionManager sharedClient];
+    [[self class] setBaseURLStr:@"http://xueliapitest.edu-cj.com"];
+    //请求头设置
+    [client.requestSerializer  setValue:[HXPublicParamTool sharedInstance].token forHTTPHeaderField:@"Authorization"];
+    NSLog(@"=====token====:%@",[HXPublicParamTool sharedInstance].token);
+    NSDictionary *parameters = @{@"userName":HXSafeString([HXPublicParamTool sharedInstance].personId)};
+    [client POST:HXPOST_RefreshToken parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable dictionary) {
+        NSString*code = [dictionary stringValueForKey:@"code"];
+        NSString*message = [dictionary stringValueForKey:@"message"];
+        if ([code isEqualToString:@"402"]) {//402表示被踢，需要重新登录
+            [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
+                [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
+            }];
+        }else if([dictionary boolValueForKey:@"success"]){
+            NSString*token = [dictionary[@"data"] stringValueForKey:@"token"];
+            [HXPublicParamTool sharedInstance].token = token;
+            callBack(YES);
+        }else{
+            callBack(NO);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callBack(NO);
+    }];
+}
+
+
 + (void)doLogout{
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_APPQuite withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_LOGIN withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
         //
-        BOOL Success = [dictionary boolValueForKey:@"Success"];
-        if (Success) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
             NSLog(@"退出登录成功！");
         }else{
             NSLog(@"退出登录失败！");
@@ -202,12 +235,45 @@
 - (NSMutableDictionary *)commonParameters{
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
-    
-    NSString *userId = [HXPublicParamTool sharedInstance].userId;
-    if (userId) {
-        [parameters setObject:userId forKey:@"userId"];
+    NSString *personID = [HXPublicParamTool sharedInstance].personId;
+    NSString *studentID = [HXPublicParamTool sharedInstance].student_id;
+    NSString *majorID = [HXPublicParamTool sharedInstance].major_id;
+    if (personID) {
+        [parameters setObject:personID forKey:@"personID"];
+    }
+    if (studentID) {
+        [parameters setObject:studentID forKey:@"studentID"];
+    }
+    if (majorID) {
+        [parameters setObject:majorID forKey:@"majorID"];
     }
     return parameters;
+}
+
+/// md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥【1poiulk*&】，生成md5值。
++ (NSString *)getMd5String:(NSDictionary *)dic{
+    // 将dic中的全部key取出，并放到数组
+    NSArray *keyArray = [dic allKeys];
+    // 根据ASCII码,将参数key从小到大排序（升序）
+    NSArray *resultArr = [keyArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    NSMutableArray *paramValueArr = [NSMutableArray arrayWithCapacity:resultArr.count];
+    for (NSString *str in resultArr) {
+        // 将key对应的value，存到数组
+        NSString *tempValue = [dic stringValueForKey:str];
+        if (tempValue.length > 0) {
+            [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
+        }
+    }
+    //最后加上密钥
+    [paramValueArr addObject:Md5Key];
+    NSString *paramStr = [paramValueArr componentsJoinedByString:@"&"];
+    NSLog(@"______________字符串拼接后结果_________:%@",paramStr);
+    NSString *md5String = [paramStr md5String];
+    NSLog(@"___________md5加密_________:%@",md5String);
+    return md5String;
+    
 }
 
 @end

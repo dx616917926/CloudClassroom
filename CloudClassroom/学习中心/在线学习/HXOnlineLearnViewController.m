@@ -13,6 +13,7 @@
 #import "HXClassRankViewController.h"//班级排名
 #import "HXCurrentLearCell.h"
 #import "HXOnlineLearnShowTipView.h"
+#import "HXSemesterModel.h"
 
 
 @interface HXOnlineLearnViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
@@ -24,6 +25,11 @@
 @property(nonatomic,strong) UIButton *selectXueQiBtn;
 @property(nonatomic,strong) UITableView *mainTableView;
 
+//是否是当前学期
+@property(nonatomic,assign) BOOL isCuurentSemester;
+
+@property(nonatomic,strong) NSMutableArray *currentDataArray;
+@property(nonatomic,strong) NSMutableArray *allDataArray;
 
 @end
 
@@ -35,19 +41,81 @@
     
     //UI
     [self createUI];
+    
+    self.isCuurentSemester = YES;
+    //
+    [self loadData];
+    //监听修改专业通知
+    [HXNotificationCenter addObserver:self selector:@selector(loadData) name:kChangeMajorSuccessNotification object:nil];
+}
+
+-(void)dealloc{
+    [HXNotificationCenter removeObserver:self];
 }
 
 
 -(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
+    //获取当前学期
+    [self getCurrentSemester];
+    //获取全部学期
+    [self getAllSemester];
+}
+#pragma mark - 获取当前学期
+-(void)getCurrentSemester{
+    
+    //学期，如果是当前学期，则传具体的学期，如果是所有学期，则传0
+    NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSString *currentSemesterid = [HXPublicParamTool sharedInstance].currentSemesterid;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(major_id),
+        @"term":HXSafeString(currentSemesterid)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXSemesterModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            HXSemesterModel *semesterModel = list.firstObject;
+            [self.currentDataArray removeAllObjects];
+            [self.currentDataArray addObjectsFromArray:semesterModel.courseList];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+#pragma mark - 获取全部学期
+-(void)getAllSemester{
+    
+    //学期，如果是当前学期，则传具体的学期，如果是所有学期，则传0
+    NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(major_id),
+        @"term":@"0"
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXSemesterModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.allDataArray removeAllObjects];
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXSemesterModel *semesterModel = obj;
+                [self.allDataArray addObjectsFromArray:semesterModel.courseList];
+            }];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
 #pragma mark - Event
+//选择当前学期和所有学期
 -(void)selectXueQi:(UIButton *)sender{
     if (sender==self.selectXueQiBtn) {
         return;
@@ -61,12 +129,13 @@
     [sender setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
     self.selectXueQiBtn = sender;
     
-    if (sender==self.allXueQiBtn) {
-        [self.view addSubview:self.noDataTipView];
-        self.noDataTipView.tipTitle = @"暂无网课～";
+    if (sender==self.currentXueQiBtn) {
+        self.isCuurentSemester =YES;
     }else{
-        [self.noDataTipView removeFromSuperview];
+        self.isCuurentSemester = NO;
     }
+    
+    [self.mainTableView reloadData];
     
 }
 
@@ -77,13 +146,14 @@
 }
 
 #pragma mark -<HXCurrentLearCellDelegate> flag:  8000:课件学习    8001:平时作业   8002:期末考试   8003:答疑室   8004:学习报告  8005:班级排名   8006:得分
--(void)handleClickEvent:(NSInteger)flag{
+-(void)handleClickEvent:(NSInteger)flag courseInfoModel:(nonnull HXCourseInfoModel *)courseInfoModel{
     
     switch (flag) {
         case 8000:
         {
             HXKeJianLearnViewController *vc = [[HXKeJianLearnViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -91,6 +161,7 @@
         {
             HXPingShiZuoYeViewController *vc = [[HXPingShiZuoYeViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -98,12 +169,13 @@
         {
             HXQIMoKaoShiViewController *vc = [[HXQIMoKaoShiViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 8003:
         {
-           
+            
         }
             break;
         case 8004:
@@ -111,6 +183,7 @@
             HXStudyReportViewController *vc = [[HXStudyReportViewController alloc] init];
             vc.sc_navigationBarHidden = YES;//隐藏导航栏
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -119,6 +192,7 @@
             HXClassRankViewController *vc = [[HXClassRankViewController alloc] init];
             vc.sc_navigationBarHidden = YES;//隐藏导航栏
             vc.hidesBottomBarWhenPushed = YES;
+            vc.courseInfoModel = courseInfoModel;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
@@ -135,7 +209,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 4;
+    return (self.isCuurentSemester?self.currentDataArray.count:self.allDataArray.count);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,8 +227,8 @@
         cell = [[HXCurrentLearCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:currentLearCellIdentifier];
     }
     cell.delegate = self;
-    cell.index=indexPath.row;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.courseInfoModel = (self.isCuurentSemester?self.currentDataArray[indexPath.row]:self.allDataArray[indexPath.row]);
     return cell;
 }
 
@@ -208,17 +282,28 @@
     [self.mainTableView updateLayout];
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:(self.isCuurentSemester? @selector(getCurrentSemester):@selector(getAllSemester))];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
     
     self.noDataTipView.frame = self.mainTableView.frame;
 }
 
 #pragma mark -LazyLoad
+
+-(NSMutableArray *)currentDataArray{
+    if(!_currentDataArray){
+        _currentDataArray = [NSMutableArray array];
+    }
+    return _currentDataArray;
+}
+
+-(NSMutableArray *)allDataArray{
+    if(!_allDataArray){
+        _allDataArray = [NSMutableArray array];
+    }
+    return _allDataArray;
+}
 
 -(UIView *)topView{
     if (!_topView) {

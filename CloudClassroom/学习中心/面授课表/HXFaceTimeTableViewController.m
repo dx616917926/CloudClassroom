@@ -13,6 +13,13 @@
 
 const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
+//单个课表高度
+#define   kKeBiaoItemHeight    130
+//左侧列宽度
+#define   kLeftColumnWidth     _kpw(40)
+//单个课表宽度
+#define   kKeBiaoItemWidth    ((kScreenWidth-kLeftColumnWidth)*1.0/7)
+
 @interface HXFaceTimeTableViewController ()
 
 @property(nonatomic,strong) UIView *topView;
@@ -80,10 +87,11 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
 //回到今天
 -(void)backToday:(UIButton *)sender{
+    
     self.selectedDate = [NSDate date];
     self.calendarView.startDate = [NSDate date];
-    NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
-    [self.riQiBtn setTitle:str forState:UIControlStateNormal];
+    
+    [self refreshUI];
 }
 
 -(void)refreshUI{
@@ -104,7 +112,6 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         viewContainer = nil;
     }
     
-    CGFloat width = kScreenWidth*1.0/8;
     
     for (int i=0; i<6; i++) {
         UIView *viewContainer =[[UIView alloc] init];
@@ -112,8 +119,8 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         viewContainer.tag = 5000+i;
         viewContainer.sd_layout
         .topEqualToView(self.columnContainerView)
-        .leftSpaceToView(self.mainScrollView, width*(i+1))
-        .widthRatioToView(self.columnContainerView, 1)
+        .leftSpaceToView(self.mainScrollView, kKeBiaoItemWidth*i+kLeftColumnWidth)
+        .widthIs(kKeBiaoItemWidth)
         .heightRatioToView(self.columnContainerView, 1);
     }
     
@@ -149,10 +156,10 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
             [colorview addSubview:label];
             
             view.sd_layout
-            .topSpaceToView(viewContainer, j*124)
+            .topSpaceToView(viewContainer, j*kKeBiaoItemHeight)
             .leftEqualToView(viewContainer)
             .rightEqualToView(viewContainer)
-            .heightIs(124);
+            .heightIs(kKeBiaoItemHeight);
             
             colorview.sd_layout.spaceToSuperView(UIEdgeInsetsMake(3, 3, 3, 3));
             colorview.sd_cornerRadius =@4;
@@ -216,15 +223,14 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     
    
     
-    NSArray *weeks = @[@" ",@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
+    NSArray *weeks = @[@"一",@"二",@"三",@"四",@"五",@"六",@"日"];
     
     self.weekContainerView.sd_layout
     .topSpaceToView(self.topView, 0)
-    .leftEqualToView(self.view)
+    .leftSpaceToView(self.view, kLeftColumnWidth)
     .rightEqualToView(self.view)
     .heightIs(40);
     
-    CGFloat width = kScreenWidth*1.0/8;
     
     for (int i=0; i<weeks.count; i++) {
         UILabel *label = [[UILabel alloc] init];
@@ -236,8 +242,8 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         
         label.sd_layout
         .centerYEqualToView(self.weekContainerView)
-        .leftSpaceToView(self.weekContainerView, i*width)
-        .widthIs(width)
+        .leftSpaceToView(self.weekContainerView, i*kKeBiaoItemWidth)
+        .widthIs(kKeBiaoItemWidth)
         .heightRatioToView(self.weekContainerView, 1);
     }
     
@@ -250,7 +256,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     self.columnContainerView.sd_layout
     .topEqualToView(self.mainScrollView)
     .leftEqualToView(self.mainScrollView)
-    .widthIs(width);
+    .widthIs(kLeftColumnWidth);
     
     NSArray *columns = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12"];
     UIView *lastView;
@@ -263,10 +269,10 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         [self.columnContainerView addSubview:label];
         
         label.sd_layout
-        .topSpaceToView(self.columnContainerView, i*124)
+        .topSpaceToView(self.columnContainerView, i*kKeBiaoItemHeight)
         .leftEqualToView(self.columnContainerView)
         .rightEqualToView(self.columnContainerView)
-        .heightIs(124);
+        .heightIs(kKeBiaoItemHeight);
         lastView = label;
     }
     [self.columnContainerView setupAutoHeightWithBottomView:lastView bottomMargin:0];
@@ -278,8 +284,8 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         viewContainer.tag = 5000+i;
         viewContainer.sd_layout
         .topEqualToView(self.columnContainerView)
-        .leftSpaceToView(self.mainScrollView, width*(i+1))
-        .widthRatioToView(self.columnContainerView, 1)
+        .leftSpaceToView(self.mainScrollView, kKeBiaoItemWidth*i+kLeftColumnWidth)
+        .widthIs(kKeBiaoItemWidth)
         .heightRatioToView(self.columnContainerView, 1);
     }
     
@@ -317,10 +323,10 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
             [colorview addSubview:label];
             
             view.sd_layout
-            .topSpaceToView(viewContainer, j*124)
+            .topSpaceToView(viewContainer, j*kKeBiaoItemHeight)
             .leftEqualToView(viewContainer)
             .rightEqualToView(viewContainer)
-            .heightIs(124);
+            .heightIs(kKeBiaoItemHeight);
             
             colorview.sd_layout.spaceToSuperView(UIEdgeInsetsMake(3, 3, 3, 3));
             colorview.sd_cornerRadius =@4;

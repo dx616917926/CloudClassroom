@@ -46,6 +46,30 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setKeJianOrExamInfoModel:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
+    
+    _keJianOrExamInfoModel = keJianOrExamInfoModel;
+    
+    [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+    
+    self.courseNameLabel.text = keJianOrExamInfoModel.termCourseName;
+    self.ciShuContentLabel.text = HXIntToString(keJianOrExamInfoModel.allowCount_CJ);
+    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",keJianOrExamInfoModel.finaltime,keJianOrExamInfoModel.finaltimeEnd];
+    self.tipLabel.hidden = [HXCommonUtil isNull:keJianOrExamInfoModel.showMessage];
+    self.tipLabel.text = keJianOrExamInfoModel.showMessage;
+    
+    ///是否能考试或者看课
+    if(keJianOrExamInfoModel.isCan==1){
+        self.startZuoYeBtn.enabled =YES;
+        self.startZuoYeBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+    }else{
+        self.startZuoYeBtn.enabled =NO;
+        self.startZuoYeBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    }
+    
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -149,7 +173,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+       
     }
     return _courseNameLabel;
 }
@@ -161,7 +185,6 @@
         _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
         _stateBtn.titleLabel.font = HXFont(12);
         [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
     }
     return _stateBtn;
 }
@@ -182,7 +205,7 @@
         _ciShuContentLabel.textAlignment = NSTextAlignmentRight;
         _ciShuContentLabel.font = HXFont(15);
         _ciShuContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _ciShuContentLabel.text = @"9";
+       
     }
     return _ciShuContentLabel;
 }
@@ -205,7 +228,7 @@
         _timeContentLabel.textAlignment = NSTextAlignmentLeft;
         _timeContentLabel.font = HXFont(15);
         _timeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeContentLabel.text = @"2020.05.31 00:00   --   2022.06.31 23:59";
+       
     }
     return _timeContentLabel;
 }
@@ -216,7 +239,7 @@
         _tipLabel.textAlignment = NSTextAlignmentLeft;
         _tipLabel.font = HXFont(12);
         _tipLabel.textColor = COLOR_WITH_ALPHA(0xEF5959, 1);
-        _tipLabel.text = @"平时作业时间已过";
+        _tipLabel.hidden = YES;
     }
     return _tipLabel;
 }

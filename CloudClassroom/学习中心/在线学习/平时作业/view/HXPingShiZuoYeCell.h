@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXKeJianOrExamInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXPingShiZuoYeCell : UITableViewCell
+
+@property(nonatomic,strong) HXKeJianOrExamInfoModel *keJianOrExamInfoModel;
 
 @end
 

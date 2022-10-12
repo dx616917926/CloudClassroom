@@ -6,15 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXMajorModel.h"
+#import "HXMajorInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^SelectMajorCallBack)(BOOL isRefresh,HXMajorModel *selectMajorModel);
+typedef void (^SelectMajorCallBack)(BOOL isRefresh,HXMajorInfoModel *selectMajorModel,NSInteger idx);
 
 @interface HXShowMajorView : UIView
 
-@property(nonatomic,strong) NSArray *dataArray;
+@property(nonatomic,strong) NSArray<HXMajorInfoModel *> *dataArray;
 
 -(void)show;
 

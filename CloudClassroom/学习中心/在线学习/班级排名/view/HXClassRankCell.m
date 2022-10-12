@@ -6,6 +6,7 @@
 //
 
 #import "HXClassRankCell.h"
+#import "SDWebImage.h"
 
 @interface HXClassRankCell ()
 
@@ -40,39 +41,31 @@
 }
 
 #pragma mark - Setter
--(void)setIdx:(NSInteger)idx{
+-(void)setCourseScoreRankModel:(HXCourseScoreRankModel *)courseScoreRankModel{
+    _courseScoreRankModel = courseScoreRankModel;
     
-    _idx = idx;
+    [self.headImageView sd_setImageWithURL:HXSafeURL(courseScoreRankModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+
+    self.nameLabel.text = courseScoreRankModel.name;
+    self.deFenLabel.text = [NSString stringWithFormat:@"%.0f分",courseScoreRankModel.finalScore];
     
-    self.nameLabel.text = @"张三丰";
-    self.deFenLabel.text = @"77分";
-    
-    if (idx<=3) {
+    if (courseScoreRankModel.rownum<=3) {
         self.rankLabel.hidden = YES;
         self.jiangPaiImageView.hidden = NO;
-        if (idx==1) {
-            self.nameLabel.text = @"张敏";
-            self.deFenLabel.text = @"98分";
+        if (courseScoreRankModel.rownum==1) {
             self.jiangPaiImageView.image = [UIImage imageNamed:@"jinpai_icon"];
-        }else if (idx==2) {
-            self.nameLabel.text = @"宋轶";
-            self.deFenLabel.text = @"88分";
+        }else if (courseScoreRankModel.rownum==2) {
             self.jiangPaiImageView.image = [UIImage imageNamed:@"yinpai_icon"];
         }else{
-            self.nameLabel.text = @"肖益晓";
-            self.deFenLabel.text = @"86分";
             self.jiangPaiImageView.image = [UIImage imageNamed:@"tongpai_icon"];
         }
-        
     }else{
         self.rankLabel.hidden = NO;
         self.jiangPaiImageView.hidden = YES;
-        self.rankLabel.text =[NSString stringWithFormat:@"%ld",(long)idx];
+        self.rankLabel.text =[NSString stringWithFormat:@"%ld",(long)courseScoreRankModel.rownum];
     }
     
-    
 }
-
 
 
 #pragma mark - UI
@@ -157,6 +150,7 @@
 -(UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc] init];
+        _headImageView.contentMode = UIViewContentModeScaleAspectFill;
         _headImageView.clipsToBounds = YES;
         _headImageView.userInteractionEnabled = YES;
         _headImageView.image = [UIImage imageNamed:@"defaulthead_icon"];

@@ -12,6 +12,8 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXPingShiZuoYeViewController
@@ -22,15 +24,39 @@
     
     //UI
     [self createUI];
+    //获取正考考试列表和看课列表
+    [self getExamList];
 }
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
+#pragma mark -Setter
+-(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
+    _courseInfoModel = courseInfoModel;
 }
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+#pragma mark - 获取正考考试列表和看课列表
+-(void)getExamList{
+
+    NSDictionary *dic =@{
+        @"termcourse_id":HXSafeString(self.courseInfoModel.termCourseID),
+        @"student_id":HXSafeString(self.courseInfoModel.student_id),
+        @"moduletype":@"1",//课件kj：0    作业zy：1  期末qm：2  答疑dn：3
+        @"revision":@"1" //pc:0  app:1  h5:2
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetExamList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
+
 
 #pragma mark - UI
 -(void)createUI{
@@ -45,12 +71,10 @@
     .bottomEqualToView(self.view);
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getExamList)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+    
     
 }
 
@@ -60,7 +84,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -79,6 +103,7 @@
         cell = [[HXPingShiZuoYeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:pingShiZuoYeCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.keJianOrExamInfoModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -88,6 +113,13 @@
 }
 
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];

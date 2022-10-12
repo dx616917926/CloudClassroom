@@ -20,24 +20,11 @@
 //记录初始选择
 @property(nonatomic,assign) NSInteger selectIndex;
 @property(nonatomic,assign) BOOL isRefresh;
-@property(nonatomic,strong) HXMajorModel *selectMajorModel;
+@property(nonatomic,strong) HXMajorInfoModel *selectMajorModel;
 
 @end
 
 @implementation HXShowMajorView
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
-//- (instancetype)showToView:(UIView *)view upView:(UIView *)upView  dataSource:(NSArray *)dataSource
-//{
-//
-//}
 
 - (instancetype)init
 {
@@ -48,11 +35,15 @@
     return self;
 }
 
--(void)setDataArray:(NSArray *)dataArray{
+
+#pragma mark - Setter
+-(void)setDataArray:(NSArray<HXMajorInfoModel *> *)dataArray{
     _dataArray = dataArray;
-    [dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        HXMajorModel *model = obj;
-        if (model.isSelected) {
+    [dataArray enumerateObjectsUsingBlock:^(HXMajorInfoModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+        HXMajorInfoModel *model = obj;
+        if ([model.major_Id isEqualToString:major_id]) {
+            model.isSelected = YES;
             self.selectIndex = idx;
             self.selectMajorModel = model;
             *stop = YES;
@@ -60,6 +51,7 @@
         }
     }];
 }
+
 
 -(void)show{
     
@@ -84,7 +76,7 @@
         [self.bigBackGroundView updateLayout];
     } completion:^(BOOL finished) {
         if (self.selectMajorCallBack) {
-            self.selectMajorCallBack(self.isRefresh,self.selectMajorModel);
+            self.selectMajorCallBack(self.isRefresh,self.selectMajorModel,self.selectIndex);
         }
         [self removeFromSuperview];
         [self.maskView removeFromSuperview];
@@ -141,9 +133,6 @@
     .rightEqualToView(self.bigBackGroundView)
     .bottomSpaceToView(self.bigBackGroundView, kScreenBottomMargin);
     
-    
-   
-
 }
 
 
@@ -155,7 +144,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return self.dataArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -172,6 +161,7 @@
         cell = [[HXShowMajorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:showMajorCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.majorInfoModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -179,7 +169,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     ///重置选择
     [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        HXMajorModel *model = obj;
+        HXMajorInfoModel *model = obj;
         if (indexPath.row == idx) {
             self.selectIndex = idx;
             model.isSelected = YES;

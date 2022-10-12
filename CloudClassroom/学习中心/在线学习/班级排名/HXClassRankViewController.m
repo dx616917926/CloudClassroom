@@ -8,6 +8,7 @@
 #import "HXClassRankViewController.h"
 #import "HXClassRankCell.h"
 #import "UIView+TransitionColor.h"
+#import "SDWebImage.h"
 
 @interface HXClassRankViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -59,6 +60,8 @@
 @property(nonatomic,strong) UILabel *encourageLabel;//太厉害啦！你是第 名
 @property(nonatomic,strong) UILabel *myDeFenLabel;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXClassRankViewController
@@ -68,7 +71,93 @@
     // Do any additional setup after loading the view.
     //UI
     [self createUI];
+    
+    //获取班级排名
+    [self getClassRank];
 }
+
+#pragma mark -Setter
+-(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
+    _courseInfoModel = courseInfoModel;
+}
+
+#pragma mark - 班级排名
+-(void)getClassRank{
+
+    NSDictionary *dic =@{
+        @"termcourse_id":HXSafeString(self.courseInfoModel.termCourseID),
+        @"student_id":HXSafeString(self.courseInfoModel.student_id),
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetClassRank withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXCourseScoreRankModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                //前三名
+                HXCourseScoreRankModel *model = obj;
+                if(model.rownum==1){
+                    self.firstNameLabel.text = model.name;
+                    self.firstDeFenLabel.text = [NSString stringWithFormat:@"%.0f分",model.finalScore];
+                    [self.firstHeadImageView sd_setImageWithURL:HXSafeURL(model.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+                }else if(model.rownum==2){
+                    self.secondNameLabel.text = model.name;
+                    self.secondDeFenLabel.text = [NSString stringWithFormat:@"%.0f分",model.finalScore];
+                    [self.secondHeadImageView sd_setImageWithURL:HXSafeURL(model.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+                }else if(model.rownum==3){
+                    self.thirdNameLabel.text = model.name;
+                    self.thirdDeFenLabel.text = [NSString stringWithFormat:@"%.0f分",model.finalScore];
+                    [self.thirdHeadImageView sd_setImageWithURL:HXSafeURL(model.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+                }
+                
+                
+                //自己
+                if(model.state==1){
+                    [self.myHeadImageView sd_setImageWithURL:HXSafeURL(model.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+                    self.myNameLabel.text = model.name;
+                    self.myDeFenLabel.text = [NSString stringWithFormat:@"%.0f分",model.finalScore];
+                    self.jiangPaiImageView.hidden = YES;
+                    self.myRankLabel.hidden = YES;
+                    
+                    if(model.rownum==1){
+                        self.jiangPaiImageView.hidden = NO;
+                        self.jiangPaiImageView.image = [UIImage imageNamed:@"jinpai_icon"];
+                    }else if(model.rownum==2){
+                        self.jiangPaiImageView.hidden = NO;
+                        self.jiangPaiImageView.image = [UIImage imageNamed:@"yinpai_icon"];
+                    }else if(model.rownum==3){
+                        self.jiangPaiImageView.hidden = NO;
+                        self.jiangPaiImageView.image = [UIImage imageNamed:@"tongpai_icon"];
+                    }else{
+                        self.myRankLabel.hidden = NO;
+                        self.myRankLabel.text = [NSString stringWithFormat:@"%ld",(long)model.rownum];
+                    }
+                    
+                    if(model.rownum<=3){
+                        self.myNameLabel.sd_layout.centerYEqualToView(self.jiangPaiImageView).offset(-10);
+                        [self.myNameLabel updateLayout];
+                        NSString *rank = [NSString stringWithFormat:@"%ld",(long)model.rownum];
+                        NSString *content = [NSString stringWithFormat:@"太厉害啦！你是第 %ld 名",(long)model.rownum];
+                        self.encourageLabel.attributedText = [HXCommonUtil getAttributedStringWith:rank needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+                    }else{
+                        self.myNameLabel.sd_layout.centerYEqualToView(self.jiangPaiImageView).offset(0);
+                        [self.myNameLabel updateLayout];
+                        self.encourageLabel.attributedText = nil;
+                    }
+                }
+                            
+            }];
+        }
+    } failure:^(NSError * _Nonnull error) {
+       
+    }];
+}
+
 
 #pragma mark - Event
 -(void)popBack{
@@ -82,7 +171,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 20;
+    return self.dataArray.count;
 }
 
 
@@ -103,6 +192,7 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.idx = (indexPath.row+1);
+    cell.courseScoreRankModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -396,7 +486,7 @@
     self.myHeadImageView.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.myNameLabel.sd_layout
-    .topEqualToView(self.myHeadImageView).offset(-4)
+    .centerYEqualToView(self.jiangPaiImageView).offset(-10)
     .leftSpaceToView(self.myHeadImageView, 20)
     .widthIs(100)
     .heightIs(21);
@@ -419,7 +509,14 @@
 
 
 
-#pragma mark - LazyLoad
+#pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UIImageView *)sheXianImageView{
     if (!_sheXianImageView) {
         _sheXianImageView = [[UIImageView alloc] init];
@@ -478,6 +575,7 @@
 -(UIImageView *)firstHeadImageView{
     if (!_firstHeadImageView) {
         _firstHeadImageView = [[UIImageView alloc] init];
+        _firstHeadImageView.contentMode = UIViewContentModeScaleAspectFill;
         _firstHeadImageView.clipsToBounds = YES;
         _firstHeadImageView.userInteractionEnabled = YES;
         _firstHeadImageView.image = [UIImage imageNamed:@"defaulthead_icon"];
@@ -512,7 +610,7 @@
         _firstNameLabel.textAlignment = NSTextAlignmentCenter;
         _firstNameLabel.font = HXFont(15);
         _firstNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _firstNameLabel.text = @"张敏";
+        
     }
     return _firstNameLabel;
 }
@@ -523,7 +621,7 @@
         _firstDeFenLabel.textAlignment = NSTextAlignmentCenter;
         _firstDeFenLabel.font = HXFont(12);
         _firstDeFenLabel.textColor = COLOR_WITH_ALPHA(0xF14E4E, 1);
-        _firstDeFenLabel.text = @"98分";
+        
     }
     return _firstDeFenLabel;
 }
@@ -547,6 +645,7 @@
 -(UIImageView *)secondHeadImageView{
     if (!_secondHeadImageView) {
         _secondHeadImageView = [[UIImageView alloc] init];
+        _secondHeadImageView.contentMode = UIViewContentModeScaleAspectFill;
         _secondHeadImageView.clipsToBounds = YES;
         _secondHeadImageView.userInteractionEnabled = YES;
         _secondHeadImageView.image = [UIImage imageNamed:@"defaulthead_icon"];
@@ -581,7 +680,7 @@
         _secondNameLabel.textAlignment = NSTextAlignmentCenter;
         _secondNameLabel.font = HXFont(15);
         _secondNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _secondNameLabel.text = @"宋轶";
+
     }
     return _secondNameLabel;
 }
@@ -592,7 +691,7 @@
         _secondDeFenLabel.textAlignment = NSTextAlignmentCenter;
         _secondDeFenLabel.font = HXFont(12);
         _secondDeFenLabel.textColor = COLOR_WITH_ALPHA(0xF14E4E, 1);
-        _secondDeFenLabel.text = @"88分";
+
     }
     return _secondDeFenLabel;
 }
@@ -615,6 +714,7 @@
 -(UIImageView *)thirdHeadImageView{
     if (!_thirdHeadImageView) {
         _thirdHeadImageView = [[UIImageView alloc] init];
+        _thirdHeadImageView.contentMode = UIViewContentModeScaleAspectFill;
         _thirdHeadImageView.clipsToBounds = YES;
         _thirdHeadImageView.userInteractionEnabled = YES;
         _thirdHeadImageView.image = [UIImage imageNamed:@"defaulthead_icon"];
@@ -649,7 +749,7 @@
         _thirdNameLabel.textAlignment = NSTextAlignmentCenter;
         _thirdNameLabel.font = HXFont(15);
         _thirdNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _thirdNameLabel.text = @"肖益晓";
+        
     }
     return _thirdNameLabel;
 }
@@ -660,7 +760,7 @@
         _thirdDeFenLabel.textAlignment = NSTextAlignmentCenter;
         _thirdDeFenLabel.font = HXFont(12);
         _thirdDeFenLabel.textColor = COLOR_WITH_ALPHA(0xF14E4E, 1);
-        _thirdDeFenLabel.text = @"86分";
+        
     }
     return _thirdDeFenLabel;
 }
@@ -772,7 +872,7 @@
     if (!_jiangPaiImageView) {
         _jiangPaiImageView = [[UIImageView alloc] init];
         _jiangPaiImageView.userInteractionEnabled = YES;
-        _jiangPaiImageView.image = [UIImage imageNamed:@"tongpai_icon"];
+        _jiangPaiImageView.hidden = YES;
     }
     return _jiangPaiImageView;
 }
@@ -784,8 +884,7 @@
         _myRankLabel.textAlignment = NSTextAlignmentCenter;
         _myRankLabel.font = HXFont(15);
         _myRankLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _myRankLabel.text = @"100";
-        _myRankLabel.hidden = YES;
+        _myNameLabel.hidden = YES;
     }
     return _myRankLabel;
 }
@@ -793,6 +892,7 @@
 -(UIImageView *)myHeadImageView{
     if (!_myHeadImageView) {
         _myHeadImageView = [[UIImageView alloc] init];
+        _myHeadImageView.contentMode = UIViewContentModeScaleAspectFill;
         _myHeadImageView.clipsToBounds = YES;
         _myHeadImageView.userInteractionEnabled = YES;
         _myHeadImageView.image = [UIImage imageNamed:@"defaulthead_icon"];
@@ -806,7 +906,7 @@
         _myNameLabel.textAlignment = NSTextAlignmentLeft;
         _myNameLabel.font = HXFont(15);
         _myNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _myNameLabel.text = @"肖益晓";
+    
     }
     return _myNameLabel;
 }
@@ -817,7 +917,7 @@
         _encourageLabel.textAlignment = NSTextAlignmentLeft;
         _encourageLabel.font = HXFont(11);
         _encourageLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _encourageLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"3" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]} content: @"太厉害啦！你是第 3 名" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x999999, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+        
     }
     return _encourageLabel;
 }
@@ -829,7 +929,7 @@
         _myDeFenLabel.textAlignment = NSTextAlignmentLeft;
         _myDeFenLabel.font = HXFont(15);
         _myDeFenLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _myDeFenLabel.text = @"86分";
+        
     }
     return _myDeFenLabel;
 }
