@@ -120,6 +120,7 @@
 }
 
 + (void)postDataWithNSString : (NSString *)actionUrlStr
+                     needMd5 : (BOOL )needMd5
               withDictionary : (NSDictionary *)nsDic
                      success : (void (^)(NSDictionary* dictionary))success
                      failure : (void (^)(NSError *error))failure
@@ -130,10 +131,12 @@
     NSLog(@"=====token====:%@",[HXPublicParamTool sharedInstance].token);
     //md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥，生成md5值。
     NSMutableDictionary * parameters = [NSMutableDictionary dictionary];
-    if(nsDic!=nil){
+    if(needMd5){
         NSString *md5Str = [self getMd5String:nsDic];
         NSDictionary *md5Dic = @{@"md5":HXSafeString(md5Str)};
         [parameters addEntriesFromDictionary:md5Dic];
+        [parameters addEntriesFromDictionary:nsDic];
+    }else{
         [parameters addEntriesFromDictionary:nsDic];
     }
     [client POST:actionUrlStr parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable dictionary) {
@@ -144,7 +147,7 @@
         NSString*code = [dictionary stringValueForKey:@"code"];
         NSString*message = [dictionary stringValueForKey:@"message"];
         if(dictionary){
-            if ([code isEqualToString:@"402"]) {//402表示被踢，需要重新登录
+            if ([code isEqualToString:@"401"]) {//402表示被踢，需要重新登录
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
                     [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
                 }];
@@ -154,7 +157,7 @@
                 [[self class] refreshTokeCallBack:^(bool sc) {
                     if(sc){
                         //刷新token，重新调取原来接口
-                        [[self class] postDataWithNSString:actionUrlStr withDictionary:nsDic success:^(NSDictionary * _Nonnull dictionary) {
+                        [[self class] postDataWithNSString:actionUrlStr needMd5:needMd5 withDictionary:nsDic success:^(NSDictionary * _Nonnull dictionary) {
                             success(dictionary);
                         } failure:^(NSError * _Nonnull error) {
                             failure(error);
@@ -215,21 +218,7 @@
 }
 
 
-+ (void)doLogout{
-    
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_LOGIN withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
-        //
-        BOOL success = [dictionary boolValueForKey:@"success"];
-        if (success) {
-            NSLog(@"退出登录成功！");
-        }else{
-            NSLog(@"退出登录失败！");
-        }
-    } failure:^(NSError * _Nonnull error) {
-        //
-        NSLog(@"退出登录失败！");
-    }];
-}
+
 
 /// 公共请求参数
 - (NSMutableDictionary *)commonParameters{

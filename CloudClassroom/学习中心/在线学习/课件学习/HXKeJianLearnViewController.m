@@ -7,6 +7,7 @@
 
 #import "HXKeJianLearnViewController.h"
 #import "HXKeJianLearnCell.h"
+#import "HXFaceConfigObject.h"
 
 @interface HXKeJianLearnViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -27,6 +28,8 @@
     
     //获取正考考试列表和看课列表
     [self getExamList];
+    //获取人脸识别设置
+    //[self getFaceSet];
 }
 
 #pragma mark -Setter
@@ -44,7 +47,7 @@
         @"revision":@"1" //pc:0  app:1  h5:2
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetExamList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetExamList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -55,6 +58,30 @@
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
+    }];
+}
+
+#pragma mark - 获取人脸识别设置
+-(void)getFaceSet{
+
+    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(majorid),
+        //班级计划学期ID（如果是补考，传补考开课ID）
+        @"termcourseid":HXSafeString(self.courseInfoModel.termCourseID),
+        //模块类型 1课件 2作业 3期末 0补考
+        @"coursetype":@"1"
+
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFaceSet needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            HXFaceConfigObject *faceConfigObject = [HXFaceConfigObject mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
     }];
 }
 

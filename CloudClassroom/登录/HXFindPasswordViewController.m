@@ -6,8 +6,10 @@
 //
 
 #import "HXFindPasswordViewController.h"
+#import "Utilities.h"
+#import "NSString+HXString.h"
 
-@interface HXFindPasswordViewController ()
+@interface HXFindPasswordViewController ()<UITextFieldDelegate>
 
 @property(nonatomic,strong) UIScrollView *mainScrollView;
 @property(nonatomic,strong) UIView *bigWhiteView;
@@ -37,6 +39,9 @@
 
 @property(nonatomic,strong) UIButton *confirmBtn;
 
+@property(nonatomic,strong)NSTimer *codeTimer;//获取验证码定时器
+@property(nonatomic,assign) integer_t timer_count;//倒计时时间
+
 @end
 
 @implementation HXFindPasswordViewController
@@ -45,27 +50,152 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.timer_count = 60;
     //UI
     [self createUI];
 }
 
+
+-(void)dealloc{
+    [self.codeTimer invalidate];
+    self.codeTimer = nil;
+}
+
+
 #pragma mark - Event
 -(void)sendVCode:(UIButton *)sender{
+    if (self.personIDTextField.text.length == 0) {
+        [self.view showTostWithMessage:@"请输入身份证号码"];
+        [self.personIDTextField becomeFirstResponder];
+        return;
+    }
+    if(![Utilities isValidateTelNumber:self.cellPhoneTextField.text]){
+        [self.view showTostWithMessage:@"请输入手机号码"];
+        [self.cellPhoneTextField becomeFirstResponder];
+        return;
+    }
     
+    [self.view endEditing:YES];
+    
+    [self.codeTimer fire];
+    
+    NSDictionary *dic =@{
+        @"personid":HXSafeString(self.personIDTextField.text),
+        @"cellphone":HXSafeString(self.cellPhoneTextField.text)
+    };
+    
+    //通过手机号获取验证码
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetVCode needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        [self.view showTostWithMessage:[dictionary stringValueForKey:@"message"]];
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
     
 }
 
 -(void)confirm:(UIButton *)sender{
     
+    if (self.personIDTextField.text.length == 0) {
+        [self.view showTostWithMessage:@"请输入身份证号码"];
+        [self.personIDTextField becomeFirstResponder];
+        return;
+    }
+    
+    if (self.cellPhoneTextField.text.length == 0) {
+        [self.view showTostWithMessage:@"请输入手机号码"];
+        [self.cellPhoneTextField becomeFirstResponder];
+        return;
+    }
+    
+    if (self.vCodeTextField.text.length == 0) {
+        [self.view showTostWithMessage:@"请输入验证码"];
+        [self.vCodeTextField becomeFirstResponder];
+        return;
+    }
+    
+    if (self.passwordTextField.text.length < 8) {
+        [self.view showTostWithMessage:@"密码应不少于8位"];
+        [self.againPasswordTextField becomeFirstResponder];
+        return;
+    }
+    
+    if ([NSString isOnlyNumString:self.passwordTextField.text] || [NSString isOnlyLetterString:self.passwordTextField.text]) {
+        [self.view showTostWithMessage:@"新密码必须包含字母、数字"];
+        [self.againPasswordTextField becomeFirstResponder];
+        return;
+    }
+    
+    if (self.againPasswordTextField.text.length == 0) {
+        [self.view showTostWithMessage:@"请再次输入新密码"];
+        [self.againPasswordTextField becomeFirstResponder];
+        return;
+    }
+    
+    if (![self.againPasswordTextField.text isEqualToString:self.passwordTextField.text])
+    {
+        [self.view showTostWithMessage:@"两次密码输入不一致"];
+        return;
+    }
+    
+    [self.view endEditing:YES];
+    
+    
+    NSDictionary *dic =@{
+        @"personid":HXSafeString(self.personIDTextField.text),
+        @"cellphone":HXSafeString(self.cellPhoneTextField.text),
+        @"vcode":HXSafeString(self.vCodeTextField.text),
+        @"newpassword":HXSafeString(self.passwordTextField.text)
+    };
+    //找回密码
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_FindPassword needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message = [dictionary stringValueForKey:@"message"];
+        if(success){
+            [self.view showTostWithMessage:message];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }else{
+            [self.view showTostWithMessage:message];
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
     
 }
+
+
+//定时器倒计时
+- (void)getSmsTimerMethod{
+    self.timer_count --;
+    NSString *title = [NSString stringWithFormat:@"已发送%ds",_timer_count];
+    [self.sendVCodeBtn setTitle:title forState:UIControlStateNormal];
+    self.sendVCodeBtn.userInteractionEnabled = NO;
+    [self.sendVCodeBtn setTitleColor:COLOR_WITH_ALPHA(0xA8BBFF, 1) forState:UIControlStateNormal];
+    self.sendVCodeBtn.layer.borderColor = COLOR_WITH_ALPHA(0xA8BBFF, 1).CGColor;
+    if (self.timer_count == 0){
+        self.timer_count = 60;
+        [self.codeTimer invalidate];
+        self.codeTimer = nil;
+        [self.sendVCodeBtn setTitle:@"重新发送" forState:UIControlStateNormal];
+        [self.sendVCodeBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
+        self.sendVCodeBtn.layer.borderColor = COLOR_WITH_ALPHA(0x2E5BFD, 1).CGColor;
+        self.sendVCodeBtn.userInteractionEnabled = YES;
+    }
+}
+
+
 
 #pragma mark - UI
 -(void)createUI{
     self.sc_navigationBar.title = @"找回密码";
+    
+    [self.view addSubview:self.mainScrollView];
    
     [self.mainScrollView addSubview:self.bigWhiteView];
-    
+
     [self.bigWhiteView addSubview:self.personIDLabel];
     [self.bigWhiteView addSubview:self.personIDTextField];
     [self.bigWhiteView addSubview:self.line1];
@@ -81,10 +211,131 @@
     [self.bigWhiteView addSubview:self.line4];
     [self.bigWhiteView addSubview:self.againPasswordLabel];
     [self.bigWhiteView addSubview:self.againPasswordTextField];
-    
-    
+
     [self.mainScrollView addSubview:self.tipLabel];
     [self.mainScrollView addSubview:self.confirmBtn];
+
+    self.mainScrollView.sd_layout
+    .topSpaceToView(self.view, kNavigationBarHeight)
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomEqualToView(self.view);
+
+    self.bigWhiteView.sd_layout
+    .topSpaceToView(self.mainScrollView, 16)
+    .leftSpaceToView(self.mainScrollView, 12)
+    .rightSpaceToView(self.mainScrollView, 12);
+    self.bigWhiteView.sd_cornerRadius=@4;
+
+    self.personIDLabel.sd_layout
+    .topEqualToView(self.bigWhiteView)
+    .leftSpaceToView(self.bigWhiteView, 12)
+    .widthIs(80)
+    .heightIs(54);
+
+    self.personIDTextField.sd_layout
+    .centerYEqualToView(self.personIDLabel)
+    .rightSpaceToView(self.bigWhiteView, 12)
+    .leftSpaceToView(self.personIDLabel, 12)
+    .heightRatioToView(self.personIDLabel, 1);
+
+    self.line1.sd_layout
+    .topSpaceToView(self.personIDLabel, 0)
+    .leftSpaceToView(self.bigWhiteView, 12)
+    .rightSpaceToView(self.bigWhiteView, 12)
+    .heightIs(0.5);
+
+    self.cellPhoneLabel.sd_layout
+    .topSpaceToView(self.line1, 0)
+    .leftEqualToView(self.personIDLabel)
+    .rightEqualToView(self.personIDLabel)
+    .heightRatioToView(self.personIDLabel, 1);
+
+    self.cellPhoneTextField.sd_layout
+    .centerYEqualToView(self.cellPhoneLabel)
+    .leftEqualToView(self.personIDTextField)
+    .rightEqualToView(self.personIDTextField)
+    .heightRatioToView(self.personIDTextField, 1);
+
+    self.line2.sd_layout
+    .topSpaceToView(self.cellPhoneLabel, 0)
+    .leftEqualToView(self.line1)
+    .rightEqualToView(self.line1)
+    .heightRatioToView(self.line1, 1);
+
+    self.vCodeLabel.sd_layout
+    .topSpaceToView(self.line2, 0)
+    .leftEqualToView(self.personIDLabel)
+    .rightEqualToView(self.personIDLabel)
+    .heightRatioToView(self.personIDLabel, 1);
+
+    self.sendVCodeBtn.sd_layout
+    .centerYEqualToView(self.vCodeLabel)
+    .rightEqualToView(self.personIDTextField)
+    .widthIs(80)
+    .heightIs(30);
+    self.sendVCodeBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+
+    self.vCodeTextField.sd_layout
+    .centerYEqualToView(self.vCodeLabel)
+    .leftSpaceToView(self.vCodeLabel, 12)
+    .rightSpaceToView(self.sendVCodeBtn, 12)
+    .heightRatioToView(self.personIDTextField, 1);
+
+    self.line3.sd_layout
+    .topSpaceToView(self.vCodeLabel, 0)
+    .leftEqualToView(self.line1)
+    .rightEqualToView(self.line1)
+    .heightRatioToView(self.line1, 1);
+
+    self.passwordLabel.sd_layout
+    .topSpaceToView(self.line3, 0)
+    .leftEqualToView(self.personIDLabel)
+    .rightEqualToView(self.personIDLabel)
+    .heightRatioToView(self.personIDLabel, 1);
+
+    self.passwordTextField.sd_layout
+    .centerYEqualToView(self.passwordLabel)
+    .leftEqualToView(self.personIDTextField)
+    .rightEqualToView(self.personIDTextField)
+    .heightRatioToView(self.personIDTextField, 1);
+
+    self.line4.sd_layout
+    .topSpaceToView(self.passwordLabel, 0)
+    .leftEqualToView(self.line1)
+    .rightEqualToView(self.line1)
+    .heightRatioToView(self.line1, 1);
+
+    self.againPasswordLabel.sd_layout
+    .topSpaceToView(self.line4, 0)
+    .leftEqualToView(self.personIDLabel)
+    .rightEqualToView(self.personIDLabel)
+    .heightRatioToView(self.personIDLabel, 1);
+
+    self.againPasswordTextField.sd_layout
+    .centerYEqualToView(self.againPasswordLabel)
+    .leftEqualToView(self.personIDTextField)
+    .rightEqualToView(self.personIDTextField)
+    .heightRatioToView(self.personIDTextField, 1);
+
+    [self.bigWhiteView setupAutoHeightWithBottomView:self.againPasswordLabel bottomMargin:0];
+
+    self.tipLabel.sd_layout
+    .topSpaceToView(self.bigWhiteView, 14)
+    .leftSpaceToView(self.mainScrollView, 24)
+    .rightSpaceToView(self.mainScrollView, 24)
+    .heightIs(17);
+
+    self.confirmBtn.sd_layout
+    .topSpaceToView(self.tipLabel, 40)
+    .leftSpaceToView(self.mainScrollView, 12)
+    .rightSpaceToView(self.mainScrollView, 12)
+    .heightIs(36);
+    self.confirmBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+
+    [self.mainScrollView setupAutoContentSizeWithBottomView:self.confirmBtn bottomMargin:100];
+    
+    
     
 }
 
@@ -219,7 +470,7 @@
         _passwordLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
         _passwordLabel.text = @"新密码";
     }
-    return _vCodeLabel;
+    return _passwordLabel;
 }
 
 -(UIButton *)sendVCodeBtn{
@@ -304,6 +555,14 @@
         [_confirmBtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _confirmBtn;
+}
+
+-(NSTimer *)codeTimer{
+    if(!_codeTimer){
+        _codeTimer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(getSmsTimerMethod) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_codeTimer forMode:NSRunLoopCommonModes];
+    }
+    return _codeTimer;
 }
 
 @end

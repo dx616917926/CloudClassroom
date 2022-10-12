@@ -63,6 +63,7 @@
 #pragma mark - 获取当前学期
 -(void)getCurrentSemester{
     
+    [self.view showLoading];
     //学期，如果是当前学期，则传具体的学期，如果是所有学期，则传0
     NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
     NSString *currentSemesterid = [HXPublicParamTool sharedInstance].currentSemesterid;
@@ -71,7 +72,8 @@
         @"term":HXSafeString(currentSemesterid)
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.view hideLoading];
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -82,6 +84,7 @@
             [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
+        [self.view hideLoading];
         [self.mainTableView.mj_header endRefreshing];
     }];
 }
@@ -96,7 +99,7 @@
         @"term":@"0"
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -282,7 +285,9 @@
     [self.mainTableView updateLayout];
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:(self.isCuurentSemester? @selector(getCurrentSemester):@selector(getAllSemester))];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        (self.isCuurentSemester? [self getCurrentSemester]:[self getAllSemester]);
+    }];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
     

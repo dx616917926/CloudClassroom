@@ -39,6 +39,8 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXStudyReportViewController
@@ -49,7 +51,33 @@
     
     //UI
     [self createUI];
+    //获取学习报告
+    [self getCourseReport];
 }
+
+
+#pragma mark - 获取学习报告
+-(void)getCourseReport{
+
+    NSDictionary *dic =@{
+        @"termcourse_id":HXSafeString(self.courseInfoModel.termCourseID),
+        @"student_id":HXSafeString(self.courseInfoModel.student_id)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCourseReport needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+//            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+//            [self.dataArray removeAllObjects];
+//            [self.dataArray addObjectsFromArray:list];
+//            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+}
+
 
 #pragma mark - Event
 -(void)popBack{
@@ -121,13 +149,14 @@
     [self.keJianXueXiView addSubview:self.keJianXueTitleLabel];
     [self.keJianXueXiView addSubview:self.keJianXueContentLabel];
     
+    [self.showContainerView addSubview:self.xueXiBiaoXianView];
+    [self.xueXiBiaoXianView addSubview:self.xueXiBiaoXianTitleLabel];
+    [self.xueXiBiaoXianView addSubview:self.xueXiBiaoXianContentLabel];
+    
     [self.showContainerView addSubview:self.pingShiZuoYeView];
     [self.pingShiZuoYeView addSubview:self.pingShiZuoYeTitleLabel];
     [self.pingShiZuoYeView addSubview:self.pingShiZuoYeContentLabel];
     
-    [self.showContainerView addSubview:self.xueXiBiaoXianView];
-    [self.xueXiBiaoXianView addSubview:self.xueXiBiaoXianTitleLabel];
-    [self.xueXiBiaoXianView addSubview:self.xueXiBiaoXianContentLabel];
     
     [self.showContainerView addSubview:self.qiMoKaoShiView];
     [self.qiMoKaoShiView addSubview:self.qiMoKaoShiTitleLabel];
@@ -140,14 +169,11 @@
     .rightEqualToView(self.view)
     .heightIs(456*kScreenWidth/750.0);
     
-
     
     self.showContainerView.sd_layout
     .bottomEqualToView(self.topBgImageView).offset(0)
     .leftSpaceToView(self.view, 12)
     .rightSpaceToView(self.view, 12);
-    
-    
     
     
     self.mainTableView.sd_layout
@@ -202,20 +228,6 @@
     .rightEqualToView(self.keJianXueXiView)
     .heightIs(20);
     
-    //平时作业
-    self.pingShiZuoYeView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
-    
-    self.pingShiZuoYeTitleLabel.sd_layout
-    .topSpaceToView(self.pingShiZuoYeView, 0)
-    .leftEqualToView(self.pingShiZuoYeView)
-    .rightEqualToView(self.pingShiZuoYeView)
-    .heightRatioToView(self.keJianXueTitleLabel, 1);
-    
-    self.pingShiZuoYeContentLabel.sd_layout
-    .bottomSpaceToView(self.pingShiZuoYeView, 0)
-    .leftEqualToView(self.pingShiZuoYeView)
-    .rightEqualToView(self.pingShiZuoYeView)
-    .heightRatioToView(self.keJianXueContentLabel, 1);
     
     //学习表现
     self.xueXiBiaoXianView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
@@ -231,6 +243,23 @@
     .leftEqualToView(self.xueXiBiaoXianView)
     .rightEqualToView(self.xueXiBiaoXianView)
     .heightRatioToView(self.keJianXueContentLabel, 1);
+    
+    //平时作业
+    self.pingShiZuoYeView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
+    
+    self.pingShiZuoYeTitleLabel.sd_layout
+    .topSpaceToView(self.pingShiZuoYeView, 0)
+    .leftEqualToView(self.pingShiZuoYeView)
+    .rightEqualToView(self.pingShiZuoYeView)
+    .heightRatioToView(self.keJianXueTitleLabel, 1);
+    
+    self.pingShiZuoYeContentLabel.sd_layout
+    .bottomSpaceToView(self.pingShiZuoYeView, 0)
+    .leftEqualToView(self.pingShiZuoYeView)
+    .rightEqualToView(self.pingShiZuoYeView)
+    .heightRatioToView(self.keJianXueContentLabel, 1);
+    
+    
     
     //期末考试
     self.qiMoKaoShiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
@@ -248,7 +277,7 @@
     .heightRatioToView(self.keJianXueContentLabel, 1);
     
     
-    [self.showContainerView setupAutoMarginFlowItems:@[self.keJianXueXiView,self.pingShiZuoYeView,self.xueXiBiaoXianView,self.qiMoKaoShiView] withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:15 horizontalEdgeInset:20];
+    [self.showContainerView setupAutoMarginFlowItems:@[self.keJianXueXiView,self.xueXiBiaoXianView,self.pingShiZuoYeView,self.qiMoKaoShiView] withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:15 horizontalEdgeInset:20];
     
     [self.showContainerView updateLayout];
     self.showContainerView.sd_layout.bottomEqualToView(self.topBgImageView).offset(CGRectGetHeight(self.showContainerView.bounds)*0.5);
@@ -267,11 +296,21 @@
     [self.showContainerView insertSubview:self.xueXiBiaoXianView aboveSubview:visualView];
     [self.showContainerView insertSubview:self.qiMoKaoShiView aboveSubview:visualView];
     
-    
+    // 刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getCourseReport)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainTableView.mj_header = header;
     
 }
 
 #pragma mark - LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UIImageView *)topBgImageView{
     if (!_topBgImageView) {
         _topBgImageView = [[UIImageView alloc] init];
@@ -422,43 +461,13 @@
         _keJianXueContentLabel = [[UILabel alloc] init];
         _keJianXueContentLabel.textAlignment = NSTextAlignmentCenter;
         _keJianXueContentLabel.font = HXBoldFont(14);
-        _keJianXueContentLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
+        _keJianXueContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
         _keJianXueContentLabel.text = @"10%";
     }
     return _keJianXueContentLabel;
 }
 
--(UIView *)pingShiZuoYeView{
-    if (!_pingShiZuoYeView) {
-        _pingShiZuoYeView = [[UIView alloc] init];
-        _pingShiZuoYeView.backgroundColor = UIColor.clearColor;
-        _pingShiZuoYeView.clipsToBounds = YES;
-    }
-    return _pingShiZuoYeView;
-}
 
-
-- (UILabel *)pingShiZuoYeTitleLabel{
-    if (!_pingShiZuoYeTitleLabel) {
-        _pingShiZuoYeTitleLabel = [[UILabel alloc] init];
-        _pingShiZuoYeTitleLabel.textAlignment = NSTextAlignmentCenter;
-        _pingShiZuoYeTitleLabel.font =HXFont(14);
-        _pingShiZuoYeTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _pingShiZuoYeTitleLabel.text = @"平时作业";
-    }
-    return _pingShiZuoYeTitleLabel;
-}
-
-- (UILabel *)pingShiZuoYeContentLabel{
-    if (!_pingShiZuoYeContentLabel) {
-        _pingShiZuoYeContentLabel = [[UILabel alloc] init];
-        _pingShiZuoYeContentLabel.textAlignment = NSTextAlignmentCenter;
-        _pingShiZuoYeContentLabel.font = HXBoldFont(14);
-        _pingShiZuoYeContentLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
-        _pingShiZuoYeContentLabel.text = @"10%";
-    }
-    return _pingShiZuoYeContentLabel;
-}
 
 -(UIView *)xueXiBiaoXianView{
     if (!_xueXiBiaoXianView) {
@@ -486,10 +495,43 @@
         _xueXiBiaoXianContentLabel = [[UILabel alloc] init];
         _xueXiBiaoXianContentLabel.textAlignment = NSTextAlignmentCenter;
         _xueXiBiaoXianContentLabel.font = HXBoldFont(14);
-        _xueXiBiaoXianContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _xueXiBiaoXianContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
         _xueXiBiaoXianContentLabel.text = @"10";
     }
     return _xueXiBiaoXianContentLabel;
+}
+
+
+-(UIView *)pingShiZuoYeView{
+    if (!_pingShiZuoYeView) {
+        _pingShiZuoYeView = [[UIView alloc] init];
+        _pingShiZuoYeView.backgroundColor = UIColor.clearColor;
+        _pingShiZuoYeView.clipsToBounds = YES;
+    }
+    return _pingShiZuoYeView;
+}
+
+
+- (UILabel *)pingShiZuoYeTitleLabel{
+    if (!_pingShiZuoYeTitleLabel) {
+        _pingShiZuoYeTitleLabel = [[UILabel alloc] init];
+        _pingShiZuoYeTitleLabel.textAlignment = NSTextAlignmentCenter;
+        _pingShiZuoYeTitleLabel.font =HXFont(14);
+        _pingShiZuoYeTitleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _pingShiZuoYeTitleLabel.text = @"平时作业";
+    }
+    return _pingShiZuoYeTitleLabel;
+}
+
+- (UILabel *)pingShiZuoYeContentLabel{
+    if (!_pingShiZuoYeContentLabel) {
+        _pingShiZuoYeContentLabel = [[UILabel alloc] init];
+        _pingShiZuoYeContentLabel.textAlignment = NSTextAlignmentCenter;
+        _pingShiZuoYeContentLabel.font = HXBoldFont(14);
+        _pingShiZuoYeContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        _pingShiZuoYeContentLabel.text = @"10%";
+    }
+    return _pingShiZuoYeContentLabel;
 }
 
 -(UIView *)qiMoKaoShiView{

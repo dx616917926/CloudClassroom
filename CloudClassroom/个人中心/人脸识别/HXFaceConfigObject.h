@@ -9,49 +9,57 @@
 #import <Foundation/Foundation.h>
 
 //人脸识别配置参数
-@interface HXFaceConfigObject : NSObject<NSCopying>
+@interface HXFaceConfigObject : NSObject
 
-@property(nonatomic, strong) NSArray *AltertBK;      //补考时弹出的考试须知地址
-@property(nonatomic, strong) NSArray *AltertKJ;       //课件时弹出的学习须知地址
-@property(nonatomic, strong) NSArray *AltertZY;       //作业时弹出的考试须知地址
-@property(nonatomic, strong) NSArray *AltertKS;       //期末考试时弹出的考试须知地址
+///模块类型（1课件 2作业 3期末 0补考 4表示模拟人脸识别）
+@property(nonatomic, assign) NSInteger courseType;
 
-@property(nonatomic, strong) NSArray *FaceMessage;    //人人脸识别提示文字
+///是否需要人脸识别
+@property(nonatomic, assign) NSInteger isFaceMatch;
 
-@property(nonatomic, assign) BOOL IsKJFaceMatch;      //课件是否需要人脸识别
-@property(nonatomic, assign) BOOL IsQMFaceMatch;      //期末考试是否需要人脸识别
-@property(nonatomic, assign) BOOL IsZYFaceMatch;      //作业是否需要人脸识别
-@property(nonatomic, assign) BOOL IsBKFaceMatch;      //补考是否需要人脸识别
+///过程中是否需要监控
+@property(nonatomic, assign) NSInteger isFaceMatchJK;
 
-@property(nonatomic, assign) BOOL IsKJFaceMatchJK;    //课件如果开启了人脸识别，是否需要监控。
-@property(nonatomic, assign) BOOL IsQMFaceMatchJK;    //期末如果开启了人脸识别，是否需要监控。
-@property(nonatomic, assign) BOOL IsZYFaceMatchJK;    //作业如果开启了人脸识别，是否需要监控。
-@property(nonatomic, assign) BOOL IsBKFaceMatchJK;    //补考如果开启了人脸识别，是否需要监控。
+///0不做采集   1强制采集   2随机采集，有跳过按钮
+@property(nonatomic, assign) NSInteger face_cj;
 
-@property(nonatomic, strong) NSString *KJFaceCjOrDb;  //课件时 1表示采集  2表示对比
-@property(nonatomic, strong) NSString *ZYFaceCjOrDb;  //作业时 1表示采集  2表示对比
-@property(nonatomic, strong) NSString *QMFaceCjOrDb;  //期末时 1表示采集  2表示对比
-@property(nonatomic, strong) NSString *BKFaceCjOrDb;  //补考时 1表示采集  2表示对比
+///0不做对比   1强制对比    2随机对比
+@property(nonatomic, assign) NSInteger face_db;
 
-@property(nonatomic, strong) NSString *imageURL;      //人脸识别的图片地址   如果为空，表示没有已审核的照片或者未上传照片
-@property(nonatomic, strong) NSString *imageStatus;   //照片状态  0表示未审核   1表示已审核   -1表示没有上传照片
+///对比次数，只对随机对比有效 ,当课件为随机对比时，对比失败次数超过这个值，则有跳过按钮
+@property(nonatomic, assign) NSInteger face_cs;
 
-@property(nonatomic, strong) NSString *modelID;       //课程ID 后加的参数
+///人脸识别提示文字
+@property(nonatomic, strong) NSArray<NSString *> *faceMessage;
 
-@property(nonatomic, assign) NSInteger QuitCount;     //APP可以退出的次数
-@property(nonatomic, assign) NSInteger QuitTime;      //APP每次退出的最长时间（秒），如果超过这个时间，则自动视为舞弊
-@property(nonatomic, assign) NSInteger QuitMinTime;   //APP每次退出的最短时间（秒），如果没超过这个时间，则不计算次数
-@property(nonatomic, strong) NSString *WarnStr;       //退出APP时候的提示
-@property(nonatomic, assign) NSInteger BKFaceMatchTimes;   //考试途中需要进行人脸识别的次数
+///人脸识别的图片地址(如果为空，表示没有已审核的照片)
+@property(nonatomic, strong) NSString *imageURL;
 
-@property(nonatomic, assign) BOOL IsUsingRTC;         //是否开启实时监控，考试过程中如果开启人脸识别，默认还是走之前的弹出对比。如果开启了实时监控，则使用实时监控
-@property(nonatomic, assign) BOOL IsSavePhotoByBack;  //如果开启实时监控，是否开启后置摄像头拍照
+///进入模块时，弹出的课件（考试）须知地址，如果有多个，则根据数组返回的顺序弹出
+@property(nonatomic, strong) NSArray<NSString *> *altertKJ;
 
-//自定义字段
-@property(nonatomic, assign) NSInteger faceType;    //来源 不传默认为0。补考考试人脸识别使用默认值0；正常考试人脸识别使用参数如下（1表示课件学习 2表示平时作业 3表示期末考试）；模拟人脸识别传递4；
-@property(nonatomic, assign, readonly) BOOL IsFaceMatch;      //根据来源判断是否需要人脸识别。
-@property(nonatomic, assign, readonly) BOOL IsFaceMatchJK;    //根据来源判断是否需要监控。
-@property(nonatomic, assign, readonly) BOOL faceCj;           //人脸拍照
-@property(nonatomic, strong, readonly) NSArray *Altert;       //考试须知地址
+///照片的审核状态，如果为-1表示没有照片   0表示未审核
+@property(nonatomic, assign) NSInteger imageStatus;
+
+///如果过程中需要监控，APP可以退出的次数
+@property(nonatomic, assign) NSInteger quiteCount;
+
+///APP每次退出的最长时间（秒），如果超过这个时间，则自动视为舞弊
+@property(nonatomic, assign) NSInteger quiteMaxtimes;
+
+///APP每次切出的时间超过这个数值（秒），才算切出一次
+@property(nonatomic, assign) NSInteger quiteMintimes;
+
+///当APP退出(切出)时，提示的语句
+@property(nonatomic, strong) NSString *warnStr;
+
+///过程中识别的次数
+@property(nonatomic, assign) NSInteger faceTimes;
+
+///考试（学习）过程中，如果需要人脸识别，是否开启实时监控。 1表示开启
+@property(nonatomic, assign) NSInteger faceMatchByRTC;
+
+///考试（学习）过程中，如果开启了实时监控，是否需要后置摄像头拍照
+@property(nonatomic, assign) NSInteger savePhotoByBack;
 
 @end

@@ -89,7 +89,7 @@
         @"student_id":HXSafeString(self.courseInfoModel.student_id),
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetClassRank withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetClassRank needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {

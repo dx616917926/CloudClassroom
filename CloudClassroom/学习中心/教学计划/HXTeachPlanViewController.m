@@ -13,6 +13,8 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 
 @end
 
@@ -24,16 +26,35 @@
     
     //UI
     [self createUI];
-    
+    //获取教学计划
+    [self getClassPlan];
 }
 
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
-}
+#pragma mark - 获取教学计划
+-(void)getClassPlan{
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentid)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetClassPlan needMd5:YES withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXClassPlanModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            if(list.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
@@ -46,7 +67,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -66,6 +87,7 @@
         cell = [[HXTeachPlanCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:teachPlanCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.classPlanModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -92,17 +114,20 @@
     self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getClassPlan)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+   
 }
 
 #pragma mark -LazyLoad
 
-
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
 
 -(UITableView *)mainTableView{
     if (!_mainTableView) {

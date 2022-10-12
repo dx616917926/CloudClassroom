@@ -73,6 +73,27 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setClassPlanModel:(HXClassPlanModel *)classPlanModel{
+    
+    _classPlanModel = classPlanModel;
+    
+    self.courseNameLabel.text = classPlanModel.courseName;
+    self.xueQiLabel.text = classPlanModel.term;
+    [self.typeBtn setTitle:classPlanModel.courseTypeName forState:UIControlStateNormal];
+    self.zongXueFenContentLabel.text = HXIntToString(classPlanModel.coursePoint);
+    self.zongXueShiContentLabel.text = HXIntToString(classPlanModel.courseTotalHour);
+    self.kaoHeFangShiContentLabel.text = classPlanModel.checkLookName;
+    self.wangXueContentLabel.textColor = (classPlanModel.isNetCourse==1?COLOR_WITH_ALPHA(0x2E5BFD, 1):COLOR_WITH_ALPHA(0xF8A528, 1));
+    self.wangXueContentLabel.text = (classPlanModel.isNetCourse==1?@"是":@"否");
+    self.keNeiXueShiContentLabel.text = HXIntToString(classPlanModel.classHour);
+    self.shangJiXueShiContentLabel.text = HXIntToString(classPlanModel.computerHour);
+    self.shiJianXueShiContentLabel.text = HXIntToString(classPlanModel.practiseHour);
+    self.ziXueXueShiContentLabel.text = HXIntToString(classPlanModel.practiseHour);
+    
+}
+
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -304,7 +325,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+        
     }
     return _courseNameLabel;
 }
@@ -314,7 +335,7 @@
         _xueQiLabel = [[UILabel alloc] init];
         _xueQiLabel.font = HXFont(12);
         _xueQiLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _xueQiLabel.text = @"第一学期";
+       
     }
     return _xueQiLabel;
 }
@@ -325,7 +346,7 @@
         _typeBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAEFFF, 1);
         _typeBtn.titleLabel.font = HXFont(12);
         [_typeBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
-        [_typeBtn setTitle:@"专业课" forState:UIControlStateNormal];
+        
     }
     return _typeBtn;
 }
@@ -366,7 +387,7 @@
         _zongXueFenContentLabel.textAlignment = NSTextAlignmentCenter;
         _zongXueFenContentLabel.font =HXBoldFont(14);
         _zongXueFenContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _zongXueFenContentLabel.text = @"20";
+       
     }
     return _zongXueFenContentLabel;
 }
@@ -399,7 +420,7 @@
         _zongXueShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _zongXueShiContentLabel.font =HXBoldFont(14);
         _zongXueShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _zongXueShiContentLabel.text = @"800";
+       
     }
     return _zongXueShiContentLabel;
 }
@@ -432,7 +453,7 @@
         _kaoHeFangShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _kaoHeFangShiContentLabel.font =HXBoldFont(14);
         _kaoHeFangShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _kaoHeFangShiContentLabel.text = @"考试";
+        
     }
     return _kaoHeFangShiContentLabel;
 }
@@ -463,8 +484,7 @@
         _wangXueContentLabel = [[UILabel alloc] init];
         _wangXueContentLabel.textAlignment = NSTextAlignmentCenter;
         _wangXueContentLabel.font =HXBoldFont(14);
-        _wangXueContentLabel.textColor = COLOR_WITH_ALPHA(0xF8A528, 1);
-        _wangXueContentLabel.text = @"否";
+
     }
     return _wangXueContentLabel;
 }
@@ -496,7 +516,7 @@
         _keNeiXueShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _keNeiXueShiContentLabel.font =HXBoldFont(14);
         _keNeiXueShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _keNeiXueShiContentLabel.text = @"200";
+        
     }
     return _keNeiXueShiContentLabel;
 }
@@ -528,7 +548,7 @@
         _shangJiXueShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _shangJiXueShiContentLabel.font =HXBoldFont(14);
         _shangJiXueShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _shangJiXueShiContentLabel.text = @"200";
+       
     }
     return _shangJiXueShiContentLabel;
 }
@@ -561,7 +581,7 @@
         _shiJianXueShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _shiJianXueShiContentLabel.font =HXBoldFont(14);
         _shiJianXueShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _shiJianXueShiContentLabel.text = @"200";
+        
     }
     return _shiJianXueShiContentLabel;
 }
@@ -593,7 +613,7 @@
         _ziXueXueShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _ziXueXueShiContentLabel.font =HXBoldFont(14);
         _ziXueXueShiContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _ziXueXueShiContentLabel.text = @"200";
+       
     }
     return _ziXueXueShiContentLabel;
 }

@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *personId;
 ///班级计划学期ID
 @property(nonatomic, copy) NSString *termCourse_id;
+///补考开课ID
+@property(nonatomic, copy) NSString *bkCourse_id;
 ///课程名称
 @property(nonatomic, copy) NSString *termCourseName;
 ///开始时间（课件和考试）
@@ -47,6 +49,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger courseALlTime;
 ///作者
 @property(nonatomic, copy) NSString *author;
+///批次名称
+@property(nonatomic, copy) NSString *batchName;
+///模块类型 1作业 2期末考试
+@property(nonatomic, assign) NSInteger moduleType;
 
 
 @end

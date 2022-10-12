@@ -64,6 +64,7 @@
 
 @property(nonatomic,strong) NSMutableArray *majorArray;
 @property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXHomePageViewController
@@ -98,7 +99,7 @@
     NSDictionary *dic =@{
         @"major_id":HXSafeString(major_id)
     };
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -118,7 +119,7 @@
 #pragma mark - 获取首页专业信息
 -(void)getHomeMajorInfo{
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMajorInfo withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMajorInfo needMd5:YES  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -155,7 +156,7 @@
         @"term":HXSafeString(semesterid)
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetOnlineCourseList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -179,7 +180,7 @@
     NSDictionary *dic =@{
         @"studentid":HXSafeString(studentId)
     };
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMessageInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -203,7 +204,7 @@
 #pragma mark - 获取首页菜单
 -(void)getHomeMenu{
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:NO  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {

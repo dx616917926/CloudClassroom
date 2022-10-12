@@ -13,6 +13,8 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXZongPingViewController
@@ -23,16 +25,33 @@
     
     //UI
     [self createUI];
+    //成绩查询
+    [self getScoreList];
 }
 
 
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
-}
+#pragma mark - 成绩查询
+-(void)getScoreList{
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+    
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentid)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetScoreClassPlan needMd5:NO withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXScoreModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 
@@ -45,7 +64,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -66,7 +85,8 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.isFirst = (indexPath.row==0);
-    cell.isLast = (indexPath.row==4);
+    cell.isLast = (indexPath.row==self.dataArray.count-1);
+    cell.scoreModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -95,15 +115,21 @@
     self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getScoreList)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+    
 }
 
 #pragma mark -LazyLoad
+
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];

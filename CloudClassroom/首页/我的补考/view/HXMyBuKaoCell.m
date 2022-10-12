@@ -39,13 +39,30 @@
     return self;
 }
 
+
+#pragma mark - Setter
+-(void)setBuKaoModel:(HXBuKaoModel *)buKaoModel{
+    
+    _buKaoModel = buKaoModel;
+    
+    self.courseNameLabel.text = buKaoModel.termCourseName;
+    self.courseCodeLabel.text = [NSString stringWithFormat:@"课程编码 %@",buKaoModel.zyCode];
+    self.zuoYeBtn.hidden = buKaoModel.showZY==1?NO:YES;
+    self.kaoShiBtn.hidden = buKaoModel.showQM==1?NO:YES;
+    [self.zuoYeBtn setTitle:(buKaoModel.zyButtonName?buKaoModel.zyButtonName:@"平时作业") forState:UIControlStateNormal];
+    [self.kaoShiBtn setTitle:(buKaoModel.qmButtonName?buKaoModel.qmButtonName:@"期末考试") forState:UIControlStateNormal];
+    
+}
+
 #pragma mark - Event
 -(void)clickEvent:(UIButton *)sender{
     NSInteger type = sender.tag-70000;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(jumpType:)]) {
-        [self.delegate jumpType:type];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(jumpType:buKaoModel:)]) {
+        [self.delegate jumpType:type buKaoModel:self.buKaoModel];
     }
 }
+
+
 
 #pragma mark - UI
 -(void)createUI{
@@ -67,8 +84,8 @@
     self.courseCodeLabel.sd_layout
     .topSpaceToView(self.bigBackgroundView, 14)
     .rightSpaceToView(self.bigBackgroundView, 16)
-    .widthIs(100)
     .heightIs(17);
+    [self.courseCodeLabel setSingleLineAutoResizeWithMaxWidth:150];
     
     self.courseNameLabel.sd_layout
     .centerYEqualToView(self.courseCodeLabel)
@@ -131,7 +148,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"计算机科学与技术";
+        
     }
     return _courseNameLabel;
 }
@@ -142,7 +159,7 @@
         _courseCodeLabel.textAlignment = NSTextAlignmentRight;
         _courseCodeLabel.font = HXFont(12);
         _courseCodeLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _courseCodeLabel.text = @"课程编码 0738";
+        
     }
     return _courseCodeLabel;
 }
@@ -156,7 +173,6 @@
         _zuoYeBtn.titleLabel.font = HXFont(14);
         [_zuoYeBtn setImage:[UIImage imageNamed:@"zuoye_icon"] forState:UIControlStateNormal];
         [_zuoYeBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_zuoYeBtn setTitle:@"平时作业" forState:UIControlStateNormal];
         [_zuoYeBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _zuoYeBtn;
@@ -170,7 +186,6 @@
         _kaoShiBtn.titleLabel.font = HXFont(14);
         [_kaoShiBtn setImage:[UIImage imageNamed:@"kaoshi_icon"] forState:UIControlStateNormal];
         [_kaoShiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        [_kaoShiBtn setTitle:@"期末考试" forState:UIControlStateNormal];
         [_kaoShiBtn addTarget:self action:@selector(clickEvent:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _kaoShiBtn;

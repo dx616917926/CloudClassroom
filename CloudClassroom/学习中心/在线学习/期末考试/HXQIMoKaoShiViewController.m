@@ -24,8 +24,8 @@
     
     //UI
     [self createUI];
-    //获取正考考试列表和看课列表
-    [self getExamList];
+    //获取正考考试列表和看课列表/获取补考考试列表
+    (self.isBuKao?[self getBKExamList]: [self getExamList]);
 }
 
 #pragma mark -Setter
@@ -43,7 +43,29 @@
         @"revision":@"1" //pc:0  app:1  h5:2
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetExamList withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetExamList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+}
+
+#pragma mark - 获取补考考试列表
+-(void)getBKExamList{
+
+    NSDictionary *dic =@{
+        @"bkcourse_id":HXSafeString(self.buKaoModel.bkCourse_id),
+        @"moduletype":@"2",//课件kj：0    作业zy：1  期末qm：2  答疑dn：3
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetBKExamList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -70,7 +92,7 @@
     .bottomEqualToView(self.view);
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getExamList)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:(self.isBuKao?@selector(getBKExamList):@selector(getExamList))];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
    

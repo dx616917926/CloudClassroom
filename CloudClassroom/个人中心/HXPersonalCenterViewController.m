@@ -77,7 +77,7 @@
     NSDictionary *dic =@{
         @"major_id":HXSafeString(major_id)
     };
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {

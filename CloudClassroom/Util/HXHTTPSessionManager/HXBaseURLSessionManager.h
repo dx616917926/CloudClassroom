@@ -139,19 +139,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  普通POST请求
  */
-+ (void)postDataWithNSString:(NSString *)actionUrlStr
-              withDictionary:(nullable NSDictionary *) nsDic
-                     success:(void (^)(NSDictionary* dictionary))success
-                     failure:(void (^)(NSError *error))failure;
++ (void)postDataWithNSString : (NSString *)actionUrlStr
+                     needMd5 : (BOOL )needMd5
+              withDictionary : (NSDictionary *)nsDic
+                     success : (void (^)(NSDictionary* dictionary))success
+                     failure : (void (^)(NSError *error))failure;
+                     
 
 /**刷新JWT的Token(如果返回false,则表示要重新登录)
  */
 + (void)refreshTokeCallBack:(void (^)(bool success))callBack;
 
-/**
- 退出登录请求
- */
-+ (void)doLogout;
+
 
 @end
 

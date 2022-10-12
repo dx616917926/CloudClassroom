@@ -108,7 +108,7 @@
     
     BOOL closeFaceLivenessSound = [HXUserDefaults boolForKey:CloseFaceLivenessSound];
     //只拍照
-    if (self.faceConfig.faceCj) {
+    if (self.faceConfig.face_cj==0) {
         [[IDLFaceDetectionManager sharedInstance] startInitial];
         [IDLFaceDetectionManager sharedInstance].enableSound = !closeFaceLivenessSound;
     }else{
@@ -124,7 +124,7 @@
 #pragma mark -重置百度人脸识别
 - (void)resetIDLFaceManager {
     //只拍照
-    if (self.faceConfig.faceCj) {
+    if (self.faceConfig.face_cj==0) {
         [[IDLFaceDetectionManager sharedInstance] reset];
     }else{
         [[IDLFaceLivenessManager sharedInstance] reset];
@@ -422,7 +422,7 @@
     UIImage* sampleImage = [self imageFromSamplePlanerPixelBuffer:sampleBuffer];
     
     
-    if (self.faceConfig.faceCj) {//人脸拍照
+    if (self.faceConfig.face_cj==0) {//人脸拍照
         [self faceCapture:sampleImage];
     }else{//人脸对比
         [self faceProcesss:sampleImage];

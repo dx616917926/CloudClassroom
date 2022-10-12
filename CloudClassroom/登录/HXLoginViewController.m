@@ -354,7 +354,7 @@
     
 #ifdef DEBUG
     self.accountTextField.text = @"20190005";
-    self.pwdTextField.text = @"20190005";
+    self.pwdTextField.text = @"dx123456";
 #endif
     
 }
