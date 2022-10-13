@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXCourseReportModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXStudyReportZuoYeCell : UITableViewCell
+
+@property(nonatomic,strong) HXCourseReportModel *courseReportModel;
 
 @end
 

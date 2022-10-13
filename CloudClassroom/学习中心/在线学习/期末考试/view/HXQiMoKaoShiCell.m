@@ -48,29 +48,29 @@
 }
 
 #pragma mark - Setter
--(void)setKeJianOrExamInfoModel:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
-    
-    _keJianOrExamInfoModel = keJianOrExamInfoModel;
+-(void)setExamParaModel:(HXExamParaModel *)examParaModel{
+    _examParaModel = examParaModel;
     
     [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
     
-    self.courseNameLabel.text = keJianOrExamInfoModel.termCourseName;
-    self.ciShuContentLabel.text = HXIntToString(keJianOrExamInfoModel.allowCount_CJ);
-    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",keJianOrExamInfoModel.finaltime,keJianOrExamInfoModel.finaltimeEnd];
-    self.tipLabel.hidden = [HXCommonUtil isNull:keJianOrExamInfoModel.showMessage];
-    self.tipLabel.text = keJianOrExamInfoModel.showMessage;
+    self.courseNameLabel.text = examParaModel.examTitle;
+    self.ciShuContentLabel.text = HXIntToString(examParaModel.leftExamNum);
+    NSString *beginTime = [HXCommonUtil timestampSwitchTime:([examParaModel.beginTime integerValue]/1000) andFormatter:nil];
+    NSString *endTime = [HXCommonUtil timestampSwitchTime:([examParaModel.endTime integerValue]/1000) andFormatter:nil];
+    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",beginTime,endTime];
+    self.tipLabel.hidden = [HXCommonUtil isNull:examParaModel.showMessage];
+    self.tipLabel.text = examParaModel.showMessage;
     
-    self.chechRecordBtn.hidden = (keJianOrExamInfoModel.vr_CJ==1?NO:YES);
+    self.chechRecordBtn.hidden = !examParaModel.allowSeeResult;
     
     ///是否能考试或者看课
-    if(keJianOrExamInfoModel.isCan==1){
+    if(examParaModel.canExam){
         self.startKaoShiBtn.enabled =YES;
         self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
     }else{
         self.startKaoShiBtn.enabled =NO;
         self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
     }
-    
 }
 
 #pragma mark - UI

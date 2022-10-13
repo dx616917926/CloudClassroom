@@ -8,7 +8,9 @@
 #import "HXStudyReportViewController.h"
 #import "UIView+TransitionColor.h"
 #import "HXStudyReportKeJianCell.h"
+#import "HXStudyReportXXBXCell.h"
 #import "HXStudyReportZuoYeCell.h"
+#import "HXCourseReportModel.h"
 
 @interface HXStudyReportViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -41,6 +43,12 @@
 
 @property(nonatomic,strong) NSMutableArray *dataArray;
 
+@property(nonatomic,strong) HXCourseReportModel *courseReportModel;
+
+@property(nonatomic,strong) HXCourseReportModel *zyCourseReportModel;
+
+@property(nonatomic,strong) HXCourseReportModel *qmCourseReportModel;
+
 @end
 
 @implementation HXStudyReportViewController
@@ -68,14 +76,43 @@
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
-//            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
-//            [self.dataArray removeAllObjects];
-//            [self.dataArray addObjectsFromArray:list];
-//            [self.mainTableView reloadData];
+            self.courseReportModel = [HXCourseReportModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            //刷新界面数据
+            [self refreshUI];
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
     }];
+}
+
+-(void)refreshUI{
+    
+    self.fenShuLabel.text = self.courseReportModel.finalScore;
+    
+    HXCourseItemModel *kejianModule = self.courseReportModel.kjInfo.firstObject;
+    HXCourseItemModel *xxbxModule = self.courseReportModel.xxbxInfo;
+    HXCourseItemModel *zyModule = self.courseReportModel.zyInfo.firstObject;
+    HXCourseItemModel *qmModule = self.courseReportModel.qmInfo.firstObject;
+    
+    self.zyCourseReportModel = [[HXCourseReportModel alloc] init];
+    self.zyCourseReportModel.type = 1;
+    self.zyCourseReportModel.zyInfo = self.courseReportModel.zyInfo;
+    
+    self.qmCourseReportModel = [[HXCourseReportModel alloc] init];
+    self.qmCourseReportModel.type = 2;
+    self.qmCourseReportModel.qmInfo = self.courseReportModel.qmInfo;
+    
+//    self.keJianXueTitleLabel.text = (kejianModule.kjButtonName?kejianModule.kjButtonName: @"课件学习");
+    self.keJianXueContentLabel.text = (kejianModule.selfRate?kejianModule.selfRate:@"0%");
+//    self.xueXiBiaoXianTitleLabel.text = (xxbxModule.moduleButtonName?xxbxModule.moduleButtonName:@"学习表现");
+    self.xueXiBiaoXianContentLabel.text = (xxbxModule.moduleRate?xxbxModule.moduleRate:@"0%");
+//    self.pingShiZuoYeTitleLabel.text = (zyModule.moduleButtonName?zyModule.moduleButtonName:@"平时作业");
+    self.pingShiZuoYeContentLabel.text = (zyModule.moduleRate?zyModule.moduleRate:@"0%");
+//    self.qiMoKaoShiTitleLabel.text = (qmModule.moduleButtonName?qmModule.moduleButtonName:@"期末考试");
+    self.qiMoKaoShiContentLabel.text = (qmModule.moduleRate?qmModule.moduleRate:@"0%");
+    
+    
+    [self.mainTableView reloadData];
 }
 
 
@@ -97,30 +134,51 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row<2) {
-        return 178;
+    if(indexPath.row==0){
+        return (self.courseReportModel.kjInfo.count>0?(127*self.courseReportModel.kjInfo.count+106):0);
+    }else if (indexPath.row==1) {
+        return 148;
+    }else if (indexPath.row==2) {
+        return (self.courseReportModel.zyInfo.count>0?(127*self.courseReportModel.zyInfo.count+106):0);
     }else{
-        return 359;
+        return (self.courseReportModel.qmInfo.count>0?(127*self.courseReportModel.qmInfo.count+106):0);
     }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *studyReportKeJianCellIdentifier = @"HXStudyReportKeJianCellIdentifier";
-    HXStudyReportKeJianCell *studyReportKeJianCell = [tableView dequeueReusableCellWithIdentifier:studyReportKeJianCellIdentifier];
+    static NSString *keJianCellIdentifier = @"HXStudyReportKeJianCellIdentifier";
+    HXStudyReportKeJianCell *keJianCell = [tableView dequeueReusableCellWithIdentifier:keJianCellIdentifier];
     
-    static NSString *studyReportZuoYeCellIdentifier = @"HXStudyReportZuoYeCellIdentifier";
-    HXStudyReportZuoYeCell *studyReportZuoYeCell = [tableView dequeueReusableCellWithIdentifier:studyReportZuoYeCellIdentifier];
+    static NSString *xXBXCellIdentifier = @"HXStudyReportXXBXCellIdentifier";
+    HXStudyReportXXBXCell *xXBXCell = [tableView dequeueReusableCellWithIdentifier:xXBXCellIdentifier];
     
-    if (indexPath.row<2) {
-        studyReportKeJianCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        studyReportKeJianCell = [[HXStudyReportKeJianCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportKeJianCellIdentifier];
-        return studyReportKeJianCell;
-    }else{
-        studyReportZuoYeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        studyReportZuoYeCell = [[HXStudyReportZuoYeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:studyReportZuoYeCellIdentifier];
-        return studyReportZuoYeCell;
+    static NSString *zuoYeCellIdentifier = @"HXStudyReportZuoYeCellIdentifier";
+    HXStudyReportZuoYeCell *zuoYeCell = [tableView dequeueReusableCellWithIdentifier:zuoYeCellIdentifier];
+    
+    if (indexPath.row==0) {//课件学习
+        keJianCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        keJianCell = [[HXStudyReportKeJianCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:keJianCellIdentifier];
+        keJianCell.courseReportModel = self.courseReportModel;
+        return keJianCell;
+    }else if (indexPath.row==1) {//学习表现
+        xXBXCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        xXBXCell = [[HXStudyReportXXBXCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xXBXCellIdentifier];
+        xXBXCell.courseItemModel = self.courseReportModel.xxbxInfo;
+        return xXBXCell;
+    }else  if (indexPath.row==2) {//平时作业
+        zuoYeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        zuoYeCell = [[HXStudyReportZuoYeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:zuoYeCellIdentifier];
+        HXCourseReportModel *courseReportModel = self.zyCourseReportModel;
+        zuoYeCell.courseReportModel = courseReportModel;
+        return zuoYeCell;
+    }else{//期末考试
+        zuoYeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        zuoYeCell = [[HXStudyReportZuoYeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:zuoYeCellIdentifier];
+        HXCourseReportModel *courseReportModel = self.qmCourseReportModel;
+        zuoYeCell.courseReportModel = courseReportModel;
+        return zuoYeCell;
     }
     
 }
@@ -348,7 +406,7 @@
         _fenShuLabel.textAlignment = NSTextAlignmentLeft;
         _fenShuLabel.font = [UIFont fontWithName: @"Verdana-Bold"  size:36];
         _fenShuLabel.textColor = COLOR_WITH_ALPHA(0xFFDE30, 1);
-        _fenShuLabel.text = @"64";
+        
     }
     return _fenShuLabel;
 }
@@ -462,7 +520,7 @@
         _keJianXueContentLabel.textAlignment = NSTextAlignmentCenter;
         _keJianXueContentLabel.font = HXBoldFont(14);
         _keJianXueContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _keJianXueContentLabel.text = @"10%";
+
     }
     return _keJianXueContentLabel;
 }
@@ -496,7 +554,7 @@
         _xueXiBiaoXianContentLabel.textAlignment = NSTextAlignmentCenter;
         _xueXiBiaoXianContentLabel.font = HXBoldFont(14);
         _xueXiBiaoXianContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _xueXiBiaoXianContentLabel.text = @"10";
+        
     }
     return _xueXiBiaoXianContentLabel;
 }
@@ -529,7 +587,7 @@
         _pingShiZuoYeContentLabel.textAlignment = NSTextAlignmentCenter;
         _pingShiZuoYeContentLabel.font = HXBoldFont(14);
         _pingShiZuoYeContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _pingShiZuoYeContentLabel.text = @"10%";
+        
     }
     return _pingShiZuoYeContentLabel;
 }
@@ -561,7 +619,7 @@
         _qiMoKaoShiContentLabel.textAlignment = NSTextAlignmentCenter;
         _qiMoKaoShiContentLabel.font = HXBoldFont(14);
         _qiMoKaoShiContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _qiMoKaoShiContentLabel.text = @"80%";
+        
     }
     return _qiMoKaoShiContentLabel;
 }

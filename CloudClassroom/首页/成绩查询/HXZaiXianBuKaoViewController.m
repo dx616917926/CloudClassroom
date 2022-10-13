@@ -16,6 +16,10 @@
 @property(nonatomic,strong) UITableView *mainTableView;
 @property(nonatomic,strong) UICollectionView *mainCollectionView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
+@property(nonatomic,strong) NSMutableArray *bukaoArray;
+
 @end
 
 @implementation HXZaiXianBuKaoViewController
@@ -26,16 +30,42 @@
     
     //UI
     [self createUI];
+    //在线补考成绩查询
+    [self getBKScore];
 }
 
 
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
-}
+#pragma mark - 在线补考成绩查询
+-(void)getBKScore{
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentid)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetBKScore needMd5:YES withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXScoreBatchModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainCollectionView reloadData];
+            if(list.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+            HXScoreBatchModel *scoreBatchModel = self.dataArray.firstObject;
+            scoreBatchModel.isSelected = YES;
+            [self.bukaoArray removeAllObjects];
+            [self.bukaoArray addObjectsFromArray:scoreBatchModel.bkInfo];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
@@ -49,18 +79,30 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
-    return 10;
+    return self.dataArray.count;
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     HXZaiXianXueQiCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([HXZaiXianXueQiCell class]) forIndexPath:indexPath];
+    cell.scoreBatchModel = self.dataArray[indexPath.row];
     return cell;
     
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXScoreBatchModel *model = obj;
+        model.isSelected = NO;
+        if(indexPath.row==idx){
+            model.isSelected = YES;
+            [self.bukaoArray removeAllObjects];
+            [self.bukaoArray addObjectsFromArray:model.bkInfo];
+        }
+    }];
+    [self.mainCollectionView reloadData];
+    [self.mainTableView reloadData];
 }
 
 
@@ -71,7 +113,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.bukaoArray.count;
 }
 
 
@@ -92,17 +134,14 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.isFirst = (indexPath.row==0);
-    cell.isLast = (indexPath.row==4);
+    cell.isLast = (indexPath.row==self.bukaoArray.count-1);
+    cell.scoreModel = self.bukaoArray[indexPath.row];
     return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    HXScoreDetailsViewController *vc = [[HXScoreDetailsViewController alloc] init];
-    vc.sc_navigationBarHidden = YES;
-    [self.navigationController pushViewController:vc animated:YES];
-    
 }
 
 #pragma mark - UI
@@ -129,15 +168,27 @@
     
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getBKScore)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+    
 }
 
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+-(NSMutableArray *)bukaoArray{
+    if(!_bukaoArray){
+        _bukaoArray = [NSMutableArray array];
+    }
+    return _bukaoArray;
+}
+
 -(UICollectionView *)mainCollectionView{
     if (!_mainCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];

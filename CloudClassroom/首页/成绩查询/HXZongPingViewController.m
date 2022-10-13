@@ -31,26 +31,30 @@
 
 
 
-#pragma mark - 成绩查询
+#pragma mark - 总评成绩查询
 -(void)getScoreList{
 
-    
     NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
         @"studentid":HXSafeString(studentid)
     };
     
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetScoreClassPlan needMd5:NO withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetZKScore needMd5:YES withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
             NSArray *list = [HXScoreModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
+            if(list.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
         }
     } failure:^(NSError * _Nonnull error) {
-        
+        [self.mainTableView.mj_header endRefreshing];
     }];
 }
 

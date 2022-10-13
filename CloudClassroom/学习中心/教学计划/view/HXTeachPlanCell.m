@@ -89,7 +89,7 @@
     self.keNeiXueShiContentLabel.text = HXIntToString(classPlanModel.classHour);
     self.shangJiXueShiContentLabel.text = HXIntToString(classPlanModel.computerHour);
     self.shiJianXueShiContentLabel.text = HXIntToString(classPlanModel.practiseHour);
-    self.ziXueXueShiContentLabel.text = HXIntToString(classPlanModel.practiseHour);
+    self.ziXueXueShiContentLabel.text = HXIntToString(classPlanModel.designHour);
     
 }
 

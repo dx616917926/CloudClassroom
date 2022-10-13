@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXScoreBatchModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXZaiXianXueQiCell : UICollectionViewCell
+
+@property(nonatomic,strong) HXScoreBatchModel *scoreBatchModel;
 
 @end
 

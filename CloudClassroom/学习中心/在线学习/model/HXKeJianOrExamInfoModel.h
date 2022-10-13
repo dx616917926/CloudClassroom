@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HXExamParaModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -53,6 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *batchName;
 ///模块类型 1作业 2期末考试
 @property(nonatomic, assign) NSInteger moduleType;
+
+///作业考试数组
+@property(nonatomic, strong) NSArray<HXExamParaModel*> *examPara;
 
 
 @end

@@ -27,6 +27,23 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setScoreBatchModel:(HXScoreBatchModel *)scoreBatchModel{
+    
+    _scoreBatchModel = scoreBatchModel;
+    
+    self.titleLabel.text = scoreBatchModel.batchName;
+    
+    if(scoreBatchModel.isSelected){
+        self.bigBackGroundView.backgroundColor = COLOR_WITH_ALPHA(0xDDE4FF, 1);
+        self.titleLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        self.titleLabel.font = HXBoldFont(12);
+    }else{
+        self.bigBackGroundView.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
+        self.titleLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
+        self.titleLabel.font = HXFont(12);
+    }
+}
 
 #pragma mark - UI布局
 -(void)createUI{
@@ -54,7 +71,7 @@
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = HXFont(12);
         _titleLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _titleLabel.text = @"202204春季";
+        
     }
     return _titleLabel;
 }

@@ -81,8 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /*******************************************************************************成绩相关操作*******************************************************************************************************/
-//成绩查询
-#define HXPOST_GetScoreClassPlan                                   @"/api/ScoreList/GetClassPlan"
+//总评成绩查询
+#define HXPOST_GetZKScore                                   @"/api/ScoreList/GetZKScore"
+
+//在线补考成绩查询
+#define HXPOST_GetBKScore                                   @"/api/ScoreList/GetBKScore"
 
 
 

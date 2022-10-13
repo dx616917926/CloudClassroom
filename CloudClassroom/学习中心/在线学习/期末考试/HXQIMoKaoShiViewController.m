@@ -12,7 +12,10 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) HXKeJianOrExamInfoModel *keJianOrExamInfoModel;
+
 @property(nonatomic,strong) NSMutableArray *dataArray;
+
 
 @end
 
@@ -48,8 +51,9 @@
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
             NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            self.keJianOrExamInfoModel = list.firstObject;
             [self.dataArray removeAllObjects];
-            [self.dataArray addObjectsFromArray:list];
+            [self.dataArray addObjectsFromArray:self.keJianOrExamInfoModel.examPara];
             [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
@@ -69,9 +73,9 @@
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
-            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            self.keJianOrExamInfoModel = [HXKeJianOrExamInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
             [self.dataArray removeAllObjects];
-            [self.dataArray addObjectsFromArray:list];
+            [self.dataArray addObjectsFromArray:self.keJianOrExamInfoModel.examPara];
             [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
@@ -123,7 +127,9 @@
         cell = [[HXQiMoKaoShiCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:qiMoKaoShiCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.keJianOrExamInfoModel = self.dataArray[indexPath.row];
+    HXExamParaModel *examParaModel = self.dataArray[indexPath.row];
+    examParaModel.showMessage = self.keJianOrExamInfoModel.showMessage;
+    cell.examParaModel = examParaModel;
     return cell;
 }
 

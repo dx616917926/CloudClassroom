@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXQiMoKaoShiCell : UITableViewCell
 
-@property(nonatomic,strong) HXKeJianOrExamInfoModel *keJianOrExamInfoModel;
+@property(nonatomic,strong) HXExamParaModel *examParaModel;
 
 @end
 

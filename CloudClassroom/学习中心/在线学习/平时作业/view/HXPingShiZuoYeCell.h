@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXPingShiZuoYeCell : UITableViewCell
 
-@property(nonatomic,strong) HXKeJianOrExamInfoModel *keJianOrExamInfoModel;
+@property(nonatomic,strong) HXExamParaModel *examParaModel;
 
 @end
 

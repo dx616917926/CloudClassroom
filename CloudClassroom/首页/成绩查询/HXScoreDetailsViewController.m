@@ -24,6 +24,9 @@
 @property(nonatomic,strong) UIImageView *deFenIcon;
 
 @property(nonatomic,strong) UIImageView *bottomBgImageView;
+
+
+@property(nonatomic,strong) UIView *middleContainerView;
 //课件学习
 @property(nonatomic,strong) UIView *keJianXueXiView;
 @property(nonatomic,strong) UIImageView *keJianXueXiIcon;
@@ -48,14 +51,26 @@
 //成绩详情
 @property(nonatomic,strong) UIView *detailsContainerView;
 @property(nonatomic,strong) UILabel *detailsTitleLabel;
+
+@property(nonatomic,strong) UIView *keJianXueXiContainerView;
 @property(nonatomic,strong) UILabel *keJianXueXiTitleLabel;
 @property(nonatomic,strong) UILabel *keJianXueXiDeFenLabel;
+
+@property(nonatomic,strong) UIView *pingShiZuoYeContainerView;
 @property(nonatomic,strong) UILabel *pingShiZuoYeTitleLabel;
 @property(nonatomic,strong) UILabel *pingShiZuoYeDeFenLabel;
+
+@property(nonatomic,strong) UIView *xueXiBiaoXianContainerView;
 @property(nonatomic,strong) UILabel *xueXiBiaoXianTitleLabel;
 @property(nonatomic,strong) UILabel *xueXiBiaoXianDeFenLabel;
+
+@property(nonatomic,strong) UIView *qiMoKaoShiContainerView;
 @property(nonatomic,strong) UILabel *qiMoKaoShiTitleLabel;
 @property(nonatomic,strong) UILabel *qiMoKaoShiDeFenLabel;
+
+@property(nonatomic,strong) UIView *bukaoContainerView;
+@property(nonatomic,strong) UILabel *bukaoTitleLabel;
+@property(nonatomic,strong) UILabel *bukaoDeFenLabel;
 
 
 
@@ -101,12 +116,14 @@
     [self.topBgImageView addSubview:self.fenLabel];
     [self.topBgImageView addSubview:self.tipLabel];
     
-    [self.mainScrollView addSubview:self.keJianXueXiView];
-    [self.mainScrollView addSubview:self.pingShiZuoYeView];
-    [self.mainScrollView addSubview:self.xueXiBiaoXianView];
-    [self.mainScrollView addSubview:self.qiMoKaoShiView];
-    [self.mainScrollView addSubview:self.detailsContainerView];
+    [self.mainScrollView addSubview:self.middleContainerView];
     
+    [self.middleContainerView addSubview:self.keJianXueXiView];
+    [self.middleContainerView addSubview:self.pingShiZuoYeView];
+    [self.middleContainerView addSubview:self.xueXiBiaoXianView];
+    [self.middleContainerView addSubview:self.qiMoKaoShiView];
+    
+
     [self.keJianXueXiView addSubview:self.keJianXueXiIcon];
     [self.keJianXueXiView addSubview:self.keJianXueXiBFB];
     [self.keJianXueXiView addSubview:self.keJianXueXiNameLabel];
@@ -123,15 +140,29 @@
     [self.qiMoKaoShiView addSubview:self.qiMoKaoShiBFB];
     [self.qiMoKaoShiView addSubview:self.qiMoKaoShiNameLabel];
     
+    [self.mainScrollView addSubview:self.detailsContainerView];
+    
     [self.detailsContainerView addSubview:self.detailsTitleLabel];
-    [self.detailsContainerView addSubview:self.keJianXueXiTitleLabel];
-    [self.detailsContainerView addSubview:self.keJianXueXiDeFenLabel];
-    [self.detailsContainerView addSubview:self.xueXiBiaoXianTitleLabel];
-    [self.detailsContainerView addSubview:self.xueXiBiaoXianDeFenLabel];
-    [self.detailsContainerView addSubview:self.pingShiZuoYeTitleLabel];
-    [self.detailsContainerView addSubview:self.pingShiZuoYeDeFenLabel];
-    [self.detailsContainerView addSubview:self.qiMoKaoShiTitleLabel];
-    [self.detailsContainerView addSubview:self.qiMoKaoShiDeFenLabel];
+    
+    [self.detailsContainerView addSubview:self.keJianXueXiContainerView];
+    [self.keJianXueXiContainerView addSubview:self.keJianXueXiTitleLabel];
+    [self.keJianXueXiContainerView addSubview:self.keJianXueXiDeFenLabel];
+    
+    [self.detailsContainerView addSubview:self.xueXiBiaoXianContainerView];
+    [self.xueXiBiaoXianContainerView addSubview:self.xueXiBiaoXianTitleLabel];
+    [self.xueXiBiaoXianContainerView addSubview:self.xueXiBiaoXianDeFenLabel];
+    
+    [self.detailsContainerView addSubview:self.pingShiZuoYeContainerView];
+    [self.pingShiZuoYeContainerView addSubview:self.pingShiZuoYeTitleLabel];
+    [self.pingShiZuoYeContainerView addSubview:self.pingShiZuoYeDeFenLabel];
+    
+    [self.detailsContainerView addSubview:self.qiMoKaoShiContainerView];
+    [self.qiMoKaoShiContainerView addSubview:self.qiMoKaoShiTitleLabel];
+    [self.qiMoKaoShiContainerView addSubview:self.qiMoKaoShiDeFenLabel];
+    
+    [self.detailsContainerView addSubview:self.bukaoContainerView];
+    [self.bukaoContainerView addSubview:self.bukaoTitleLabel];
+    [self.bukaoContainerView addSubview:self.bukaoDeFenLabel];
     
     
     self.topBgImageView.sd_layout
@@ -206,37 +237,27 @@
     .rightEqualToView(self.courseNameLabel)
     .heightIs(16);
     
-    
-    self.keJianXueXiView.sd_layout
+    self.middleContainerView.sd_layout
     .topSpaceToView(self.mainScrollView, 25)
     .leftSpaceToView(self.mainScrollView, 16)
-    .widthIs(_kpw(160))
-    .heightIs(77);
-    [self.keJianXueXiView updateLayout];
+    .rightSpaceToView(self.mainScrollView, 16);
+    
+    self.keJianXueXiView.sd_layout.heightIs(77);
+    self.keJianXueXiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
+    self.xueXiBiaoXianView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
+    self.qiMoKaoShiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
+    
+    [self.middleContainerView setupAutoMarginFlowItems:@[self.keJianXueXiView,self.pingShiZuoYeView,self.xueXiBiaoXianView,self.qiMoKaoShiView] withPerRowItemsCount:2 itemWidth:_kpw(160) verticalMargin:16 verticalEdgeInset:0 horizontalEdgeInset:0];
+    
 
     
-    self.pingShiZuoYeView.sd_layout
-    .centerYEqualToView(self.keJianXueXiView)
-    .rightSpaceToView(self.mainScrollView, 16)
-    .widthRatioToView(self.keJianXueXiView, 1)
-    .heightRatioToView(self.keJianXueXiView, 1);
+    [self.keJianXueXiView updateLayout];
     [self.pingShiZuoYeView updateLayout];
-    
-    self.xueXiBiaoXianView.sd_layout
-    .topSpaceToView(self.keJianXueXiView, 16)
-    .leftEqualToView(self.keJianXueXiView)
-    .widthRatioToView(self.keJianXueXiView, 1)
-    .heightRatioToView(self.keJianXueXiView, 1);
     [self.xueXiBiaoXianView updateLayout];
-    
-    self.qiMoKaoShiView.sd_layout
-    .centerYEqualToView(self.xueXiBiaoXianView)
-    .rightEqualToView(self.pingShiZuoYeView)
-    .widthRatioToView(self.keJianXueXiView, 1)
-    .heightRatioToView(self.keJianXueXiView, 1);
     [self.qiMoKaoShiView updateLayout];
     
-    
+
+
     // 渐变
     [self.keJianXueXiView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xFFFFFF, 0.3) endColor:COLOR_WITH_ALPHA(0xFFFFFF, 0.8)];
     // 模糊
@@ -350,7 +371,7 @@
     .heightRatioToView(self.keJianXueXiBFB, 1);
     
     self.detailsContainerView.sd_layout
-    .topSpaceToView(self.xueXiBiaoXianView, 20)
+    .topSpaceToView(self.middleContainerView, 20)
     .leftSpaceToView(self.mainScrollView, 12)
     .rightSpaceToView(self.mainScrollView, 12);
     
@@ -360,55 +381,98 @@
     .rightSpaceToView(self.detailsContainerView, 16)
     .heightIs(21);
     
+    self.keJianXueXiContainerView.sd_layout
+    .topSpaceToView(self.detailsTitleLabel, 0)
+    .leftEqualToView(self.detailsContainerView)
+    .rightEqualToView(self.detailsContainerView)
+    .heightIs(40);
+    
     self.keJianXueXiTitleLabel.sd_layout
-    .topSpaceToView(self.detailsTitleLabel, 16)
-    .leftEqualToView(self.detailsTitleLabel)
-    .widthIs(70)
+    .centerYEqualToView(self.keJianXueXiContainerView)
+    .leftSpaceToView(self.keJianXueXiContainerView, 16)
+    .widthIs(60)
     .heightIs(21);
     
     self.keJianXueXiDeFenLabel.sd_layout
-    .centerYEqualToView(self.keJianXueXiTitleLabel)
-    .rightSpaceToView(self.detailsContainerView, 16)
+    .centerYEqualToView(self.keJianXueXiContainerView)
+    .rightSpaceToView(self.keJianXueXiContainerView, 16)
     .widthIs(80)
     .heightIs(21);
     
+    self.xueXiBiaoXianContainerView.sd_layout
+    .topSpaceToView(self.keJianXueXiContainerView, 0)
+    .leftEqualToView(self.detailsContainerView)
+    .rightEqualToView(self.detailsContainerView)
+    .heightIs(40);
+    
     self.xueXiBiaoXianTitleLabel.sd_layout
-    .topSpaceToView(self.keJianXueXiTitleLabel, 16)
-    .leftEqualToView(self.keJianXueXiTitleLabel)
+    .centerYEqualToView(self.xueXiBiaoXianContainerView)
+    .leftSpaceToView(self.xueXiBiaoXianContainerView, 16)
     .widthRatioToView(self.keJianXueXiTitleLabel, 1)
     .heightRatioToView(self.keJianXueXiTitleLabel, 1);
     
     self.xueXiBiaoXianDeFenLabel.sd_layout
-    .centerYEqualToView(self.xueXiBiaoXianTitleLabel)
-    .rightEqualToView(self.keJianXueXiDeFenLabel)
+    .centerYEqualToView(self.xueXiBiaoXianContainerView)
+    .rightSpaceToView(self.xueXiBiaoXianContainerView, 16)
     .widthRatioToView(self.keJianXueXiDeFenLabel, 1)
     .heightRatioToView(self.keJianXueXiDeFenLabel, 1);
     
+    self.pingShiZuoYeContainerView.sd_layout
+    .topSpaceToView(self.xueXiBiaoXianContainerView, 0)
+    .leftEqualToView(self.detailsContainerView)
+    .rightEqualToView(self.detailsContainerView)
+    .heightIs(40);
+    
     self.pingShiZuoYeTitleLabel.sd_layout
-    .topSpaceToView(self.xueXiBiaoXianTitleLabel, 16)
-    .leftEqualToView(self.keJianXueXiTitleLabel)
+    .centerYEqualToView(self.pingShiZuoYeContainerView)
+    .leftSpaceToView(self.pingShiZuoYeContainerView, 16)
     .widthRatioToView(self.keJianXueXiTitleLabel, 1)
     .heightRatioToView(self.keJianXueXiTitleLabel, 1);
     
     self.pingShiZuoYeDeFenLabel.sd_layout
-    .centerYEqualToView(self.pingShiZuoYeTitleLabel)
-    .rightEqualToView(self.keJianXueXiDeFenLabel)
+    .centerYEqualToView(self.pingShiZuoYeContainerView)
+    .rightSpaceToView(self.pingShiZuoYeContainerView, 16)
     .widthRatioToView(self.keJianXueXiDeFenLabel, 1)
     .heightRatioToView(self.keJianXueXiDeFenLabel, 1);
     
+    self.qiMoKaoShiContainerView.sd_layout
+    .topSpaceToView(self.pingShiZuoYeContainerView, 0)
+    .leftEqualToView(self.detailsContainerView)
+    .rightEqualToView(self.detailsContainerView)
+    .heightIs(40);
+    
     self.qiMoKaoShiTitleLabel.sd_layout
-    .topSpaceToView(self.pingShiZuoYeTitleLabel, 16)
-    .leftEqualToView(self.keJianXueXiTitleLabel)
+    .centerYEqualToView(self.qiMoKaoShiContainerView)
+    .leftSpaceToView(self.qiMoKaoShiContainerView, 16)
     .widthRatioToView(self.keJianXueXiTitleLabel, 1)
     .heightRatioToView(self.keJianXueXiTitleLabel, 1);
     
     self.qiMoKaoShiDeFenLabel.sd_layout
-    .centerYEqualToView(self.qiMoKaoShiTitleLabel)
-    .rightEqualToView(self.keJianXueXiDeFenLabel)
+    .centerYEqualToView(self.qiMoKaoShiContainerView)
+    .rightSpaceToView(self.qiMoKaoShiContainerView, 16)
     .widthRatioToView(self.keJianXueXiDeFenLabel, 1)
     .heightRatioToView(self.keJianXueXiDeFenLabel, 1);
     
-    [self.detailsContainerView setupAutoHeightWithBottomView:self.qiMoKaoShiTitleLabel bottomMargin:16];
+    
+    self.bukaoContainerView.sd_layout
+    .topSpaceToView(self.qiMoKaoShiContainerView, 0)
+    .leftEqualToView(self.detailsContainerView)
+    .rightEqualToView(self.detailsContainerView)
+    .heightIs(40);
+    
+    self.bukaoTitleLabel.sd_layout
+    .centerYEqualToView(self.bukaoContainerView)
+    .leftSpaceToView(self.bukaoContainerView, 16)
+    .widthRatioToView(self.keJianXueXiTitleLabel, 1)
+    .heightRatioToView(self.keJianXueXiTitleLabel, 1);
+    
+    self.bukaoDeFenLabel.sd_layout
+    .centerYEqualToView(self.bukaoContainerView)
+    .rightSpaceToView(self.bukaoContainerView, 16)
+    .widthRatioToView(self.keJianXueXiDeFenLabel, 1)
+    .heightRatioToView(self.keJianXueXiDeFenLabel, 1);
+    
+    [self.detailsContainerView setupAutoHeightWithBottomView:self.bukaoContainerView bottomMargin:0];
     
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.detailsContainerView bottomMargin:50];
@@ -503,7 +567,7 @@
         _tipLabel.textAlignment = NSTextAlignmentLeft;
         _tipLabel.font = HXFont(11);
         _tipLabel.textColor =COLOR_WITH_ALPHA(0x999999, 1);
-        _tipLabel.text = @"总分由各部分得分折合权重结算而来";
+        _tipLabel.text = @"总分由各部分得分折合权重结算而来/n最终成绩默认取最高分";
     }
     return _tipLabel;
 }
@@ -526,6 +590,17 @@
     }
     return _mainScrollView;
 }
+
+-(UIView *)middleContainerView{
+    if (!_middleContainerView) {
+        _middleContainerView = [[UIView alloc] init];
+        _middleContainerView.clipsToBounds = YES;
+        _middleContainerView.backgroundColor = UIColor.clearColor;
+        
+    }
+    return _middleContainerView;
+}
+
 
 -(UIView *)keJianXueXiView{
     if (!_keJianXueXiView) {
@@ -720,6 +795,15 @@
     return _detailsTitleLabel;
 }
 
+
+-(UIView *)keJianXueXiContainerView{
+    if (!_keJianXueXiContainerView) {
+        _keJianXueXiContainerView = [[UIView alloc] init];
+        _keJianXueXiContainerView.clipsToBounds = YES;
+        _keJianXueXiContainerView.backgroundColor = UIColor.whiteColor;
+    }
+    return _keJianXueXiContainerView;
+}
 -(UILabel *)keJianXueXiTitleLabel{
     if (!_keJianXueXiTitleLabel) {
         _keJianXueXiTitleLabel = [[UILabel alloc] init];
@@ -740,6 +824,15 @@
         _keJianXueXiDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }
     return _keJianXueXiDeFenLabel;
+}
+
+-(UIView *)xueXiBiaoXianContainerView{
+    if (!_xueXiBiaoXianContainerView) {
+        _xueXiBiaoXianContainerView = [[UIView alloc] init];
+        _xueXiBiaoXianContainerView.clipsToBounds = YES;
+        _xueXiBiaoXianContainerView.backgroundColor = UIColor.whiteColor;
+    }
+    return _xueXiBiaoXianContainerView;
 }
 
 -(UILabel *)xueXiBiaoXianTitleLabel{
@@ -764,6 +857,15 @@
     return _xueXiBiaoXianDeFenLabel;
 }
 
+-(UIView *)pingShiZuoYeContainerView{
+    if (!_pingShiZuoYeContainerView) {
+        _pingShiZuoYeContainerView = [[UIView alloc] init];
+        _pingShiZuoYeContainerView.clipsToBounds = YES;
+        _pingShiZuoYeContainerView.backgroundColor = UIColor.whiteColor;
+    }
+    return _pingShiZuoYeContainerView;
+}
+
 -(UILabel *)pingShiZuoYeTitleLabel{
     if (!_pingShiZuoYeTitleLabel) {
         _pingShiZuoYeTitleLabel = [[UILabel alloc] init];
@@ -786,6 +888,15 @@
     return _pingShiZuoYeDeFenLabel;
 }
 
+
+-(UIView *)qiMoKaoShiContainerView{
+    if (!_qiMoKaoShiContainerView) {
+        _qiMoKaoShiContainerView = [[UIView alloc] init];
+        _qiMoKaoShiContainerView.clipsToBounds = YES;
+        _qiMoKaoShiContainerView.backgroundColor = UIColor.whiteColor;
+    }
+    return _qiMoKaoShiContainerView;
+}
 -(UILabel *)qiMoKaoShiTitleLabel{
     if (!_qiMoKaoShiTitleLabel) {
         _qiMoKaoShiTitleLabel = [[UILabel alloc] init];
@@ -809,6 +920,34 @@
 }
 
 
+-(UIView *)bukaoContainerView{
+    if (!_bukaoContainerView) {
+        _bukaoContainerView = [[UIView alloc] init];
+        _bukaoContainerView.clipsToBounds = YES;
+        _bukaoContainerView.backgroundColor = UIColor.whiteColor;
+    }
+    return _bukaoContainerView;
+}
+-(UILabel *)bukaoTitleLabel{
+    if (!_bukaoTitleLabel) {
+        _bukaoTitleLabel = [[UILabel alloc] init];
+        _bukaoTitleLabel.textAlignment = NSTextAlignmentLeft;
+        _bukaoTitleLabel.font = HXFont(15);
+        _bukaoTitleLabel.textColor =COLOR_WITH_ALPHA(0x999999, 1);
+        _bukaoTitleLabel.text = @"期末考试";
+    }
+    return _bukaoTitleLabel;
+}
 
+-(UILabel *)bukaoDeFenLabel{
+    if (!_bukaoDeFenLabel) {
+        _bukaoDeFenLabel = [[UILabel alloc] init];
+        _bukaoDeFenLabel.textAlignment = NSTextAlignmentRight;
+        _bukaoDeFenLabel.font = HXBoldFont(15);
+        _bukaoDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
+        _bukaoDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+    }
+    return _bukaoDeFenLabel;
+}
 
 @end

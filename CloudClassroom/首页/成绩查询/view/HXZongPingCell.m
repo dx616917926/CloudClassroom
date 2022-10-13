@@ -70,6 +70,33 @@
     }
 }
 
+-(void)setScoreModel:(HXScoreModel *)scoreModel{
+    
+    _scoreModel = scoreModel;
+    
+    if(scoreModel.isNetCourse){
+        self.courseIcon.sd_layout.widthIs(16);
+        self.courseNameLabel.sd_layout.leftSpaceToView(self.courseIcon, 2);
+    }else{
+        self.courseIcon.sd_layout.widthIs(0);
+        self.courseNameLabel.sd_layout.leftSpaceToView(self.courseIcon, 0);
+    }
+    [self.courseNameLabel updateLayout];
+    
+    self.courseNameLabel.text = scoreModel.termCourseName;
+    self.xueQiLabel.text = @"第一学期";
+    
+    //分数字体颜色未及格（60分以下）用红色标红，及格（60分及60分以上）用主题色
+    if([scoreModel.commonTestScore integerValue]>=60){
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+    }else{
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+    }
+    
+    
+    
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -111,7 +138,7 @@
     
     
     self.courseNameLabel.sd_layout
-    .centerYEqualToView(self.courseIcon)
+    .topSpaceToView(self.bigBackgroundView, 16)
     .leftSpaceToView(self.courseIcon, 2)
     .rightSpaceToView(self.deFenLabel, 16)
     .heightIs(18);
@@ -154,7 +181,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXFont(13);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"毛泽东思想和中国特色社会主义理论体系概论";
+        
     }
     return _courseNameLabel;
 }
@@ -164,7 +191,7 @@
         _xueQiLabel = [[UILabel alloc] init];
         _xueQiLabel.font = HXFont(12);
         _xueQiLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _xueQiLabel.text = @"第一学期";
+        
     }
     return _xueQiLabel;
 }
@@ -175,7 +202,7 @@
         _deFenLabel.textAlignment = NSTextAlignmentRight;
         _deFenLabel.font = HXFont(10);
         _deFenLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"68" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"68分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+       
     }
     return _deFenLabel;
 }

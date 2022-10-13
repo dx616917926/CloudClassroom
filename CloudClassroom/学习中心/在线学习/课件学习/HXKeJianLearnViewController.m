@@ -29,7 +29,7 @@
     //获取正考考试列表和看课列表
     [self getExamList];
     //获取人脸识别设置
-    //[self getFaceSet];
+    [self getFaceSet];
 }
 
 #pragma mark -Setter
@@ -55,6 +55,11 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
+            if(list.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];

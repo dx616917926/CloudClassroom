@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger computerHour;
 ///实践学时
 @property(nonatomic, assign) NSInteger practiseHour;
+///自学学时
+@property(nonatomic, assign) NSInteger designHour;
 ///总学分
 @property(nonatomic, assign) NSInteger coursePoint;
 ///考核方式

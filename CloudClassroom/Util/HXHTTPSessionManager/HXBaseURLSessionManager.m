@@ -20,7 +20,7 @@
         NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
         _sharedClient = [[HXBaseURLSessionManager alloc] initWithBaseURL:HXSafeURL(baseUreStr)];
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
-        _sharedClient.requestSerializer.timeoutInterval = 30;
+        _sharedClient.requestSerializer.timeoutInterval = 15;
         
     });
     
@@ -129,9 +129,9 @@
     //请求头设置
     [client.requestSerializer  setValue:[HXPublicParamTool sharedInstance].token forHTTPHeaderField:@"Authorization"];
     NSLog(@"=====token====:%@",[HXPublicParamTool sharedInstance].token);
-    //md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥，生成md5值。
     NSMutableDictionary * parameters = [NSMutableDictionary dictionary];
     if(needMd5){
+        //md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥，生成md5值。
         NSString *md5Str = [self getMd5String:nsDic];
         NSDictionary *md5Dic = @{@"md5":HXSafeString(md5Str)};
         [parameters addEntriesFromDictionary:md5Dic];

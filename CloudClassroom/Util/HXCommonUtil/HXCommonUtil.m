@@ -427,4 +427,24 @@
     return dataTime;
 }
 
+/**
+ 将某个时间戳转化成 时间
+ 默认日期格式为:yyyy.MM.dd  HH:mm
+ */
++(NSString *)timestampSwitchTime:(NSInteger)timestamp andFormatter:(NSString *)format{
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    if(format){
+        [formatter setDateFormat:format];
+    }else{
+        [formatter setDateFormat:@"yyyy.MM.dd HH:mm"];
+    }
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"Asia/Beijing"];
+    [formatter setTimeZone:timeZone];
+    NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSString *confromTimespStr = [formatter stringFromDate:confromTimesp];
+    return confromTimespStr;
+
+}
+
 @end

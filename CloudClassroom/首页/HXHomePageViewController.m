@@ -234,7 +234,7 @@
             [btn setTitle:obj.moduleName forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
-            [btn sd_setImageWithURL:HXSafeURL([baseUreStr stringByAppendingString:obj.moduleIcon])  forState:UIControlStateNormal placeholderImage:nil];
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
             [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
             [_btnsContainerView addSubview:btn];
             [self.bujuBtns addObject:btn];
