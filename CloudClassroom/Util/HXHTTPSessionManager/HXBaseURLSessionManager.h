@@ -126,18 +126,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  登录请求
  */
-+ (void)doLoginWithUserName:(NSString *)userName
-                andPassword:(NSString *)pwd
-                    success:(void (^)(NSDictionary* dictionary))success
-                    failure:(void (^)(NSString *messsage))failure;
++ (void)doLoginWithUserName:(NSString * _Nullable)userName
+                andPassword:(NSString * _Nullable)pwd
+                    success:(void (^)(NSDictionary* _Nullable dictionary))success
+                    failure:(void (^)(NSString * _Nullable messsage))failure;
 
 /**
  普通GET请求
  */
-+ (void)getDataWithNSString:(NSString *)actionUrlStr
-             withDictionary:(nullable NSDictionary *) nsDic
-                    success:(void (^)(NSDictionary* dictionary))success
-                    failure:(void (^)(NSError *error))failure;
++ (void)getDataWithNSString:(NSString * _Nullable)actionUrlStr
+             withDictionary:(NSDictionary * _Nullable)nsDic
+                    success:(void (^)(NSDictionary* _Nullable dictionary))success
+                    failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
  普通POST请求

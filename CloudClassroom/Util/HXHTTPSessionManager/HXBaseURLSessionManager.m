@@ -27,19 +27,12 @@
     return _sharedClient;
 }
 
-//修改baseURL
+#pragma mark - 修改baseURL
 +(void)setBaseURLStr:(NSString *)baseURLStr{
     [[HXBaseURLSessionManager sharedClient] setValue:[NSURL URLWithString:baseURLStr] forKey:NSStringFromSelector(@selector(baseURL))];
 }
 
--(void)clearCookies
-{
-    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-    for (NSHTTPCookie* cookie in cookies) {
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-    }
-}
-
+#pragma mark - 登录请求
 + (void)doLoginWithUserName:(NSString *)userName
                 andPassword:(NSString *)pwd
                    success : (void (^)(NSDictionary* dictionary))success
@@ -72,6 +65,7 @@
     }];
 }
 
+#pragma mark - GET请求
 + (void)getDataWithNSString : (NSString *)actionUrlStr
              withDictionary : (NSDictionary *) nsDic
                     success : (void (^)(NSDictionary* dictionary))success
@@ -121,6 +115,7 @@
     }];
 }
 
+#pragma mark - POST请求
 + (void)postDataWithNSString : (NSString * _Nullable)actionUrlStr
                      needMd5 : (BOOL )needMd5
               withDictionary : (NSDictionary * _Nullable)nsDic
@@ -193,7 +188,7 @@
     }];
 }
 
-//刷新JWT的Token(如果返回false,则表示要重新登录)
+#pragma mark - 刷新JWT的Token(如果返回false,则表示要重新登录)
 + (void)refreshTokeCallBack:(void (^)(bool success))callBack
 {
     HXBaseURLSessionManager * client = [HXBaseURLSessionManager sharedClient];
@@ -222,28 +217,7 @@
 }
 
 
-
-
-/// 公共请求参数
-- (NSMutableDictionary *)commonParameters{
-    
-    NSMutableDictionary *parameters = [NSMutableDictionary new];
-    NSString *personID = [HXPublicParamTool sharedInstance].personId;
-    NSString *studentID = [HXPublicParamTool sharedInstance].student_id;
-    NSString *majorID = [HXPublicParamTool sharedInstance].major_id;
-    if (personID) {
-        [parameters setObject:personID forKey:@"personID"];
-    }
-    if (studentID) {
-        [parameters setObject:studentID forKey:@"studentID"];
-    }
-    if (majorID) {
-        [parameters setObject:majorID forKey:@"majorID"];
-    }
-    return parameters;
-}
-
-/// md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥【1poiulk*&】，生成md5值。
+#pragma mark -  md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥Md5Key，生成md5值。
 + (NSString *)getMd5String:(NSDictionary *)dic{
     // 将dic中的全部key取出，并放到数组
     NSArray *keyArray = [dic allKeys];
@@ -266,6 +240,34 @@
     NSString *md5String = [paramStr md5String];
     return md5String;
     
+}
+
+#pragma mark - 公共请求参数
+- (NSMutableDictionary *)commonParameters{
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
+    NSString *personID = [HXPublicParamTool sharedInstance].personId;
+    NSString *studentID = [HXPublicParamTool sharedInstance].student_id;
+    NSString *majorID = [HXPublicParamTool sharedInstance].major_id;
+    if (personID) {
+        [parameters setObject:personID forKey:@"personID"];
+    }
+    if (studentID) {
+        [parameters setObject:studentID forKey:@"studentID"];
+    }
+    if (majorID) {
+        [parameters setObject:majorID forKey:@"majorID"];
+    }
+    return parameters;
+}
+
+#pragma mark - 清除cookie
+-(void)clearCookies
+{
+    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
+    for (NSHTTPCookie* cookie in cookies) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+    }
 }
 
 @end

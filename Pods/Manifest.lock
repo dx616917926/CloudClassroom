@@ -15,9 +15,9 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - AlipaySDK-iOS (15.8.11)
-  - AliPlayerSDK_iOS (5.4.7.1):
-    - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.7.1)
-  - AliPlayerSDK_iOS/AliPlayerSDK (5.4.7.1)
+  - AliPlayerSDK_iOS (5.4.9.1):
+    - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.9.1)
+  - AliPlayerSDK_iOS/AliPlayerSDK (5.4.9.1)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -45,7 +45,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 4.0.1)
   - AlipaySDK-iOS (~> 15.8.8)
-  - AliPlayerSDK_iOS (~> 5.4.7.1)
+  - AliPlayerSDK_iOS (~> 5.4.9.1)
   - FMDB (~> 2.6.2)
   - GKCover (~> 2.6.0)
   - GKPhotoBrowser (~> 2.1.9)
@@ -80,7 +80,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   AlipaySDK-iOS: a07b6eafa847a5b29acb6c150ea16d9792d5d167
-  AliPlayerSDK_iOS: f5214cba6536e635b21c0d625a438b05deecbadf
+  AliPlayerSDK_iOS: f6788ec326a3c04eba39a7d24147958c22fc7a61
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   GKCover: 62c29b9db8ff38b854d2f128f1043f2a4edd9f96
   GKPhotoBrowser: c45231edd9ec79f031c412c646af46419d997c97
@@ -94,6 +94,6 @@ SPEC CHECKSUMS:
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
 
-PODFILE CHECKSUM: 35748bc83f58fd07d28a40ab4e02d4416752c7b9
+PODFILE CHECKSUM: 082dd057068c826d581f6ccd7b0389256c52883d
 
 COCOAPODS: 1.11.3

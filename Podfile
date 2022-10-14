@@ -1,4 +1,5 @@
 
+
 platform :ios, '9.0'
 
 use_frameworks!
@@ -30,7 +31,8 @@ target 'CloudClassroom' do
   pod 'IQKeyboardManager', '~> 6.5.6'
 
   #从5.4.7.1开始需要license证书哦⚠️
-  pod 'AliPlayerSDK_iOS', '~> 5.4.7.1'
+  pod 'AliPlayerSDK_iOS', '~> 5.4.9.1'
+
   
   pod 'AlipaySDK-iOS', '~> 15.8.8'
   

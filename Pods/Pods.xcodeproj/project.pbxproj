@@ -15,7 +15,6 @@
 			dependencies = (
 			);
 			name = "AlipaySDK-iOS";
-			productName = "AlipaySDK-iOS";
 		};
 		849570DFC27665175463482CD1A7929F /* AliPlayerSDK_iOS */ = {
 			isa = PBXAggregateTarget;
@@ -25,7 +24,6 @@
 			dependencies = (
 			);
 			name = AliPlayerSDK_iOS;
-			productName = AliPlayerSDK_iOS;
 		};
 		8554F6236D2AA202CF58503D2DF29730 /* WechatOpenSDK */ = {
 			isa = PBXAggregateTarget;
@@ -35,7 +33,6 @@
 			dependencies = (
 			);
 			name = WechatOpenSDK;
-			productName = WechatOpenSDK;
 		};
 /* End PBXAggregateTarget section */
 
@@ -547,7 +544,7 @@
 		E3226C305B708F68460A437B3A73C0DE /* IQToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA3222107CEEAC5AB79F537609B433D /* IQToolbar.m */; };
 		E378D34BD0AD75DE5E067483C6D5BFE4 /* SDImageAPNGCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1753C42CB9B1E4A13FA121F3960ABAF3 /* SDImageAPNGCoder.m */; };
 		E3B77940EC260EAE08B79A571E8F14D3 /* SDDeviceHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F981C44F44324FAB1F70471856BDB87F /* SDDeviceHelper.m */; };
-		E3DC857EAC8DBDBC1393AE0A0B0EE08D /* HXViewHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD.bundle */; };
+		E3DC857EAC8DBDBC1393AE0A0B0EE08D /* HXViewHUD-HXViewHUD in Resources */ = {isa = PBXBuildFile; fileRef = BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD-HXViewHUD */; };
 		E471FDC54C70996D03F54D0CD1FDDBB5 /* SDImageCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = E91C84C158618CAB5429E0F84B13988A /* SDImageCoder.m */; };
 		E4B539A0FDEEB415FC6EBCB8EDD13ABE /* HXPhotoEditStickerTrashView.m in Sources */ = {isa = PBXBuildFile; fileRef = D55241838F8FE97A1BD94FD5A128356D /* HXPhotoEditStickerTrashView.m */; };
 		E4E14C2965BD1C690B40C8D3257177F5 /* MJRefreshHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 076637652FA6368557B923DD922308BA /* MJRefreshHeader.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1153,7 +1150,7 @@
 		9CEF67462479FF6E4D918AEBE2EF046A /* IQKeyboardManager-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "IQKeyboardManager-Info.plist"; sourceTree = "<group>"; };
 		9D3AD620BD0DDAB1AF885FEC5DED392F /* HXPreviewContentView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXPreviewContentView.m; path = HXPhotoPicker/View/HXPreviewContentView.m; sourceTree = "<group>"; };
 		9D8AD3812BA1D87C60CD783DC85B9CE0 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F009BC9550CF004A001669782F727B8 /* HXPhotoPersentInteractiveTransition.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXPhotoPersentInteractiveTransition.m; path = HXPhotoPicker/TransitionAnimation/HXPhotoPersentInteractiveTransition.m; sourceTree = "<group>"; };
 		9F22626D015BE12CC58F7F2944B6FE79 /* MJExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MJExtension-dummy.m"; sourceTree = "<group>"; };
 		9FCBDA0EDA166E2E7D2E59C57B5D0E56 /* HXPhotoEditGridLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoEditGridLayer.h; path = HXPhotoPicker/HXPhotoEdit/View/HXPhotoEditGridLayer.h; sourceTree = "<group>"; };
@@ -1217,7 +1214,7 @@
 		BC0C5479C3103946C0CC486B51015B87 /* HXCustomPreviewView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXCustomPreviewView.m; path = HXPhotoPicker/View/HXCustomPreviewView.m; sourceTree = "<group>"; };
 		BC185BE616B69E05BB504DA057047E08 /* SDWebImage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SDWebImage.debug.xcconfig; sourceTree = "<group>"; };
 		BC330C9DD4B782B86D3659A1A9E18BE8 /* HXPhotoPicker.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = HXPhotoPicker.modulemap; sourceTree = "<group>"; };
-		BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HXViewHUD.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD-HXViewHUD */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "HXViewHUD-HXViewHUD"; path = HXViewHUD.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC42639C1566A202D169D6B2152265FA /* NSTimer+HXExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSTimer+HXExtension.m"; path = "HXPhotoPicker/Category/NSTimer+HXExtension.m"; sourceTree = "<group>"; };
 		BC6F92949939EBD9B67A100B96C75B61 /* FMDatabase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = src/fmdb/FMDatabase.h; sourceTree = "<group>"; };
 		BC80C1702021A6F49AC987CA3EF9F6AC /* AFAutoPurgingImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFAutoPurgingImageCache.h; path = "UIKit+AFNetworking/AFAutoPurgingImageCache.h"; sourceTree = "<group>"; };
@@ -1250,7 +1247,7 @@
 		C6B7BADAA17EBC93DD90763EB2162874 /* SDAnimatedImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAnimatedImage.h; path = SDWebImage/Core/SDAnimatedImage.h; sourceTree = "<group>"; };
 		C6C00D0119780C7DF7F36EE129FBD82F /* UIView+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+WebCache.m"; path = "SDWebImage/Core/UIView+WebCache.m"; sourceTree = "<group>"; };
 		C7B4D74C13380C0FED486365FBA7F7E8 /* NSString+HXExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+HXExtension.h"; path = "HXPhotoPicker/Category/NSString+HXExtension.h"; sourceTree = "<group>"; };
-		C84A632943AD99CD34C2478C8E4C8910 /* Pods_CloudClassroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CloudClassroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C84A632943AD99CD34C2478C8E4C8910 /* Pods-CloudClassroom */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-CloudClassroom"; path = Pods_CloudClassroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C894FD94EBE2AC38CBCD7E26A3F91975 /* IQUIView+Hierarchy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "IQUIView+Hierarchy.m"; path = "IQKeyboardManager/Categories/IQUIView+Hierarchy.m"; sourceTree = "<group>"; };
 		C8DABC5FB18BC8D4BA1ED385A76E3C3D /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = src/fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		C955A670A21FAAAC56B2E1B96AC74AD0 /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
@@ -1550,6 +1547,7 @@
 				7C01660079B7FCDC361CA1788C5ADD43 /* Resources */,
 				9104E5D04299DAE7A3429A444816EDFA /* Support Files */,
 			);
+			name = "AlipaySDK-iOS";
 			path = "AlipaySDK-iOS";
 			sourceTree = "<group>";
 		};
@@ -1873,6 +1871,7 @@
 				C33FE056463526AEA17FC3F5550E71D5 /* IQUIViewController+Additions.m */,
 				85219B15E180BEAA4615EFA54BC2B4CB /* Support Files */,
 			);
+			name = IQKeyboardManager;
 			path = IQKeyboardManager;
 			sourceTree = "<group>";
 		};
@@ -1996,6 +1995,7 @@
 				0434C2C53A10FFB000761CC5EE98EFFC /* Frameworks */,
 				E98949FAF7E675F01A9EAACAEC2C1DA1 /* Support Files */,
 			);
+			name = WechatOpenSDK;
 			path = WechatOpenSDK;
 			sourceTree = "<group>";
 		};
@@ -2050,6 +2050,7 @@
 				56233ED7DB3492AABA3CED366555EA7C /* standard */,
 				2C688288F2B3D5A4C51EC8B1AD8BC757 /* Support Files */,
 			);
+			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -2223,6 +2224,7 @@
 				D4D5D46B87859B0DD567E45C38AACC3D /* Support Files */,
 				1DCF422AA45E60A1B8283A43CFA0BE10 /* UIKit */,
 			);
+			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -2288,12 +2290,12 @@
 				CAF0751214AFBE871D56A253826CE89D /* GKPhotoBrowser */,
 				24DDD4A0849B06C0942057220E1E81B2 /* HXPhotoPicker */,
 				C41180B62B7B37EB492B54EE6E6A82AE /* HXViewHUD */,
-				BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD.bundle */,
+				BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD-HXViewHUD */,
 				98527D7196957AAB07B79E2E2AFDE23E /* IQKeyboardManager */,
 				1FFED36A657123030ABB700256D73F15 /* Masonry */,
 				2B276B0A79173A1D6E83C9B4FB9A4A57 /* MJExtension */,
 				E49D6D248DD1CEE584E6776B9164A1B2 /* MJRefresh */,
-				C84A632943AD99CD34C2478C8E4C8910 /* Pods_CloudClassroom.framework */,
+				C84A632943AD99CD34C2478C8E4C8910 /* Pods-CloudClassroom */,
 				2D24B4853EF5CE5AD7D4FA5E183BD6E2 /* SDAutoLayout */,
 				B0B214D775196BA7CA8E17E53048A493 /* SDWebImage */,
 			);
@@ -2330,6 +2332,7 @@
 				92F4D9097DCAD5C4583EACB90DCA9D4B /* Core */,
 				20EA06B88FB44B0929987B48208C1086 /* Support Files */,
 			);
+			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -2371,6 +2374,7 @@
 				4505E10D68667D8AC11E93B912785F6F /* ViewController+MASAdditions.m */,
 				B3BD5C54D2D47D49DE1E7616AC316D9E /* Support Files */,
 			);
+			name = Masonry;
 			path = Masonry;
 			sourceTree = "<group>";
 		};
@@ -2403,6 +2407,7 @@
 				C7599545B6C482C5F85BDC190C3564A0 /* AliPlayerSDK */,
 				956BCCE80F21403E3855EA1C8148D874 /* Support Files */,
 			);
+			name = AliPlayerSDK_iOS;
 			path = AliPlayerSDK_iOS;
 			sourceTree = "<group>";
 		};
@@ -2427,6 +2432,7 @@
 				6A80426DFAEC0E2828559F0C6C921979 /* Resources */,
 				A67299378BAA5E8D197B2CB40654A220 /* Support Files */,
 			);
+			name = HXViewHUD;
 			path = HXViewHUD;
 			sourceTree = "<group>";
 		};
@@ -2451,6 +2457,7 @@
 				427B6762DC7B1EE6EF9BE1F447A32D2B /* Default */,
 				EDA7A9043F9B554DE0E0CFB8172DDDA5 /* Support Files */,
 			);
+			name = HXPhotoPicker;
 			path = HXPhotoPicker;
 			sourceTree = "<group>";
 		};
@@ -2499,6 +2506,7 @@
 				BFE417EF7BD5AFAAA1673C1061697D57 /* Resources */,
 				C42081F729B2AA239FCC9E911E8EBA20 /* Support Files */,
 			);
+			name = MJRefresh;
 			path = MJRefresh;
 			sourceTree = "<group>";
 		};
@@ -2512,6 +2520,7 @@
 				87C0A5F034301CA4C06E8F48D49C483F /* UIView+GKExtension.m */,
 				58B2F5E5BDE542039E954BEE6D6504D5 /* Support Files */,
 			);
+			name = GKCover;
 			path = GKCover;
 			sourceTree = "<group>";
 		};
@@ -2541,6 +2550,7 @@
 				B052E120374D12FAB142C416412A9C1F /* NSString+MJExtension.m */,
 				7515C51BD4693EE01E243C5814D606EA /* Support Files */,
 			);
+			name = MJExtension;
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
@@ -2551,6 +2561,7 @@
 				3B6C8A9EAA7763E522F0A1BC7C865AEA /* SD */,
 				2B879FD45022B111E553C77275019C0D /* Support Files */,
 			);
+			name = GKPhotoBrowser;
 			path = GKPhotoBrowser;
 			sourceTree = "<group>";
 		};
@@ -2588,6 +2599,7 @@
 				AF7D4F5D79355F56E0490CC96F959845 /* UIView+SDAutoLayout.m */,
 				9C2C015B54368E7A90CDA5DD174223A6 /* Support Files */,
 			);
+			name = SDAutoLayout;
 			path = SDAutoLayout;
 			sourceTree = "<group>";
 		};
@@ -3060,7 +3072,7 @@
 			);
 			name = "HXViewHUD-HXViewHUD";
 			productName = HXViewHUD;
-			productReference = BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD.bundle */;
+			productReference = BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD-HXViewHUD */;
 			productType = "com.apple.product-type.bundle";
 		};
 		3847153A6E5EEFB86565BA840768F429 /* SDWebImage */ = {
@@ -3147,7 +3159,7 @@
 			);
 			name = "Pods-CloudClassroom";
 			productName = Pods_CloudClassroom;
-			productReference = C84A632943AD99CD34C2478C8E4C8910 /* Pods_CloudClassroom.framework */;
+			productReference = C84A632943AD99CD34C2478C8E4C8910 /* Pods-CloudClassroom */;
 			productType = "com.apple.product-type.framework";
 		};
 		6868056D761E163D10FDAF8CF1C4D9B8 /* MJRefresh */ = {
@@ -3405,7 +3417,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3DC857EAC8DBDBC1393AE0A0B0EE08D /* HXViewHUD.bundle in Resources */,
+				E3DC857EAC8DBDBC1393AE0A0B0EE08D /* HXViewHUD-HXViewHUD in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3927,7 +3939,6 @@
 			baseConfigurationReference = E0A57AF2BF84AB3966CB9B3F434C7686 /* HXViewHUD.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/HXViewHUD";
-				DEVELOPMENT_TEAM = S6PPR257T5;
 				IBSC_MODULE = HXViewHUD;
 				INFOPLIST_FILE = "Target Support Files/HXViewHUD/ResourceBundle-HXViewHUD-HXViewHUD-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -4177,7 +4188,6 @@
 			baseConfigurationReference = D8EDF5F9F1E3F0CA4D677547528109C8 /* HXViewHUD.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/HXViewHUD";
-				DEVELOPMENT_TEAM = S6PPR257T5;
 				IBSC_MODULE = HXViewHUD;
 				INFOPLIST_FILE = "Target Support Files/HXViewHUD/ResourceBundle-HXViewHUD-HXViewHUD-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -4556,7 +4566,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4726,7 +4736,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
