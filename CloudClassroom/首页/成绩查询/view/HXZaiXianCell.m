@@ -87,9 +87,9 @@
     
     //分数字体颜色未及格（60分以下）用红色标红，及格（60分及60分以上）用主题色
     if([scoreModel.testScore integerValue]>=60){
-        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.testScore?scoreModel.testScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.testScore?scoreModel.testScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.testScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.testScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }else{
-        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.testScore?scoreModel.testScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.testScore?scoreModel.testScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.testScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.testScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }
     
 }

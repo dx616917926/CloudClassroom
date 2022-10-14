@@ -142,11 +142,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  普通POST请求
  */
-+ (void)postDataWithNSString : (NSString *)actionUrlStr
++ (void)postDataWithNSString : (NSString * _Nullable)actionUrlStr
                      needMd5 : (BOOL )needMd5
-              withDictionary : (NSDictionary *)nsDic
-                     success : (void (^)(NSDictionary* dictionary))success
-                     failure : (void (^)(NSError *error))failure;
+              withDictionary : (NSDictionary * _Nullable)nsDic
+                     success : (void (^)(NSDictionary * _Nullable dictionary))success
+                     failure : (void (^)(NSError * _Nullable error))failure;
                      
 
 /**刷新JWT的Token(如果返回false,则表示要重新登录)

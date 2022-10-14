@@ -50,7 +50,7 @@
     self.titleIcon.image = [UIImage imageNamed:(courseReportModel.type==1?@"reportzuoye_icon":@"reportqimo_icon")];
     self.titleNameLabel.text = itemModel.moduleButtonName;
     
-    self.quanZhongFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(itemModel.moduleScore?itemModel.moduleScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(itemModel.moduleScore?itemModel.moduleScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+    self.quanZhongFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(itemModel.moduleScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(itemModel.moduleScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
     
     [self.containerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj removeFromSuperview];
@@ -87,7 +87,7 @@
         zuiGaoFenContentLabel.textAlignment = NSTextAlignmentCenter;
         zuiGaoFenContentLabel.font = HXFont(14);
         zuiGaoFenContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        zuiGaoFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(model.getScore?model.getScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(model.getScore?model.getScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+        zuiGaoFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(model.getScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(model.getScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
         [view addSubview:zuiGaoFenContentLabel];
         
         UILabel *maFenTitleLabel = [[UILabel alloc] init];
@@ -101,7 +101,7 @@
         maFenContentLabel.textAlignment = NSTextAlignmentCenter;
         maFenContentLabel.font = HXFont(15);
         maFenContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        maFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(model.totalScore?model.totalScore:@"100") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(model.totalScore?model.totalScore:@"100") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+        maFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(model.totalScore?:@"100") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(model.totalScore?:@"100") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
         [view addSubview:maFenContentLabel];
         
         UILabel *ciShuTitleLabel = [[UILabel alloc] init];

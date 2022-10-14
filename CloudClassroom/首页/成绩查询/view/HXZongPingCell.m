@@ -88,9 +88,9 @@
     
     //分数字体颜色未及格（60分以下）用红色标红，及格（60分及60分以上）用主题色
     if([scoreModel.commonTestScore integerValue]>=60){
-        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }else{
-        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?scoreModel.commonTestScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+        self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }
     
     

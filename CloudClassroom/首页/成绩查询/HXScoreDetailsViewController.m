@@ -235,7 +235,7 @@
     .topSpaceToView(self.fenShuLabel, 5)
     .leftEqualToView(self.fenShuLabel)
     .rightEqualToView(self.courseNameLabel)
-    .heightIs(16);
+    .autoHeightRatio(0);
     
     self.middleContainerView.sd_layout
     .topSpaceToView(self.mainScrollView, 25)
@@ -243,7 +243,7 @@
     .rightSpaceToView(self.mainScrollView, 16);
     
     self.keJianXueXiView.sd_layout.heightIs(77);
-    self.keJianXueXiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
+    self.pingShiZuoYeView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
     self.xueXiBiaoXianView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
     self.qiMoKaoShiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
     
@@ -251,12 +251,8 @@
     
 
     
-    [self.keJianXueXiView updateLayout];
-    [self.pingShiZuoYeView updateLayout];
-    [self.xueXiBiaoXianView updateLayout];
-    [self.qiMoKaoShiView updateLayout];
-    
-
+    [self.middleContainerView updateLayout];
+   
 
     // 渐变
     [self.keJianXueXiView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xFFFFFF, 0.3) endColor:COLOR_WITH_ALPHA(0xFFFFFF, 0.8)];
@@ -376,10 +372,10 @@
     .rightSpaceToView(self.mainScrollView, 12);
     
     self.detailsTitleLabel.sd_layout
-    .topSpaceToView(self.detailsContainerView, 16)
+    .topSpaceToView(self.detailsContainerView, 10)
     .leftSpaceToView(self.detailsContainerView, 16)
     .rightSpaceToView(self.detailsContainerView, 16)
-    .heightIs(21);
+    .heightIs(40);
     
     self.keJianXueXiContainerView.sd_layout
     .topSpaceToView(self.detailsTitleLabel, 0)
@@ -390,7 +386,7 @@
     self.keJianXueXiTitleLabel.sd_layout
     .centerYEqualToView(self.keJianXueXiContainerView)
     .leftSpaceToView(self.keJianXueXiContainerView, 16)
-    .widthIs(60)
+    .widthIs(80)
     .heightIs(21);
     
     self.keJianXueXiDeFenLabel.sd_layout
@@ -472,7 +468,7 @@
     .widthRatioToView(self.keJianXueXiDeFenLabel, 1)
     .heightRatioToView(self.keJianXueXiDeFenLabel, 1);
     
-    [self.detailsContainerView setupAutoHeightWithBottomView:self.bukaoContainerView bottomMargin:0];
+    [self.detailsContainerView setupAutoHeightWithBottomView:self.bukaoContainerView bottomMargin:10];
     
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.detailsContainerView bottomMargin:50];
@@ -567,7 +563,8 @@
         _tipLabel.textAlignment = NSTextAlignmentLeft;
         _tipLabel.font = HXFont(11);
         _tipLabel.textColor =COLOR_WITH_ALPHA(0x999999, 1);
-        _tipLabel.text = @"总分由各部分得分折合权重结算而来/n最终成绩默认取最高分";
+        _tipLabel.numberOfLines = 0;
+        _tipLabel.text = @"总分由各部分得分折合权重结算而来\n最终成绩默认取最高分";
     }
     return _tipLabel;
 }
@@ -934,7 +931,7 @@
         _bukaoTitleLabel.textAlignment = NSTextAlignmentLeft;
         _bukaoTitleLabel.font = HXFont(15);
         _bukaoTitleLabel.textColor =COLOR_WITH_ALPHA(0x999999, 1);
-        _bukaoTitleLabel.text = @"期末考试";
+        _bukaoTitleLabel.text = @"补考成绩";
     }
     return _bukaoTitleLabel;
 }

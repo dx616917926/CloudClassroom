@@ -7,6 +7,7 @@
 
 #import "HXPingShiZuoYeViewController.h"
 #import "HXPingShiZuoYeCell.h"
+#import "HXFaceConfigObject.h"
 
 @interface HXPingShiZuoYeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -28,11 +29,73 @@
     [self createUI];
     //获取正考考试列表和看课列表/获取补考考试列表
     (self.isBuKao?[self getBKExamList]: [self getExamList]);
+    //获取人脸识别设置
+    //[self getFaceSet];
 }
 
 #pragma mark -Setter
 -(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
     _courseInfoModel = courseInfoModel;
+}
+
+#pragma mark - 获取人脸识别设置
+-(void)getFaceSet{
+
+    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(majorid),
+        //班级计划学期ID（如果是补考，传补考开课ID）
+        @"termcourseid":HXSafeString(self.courseInfoModel.termCourseID),
+        //模块类型 1课件 2作业 3期末 0补考
+        @"coursetype":@"1"
+
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFaceSet needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            HXFaceConfigObject *faceConfigObject = [HXFaceConfigObject mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 人脸识别
+-(void)faceMatch{
+
+    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
+    
+    NSDictionary *dic =@{
+        //专业ID
+        @"majorid":HXSafeString(majorid),
+        //班级计划学期ID（如果是补考，传补考开课ID）
+        @"termcourseid":HXSafeString(self.courseInfoModel.termCourseID),
+        //模块类型 1课件 2作业 3期末 0补考 4表示模拟人脸识别（如果为模拟人脸识别，则传SourseImgBase64和UploadType=2，其他参数传0即可）
+        @"coursetype":@1,
+        //Base64的图片
+        @"sourseImgBase64":@"",
+        //1表示采集 2表示对比
+        @"uploadType":@1,
+        //0表示系统拍照（默认） 1表示抓拍
+        @"systemType":@0,
+        //前置照片还是后置照片 0表示前置照片（默认） 1表示后置照片
+        @"photoType":@0,
+        //进入考试（学习）时对比还是过程中对比 0表示过程中对比（默认） 1表示进入时对比
+        @"isEnter":@0
+
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_FaceMatch needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            [self.view showTostWithMessage:[dictionary stringValueForKey:@"message"]];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark - 获取正考考试列表和看课列表

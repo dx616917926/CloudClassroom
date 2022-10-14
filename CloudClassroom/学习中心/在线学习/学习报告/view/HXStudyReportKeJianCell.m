@@ -48,7 +48,7 @@
     
     HXCourseItemModel *itemModel = courseReportModel.kjInfo.firstObject;
     self.titleNameLabel.text = itemModel.kjButtonName;
-    self.quanZhongFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(itemModel.selfScore?itemModel.selfScore:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(itemModel.selfScore?itemModel.selfScore:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
+    self.quanZhongFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(itemModel.selfScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(itemModel.selfScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
     
     [self.containerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj removeFromSuperview];
