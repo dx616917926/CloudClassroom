@@ -1,24 +1,23 @@
 //
-//  HXLearnCenterViewController.m
+//  HXMyLiveViewController.m
 //  CloudClassroom
 //
-//  Created by mac on 2022/8/30.
+//  Created by mac on 2022/10/18.
 //
 
-#import "HXLearnCenterViewController.h"
-#import "HXOnlineLearnViewController.h"
-#import "HXTeachPlanViewController.h"
-#import "HXFaceTimeTableViewController.h"
+#import "HXMyLiveViewController.h"
 #import "XLPageViewController.h"
+#import "HXAllLiveViewController.h"
+#import "HXPreviousViewController.h"
 #import "HXLearnCenterPageTitleCell.h"
 
-@interface HXLearnCenterViewController ()<XLPageViewControllerDelegate,XLPageViewControllerDataSrouce>
+@interface HXMyLiveViewController ()<XLPageViewControllerDelegate,XLPageViewControllerDataSrouce>
 
 @property (nonatomic, strong) XLPageViewController *pageViewController;
 
 @end
 
-@implementation HXLearnCenterViewController
+@implementation HXMyLiveViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,8 +37,8 @@
 
 #pragma mark - UI
 -(void)createUI{
-    self.sc_navigationBar.leftBarButtonItem = nil;
-    self.sc_navigationBar.title = @"学习中心";
+    
+    self.sc_navigationBar.title = @"我的直播";
     //初始化控制器
     [self initPageViewController];
 }
@@ -50,12 +49,12 @@
     config.titleViewBackgroundColor = UIColor.whiteColor;
     config.titleViewHeight = 44;
     //设置标题间距
-    config.titleSpace = 60;
+    config.titleSpace = 130;
     //设置标题栏缩进
     config.titleViewInset = UIEdgeInsetsMake(0, 20, 0, 20);
     config.titleViewAlignment = XLPageTitleViewAlignmentCenter;
     //隐藏底部分割线
-    config.separatorLineHidden =NO;
+    config.separatorLineHidden =YES;
     ////设置标题颜色
     config.titleSelectedColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
     config.titleNormalColor = COLOR_WITH_ALPHA(0x333333, 1);;
@@ -64,27 +63,25 @@
     //隐藏底部阴影
     config.shadowLineHidden = true;
     self.pageViewController = [[XLPageViewController alloc] initWithConfig:config];
-    self.pageViewController.view.frame =CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight-kTabBarHeight);
+    self.pageViewController.view.frame =CGRectMake(0, kNavigationBarHeight, kScreenWidth, kScreenHeight-kNavigationBarHeight);
     self.pageViewController.bounces = NO;
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self;
     [self.pageViewController registerClass:HXLearnCenterPageTitleCell.class forTitleViewCellWithReuseIdentifier:@"HXLearnCenterPageTitleCell"];
     [self addChildViewController:self.pageViewController];
     [self.view addSubview:self.pageViewController.view];
+    
 }
 
 #pragma mark -
 #pragma mark TableViewDelegate&DataSource
 - (UIViewController *)pageViewController:(XLPageViewController *)pageViewController viewControllerForIndex:(NSInteger)index {
     if (index==0) {
-        HXOnlineLearnViewController *onlineLearnVc = [[HXOnlineLearnViewController alloc] init];
-        return onlineLearnVc;
+        HXAllLiveViewController *vc = [[HXAllLiveViewController alloc] init];
+        return vc;
     }else if (index==1) {
-        HXTeachPlanViewController *teachPlanVC = [[HXTeachPlanViewController alloc] init];
-        return teachPlanVC;
-    }else if (index==2) {
-        HXFaceTimeTableViewController *faceTimeTableViewVc = [[HXFaceTimeTableViewController alloc] init];
-        return faceTimeTableViewVc;
+        HXPreviousViewController *vc = [[HXPreviousViewController alloc] init];
+        return vc;
     }
     return nil;
 }
@@ -107,11 +104,13 @@
     NSLog(@"切换到了：%@",[self titles][index]);
 }
 
-
-
+#pragma mark -
 #pragma mark 标题数据
 - (NSArray *)titles {
-    return @[@"在线学习",@"教学计划",@"面授课表"];
+    return @[@"全部直播",@"往期直播"];
 }
 
 @end
+
+
+

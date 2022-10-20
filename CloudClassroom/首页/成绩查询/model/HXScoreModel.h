@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL isPass;
 ///是否网课
 @property(nonatomic, assign) BOOL isNetCourse;
+///学期
+@property(nonatomic, copy) NSString *term;
 
 
 //********************在线补考参数*****************//

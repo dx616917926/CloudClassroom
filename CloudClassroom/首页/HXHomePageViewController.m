@@ -10,6 +10,7 @@
 #import "HXPaymentQueryViewController.h"//缴费查询
 #import "HXScoreQueryViewController.h"//成绩查询
 #import "HXMyBuKaoViewController.h"//我的补考
+#import "HXLiveCourseViewController.h"//直播课程
 #import "HXFunctionCenterViewController.h"//更多
 
 #import "HXKeJianLearnViewController.h"//课件学习
@@ -226,33 +227,89 @@
     }];
     
     [self.bujuArray removeAllObjects];
-    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if(obj.isShow==1){
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
-            btn.titleLabel.font = HXFont(13);
-            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
-            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-            NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
-            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
-            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
-            [_btnsContainerView addSubview:btn];
-            [self.bujuBtns addObject:btn];
-            
-            btn.sd_layout.heightIs(73);
-            btn.imageView.sd_layout
-                .centerXEqualToView(btn)
-                .topSpaceToView(btn, 0)
-                .widthIs(47)
-                .heightEqualToWidth();
-            
-            btn.titleLabel.sd_layout
-                .bottomSpaceToView(btn, 0)
-                .leftEqualToView(btn)
-                .rightEqualToView(btn)
-                .heightIs(17);
-        }
-    }];
+    if(list.count<=8){
+        [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.isShow==1){
+                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+                btn.titleLabel.font = HXFont(13);
+                [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+                [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+                NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
+                [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+                [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+                [_btnsContainerView addSubview:btn];
+                [self.bujuBtns addObject:btn];
+                
+                btn.sd_layout.heightIs(73);
+                btn.imageView.sd_layout
+                    .centerXEqualToView(btn)
+                    .topSpaceToView(btn, 0)
+                    .widthIs(47)
+                    .heightEqualToWidth();
+                
+                btn.titleLabel.sd_layout
+                    .bottomSpaceToView(btn, 0)
+                    .leftEqualToView(btn)
+                    .rightEqualToView(btn)
+                    .heightIs(17);
+            }
+        }];
+    }else{
+        NSArray *tempList = [list subarrayWithRange:NSMakeRange(0, 7)];
+        [tempList enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if(obj.isShow==1){
+                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+                btn.titleLabel.font = HXFont(13);
+                [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+                [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+                NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
+                [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+                [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+                [_btnsContainerView addSubview:btn];
+                [self.bujuBtns addObject:btn];
+                
+                btn.sd_layout.heightIs(73);
+                btn.imageView.sd_layout
+                    .centerXEqualToView(btn)
+                    .topSpaceToView(btn, 0)
+                    .widthIs(47)
+                    .heightEqualToWidth();
+                
+                btn.titleLabel.sd_layout
+                    .bottomSpaceToView(btn, 0)
+                    .leftEqualToView(btn)
+                    .rightEqualToView(btn)
+                    .heightIs(17);
+            }
+        }];
+        //更多
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        btn.titleLabel.font = HXFont(13);
+        [btn setTitle:@"更多" forState:UIControlStateNormal];
+        [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+        NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
+        [btn setImage:[UIImage imageNamed:@"more_icon"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_btnsContainerView addSubview:btn];
+        [self.bujuBtns addObject:btn];
+        
+        btn.sd_layout.heightIs(73);
+        btn.imageView.sd_layout
+            .centerXEqualToView(btn)
+            .topSpaceToView(btn, 0)
+            .widthIs(47)
+            .heightEqualToWidth();
+        
+        btn.titleLabel.sd_layout
+            .bottomSpaceToView(btn, 0)
+            .leftEqualToView(btn)
+            .rightEqualToView(btn)
+            .heightIs(17);
+    }
+    
         
     [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
 }
@@ -286,7 +343,9 @@
         degreeEnglishShowView.type = WeiKaiFangBaoMingType;
         [degreeEnglishShowView show];
     }else if([tittle isEqualToString:@"我的直播"]){
-        
+        HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
         
     }else if([tittle isEqualToString:@"更多"]){
         HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];

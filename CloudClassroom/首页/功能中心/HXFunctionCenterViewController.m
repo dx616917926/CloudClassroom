@@ -6,8 +6,14 @@
 //
 
 #import "HXFunctionCenterViewController.h"
+#import "HXFinancePaymentViewController.h"//财务缴费
+#import "HXPaymentQueryViewController.h"//缴费查询
 #import "HXScoreQueryViewController.h"//成绩查询
 #import "HXMyBuKaoViewController.h"//我的补考
+#import "HXLiveCourseViewController.h"//直播课程
+#import "HXDegreeEnglishShowView.h"
+#import "HXHomeMenuModel.h"
+#import "SDWebImage.h"
 
 @interface HXFunctionCenterViewController ()
 
@@ -25,54 +31,104 @@
     
     //UI
     [self createUI];
+    //获取首页菜单
+    [self getHomeMenu];
 }
 
+#pragma mark - 获取首页菜单
+-(void)getHomeMenu{
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:NO  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXHomeMenuModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self refreshHomeMenuLayout:list];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+#pragma mark - 重新布局功能模块
+-(void)refreshHomeMenuLayout:(NSArray<HXHomeMenuModel*>*)list{
+    ///移除重新布局
+    [self.bujuBtns removeAllObjects];
+    [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    [self.bujuArray removeAllObjects];
+    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.isShow==1){
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnsContainerView addSubview:btn];
+            [self.bujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
+        }
+    }];
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+}
 
 #pragma mark - Event
--(void)handleMiddleClick:(UIButton *)sender{
-    NSInteger tag = sender.tag;
-    switch (tag) {
-        case 5000:
-        {
-           
-        }
-            break;
-        case 5001:
-        {
-            
-        }
-            break;
-        case 5002:
-        {
-            HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 5003:
-        {
-            HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 5004:
-        {
-           
-        }
-            break;
-        case 5005:
-        {
-           
-        }
-            break;
-            
-        default:
-            break;
+-(void)handleHomeMenuClick:(UIButton *)sender{
+    
+    NSString *tittle = [sender titleForState:UIControlStateNormal];
+    
+    if([tittle isEqualToString:@"在线缴费"]){
+        HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"缴费查询"]){
+        HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"成绩查询"]){
+        HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"我的补考"]){
+        HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"毕业论文"]){
+        
+        
+    }else if([tittle isEqualToString:@"学位英语"]){
+        HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
+        degreeEnglishShowView.type = WeiKaiFangBaoMingType;
+        [degreeEnglishShowView show];
+    }else if([tittle isEqualToString:@"我的直播"]){
+        HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else if([tittle isEqualToString:@"更多"]){
+        HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
 }
-
 #pragma mark - UI
 -(void)createUI{
     
@@ -88,19 +144,19 @@
     for (UIButton *btn in self.bujuBtns) {
         btn.sd_layout.heightIs(73);
         btn.imageView.sd_layout
-        .centerXEqualToView(btn)
-        .topSpaceToView(btn, 0)
-        .widthIs(47)
-        .heightEqualToWidth();
+            .centerXEqualToView(btn)
+            .topSpaceToView(btn, 0)
+            .widthIs(47)
+            .heightEqualToWidth();
         
         btn.titleLabel.sd_layout
-        .bottomSpaceToView(btn, 0)
-        .leftEqualToView(btn)
-        .rightEqualToView(btn)
-        .heightIs(17);
+            .bottomSpaceToView(btn, 0)
+            .leftEqualToView(btn)
+            .rightEqualToView(btn)
+            .heightIs(17);
     }
     
-    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
     self.btnsContainerView.sd_cornerRadius = @8;
     
 }
@@ -110,15 +166,13 @@
     if (!_bujuArray) {
         _bujuArray = [NSMutableArray array];
         [_bujuArray addObjectsFromArray:@[
-            [@{@"title":@"财务缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"handleEventTag":@(5001),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"handleEventTag":@(5002),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"handleEventTag":@(5003),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"handleEventTag":@(5004),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"学位英语",@"iconName":@"english_icon",@"handleEventTag":@(5005),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"handleEventTag":@(5006),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"资料上传",@"iconName":@"zlupload_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业登记表",@"iconName":@"biyedengjibiao_icon",@"handleEventTag":@(5008),@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _bujuArray;
@@ -146,14 +200,13 @@
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(handleMiddleClick:) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
             [_btnsContainerView addSubview:btn];
             [self.bujuBtns addObject:btn];
         }
     }
     return _btnsContainerView;;
 }
-
 
 
 @end

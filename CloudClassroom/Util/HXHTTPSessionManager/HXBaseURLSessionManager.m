@@ -144,6 +144,7 @@
         //401:表示token失效   402:表示被踢，需要重新登录
         NSString*code = [dictionary stringValueForKey:@"code"];
         NSString*message = [dictionary stringValueForKey:@"message"];
+        NSLog(@"\n______________________code______________________\n%@\n",code);
         if(dictionary){
             if ([code isEqualToString:@"401"]) {//402表示被踢，需要重新登录
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{

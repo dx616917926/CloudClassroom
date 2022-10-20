@@ -592,7 +592,7 @@
         
             }
             case LivenessRemindCodeConditionMeet: {
-               
+                [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
             }
                 break;
             default:
@@ -603,7 +603,129 @@
 
 //人脸拍照
 - (void)faceCapture:(UIImage *)image {
+    if (self.hasFinished) {
+        return;
+    }
     
+    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [[IDLFaceDetectionManager sharedInstance] detectStratrgyWithNormalImage:image previewRect:rect detectRect:rect completionHandler:^(FaceInfo *faceinfo, NSDictionary *images, DetectRemindCode remindCode) {
+        switch (remindCode) {
+            case DetectRemindCodeOK: {
+                weakSelf.hasFinished = YES;
+                [weakSelf warningStatus:CommonStatus warning:@"非常好"];
+                
+                if (images[@"image"] != nil && [images[@"image"] count] != 0) {
+                    NSArray *imageArr = images[@"image"];
+                    FaceCropImageInfo *imageInfo = imageArr[0];
+                    if (imageInfo.cropImageWithBlackEncryptStr) {
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            //停止识别
+                            [weakSelf.captureSession stopRunning];
+                            //上传
+                            [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+                        });
+                        
+                    }else{
+                       
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [weakSelf resetIDLFaceManager];
+                            weakSelf.hasFinished = NO;
+                        });
+                    }
+                }else{
+                   
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf resetIDLFaceManager];
+                        weakSelf.hasFinished = NO;
+                    });
+                }
+                break;
+            }
+            case DetectRemindCodePitchOutofDownRange:
+                [weakSelf warningStatus:PoseStatus warning:@"请略微抬头"];
+               
+                break;
+            case DetectRemindCodePitchOutofUpRange:
+                [weakSelf warningStatus:PoseStatus warning:@"请略微低头"];
+                
+                break;
+            case DetectRemindCodeYawOutofLeftRange:
+                [weakSelf warningStatus:PoseStatus warning:@"请略微向右转头"];
+               
+                break;
+            case DetectRemindCodeYawOutofRightRange:
+                [weakSelf warningStatus:PoseStatus warning:@"请略微向左转头"];
+                
+                break;
+            case DetectRemindCodePoorIllumination:
+                [weakSelf warningStatus:CommonStatus warning:@"光线再亮些"];
+                
+                break;
+            case DetectRemindCodeNoFaceDetected:
+                [weakSelf warningStatus:CommonStatus warning:@"把脸移入框内"];
+               
+                break;
+            case DetectRemindCodeImageBlured:
+                [weakSelf warningStatus:CommonStatus warning:@"请握稳手机"];
+                
+                break;
+            case DetectRemindCodeOcclusionLeftEye:
+                [weakSelf warningStatus:OcclusionStatus warning:@"左眼有遮挡"];
+                
+                break;
+            case DetectRemindCodeOcclusionRightEye:
+                [weakSelf warningStatus:OcclusionStatus warning:@"右眼有遮挡"];
+                break;
+            case DetectRemindCodeOcclusionNose:
+                [weakSelf warningStatus:OcclusionStatus warning:@"鼻子有遮挡"];
+                break;
+            case DetectRemindCodeOcclusionMouth:
+                [weakSelf warningStatus:OcclusionStatus warning:@"嘴巴有遮挡"];
+                break;
+            case DetectRemindCodeOcclusionLeftContour:
+                [weakSelf warningStatus:OcclusionStatus warning:@"左脸颊有遮挡"];
+                
+                break;
+            case DetectRemindCodeOcclusionRightContour:
+                [weakSelf warningStatus:OcclusionStatus warning:@"右脸颊有遮挡"];
+               
+                break;
+            case DetectRemindCodeOcclusionChinCoutour:
+                [weakSelf warningStatus:OcclusionStatus warning:@"下颚有遮挡"];
+                
+                break;
+            case DetectRemindCodeTooClose:
+                [weakSelf warningStatus:CommonStatus warning:@"请将脸部离远一点"];
+                
+                break;
+            case DetectRemindCodeTooFar:
+                [weakSelf warningStatus:CommonStatus warning:@"请将脸部靠近一点"];
+               
+                break;
+            case DetectRemindCodeBeyondPreviewFrame:
+                [weakSelf warningStatus:CommonStatus warning:@"把脸移入框内"];
+               
+                break;
+            case DetectRemindCodeVerifyInitError:
+                [weakSelf warningStatus:FailStatus warning:@"验证失败"];
+                break;
+            case DetectRemindCodeTimeout: {
+                [weakSelf warningStatus:Timeout warning:@"人脸识别超时"];
+                break;
+            }
+            case DetectRemindCodeConditionMeet: {
+                [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+            }
+                break;
+            default:
+                break;
+        }
+        
+    }];
+
 }
 
 

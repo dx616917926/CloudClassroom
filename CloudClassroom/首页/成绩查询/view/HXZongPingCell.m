@@ -84,7 +84,7 @@
     [self.courseNameLabel updateLayout];
     
     self.courseNameLabel.text = scoreModel.termCourseName;
-    self.xueQiLabel.text = @"第一学期";
+    self.xueQiLabel.text = scoreModel.term;
     
     //分数字体颜色未及格（60分以下）用红色标红，及格（60分及60分以上）用主题色
     if([scoreModel.commonTestScore integerValue]>=60){
@@ -92,7 +92,6 @@
     }else{
         self.deFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:(scoreModel.commonTestScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(scoreModel.commonTestScore?:@"0") stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }
-    
     
     
 }
