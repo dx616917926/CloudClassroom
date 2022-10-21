@@ -2210,7 +2210,7 @@
 					"$(PROJECT_DIR)/CloudClassroom/Util/TXMoviePlayer",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "学历教育云课堂";
 				INFOPLIST_KEY_NSCameraUsageDescription = "要在APP中扫描二维码，请点击\"好\"。";
@@ -2254,7 +2254,7 @@
 					"$(PROJECT_DIR)/CloudClassroom/Util/TXMoviePlayer",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = CloudClassroom/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "学历教育云课堂";
 				INFOPLIST_KEY_NSCameraUsageDescription = "要在APP中扫描二维码，请点击\"好\"。";
