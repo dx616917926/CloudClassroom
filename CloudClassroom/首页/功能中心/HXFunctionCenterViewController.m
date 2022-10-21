@@ -11,6 +11,7 @@
 #import "HXScoreQueryViewController.h"//成绩查询
 #import "HXMyBuKaoViewController.h"//我的补考
 #import "HXLiveCourseViewController.h"//直播课程
+#import "HXZiLiaoUploadViewController.h"//资料上传
 #import "HXDegreeEnglishShowView.h"
 #import "HXHomeMenuModel.h"
 #import "SDWebImage.h"
@@ -96,19 +97,15 @@
     
     if([tittle isEqualToString:@"在线缴费"]){
         HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else if([tittle isEqualToString:@"缴费查询"]){
         HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else if([tittle isEqualToString:@"成绩查询"]){
         HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else if([tittle isEqualToString:@"我的补考"]){
         HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else if([tittle isEqualToString:@"毕业论文"]){
         
@@ -119,13 +116,13 @@
         [degreeEnglishShowView show];
     }else if([tittle isEqualToString:@"我的直播"]){
         HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else if([tittle isEqualToString:@"更多"]){
-        HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
-        vc.hidesBottomBarWhenPushed = YES;
+    }else if([tittle isEqualToString:@"资料上传"]){
+        HXZiLiaoUploadViewController *vc = [[HXZiLiaoUploadViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+    }else if([tittle isEqualToString:@"毕业登记表"]){
+        
     }
     
 }
@@ -173,6 +170,8 @@
             [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"handleEventTag":@(5004),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"学位英语",@"iconName":@"english_icon",@"handleEventTag":@(5005),@"isShow":@(1)} mutableCopy],
             [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"handleEventTag":@(5006),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"资料上传",@"iconName":@"zlupload_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业登记表",@"iconName":@"bydjb_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy],
         ]];
     }
     return _bujuArray;
