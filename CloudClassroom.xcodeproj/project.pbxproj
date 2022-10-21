@@ -14,6 +14,11 @@
 		0425A25F28CB281600DA81BD /* HXMyMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0425A25E28CB281600DA81BD /* HXMyMessageCell.m */; };
 		0436510428C1F3CE0009ED38 /* UIView+TransitionColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0436510328C1F3CD0009ED38 /* UIView+TransitionColor.m */; };
 		0436510728C205380009ED38 /* HXStudyReportXXBXCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0436510628C205380009ED38 /* HXStudyReportXXBXCell.m */; };
+		043E9918290275EE00A8E6DA /* TXMoviePlayer.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 043E9914290275EE00A8E6DA /* TXMoviePlayer.xcassets */; };
+		043E9919290275EE00A8E6DA /* TXExamPopView.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 043E9915290275EE00A8E6DA /* TXExamPopView.xcassets */; };
+		043E991B290275EE00A8E6DA /* minedu.crt in Resources */ = {isa = PBXBuildFile; fileRef = 043E9917290275EE00A8E6DA /* minedu.crt */; };
+		043E991C290275FC00A8E6DA /* TXMoviePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 043E9916290275EE00A8E6DA /* TXMoviePlayer.framework */; };
+		043E991D290275FC00A8E6DA /* TXMoviePlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 043E9916290275EE00A8E6DA /* TXMoviePlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F217A28D052B6007023D7 /* HXSchoolVerifyViewController.m */; };
 		045F218728D05948007023D7 /* light_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 045F217E28D05948007023D7 /* light_green@2x.png */; };
 		045F218828D05948007023D7 /* QRCodeReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218228D05948007023D7 /* QRCodeReaderViewController.m */; };
@@ -210,6 +215,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				043E991D290275FC00A8E6DA /* TXMoviePlayer.framework in Embed Frameworks */,
 				047D23C528D1A24B00514C1C /* IDLFaceSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -232,6 +238,10 @@
 		0436510328C1F3CD0009ED38 /* UIView+TransitionColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TransitionColor.m"; sourceTree = "<group>"; };
 		0436510528C205380009ED38 /* HXStudyReportXXBXCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudyReportXXBXCell.h; sourceTree = "<group>"; };
 		0436510628C205380009ED38 /* HXStudyReportXXBXCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXStudyReportXXBXCell.m; sourceTree = "<group>"; };
+		043E9914290275EE00A8E6DA /* TXMoviePlayer.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TXMoviePlayer.xcassets; sourceTree = "<group>"; };
+		043E9915290275EE00A8E6DA /* TXExamPopView.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TXExamPopView.xcassets; sourceTree = "<group>"; };
+		043E9916290275EE00A8E6DA /* TXMoviePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TXMoviePlayer.framework; sourceTree = "<group>"; };
+		043E9917290275EE00A8E6DA /* minedu.crt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = minedu.crt; sourceTree = "<group>"; };
 		045F217928D052B6007023D7 /* HXSchoolVerifyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSchoolVerifyViewController.h; sourceTree = "<group>"; };
 		045F217A28D052B6007023D7 /* HXSchoolVerifyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXSchoolVerifyViewController.m; sourceTree = "<group>"; };
 		045F217D28D05948007023D7 /* QRCodeReaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReaderView.h; sourceTree = "<group>"; };
@@ -609,6 +619,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				043E991C290275FC00A8E6DA /* TXMoviePlayer.framework in Frameworks */,
 				0480D9E428D303B700BA4CE2 /* libc++.tbd in Frameworks */,
 				047D23C428D1A24B00514C1C /* IDLFaceSDK.framework in Frameworks */,
 				7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */,
@@ -658,6 +669,17 @@
 				048A0EBF28C044830077F40A /* HXShowMajorCell.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		043E9913290275EE00A8E6DA /* TXMoviePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				043E9914290275EE00A8E6DA /* TXMoviePlayer.xcassets */,
+				043E9915290275EE00A8E6DA /* TXExamPopView.xcassets */,
+				043E9916290275EE00A8E6DA /* TXMoviePlayer.framework */,
+				043E9917290275EE00A8E6DA /* minedu.crt */,
+			);
+			path = TXMoviePlayer;
 			sourceTree = "<group>";
 		};
 		045F217C28D05948007023D7 /* QRCodeReaderViewController */ = {
@@ -1156,6 +1178,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				043E9913290275EE00A8E6DA /* TXMoviePlayer */,
 				0473F3B728E579610085DBE4 /* Calendar */,
 				0470DC3328DC0F97007A25DC /* HXFileManager */,
 				0470DC0928DC0EB7007A25DC /* VIMediaCache */,
@@ -1776,6 +1799,8 @@
 				04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */,
 				0473F3D128E579610085DBE4 /* Calendar.bundle in Resources */,
 				048B7D4928BDA20A006EBAAE /* launch_logo@2x.png in Resources */,
+				043E991B290275EE00A8E6DA /* minedu.crt in Resources */,
+				043E9919290275EE00A8E6DA /* TXExamPopView.xcassets in Resources */,
 				0470DC2628DC0EB7007A25DC /* LICENSE in Resources */,
 				048B7CAF28BD9D8A006EBAAE /* LaunchScreen.storyboard in Resources */,
 				048B7CAC28BD9D8A006EBAAE /* Assets.xcassets in Resources */,
@@ -1784,6 +1809,7 @@
 				047D23C128D1746100514C1C /* idl-license.face-ios in Resources */,
 				048B7D4828BDA20A006EBAAE /* launch_logo@3x.png in Resources */,
 				047D23C228D1746100514C1C /* com.baidu.idl.face.model.faceSDK.bundle in Resources */,
+				043E9918290275EE00A8E6DA /* TXMoviePlayer.xcassets in Resources */,
 				0470DC2728DC0EB7007A25DC /* README.md in Resources */,
 				0490BBB228C884400095FF39 /* launchscreen_logo.png in Resources */,
 				047D23C328D1746100514C1C /* com.baidu.idl.face.faceSDK.bundle in Resources */,
@@ -2181,6 +2207,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CloudClassroom/Util/BDFaceSDK",
+					"$(PROJECT_DIR)/CloudClassroom/Util/TXMoviePlayer",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2224,6 +2251,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CloudClassroom/Util/BDFaceSDK",
+					"$(PROJECT_DIR)/CloudClassroom/Util/TXMoviePlayer",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CloudClassroom/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
