@@ -17,6 +17,8 @@ target 'CloudClassroom' do
   pod 'FMDB', '~> 2.6.2'
 
   pod 'MJExtension', '3.2.4'
+  
+  pod 'MMLayout', '0.3.0'
 
   pod 'HXViewHUD', '~> 0.2.0'
 

@@ -36,6 +36,7 @@ PODS:
   - Masonry (1.1.0)
   - MJExtension (3.2.4)
   - MJRefresh (3.1.14.1)
+  - MMLayout (0.3.0)
   - SDAutoLayout (2.2.1)
   - SDWebImage (5.10.4):
     - SDWebImage/Core (= 5.10.4)
@@ -55,6 +56,7 @@ DEPENDENCIES:
   - Masonry (= 1.1.0)
   - MJExtension (= 3.2.4)
   - MJRefresh (= 3.1.14.1)
+  - MMLayout (= 0.3.0)
   - SDAutoLayout (~> 2.2.1)
   - SDWebImage (~> 5.10.0)
   - WechatOpenSDK (~> 1.8.7.1)
@@ -73,6 +75,7 @@ SPEC REPOS:
     - Masonry
     - MJExtension
     - MJRefresh
+    - MMLayout
     - SDAutoLayout
     - SDWebImage
     - WechatOpenSDK
@@ -90,10 +93,11 @@ SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 88e0900751b6cac8de1cf724ca9838a0b28d5acb
   MJRefresh: 238e6a37e2dba12160ee3b79f6d2a2b26abcab42
+  MMLayout: d559edecd69fbcb348368ba90917e047ab1c544e
   SDAutoLayout: 8bf6b3bbc8b01f775d4defbb4fda2ace805461be
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
 
-PODFILE CHECKSUM: 082dd057068c826d581f6ccd7b0389256c52883d
+PODFILE CHECKSUM: 83b148df1ac7f2f1b6567f57f24d299487877066
 
 COCOAPODS: 1.11.3
