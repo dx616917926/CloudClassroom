@@ -14,6 +14,7 @@
 #import "HXCurrentLearCell.h"
 #import "HXOnlineLearnShowTipView.h"
 #import "HXSemesterModel.h"
+#import "HXSemesterHeaderView.h"
 
 
 @interface HXOnlineLearnViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
@@ -105,10 +106,7 @@
         if (success) {
             NSArray *list = [HXSemesterModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
             [self.allDataArray removeAllObjects];
-            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                HXSemesterModel *semesterModel = obj;
-                [self.allDataArray addObjectsFromArray:semesterModel.courseList];
-            }];
+            [self.allDataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
@@ -208,11 +206,17 @@
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
+    return (!self.isCuurentSemester?self.allDataArray.count:1);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return (self.isCuurentSemester?self.currentDataArray.count:self.allDataArray.count);
+    if (!self.isCuurentSemester) {
+        HXSemesterModel *semesterModel = self.allDataArray[section];
+        return (semesterModel.isExpand?semesterModel.courseList.count:0);
+    }else{
+        return self.currentDataArray.count;
+    }
+   
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -220,6 +224,32 @@
     return 242;
 }
 
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return !self.isCuurentSemester?48:0.01;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (!self.isCuurentSemester) {
+        HXSemesterModel *semesterModel = self.allDataArray[section];
+        static NSString *semesterHeaderViewIdentifier = @"HXSemesterHeaderViewIdentifier";
+        HXSemesterHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:semesterHeaderViewIdentifier];
+        if (!headerView) {
+            headerView = [[HXSemesterHeaderView alloc] initWithReuseIdentifier:semesterHeaderViewIdentifier];
+        }
+        headerView.semesterModel = semesterModel;
+        ///展开/折叠回调
+        headerView.expandCallBack = ^(void) {
+            [tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
+        };
+        return headerView;
+    }else{
+        return nil;
+    }
+    
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -231,7 +261,12 @@
     }
     cell.delegate = self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.courseInfoModel = (self.isCuurentSemester?self.currentDataArray[indexPath.row]:self.allDataArray[indexPath.row]);
+    if (!self.isCuurentSemester) {
+        HXSemesterModel *semesterModel = self.allDataArray[indexPath.section];
+        cell.courseInfoModel = semesterModel.courseList[indexPath.row];
+    }else{
+        cell.courseInfoModel = self.currentDataArray[indexPath.row];
+    }
     return cell;
 }
 

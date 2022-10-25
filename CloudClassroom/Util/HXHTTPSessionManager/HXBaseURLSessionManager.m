@@ -10,6 +10,11 @@
 #import "HXCheckUpdateTool.h"
 #import "NSString+md5.h"
 
+@interface HXBaseURLSessionManager ()
+
+
+@end
+
 @implementation HXBaseURLSessionManager
 
 + (instancetype)sharedClient {
@@ -192,6 +197,7 @@
 #pragma mark - 刷新JWT的Token(如果返回false,则表示要重新登录)
 + (void)refreshTokeCallBack:(void (^)(bool success))callBack
 {
+     
     HXBaseURLSessionManager * client = [HXBaseURLSessionManager sharedClient];
     //请求头设置
     [client.requestSerializer  setValue:[HXPublicParamTool sharedInstance].token forHTTPHeaderField:@"Authorization"];
@@ -236,7 +242,7 @@
     }
     //最后加上密钥
     [paramValueArr addObject:Md5Key];
-    NSString *paramStr = [paramValueArr componentsJoinedByString:@"&"];
+    NSString *paramStr = [[paramValueArr componentsJoinedByString:@"&"] lowercaseString];
     NSLog(@"\n______________________字符串拼接后结果______________________\n%@\n",paramStr);
     NSString *md5String = [paramStr md5String];
     return md5String;

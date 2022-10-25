@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger isCan;
 ///提示信息
 @property(nonatomic, copy) NSString *showMessage;
-///考试代码（课件代码
+///考试代码（课件代码)
 @property(nonatomic, copy) NSString *examCode;
 ///限制考试次数
 @property(nonatomic, assign) NSInteger allowCount_CJ;

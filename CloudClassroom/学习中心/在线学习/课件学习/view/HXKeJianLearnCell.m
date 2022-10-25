@@ -77,11 +77,14 @@
         self.startLearnBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
     }
     
-    
-    
 }
 
-
+#pragma mark - Event
+-(void)startLearn:(UIButton *)sender{
+    if(self.delegate &&[self.delegate respondsToSelector:@selector(playCourse:)]){
+        [self.delegate playCourse:self.keJianOrExamInfoModel];
+    }
+}
 
 
 #pragma mark - UI
@@ -100,7 +103,6 @@
     [self.bigBackgroundView addSubview:self.timeTitleLabel];
     [self.bigBackgroundView addSubview:self.timeContentLabel];
     [self.bigBackgroundView addSubview:self.tipLabel];
-    [self.bigBackgroundView addSubview:self.muLuBtn];
     [self.bigBackgroundView addSubview:self.startLearnBtn];
     
     
@@ -175,12 +177,6 @@
     .rightSpaceToView(self.startLearnBtn, 3)
     .heightIs(20);
     
-    self.muLuBtn.sd_layout
-    .centerYEqualToView(self.startLearnBtn)
-    .rightSpaceToView(self.startLearnBtn, 12)
-    .widthIs(66)
-    .heightIs(36);
-    self.muLuBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.tipLabel.sd_layout
     .centerYEqualToView(self.startLearnBtn)
@@ -297,18 +293,7 @@
     return _tipLabel;
 }
 
-- (UIButton *)muLuBtn{
-    if (!_muLuBtn) {
-        _muLuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _muLuBtn.layer.borderWidth = 1;
-        _muLuBtn.layer.borderColor = COLOR_WITH_ALPHA(0x2E5BFD, 1).CGColor;
-        _muLuBtn.backgroundColor = UIColor.whiteColor;
-        _muLuBtn.titleLabel.font = HXBoldFont(14);
-        [_muLuBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
-        [_muLuBtn setTitle:@"目录" forState:UIControlStateNormal];
-    }
-    return _muLuBtn;
-}
+
 
 - (UIButton *)startLearnBtn{
     if (!_startLearnBtn) {
@@ -318,6 +303,7 @@
         [_startLearnBtn setImage:[UIImage imageNamed:@"smallplay_icon"] forState:UIControlStateNormal];
         [_startLearnBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_startLearnBtn setTitle:@"开始学习" forState:UIControlStateNormal];
+        [_startLearnBtn addTarget:self action:@selector(startLearn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startLearnBtn;
 }

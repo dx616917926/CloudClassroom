@@ -43,7 +43,7 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //状态栏高度
 #define kStatusBarHeight           (IS_iPhoneX?(IsIOS14?48:44):20)  //状态高度  iPhone X高44(iOS 14高48)，其它的高20
 //导航栏
-#define kNavigationBarHeight       (IS_iPhoneX?88:64)   //导航栏高度  iPhone X高88(iOS 14高92)，其它的高64
+#define kNavigationBarHeight       (IS_iPhoneX?(kStatusBarHeight+44):64)   //导航栏高度  iPhone X高88(iOS 14高92)，其它的高64
 //底部边距
 #define kScreenBottomMargin        (IS_iPhoneX?34:0) //屏幕底部边距  iPhone X边距34，其它的0
 //tabbar高度

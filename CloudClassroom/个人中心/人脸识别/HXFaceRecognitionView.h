@@ -30,12 +30,15 @@ typedef enum : NSUInteger {
 
 @interface HXFaceRecognitionView : UIView
 
-//当前考试状态
+///当前考试状态
 @property(nonatomic, assign) HXFaceRecognitionStatus status;
-//人脸识别和采集的相关参数
+///人脸识别和采集的相关参数
 @property(nonatomic, strong) HXFaceConfigObject *faceConfig;
 
-//弹出
+///班级计划学期ID（如果是补考，传补考开课ID）
+@property(nonatomic, strong)NSString *termCourseID;
+
+///弹出
 - (void)showInViewController:(UIViewController *)viewController;
 
 @end

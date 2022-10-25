@@ -119,7 +119,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)sharedClient;
 
-- (void)clearCookies;
 
 //修改baseURL
 +(void)setBaseURLStr:(NSString *)baseURL;
@@ -154,6 +153,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)refreshTokeCallBack:(void (^)(bool success))callBack;
 
 
+/**清除cookie
+ */
+- (void)clearCookies;
 
 @end
 

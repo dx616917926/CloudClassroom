@@ -795,6 +795,41 @@
 }
 
 
+#pragma mark - 人脸识别
+-(void)faceMatch{
+
+    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        //专业ID
+        @"majorid":HXSafeString(majorid),
+        //班级计划学期ID（如果是补考，传补考开课ID）
+        @"termcourseid":HXSafeString(self.termCourseID),
+        //模块类型 1课件 2作业 3期末 0补考 4表示模拟人脸识别（如果为模拟人脸识别，则传SourseImgBase64和UploadType=2，其他参数传0即可）
+        @"coursetype":@1,
+        //Base64的图片
+        @"sourseImgBase64":@"",
+        //1表示采集 2表示对比
+        @"uploadType":@1,
+        //0表示系统拍照（默认） 1表示抓拍
+        @"systemType":@0,
+        //前置照片还是后置照片 0表示前置照片（默认） 1表示后置照片
+        @"photoType":@0,
+        //进入考试（学习）时对比还是过程中对比 0表示过程中对比（默认） 1表示进入时对比
+        @"isEnter":@0
+
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_FaceMatch needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
 
 /**
  * 把 CMSampleBufferRef 转化成 UIImage 的方法，参考自：

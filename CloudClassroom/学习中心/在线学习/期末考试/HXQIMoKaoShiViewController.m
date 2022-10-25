@@ -55,6 +55,11 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:self.keJianOrExamInfoModel.examPara];
             [self.mainTableView reloadData];
+            if(self.dataArray.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
@@ -77,6 +82,11 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:self.keJianOrExamInfoModel.examPara];
             [self.mainTableView reloadData];
+            if(self.dataArray.count==0){
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];

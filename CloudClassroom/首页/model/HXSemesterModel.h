@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 //课程数组
 @property(nonatomic, strong) NSArray<HXCourseInfoModel *> *courseList;
 
+//是否展开，默认 否
+@property(nonatomic,assign) BOOL isExpand;
+
 @end
 
 NS_ASSUME_NONNULL_END
