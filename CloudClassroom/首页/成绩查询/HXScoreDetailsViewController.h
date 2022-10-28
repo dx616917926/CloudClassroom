@@ -6,10 +6,13 @@
 //
 
 #import "HXBaseViewController.h"
+#import "HXScoreModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXScoreDetailsViewController : HXBaseViewController
+
+@property(nonatomic,strong) HXScoreModel *scoreModel;
 
 @end
 

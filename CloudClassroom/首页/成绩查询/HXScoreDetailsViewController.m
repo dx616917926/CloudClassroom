@@ -7,6 +7,7 @@
 
 #import "HXScoreDetailsViewController.h"
 #import "UIView+TransitionColor.h"
+#import "HXScoreDetailModel.h"
 
 @interface HXScoreDetailsViewController ()
 
@@ -27,6 +28,8 @@
 
 
 @property(nonatomic,strong) UIView *middleContainerView;
+@property(nonatomic,strong) NSMutableArray *middleViews;
+@property(nonatomic,strong) UIView *lastBottomView;
 //课件学习
 @property(nonatomic,strong) UIView *keJianXueXiView;
 @property(nonatomic,strong) UIImageView *keJianXueXiIcon;
@@ -74,6 +77,8 @@
 
 
 
+@property(nonatomic,strong) HXScoreDetailModel *scoreDetailModel;
+
 @end
 
 @implementation HXScoreDetailsViewController
@@ -84,6 +89,14 @@
     
     //UI
     [self createUI];
+    
+    //获取成绩详情
+    [self getZKScoreDetail];
+    
+}
+
+-(void)dealloc{
+    
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
@@ -94,9 +107,115 @@
     }
 }
 
+#pragma mark - 获取成绩详情
+-(void)getZKScoreDetail{
+    
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(self.scoreModel.studentID),
+        @"termCourseid":HXSafeString(self.scoreModel.termCourseID)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetZKScoreDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainScrollView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.scoreDetailModel = [HXScoreDetailModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            //刷新UI
+            [self refreshUI];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainScrollView.mj_header endRefreshing];
+    }];
+    
+}
+
+
+
 #pragma mark - Event
 -(void)popBack{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+ 
+#pragma mark - 刷新UI
+-(void)refreshUI{
+    
+    if (self.scoreDetailModel.isNetCourse) {
+        self.courseIcon.sd_layout.widthIs(16);
+        self.courseNameLabel.sd_layout.leftSpaceToView(self.courseIcon, 4);
+    }else{
+        self.courseIcon.sd_layout.widthIs(0);
+        self.courseNameLabel.sd_layout.leftSpaceToView(self.courseIcon, 0);
+    }
+
+    [self.middleViews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+   
+   
+    if (self.scoreDetailModel.selfRate==0) {
+        [self.middleViews removeObject:self.keJianXueXiView];
+    }
+
+    if (self.scoreDetailModel.timeRate==0) {
+        [self.middleViews removeObject:self.pingShiZuoYeView];
+    }
+
+    if (self.scoreDetailModel.workRate==0) {
+        [self.middleViews removeObject:self.xueXiBiaoXianView];
+    }
+
+    if (self.scoreDetailModel.examRate==0) {
+        [self.middleViews removeObject:self.qiMoKaoShiView];
+    }
+    
+    [self.middleContainerView sd_addSubviews:self.middleViews];
+    
+    __block UIView *lastView = [UIView new];;
+    [self.middleViews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.sd_layout
+        .topSpaceToView(self.middleContainerView, (idx/2)*(16+77))
+        .leftSpaceToView(self.middleContainerView, (_kpw(160)+(kScreenWidth-32-_kpw(160)*2))*(idx%2))
+        .widthIs(_kpw(160))
+        .heightIs(77);
+        if (idx==self.middleViews.count-1) {
+            lastView = obj;
+        }
+    }];
+    
+    [self.middleContainerView setupAutoHeightWithBottomViewsArray:@[self.lastBottomView,lastView] bottomMargin:0];
+    
+    self.keJianXueXiContainerView.sd_layout.heightIs((self.scoreDetailModel.selfRate >0?40:0));
+    self.xueXiBiaoXianContainerView.sd_layout.heightIs((self.scoreDetailModel.workRate >0?40:0));
+    self.pingShiZuoYeContainerView.sd_layout.heightIs((self.scoreDetailModel.timeRate>0?40:0));
+    self.qiMoKaoShiContainerView.sd_layout.heightIs((self.scoreDetailModel.examRate>0?40:0));
+    self.bukaoContainerView.sd_layout.heightIs((self.scoreDetailModel.addTestScore>0?40:0));
+
+    
+    self.courseNameLabel.text = self.scoreDetailModel.termCourseName;
+    
+    self.fenShuLabel.text = HXFloatToString(self.scoreDetailModel.showScore);
+    
+    
+    self.keJianXueXiBFB.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.selfRate) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:[HXFloatToString(self.scoreDetailModel.selfRate) stringByAppendingString:@"%"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+
+    
+    self.pingShiZuoYeBFB.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.timeRate) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:[HXFloatToString(self.scoreDetailModel.timeRate) stringByAppendingString:@"%"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+
+    
+    self.xueXiBiaoXianBFB.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.workRate) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:[HXFloatToString(self.scoreDetailModel.workRate) stringByAppendingString:@"%"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+
+    
+    self.qiMoKaoShiBFB.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.examRate) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:[HXFloatToString(self.scoreDetailModel.examRate) stringByAppendingString:@"%"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+
+    self.keJianXueXiDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.selfScore) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:[HXFloatToString(self.scoreDetailModel.selfScore) stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+
+    self.xueXiBiaoXianDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.workScore) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:[HXFloatToString(self.scoreDetailModel.workScore) stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+
+    self.pingShiZuoYeDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.timeScore) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:[HXFloatToString(self.scoreDetailModel.timeScore) stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+
+    self.qiMoKaoShiDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.examScore) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:[HXFloatToString(self.scoreDetailModel.examScore) stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+
+    self.bukaoDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:HXFloatToString(self.scoreDetailModel.addTestScore) needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:[HXFloatToString(self.scoreDetailModel.addTestScore) stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
 }
 
 #pragma mark - UI
@@ -117,11 +236,10 @@
     [self.topBgImageView addSubview:self.tipLabel];
     
     [self.mainScrollView addSubview:self.middleContainerView];
+    [self.mainScrollView addSubview:self.lastBottomView];
     
-    [self.middleContainerView addSubview:self.keJianXueXiView];
-    [self.middleContainerView addSubview:self.pingShiZuoYeView];
-    [self.middleContainerView addSubview:self.xueXiBiaoXianView];
-    [self.middleContainerView addSubview:self.qiMoKaoShiView];
+    [self.middleViews addObjectsFromArray:@[self.keJianXueXiView,self.pingShiZuoYeView,self.xueXiBiaoXianView,self.qiMoKaoShiView]];
+    [self.middleContainerView sd_addSubviews:self.middleViews];
     
 
     [self.keJianXueXiView addSubview:self.keJianXueXiIcon];
@@ -210,7 +328,7 @@
     .topEqualToView(self.deFenIcon)
     .leftSpaceToView(self.topBgImageView, 30)
     .widthIs(16)
-    .heightEqualToWidth();
+    .heightIs(16);
     
     self.courseNameLabel.sd_layout
     .centerYEqualToView(self.courseIcon)
@@ -226,14 +344,14 @@
     [self.fenShuLabel setSingleLineAutoResizeWithMaxWidth:100];
     
     self.fenLabel.sd_layout
-    .bottomEqualToView(self.fenShuLabel).offset(-5)
+    .bottomEqualToView(self.fenShuLabel).offset(-2)
     .leftSpaceToView(self.fenShuLabel, 4)
     .widthIs(30)
     .heightIs(23);
     
     self.tipLabel.sd_layout
     .topSpaceToView(self.fenShuLabel, 5)
-    .leftEqualToView(self.fenShuLabel)
+    .leftEqualToView(self.courseIcon)
     .rightEqualToView(self.courseNameLabel)
     .autoHeightRatio(0);
     
@@ -241,23 +359,32 @@
     .topSpaceToView(self.mainScrollView, 25)
     .leftSpaceToView(self.mainScrollView, 16)
     .rightSpaceToView(self.mainScrollView, 16);
-    
-    self.keJianXueXiView.sd_layout.heightIs(77);
-    self.pingShiZuoYeView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
-    self.xueXiBiaoXianView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
-    self.qiMoKaoShiView.sd_layout.heightRatioToView(self.keJianXueXiView, 1);
-    
-    [self.middleContainerView setupAutoMarginFlowItems:@[self.keJianXueXiView,self.pingShiZuoYeView,self.xueXiBiaoXianView,self.qiMoKaoShiView] withPerRowItemsCount:2 itemWidth:_kpw(160) verticalMargin:16 verticalEdgeInset:0 horizontalEdgeInset:0];
-    
 
+    self.lastBottomView.sd_layout
+    .topEqualToView(self.middleContainerView)
+    .leftEqualToView(self.middleContainerView)
+    .rightEqualToView(self.middleContainerView)
+    .heightIs(0);
     
+    __block UIView *lastView = [UIView new];
+    [self.middleViews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.sd_layout
+        .topSpaceToView(self.middleContainerView, (idx/2)*(16+77))
+        .leftSpaceToView(self.middleContainerView, (_kpw(160)+(kScreenWidth-32-_kpw(160)*2))*(idx%2))
+        .widthIs(_kpw(160))
+        .heightIs(77);
+        if (idx==self.middleViews.count-1) {
+            lastView = obj;
+        }
+    }];
+    
+    [self.middleContainerView setupAutoHeightWithBottomViewsArray:@[self.lastBottomView,lastView] bottomMargin:0];
     [self.middleContainerView updateLayout];
    
-
-    // 渐变
-    [self.keJianXueXiView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xFFFFFF, 0.3) endColor:COLOR_WITH_ALPHA(0xFFFFFF, 0.8)];
     // 模糊
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    // 渐变
+    [self.keJianXueXiView addTransitionColorTopToBottom:COLOR_WITH_ALPHA(0xFFFFFF, 0.3) endColor:COLOR_WITH_ALPHA(0xFFFFFF, 0.8)];
     UIVisualEffectView *keJianXueXiVisualView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
     keJianXueXiVisualView.clipsToBounds = YES;
     keJianXueXiVisualView.layer.cornerRadius = 6;
@@ -312,59 +439,66 @@
     .heightIs(21);
     
     
+    
     self.pingShiZuoYeIcon.sd_layout
     .centerYEqualToView(self.pingShiZuoYeView)
     .leftSpaceToView(self.pingShiZuoYeView, 20)
-    .widthRatioToView(self.keJianXueXiIcon, 1)
-    .heightRatioToView(self.keJianXueXiIcon, 1);
+    .widthIs(27)
+    .heightEqualToWidth();
     
     self.pingShiZuoYeNameLabel.sd_layout
     .bottomSpaceToView(self.pingShiZuoYeView, 16)
     .rightSpaceToView(self.pingShiZuoYeView, 14)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiNameLabel, 1);
+    .widthIs(60)
+    .heightIs(18);
     
     self.pingShiZuoYeBFB.sd_layout
     .bottomSpaceToView(self.pingShiZuoYeNameLabel, 3)
     .rightSpaceToView(self.pingShiZuoYeView, 16)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiBFB, 1);
+    .widthRatioToView(self.pingShiZuoYeNameLabel, 1)
+    .heightIs(21);
+    
+   
     
     self.xueXiBiaoXianIcon.sd_layout
     .centerYEqualToView(self.xueXiBiaoXianView)
     .leftSpaceToView(self.xueXiBiaoXianView, 20)
-    .widthRatioToView(self.keJianXueXiIcon, 1)
-    .heightRatioToView(self.keJianXueXiIcon, 1);
+    .widthIs(27)
+    .heightEqualToWidth();
     
     self.xueXiBiaoXianNameLabel.sd_layout
     .bottomSpaceToView(self.xueXiBiaoXianView, 16)
     .rightSpaceToView(self.xueXiBiaoXianView, 14)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiNameLabel, 1);
+    .widthIs(60)
+    .heightIs(18);
     
     self.xueXiBiaoXianBFB.sd_layout
     .bottomSpaceToView(self.xueXiBiaoXianNameLabel, 3)
     .rightSpaceToView(self.xueXiBiaoXianView, 16)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiBFB, 1);
+    .widthRatioToView(self.xueXiBiaoXianNameLabel, 1)
+    .heightIs(21);
+    
+    
     
     self.qiMoKaoShiIcon.sd_layout
     .centerYEqualToView(self.qiMoKaoShiView)
     .leftSpaceToView(self.qiMoKaoShiView, 20)
-    .widthRatioToView(self.keJianXueXiIcon, 1)
-    .heightRatioToView(self.keJianXueXiIcon, 1);
+    .widthIs(27)
+    .heightEqualToWidth();
     
     self.qiMoKaoShiNameLabel.sd_layout
     .bottomSpaceToView(self.qiMoKaoShiView, 16)
     .rightSpaceToView(self.qiMoKaoShiView, 14)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiNameLabel, 1);
+    .widthIs(60)
+    .heightIs(18);
     
     self.qiMoKaoShiBFB.sd_layout
     .bottomSpaceToView(self.qiMoKaoShiNameLabel, 3)
     .rightSpaceToView(self.qiMoKaoShiView, 16)
-    .widthRatioToView(self.keJianXueXiNameLabel, 1)
-    .heightRatioToView(self.keJianXueXiBFB, 1);
+    .widthRatioToView(self.qiMoKaoShiNameLabel, 1)
+    .heightIs(21);
+    
+   
     
     self.detailsContainerView.sd_layout
     .topSpaceToView(self.middleContainerView, 20)
@@ -473,11 +607,22 @@
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.detailsContainerView bottomMargin:50];
     
+    //下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getZKScoreDetail)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainScrollView.mj_header = header;
+    
 }
 
 
 
 #pragma mark - LazyLoad
+-(NSMutableArray *)middleViews{
+    if (!_middleViews) {
+        _middleViews = [NSMutableArray array];
+    }
+    return _middleViews;
+}
 -(UIImageView *)topBgImageView{
     if (!_topBgImageView) {
         _topBgImageView = [[UIImageView alloc] init];
@@ -529,7 +674,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(13);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"计算机科学与技术";
+       
     }
     return _courseNameLabel;
 }
@@ -541,7 +686,7 @@
         _fenShuLabel.textAlignment = NSTextAlignmentLeft;
         _fenShuLabel.font = [UIFont fontWithName: @"Verdana-Bold"  size:30];
         _fenShuLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _fenShuLabel.text = @"64";
+        
     }
     return _fenShuLabel;
 }
@@ -598,6 +743,15 @@
     return _middleContainerView;
 }
 
+-(UIView *)lastBottomView{
+    if (!_lastBottomView) {
+        _lastBottomView = [[UIView alloc] init];
+        _lastBottomView.clipsToBounds = YES;
+        _lastBottomView.backgroundColor = UIColor.clearColor;
+    }
+    return _lastBottomView;
+}
+
 
 -(UIView *)keJianXueXiView{
     if (!_keJianXueXiView) {
@@ -626,7 +780,8 @@
         _keJianXueXiBFB.textAlignment = NSTextAlignmentRight;
         _keJianXueXiBFB.font = HXBoldFont(18);
         _keJianXueXiBFB.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _keJianXueXiBFB.attributedText = [HXCommonUtil getAttributedStringWith:@"10" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:@"10%" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+        _keJianXueXiBFB.isAttributedContent = YES;
+        
     }
     return _keJianXueXiBFB;
 }
@@ -669,7 +824,7 @@
         _pingShiZuoYeBFB.textAlignment = NSTextAlignmentRight;
         _pingShiZuoYeBFB.font = HXBoldFont(18);
         _pingShiZuoYeBFB.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _pingShiZuoYeBFB.attributedText = [HXCommonUtil getAttributedStringWith:@"10" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:@"10%" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+        _pingShiZuoYeBFB.isAttributedContent = YES;
     }
     return _pingShiZuoYeBFB;
 }
@@ -712,7 +867,7 @@
         _xueXiBiaoXianBFB.textAlignment = NSTextAlignmentRight;
         _xueXiBiaoXianBFB.font = HXBoldFont(18);
         _xueXiBiaoXianBFB.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _xueXiBiaoXianBFB.attributedText = [HXCommonUtil getAttributedStringWith:@"0" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:@"0%" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+        _xueXiBiaoXianBFB.isAttributedContent = YES;
     }
     return _xueXiBiaoXianBFB;
 }
@@ -755,7 +910,7 @@
         _qiMoKaoShiBFB.textAlignment = NSTextAlignmentRight;
         _qiMoKaoShiBFB.font = HXBoldFont(18);
         _qiMoKaoShiBFB.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _qiMoKaoShiBFB.attributedText = [HXCommonUtil getAttributedStringWith:@"0" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} content:@"0%" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x666666, 1),NSFontAttributeName:[UIFont systemFontOfSize:12]}];
+        _qiMoKaoShiBFB.isAttributedContent = YES;
     }
     return _qiMoKaoShiBFB;
 }
@@ -818,8 +973,8 @@
         _keJianXueXiDeFenLabel.textAlignment = NSTextAlignmentRight;
         _keJianXueXiDeFenLabel.font = HXBoldFont(15);
         _keJianXueXiDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _keJianXueXiDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
     }
+        
     return _keJianXueXiDeFenLabel;
 }
 
@@ -849,7 +1004,7 @@
         _xueXiBiaoXianDeFenLabel.textAlignment = NSTextAlignmentRight;
         _xueXiBiaoXianDeFenLabel.font = HXBoldFont(15);
         _xueXiBiaoXianDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _xueXiBiaoXianDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+       
     }
     return _xueXiBiaoXianDeFenLabel;
 }
@@ -880,7 +1035,7 @@
         _pingShiZuoYeDeFenLabel.textAlignment = NSTextAlignmentRight;
         _pingShiZuoYeDeFenLabel.font = HXBoldFont(15);
         _pingShiZuoYeDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _pingShiZuoYeDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+        
     }
     return _pingShiZuoYeDeFenLabel;
 }
@@ -911,7 +1066,7 @@
         _qiMoKaoShiDeFenLabel.textAlignment = NSTextAlignmentRight;
         _qiMoKaoShiDeFenLabel.font = HXBoldFont(15);
         _qiMoKaoShiDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _qiMoKaoShiDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+       
     }
     return _qiMoKaoShiDeFenLabel;
 }
@@ -942,7 +1097,7 @@
         _bukaoDeFenLabel.textAlignment = NSTextAlignmentRight;
         _bukaoDeFenLabel.font = HXBoldFont(15);
         _bukaoDeFenLabel.textColor =COLOR_WITH_ALPHA(0x333333, 1);
-        _bukaoDeFenLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"88" needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:15]} content:@"88分" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:10]}];
+       
     }
     return _bukaoDeFenLabel;
 }

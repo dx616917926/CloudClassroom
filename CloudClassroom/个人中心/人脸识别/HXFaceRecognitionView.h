@@ -28,6 +28,9 @@ typedef enum : NSUInteger {
     Timeout//超时
 } WarningStatus;
 
+typedef void (^HXFaceRecognitionViewSuccessBlock)(void);
+typedef void (^HXFaceRecognitionViewNeedUploadPhotoBlock)(void);
+
 @interface HXFaceRecognitionView : UIView
 
 ///当前考试状态
@@ -35,8 +38,10 @@ typedef enum : NSUInteger {
 ///人脸识别和采集的相关参数
 @property(nonatomic, strong) HXFaceConfigObject *faceConfig;
 
-///班级计划学期ID（如果是补考，传补考开课ID）
-@property(nonatomic, strong)NSString *termCourseID;
+
+
+@property(nonatomic, copy) HXFaceRecognitionViewSuccessBlock successBlack; //采集成功回调
+@property(nonatomic, copy) HXFaceRecognitionViewNeedUploadPhotoBlock uploadPhotoBlack; //上传证件照回调
 
 ///弹出
 - (void)showInViewController:(UIViewController *)viewController;

@@ -99,6 +99,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HXScoreDetailsViewController *vc = [[HXScoreDetailsViewController alloc] init];
     vc.sc_navigationBarHidden = YES;
+    vc.scoreModel = self.dataArray[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

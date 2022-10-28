@@ -21,6 +21,8 @@
 @property(nonatomic,strong) UIImageView *circleImageView;
 @property(nonatomic,strong) UIImageView *headImageView;
 @property(nonatomic,strong) UIImageView *zhuanDongCircleImageView;
+//人脸识别提示文字
+@property(nonatomic, strong) UILabel *hintLabel;
 
 @property(nonatomic, strong) UIView *circleView;
 @property(nonatomic, strong) UIView *remindView;
@@ -61,6 +63,8 @@
         self.backgroundColor = [UIColor whiteColor];
         //UI
         [self createUI];
+        //监听退出登录
+        [HXNotificationCenter addObserver:self selector:@selector(loginOut) name:SHOWLOGIN object:nil];
     }
     return self;
 }
@@ -68,6 +72,12 @@
 
 - (void)dealloc{
     NSLog(@"百度人脸活体检测窗口已关闭!");
+    [HXNotificationCenter removeObserver:self];
+}
+
+#pragma mark - 退出登录
+- (void)loginOut {
+    [self close];
 }
 
 
@@ -91,8 +101,8 @@
     [[FaceSDKManager sharedInstance] setEulurAngleThrPitch:10 yaw:10 roll:10];
     // 设置人脸检测精度阀值
     [[FaceSDKManager sharedInstance] setNotFaceThreshold:0.6];
-    // 设置抠图的缩放倍数--数值越大抠图周边黑框越大
-    [[FaceSDKManager sharedInstance] setCropEnlargeRatio:2.1f];
+    // 设置抠图的缩放倍数--数值越大抠图周边黑框越大--只显示出头部和颈部即可--2022年10月17日
+    [[FaceSDKManager sharedInstance] setCropEnlargeRatio:1.2f];
     // 设置照片采集张数
     [[FaceSDKManager sharedInstance] setMaxCropImageNum:1];
     // 设置超时时间
@@ -108,7 +118,7 @@
     
     BOOL closeFaceLivenessSound = [HXUserDefaults boolForKey:CloseFaceLivenessSound];
     //只拍照
-    if (self.faceConfig.face_cj==0) {
+    if (self.faceConfig.face_cj==1||self.faceConfig.face_cj==2) {
         [[IDLFaceDetectionManager sharedInstance] startInitial];
         [IDLFaceDetectionManager sharedInstance].enableSound = !closeFaceLivenessSound;
     }else{
@@ -124,7 +134,7 @@
 #pragma mark -重置百度人脸识别
 - (void)resetIDLFaceManager {
     //只拍照
-    if (self.faceConfig.face_cj==0) {
+    if (self.faceConfig.face_cj==1||self.faceConfig.face_cj==2) {
         [[IDLFaceDetectionManager sharedInstance] reset];
     }else{
         [[IDLFaceLivenessManager sharedInstance] reset];
@@ -143,9 +153,41 @@
 //添加弹出移除的动画效果
 - (void)showInView:(UIView *)view{
     
+    //考试中、最后交卷 都不允许取消 2022年1月
+    if (self.status == HXFaceRecognitionStatusExam || self.status == HXFaceRecognitionStatusEndExam) {
+        self.closeBtn.hidden = YES;
+    }
+    
+    self.failTimes = 0;
+    
     if (self.status == HXFaceRecognitionStatusSimulate) {
         self.titleLabel.text = @"模拟人脸识别";
+        self.hintLabel.hidden = YES;
+        self.tipLabel.hidden = self.tipImageView.hidden = NO;
+    }else{
+        self.hintLabel.hidden = NO;
+        self.tipLabel.hidden = self.tipImageView.hidden = YES;
     }
+    
+    
+    //提示信息
+    NSString *hintText = @"";
+    for (NSString *text in self.faceConfig.faceMessage) {
+        if (!hintText) {
+            hintText = [NSString stringWithFormat:@"%@",text];
+        }else{
+            hintText = [NSString stringWithFormat:@"%@\n%@",hintText,text];
+        }
+    }
+    
+    //设置一下行间距、居中
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:hintText];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+    [paragraphStyle setAlignment:NSTextAlignmentLeft];
+    [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
+    self.hintLabel.attributedText = attr;
+    [self.hintLabel sizeToFit];
     
     self.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight);
     [view addSubview:self];
@@ -160,10 +202,37 @@
 
 #pragma mark - 检查照片状态
 - (void)checkImageStatus {
-    //主动开启相机进行拍照
-    [self checkCameraAuthorization];
-    //初始化百度人脸识别
-    [self startInitialIDLFaceManger];
+    
+    ///照片的审核状态，-1:表示没有照片      0:表示未审核     1:表示已审核
+    NSInteger imageStatus = self.faceConfig.imageStatus;
+   
+    if (imageStatus!=1) {
+        //未审核
+        NSString *message = @"您的照片未审核，请联系管理员！";
+        //没有上传照片
+        if (imageStatus!=-1) {
+            message = @"您未上传证件照，请先上传证件照！";
+        }
+        WeakSelf(weakSelf);
+        //弹框提示
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action){
+            if (imageStatus ==-1) {
+                [weakSelf uploadPhoto];
+            }else{
+                [weakSelf close];
+            }
+        }];
+        [alert addAction:action];
+        [weakSelf.parentViewController presentViewController:alert animated:YES completion:nil];
+        
+    }else{
+        //主动开启相机进行拍照
+        [self checkCameraAuthorization];
+        //初始化百度人脸识别
+        [self startInitialIDLFaceManger];
+    }
+    
 }
 
 #pragma mark - 判断相机权限
@@ -324,6 +393,11 @@
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
+    
+    //成功回调
+    if (self.successBlack) {
+        self.successBlack();
+    }
 }
 
 
@@ -364,9 +438,7 @@
 
 //停止识别
 -(void)endFaceRecognitioning{
-    
-    
-    
+
     self.remindView.hidden = NO;
     self.circleView.hidden = NO;
     self.previewView.hidden = NO;
@@ -384,6 +456,15 @@
     [self resetIDLFaceManager];
 }
 
+
+#pragma mark -  前往个人信息页面  上传证件照
+- (void)uploadPhoto {
+    [self close];
+    //上传证件照回调
+    if (self.uploadPhotoBlack) {
+        self.uploadPhotoBlack();
+    }
+}
 
 
 #pragma mark - 识别中转动
@@ -422,7 +503,7 @@
     UIImage* sampleImage = [self imageFromSamplePlanerPixelBuffer:sampleBuffer];
     
     
-    if (self.faceConfig.face_cj==0) {//人脸拍照
+    if (self.faceConfig.face_cj==1||self.faceConfig.face_cj==2) {//人脸拍照
         [self faceCapture:sampleImage];
     }else{//人脸对比
         [self faceProcesss:sampleImage];
@@ -450,8 +531,9 @@
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             //停止识别
                             [weakSelf.captureSession stopRunning];
-                            //上传
-                            [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+                           
+                            //上传服务器
+                            [weakSelf faceMatch:imageInfo.cropImageWithBlackEncryptStr];
                         });
                         
                     }else{
@@ -592,7 +674,7 @@
         
             }
             case LivenessRemindCodeConditionMeet: {
-                [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+               
             }
                 break;
             default:
@@ -615,8 +697,6 @@
         switch (remindCode) {
             case DetectRemindCodeOK: {
                 weakSelf.hasFinished = YES;
-                [weakSelf warningStatus:CommonStatus warning:@"非常好"];
-                
                 if (images[@"image"] != nil && [images[@"image"] count] != 0) {
                     NSArray *imageArr = images[@"image"];
                     FaceCropImageInfo *imageInfo = imageArr[0];
@@ -624,8 +704,8 @@
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             //停止识别
                             [weakSelf.captureSession stopRunning];
-                            //上传
-                            [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+                            //上传服务器
+                            [weakSelf faceMatch:imageInfo.cropImageWithBlackEncryptStr];
                         });
                         
                     }else{
@@ -717,7 +797,7 @@
                 break;
             }
             case DetectRemindCodeConditionMeet: {
-                [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+               
             }
                 break;
             default:
@@ -742,6 +822,8 @@
         }else if (status == CommonStatus) {
             weakSelf.suggestLabel.text = warning;
         }else if (status == SuccessStatus) {
+            //重置百度人脸识别
+            [weakSelf resetIDLFaceManager];
             
             weakSelf.startRecognitionBtn.userInteractionEnabled = YES;
             weakSelf.remindLabel.textColor = COLOR_WITH_ALPHA(0x5EDA6A, 1);
@@ -766,10 +848,14 @@
             weakSelf.remindLabel.textColor = COLOR_WITH_ALPHA(0xF54747, 1);
             weakSelf.remindLabel.text = @"识别失败";
             weakSelf.remindImageView.image = [UIImage imageNamed:@"remindfail_icon"];
+            
+            [weakSelf.startRecognitionBtn setTitle:@"重新识别" forState:UIControlStateNormal];
+            [weakSelf.startRecognitionBtn setImage:[UIImage imageNamed:@"facerest_icon"] forState:UIControlStateNormal];
+            weakSelf.startRecognitionBtn.titleLabel.sd_layout.centerXEqualToView(self.startRecognitionBtn).offset(12);
+            
             weakSelf.hasFinished = NO;
             //停止识别
             [weakSelf endFaceRecognitioning];
-            
             
         }else if (status == Timeout){
             weakSelf.hasFinished = YES;
@@ -796,40 +882,72 @@
 
 
 #pragma mark - 人脸识别
--(void)faceMatch{
-
+-(void)faceMatch:(NSString *)base64String{
+    [self showLoadingWithMessage:@"上传中…"];
+    
     NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
     NSDictionary *dic =@{
         //专业ID
-        @"majorid":HXSafeString(majorid),
+        @"majorid":(self.status==HXFaceRecognitionStatusSimulate?@"0":HXSafeString(majorid)),
         //班级计划学期ID（如果是补考，传补考开课ID）
-        @"termcourseid":HXSafeString(self.termCourseID),
+        @"termcourseid":(self.status==HXFaceRecognitionStatusSimulate?@"0":HXSafeString(self.faceConfig.termCourseID)),
         //模块类型 1课件 2作业 3期末 0补考 4表示模拟人脸识别（如果为模拟人脸识别，则传SourseImgBase64和UploadType=2，其他参数传0即可）
-        @"coursetype":@1,
+        @"coursetype":@(self.faceConfig.courseType),
         //Base64的图片
-        @"sourseImgBase64":@"",
+        @"sourseimgbase64":HXSafeString(base64String),
         //1表示采集 2表示对比
-        @"uploadType":@1,
+        @"uploadtype":((self.faceConfig.face_cj==1||self.faceConfig.face_cj==2)?@1:@2),
         //0表示系统拍照（默认） 1表示抓拍
-        @"systemType":@0,
+        @"systemtype":@0,
         //前置照片还是后置照片 0表示前置照片（默认） 1表示后置照片
-        @"photoType":@0,
+        @"phototype":@0,
         //进入考试（学习）时对比还是过程中对比 0表示过程中对比（默认） 1表示进入时对比
-        @"isEnter":@0
+        @"isenter":@1
 
     };
-    
+    WeakSelf(weakSelf);
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_FaceMatch needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        
+        [self hideLoading];
         BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message = [dictionary stringValueForKey:@"message"];
         if (success) {
-            
+            [weakSelf warningStatus:SuccessStatus warning:@"识别成功"];
+        }else{
+            [weakSelf warningStatus:FailStatus warning:@"识别失败"];
+            weakSelf.failTimes ++;
+            BOOL isShowContinue = (weakSelf.failTimes>self.faceConfig.face_cs&&(self.faceConfig.face_cj==2||self.faceConfig.face_db==2))?YES:NO;
+            [weakSelf showResultViewWithMessage:message isShowContinue:isShowContinue];
         }
     } failure:^(NSError * _Nonnull error) {
-        
+        [self hideLoading];
+        [weakSelf warningStatus:FailStatus warning:@"识别失败"];
+        weakSelf.failTimes ++;
+        BOOL isShowContinue = (weakSelf.failTimes>self.faceConfig.face_cs&&(self.faceConfig.face_cj==2||self.faceConfig.face_db==2))?YES:NO;
+        [weakSelf showResultViewWithMessage:@"服务器错误，请再试一次！" isShowContinue:isShowContinue];
     }];
 }
 
+/**
+ 采集结果页面  isShowContinue是否可以跳过
+ */
+- (void)showResultViewWithMessage:(NSString *)msg isShowContinue:(BOOL)isShowContinue{
+    
+    WeakSelf(weakSelf);
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"人脸识别失败" message:msg preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* action = [UIAlertAction actionWithTitle:@"再试一次" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [weakSelf faceRecognitioning];
+    }];
+    [alert addAction:action];
+    
+    if (isShowContinue) {
+        UIAlertAction* action = [UIAlertAction actionWithTitle:@"跳过" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"跳过");
+            [weakSelf close];
+        }];
+        [alert addAction:action];
+    }
+    [self.parentViewController presentViewController:alert animated:YES completion:nil];
+}
 
 /**
  * 把 CMSampleBufferRef 转化成 UIImage 的方法，参考自：
@@ -900,6 +1018,7 @@
     
     [self.backGroudView addSubview:self.tipLabel];
     [self.backGroudView addSubview:self.tipImageView];
+    [self.backGroudView addSubview:self.hintLabel];
     [self.backGroudView addSubview:self.startRecognitionBtn];
     
     [self.startRecognitionBtn addSubview:self.playImageView];
@@ -947,8 +1066,8 @@
     self.previewView.sd_layout
     .centerXEqualToView(self.headImageView)
     .centerYEqualToView(self.headImageView)
-    .widthRatioToView(self.headImageView, 1.3)
-    .heightRatioToView(self.headImageView,2.6);
+    .widthRatioToView(self.headImageView, 1.2)
+    .heightRatioToView(self.headImageView,2.4);
     
     
     self.circleView.sd_layout
@@ -1037,6 +1156,13 @@
     .rightSpaceToView(self.startRecognitionBtn.titleLabel, 4)
     .widthIs(16)
     .heightIs(14);
+    
+    self.hintLabel.sd_layout
+    .topSpaceToView(self.remindImageView,30)
+    .leftSpaceToView(self.backGroudView, 30)
+    .rightSpaceToView(self.backGroudView, 30)
+    .autoHeightRatio(0);
+    self.hintLabel.isAttributedContent = YES;
    
     self.playImageView.sd_layout
     .centerXEqualToView(self.startRecognitionBtn)
@@ -1114,6 +1240,15 @@
     return _zhuanDongCircleImageView;
 }
 
+-(UILabel *)hintLabel{
+    if (!_hintLabel) {
+        _hintLabel = [[UILabel alloc] init];
+        _hintLabel.numberOfLines = 0;
+        _hintLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _hintLabel.font = HXFont(14);
+    }
+    return _hintLabel;
+}
 
 -(UIView *)circleView{
     if (!_circleView) {

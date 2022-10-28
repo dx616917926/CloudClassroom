@@ -38,7 +38,7 @@
 ///进入模块时，弹出的课件（考试）须知地址，如果有多个，则根据数组返回的顺序弹出
 @property(nonatomic, strong) NSArray<NSString *> *altertKJ;
 
-///照片的审核状态，如果为-1表示没有照片   0表示未审核
+///照片的审核状态，-1:表示没有照片      0:表示未审核     1:表示已审核 
 @property(nonatomic, assign) NSInteger imageStatus;
 
 ///如果过程中需要监控，APP可以退出的次数
@@ -61,5 +61,8 @@
 
 ///考试（学习）过程中，如果开启了实时监控，是否需要后置摄像头拍照
 @property(nonatomic, assign) NSInteger savePhotoByBack;
+
+///班级计划学期ID（如果是补考，传补考开课ID）
+@property(nonatomic, strong)NSString *termCourseID;
 
 @end

@@ -10,12 +10,15 @@
 #import "HXKeJianLearnCell.h"
 #import "HXFaceConfigObject.h"
 #import <TXMoviePlayer/TXMoviePlayerController.h>
+#import "HXFaceRecognitionTool.h"
 
 @interface HXKeJianLearnViewController ()<UITableViewDelegate,UITableViewDataSource,HXKeJianLearnCellDelegate>
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
 @property(nonatomic,strong) NSMutableArray *dataArray;
+
+@property(nonatomic,strong) HXFaceConfigObject *faceConfigObject;
 
 @end
 
@@ -27,7 +30,8 @@
     
     //UI
     [self createUI];
-    
+    //获取人脸识别设置
+    [self getFaceSet];
     //获取正考考试列表和看课列表
     [self getExamList];
     
@@ -36,6 +40,32 @@
 #pragma mark -Setter
 -(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
     _courseInfoModel = courseInfoModel;
+}
+
+
+
+#pragma mark - 获取人脸识别设置
+-(void)getFaceSet{
+
+    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
+    NSDictionary *dic =@{
+        @"majorid":HXSafeString(majorid),
+        //班级计划学期ID（如果是补考，传补考开课ID）
+        @"termcourseid":HXSafeString(self.courseInfoModel.termCourseID),
+        //模块类型 1课件 2作业 3期末 0补考
+        @"coursetype":@"1"
+
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFaceSet needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.faceConfigObject = [HXFaceConfigObject mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark - 获取正考考试列表和看课列表
@@ -67,32 +97,6 @@
     }];
 }
 
-#pragma mark - 获取人脸识别设置
--(void)getFaceSet:(HXKeJianOrExamInfoModel *)model{
-
-    NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
-    NSDictionary *dic =@{
-        @"majorid":HXSafeString(majorid),
-        //班级计划学期ID（如果是补考，传补考开课ID）
-        @"termcourseid":HXSafeString(model.termCourse_id),
-        //模块类型 1课件 2作业 3期末 0补考
-        @"coursetype":@"1"
-
-    };
-    
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFaceSet needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        
-        BOOL success = [dictionary boolValueForKey:@"success"];
-        if (success) {
-            HXFaceConfigObject *faceConfigObject = [HXFaceConfigObject mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        
-    }];
-}
-
-
-
 
 #pragma mark - 播放课件
 -(void)beginCourse:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
@@ -100,46 +104,34 @@
     NSDictionary *dic =@{
         @"coursecode":HXSafeString(keJianOrExamInfoModel.examCode),
         @"looktype":@"1",//观看方式（PC = 0, APP = 1,H5 = 2）
-        @"coursename":HXSafeString(keJianOrExamInfoModel.termCourseName)
+        @"coursename":HXSafeString(keJianOrExamInfoModel.termCourseName),
+        @"stemcode":HXSafeString(keJianOrExamInfoModel.stemCode)
     };
     
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_BeginCourse needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.noDataTipView removeFromSuperview];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
-            NSDictionary *dic = @{
-                @"accumulativeTime":@"",
-                @"backUrl":@"https://xsjy.hlw-study.com/ApiMinedu/LearnReturnUrl/LearnReturnUrlIndex",
-                @"businessLineCode":@"",
-                @"catalogId":@"601655686526410752",
-                @"clientCode":@"888888",
-                @"clientKey":@"",
-                @"courseCodeN":@"",
-                @"coursewareCode":@"crgk_zsb_zz",
-                @"hintPoint":@"0",
-                @"isQuestion":@"0",
-                @"lastTime":@"280",
-//                @"logoAlpha":@"1",
-//                @"logoHeight":@"20",
-//                @"logoPosition":@"2",
-//                @"logoUrl":@"https://minedu.oss-cn-hangzhou.aliyuncs.com/op_manager/xsjy/appVideo_log.png",
-//                @"logoWidth":@"100",
-                @"publicKey":@"d284adb2b8d8c85e85f7c384a2f14e6d",
-                @"serverUrl":@"https://cws.edu-edu.com",
-                @"timestamp":@"1666598386366",
-                @"userId":@"430481200008085667_1000_1",
-                @"userName":@"",
-                @"videoTime":@"0",
+            //判断是否需要人脸识别和采集
+            HXFaceRecognitionTool *tool = [[HXFaceRecognitionTool alloc] init];
+            self.faceConfigObject.termCourseID = keJianOrExamInfoModel.termCourse_id;
+            tool.faceConfig = self.faceConfigObject;
+            tool.successBlack = ^{
+                if([keJianOrExamInfoModel.stemCode containsString:@"HXDD"]){
+                    TXMoviePlayerController *playerVC = [[TXMoviePlayerController alloc] init];
+                    playerVC.barStyle = UIStatusBarStyleLightContent;
+                    playerVC.cws_param = [dictionary dictionaryValueForKey:@"data"];
+                    playerVC.showLearnFinishStyle = YES;
+                    playerVC.ignoreLearnRecordErrorAlert = YES;
+                    [self.navigationController pushViewController:playerVC animated:YES];
+                }else{
+                    HXMoocViewController *moocVC = [[HXMoocViewController alloc] init];
+                    moocVC.titleName = keJianOrExamInfoModel.termCourseName;
+                    moocVC.moocUrl = [dictionary stringValueForKey:@"data"];
+                    [self.navigationController pushViewController:moocVC animated:YES];
+                }
             };
-            TXMoviePlayerController *playerVC = [[TXMoviePlayerController alloc] init];
-            playerVC.barStyle = UIStatusBarStyleLightContent;
-            playerVC.cws_param = [dictionary dictionaryValueForKey:@"data"];
-            playerVC.showLearnFinishStyle = YES;
-            playerVC.ignoreLearnRecordErrorAlert = YES;
-            playerVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:playerVC animated:YES];
-        }else{
-            
+            [tool showInViewController:self];
         }
         
     } failure:^(NSError * _Nonnull error) {
@@ -170,9 +162,7 @@
 
 #pragma mark - <HXKeJianLearnCellDelegate>
 -(void)playCourse:(HXKeJianOrExamInfoModel *)model{
-    
-    //获取人脸识别设置
-//    [self getFaceSet:model];
+   
     
     [self beginCourse:model];
 }

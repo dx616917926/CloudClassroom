@@ -76,9 +76,9 @@
     
     [UIView animateWithDuration:2 delay:0 options:UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse animations:^{
         //
-        CGRect frame = _lineView.frame;
+        CGRect frame = self.lineView.frame;
         frame.origin.y +=moveHeight;
-        _lineView.frame = frame;
+        self.lineView.frame = frame;
     } completion:^(BOOL finished) {
         //
         NSLog(@"finished");

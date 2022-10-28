@@ -74,6 +74,9 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //Int转换成字符串
 #define HXIntToString(__Int_)    [NSString stringWithFormat:@"%ld",__Int_]
 
+//Int转换成字符串
+#define HXFloatToString(__Float_)    [NSString stringWithFormat:@"%.0f",__Float_]
+
 //url字符串转码处理
 #define HXSafeURL(urlStr)   [NSURL URLWithString:[HXCommonUtil stringEncoding:urlStr]]
 

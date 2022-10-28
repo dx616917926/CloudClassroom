@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 //通过手机号获取验证码
 #define HXPOST_GetVCode                                           @"/api/Login/GetVCode"
 
+///修改密码
+#define HXPOST_UpdatePassword                                     @"/api/Login/UpdatePassword"
+
 
 /*******************************************************************************补考相关操作*******************************************************************************************************/
 //获取补考列表
@@ -87,7 +90,8 @@ NS_ASSUME_NONNULL_BEGIN
 //在线补考成绩查询
 #define HXPOST_GetBKScore                                   @"/api/ScoreList/GetBKScore"
 
-
+//成绩详情
+#define HXPOST_GetZKScoreDetail                             @"/api/ScoreList/GetZKScoreDetail"
 
 
 /*******************************************************************************考试相关接口*******************************************************************************************************/

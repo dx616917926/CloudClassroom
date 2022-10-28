@@ -78,12 +78,30 @@
     
     [self.view endEditing:YES];
     
-    [self.view showSuccessWithMessage:@"修改成功"];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        //退出登录--弹登录框！
-        [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
-    });
+    NSDictionary *dic =@{
+        @"oldpassword":HXSafeString(self.yuanPwdTextField.text),
+        @"newpassword":HXSafeString(self.xinPwdTextField.text)
+
+    };
+    //找回密码
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_UpdatePassword needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message = [dictionary stringValueForKey:@"message"];
+        if(success){
+            [self.view showTostWithMessage:message];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                //退出登录--弹登录框！
+                [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
+            });
+        }else{
+            [self.view showTostWithMessage:message];
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
     
 }
 

@@ -16,7 +16,7 @@
 #import "HXZiLiaoUploadViewController.h"//资料上传
 #import "SDWebImage.h"
 #import "UIImage+Extension.h"
-#import "HXFaceRecognitionView.h"
+#import "HXFaceRecognitionTool.h"
 #import "HXHomeStudentInfoModel.h"
 
 
@@ -57,6 +57,8 @@
 @property(nonatomic,strong) NSMutableArray *bottomBujuArray;
 @property(nonatomic,strong) NSMutableArray *bottomBujuBtns;
 
+@property(nonatomic,strong) HXHomeStudentInfoModel *homeStudentInfoModel;
+
 @end
 
 @implementation HXPersonalCenterViewController
@@ -81,9 +83,11 @@
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
-            HXHomeStudentInfoModel *homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
-            [self.headImageView sd_setImageWithURL:HXSafeURL(homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
-            self.nameLabel.text = homeStudentInfoModel.name;
+            self.homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            [[SDImageCache sharedImageCache] clearMemory];
+            [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
+            [self.headImageView sd_setImageWithURL:HXSafeURL(self.homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+            self.nameLabel.text = self.homeStudentInfoModel.name;
         }
     } failure:^(NSError * _Nonnull error) {
         
@@ -119,8 +123,13 @@
             break;
         case 3002://人脸识别
         {
+            HXFaceConfigObject *faceConfig = [[HXFaceConfigObject alloc] init];
+            faceConfig.imageStatus = ([HXCommonUtil isNull:self.homeStudentInfoModel.imgUrl]?-1:1);
+            faceConfig.imageURL = self.homeStudentInfoModel.imgUrl;
+            faceConfig.courseType = 4;
             HXFaceRecognitionView *faceView = [[HXFaceRecognitionView alloc] init];
             faceView.status = HXFaceRecognitionStatusSimulate;
+            faceView.faceConfig = faceConfig;
             [faceView showInViewController:self];
         }
             break;

@@ -151,7 +151,7 @@
         NSString*message = [dictionary stringValueForKey:@"message"];
         NSLog(@"\n______________________code______________________\n%@\n",code);
         if(dictionary){
-            if ([code isEqualToString:@"401"]) {//402表示被踢，需要重新登录
+            if ([code isEqualToString:@"402"]) {//402表示被踢，需要重新登录
                 [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message completionBlock:^{
                     [HXNotificationCenter postNotificationName:SHOWLOGIN object:nil];
                 }];

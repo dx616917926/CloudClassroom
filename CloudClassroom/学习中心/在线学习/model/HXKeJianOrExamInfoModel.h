@@ -55,6 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///模块类型 1作业 2期末考试
 @property(nonatomic, assign) NSInteger moduleType;
 
+///课件来源:HXDD   MOOC
+@property(nonatomic, copy) NSString *stemCode;
+
 ///作业考试数组
 @property(nonatomic, strong) NSArray<HXExamParaModel*> *examPara;
 
