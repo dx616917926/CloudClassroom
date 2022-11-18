@@ -10,8 +10,7 @@
 #define CXDatePickerConfig_h
 
 #define kScreenFrame                    ([UIScreen mainScreen].bounds)
-#define kScreenWidth                    (kScreenFrame.size.width)
-#define kScreenHeight                   (kScreenFrame.size.height)
+
 
 #define ShadeViewAlphaWhenShow          0.5
 #define ShadeViewAlphaWhenHide          0

@@ -40,7 +40,7 @@ target 'CloudClassroom' do
   
   pod 'WechatOpenSDK', '~> 1.8.7.1'
   
- 
+  pod 'DTCoreText', '~> 1.6.20'
 
 	
  	

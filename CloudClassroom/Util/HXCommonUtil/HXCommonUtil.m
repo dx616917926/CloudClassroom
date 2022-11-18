@@ -431,7 +431,7 @@
  将某个时间戳转化成 时间
  默认日期格式为:yyyy.MM.dd  HH:mm
  */
-+(NSString *)timestampSwitchTime:(NSInteger)timestamp andFormatter:(NSString *)format{
++(NSString *)timestampSwitchTime:(NSInteger)timestamp andFormatter:(NSString *_Nullable)format{
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     if(format){

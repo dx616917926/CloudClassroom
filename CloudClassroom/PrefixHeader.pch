@@ -18,6 +18,7 @@
 #import "HXDefines.h"
 #import "HXDictionary.h"
 #import "HXBaseURLSessionManager.h"
+#import "HXExamSessionManager.h"
 #import "HXNotificationNameDefines.h"
 #import "HXCommonUtil.h"
 #import "FrameAccessor.h"

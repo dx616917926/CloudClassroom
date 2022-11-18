@@ -48,26 +48,30 @@
 
 #pragma mark - Setter
 
--(void)setExamParaModel:(HXExamParaModel *)examParaModel{
-    _examParaModel = examParaModel;
+-(void)setExamModel:(HXExamModel *)examModel{
+    _examModel = examModel;
     
     [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
     
-    self.courseNameLabel.text = examParaModel.examTitle;
-    self.ciShuContentLabel.text = HXIntToString(examParaModel.leftExamNum);
-    NSString *beginTime = [HXCommonUtil timestampSwitchTime:([examParaModel.beginTime integerValue]/1000) andFormatter:nil];
-    NSString *endTime = [HXCommonUtil timestampSwitchTime:([examParaModel.endTime integerValue]/1000) andFormatter:nil];
-    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",beginTime,endTime];
-    self.tipLabel.hidden = [HXCommonUtil isNull:examParaModel.showMessage];
-    self.tipLabel.text = examParaModel.showMessage;
+    self.courseNameLabel.text = examModel.examTitle;
+    self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
+    self.timeContentLabel.text = [NSString stringWithFormat:@"%@   --   %@",[HXCommonUtil timestampSwitchTime:[examModel.beginTime integerValue]/1000 andFormatter:nil],[HXCommonUtil timestampSwitchTime:[examModel.endTime integerValue]/1000 andFormatter:nil]];
     
-    ///是否能考试或者看课
-    if(examParaModel.canStart){
-        self.startZuoYeBtn.enabled =YES;
-        self.startZuoYeBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-    }else{
-        self.startZuoYeBtn.enabled =NO;
-        self.startZuoYeBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    
+    self.startZuoYeBtn.enabled = examModel.canExam;
+    self.startZuoYeBtn.backgroundColor = examModel.canExam? COLOR_WITH_ALPHA(0x2E5BFD, 1):COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    
+    self.tipLabel.hidden = !(![HXCommonUtil isNull:examModel.showMessage]&&!examModel.canExam);
+    self.tipLabel.text = examModel.showMessage;
+    
+   
+}
+
+#pragma mark - Event
+
+-(void)startZuoYe:(UIButton *)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:)]) {
+        [self.delegate startExam:self.examModel];
     }
 }
 
@@ -255,6 +259,7 @@
         [_startZuoYeBtn setImage:[UIImage imageNamed:@"pingshizuoye_icon"] forState:UIControlStateNormal];
         [_startZuoYeBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_startZuoYeBtn setTitle:@"开始作业" forState:UIControlStateNormal];
+        [_startZuoYeBtn addTarget:self action:@selector(startZuoYe:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startZuoYeBtn;
 }

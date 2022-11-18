@@ -18,6 +18,23 @@ PODS:
   - AliPlayerSDK_iOS (5.4.9.1):
     - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.9.1)
   - AliPlayerSDK_iOS/AliPlayerSDK (5.4.9.1)
+  - DTCoreText (1.6.27):
+    - DTCoreText/Core (= 1.6.27)
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTCoreText/Core (1.6.27):
+    - DTFoundation/Core (~> 1.7.5)
+    - DTFoundation/DTAnimatedGIF (~> 1.7.5)
+    - DTFoundation/DTHTMLParser (~> 1.7.5)
+    - DTFoundation/UIKit (~> 1.7.5)
+  - DTFoundation/Core (1.7.18)
+  - DTFoundation/DTAnimatedGIF (1.7.18)
+  - DTFoundation/DTHTMLParser (1.7.18):
+    - DTFoundation/Core
+  - DTFoundation/UIKit (1.7.18):
+    - DTFoundation/Core
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -47,6 +64,7 @@ DEPENDENCIES:
   - AFNetworking (~> 4.0.1)
   - AlipaySDK-iOS (~> 15.8.8)
   - AliPlayerSDK_iOS (~> 5.4.9.1)
+  - DTCoreText (~> 1.6.20)
   - FMDB (~> 2.6.2)
   - GKCover (~> 2.6.0)
   - GKPhotoBrowser (~> 2.1.9)
@@ -66,6 +84,8 @@ SPEC REPOS:
     - AFNetworking
     - AlipaySDK-iOS
     - AliPlayerSDK_iOS
+    - DTCoreText
+    - DTFoundation
     - FMDB
     - GKCover
     - GKPhotoBrowser
@@ -84,6 +104,8 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   AlipaySDK-iOS: a07b6eafa847a5b29acb6c150ea16d9792d5d167
   AliPlayerSDK_iOS: f6788ec326a3c04eba39a7d24147958c22fc7a61
+  DTCoreText: ac297b565abd3b12390d33cd6e076d875f0c0a5e
+  DTFoundation: a53f8cda2489208cbc71c648be177f902ee17536
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   GKCover: 62c29b9db8ff38b854d2f128f1043f2a4edd9f96
   GKPhotoBrowser: c45231edd9ec79f031c412c646af46419d997c97
@@ -98,6 +120,6 @@ SPEC CHECKSUMS:
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
 
-PODFILE CHECKSUM: 83b148df1ac7f2f1b6567f57f24d299487877066
+PODFILE CHECKSUM: 1da064f4116757124dd84c90eae359c235a9358c
 
 COCOAPODS: 1.11.3

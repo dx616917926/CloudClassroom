@@ -9,11 +9,5 @@
 
 @implementation HXKeJianOrExamInfoModel
 
-+ (NSDictionary *)mj_objectClassInArray
-{
-    return @{
-             @"examPara" : @"HXExamParaModel"
-             };
-}
 
 @end

@@ -6,13 +6,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXKeJianOrExamInfoModel.h"
+#import "HXExamModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol HXPingShiZuoYeCellDelegate <NSObject>
+
+///开始作业
+-(void)startExam:(HXExamModel *)examModel;
+
+@end
+
 @interface HXPingShiZuoYeCell : UITableViewCell
 
-@property(nonatomic,strong) HXExamParaModel *examParaModel;
+@property(nonatomic,weak) id<HXPingShiZuoYeCellDelegate> delegate;
+
+@property(nonatomic,strong) HXExamModel *examModel;
 
 @end
 

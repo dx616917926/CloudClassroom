@@ -6,14 +6,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXKeJianOrExamInfoModel.h"
+#import "HXExamModel.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol HXQiMoKaoShiCellDelegate <NSObject>
+
+///开始考试
+-(void)startExam:(HXExamModel *)examModel;
+
+///查看考试记录
+-(void)chechExamRecord:(HXExamModel *)examModel;
+
+@end
+
 @interface HXQiMoKaoShiCell : UITableViewCell
 
-@property(nonatomic,strong) HXExamParaModel *examParaModel;
+
+@property(nonatomic,weak) id<HXQiMoKaoShiCellDelegate> delegate;
+
+
+@property(nonatomic,strong) HXExamModel *examModel;
 
 @end
 

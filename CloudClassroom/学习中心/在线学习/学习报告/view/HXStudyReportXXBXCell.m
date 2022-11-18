@@ -49,7 +49,7 @@
 -(void)setCourseItemModel:(HXCourseItemModel *)courseItemModel{
     _courseItemModel = courseItemModel;
     
-    self.titleNameLabel.text = courseItemModel.moduleButtonName;
+    self.titleNameLabel.text = courseItemModel.moduleButtonName?:@"学习表现";
     self.deFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:courseItemModel.moduleScore needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content: [courseItemModel.moduleScore stringByAppendingString:@"分"] defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
     self.maFenContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:(courseItemModel.getScore?:@"0") needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x2E5BFD, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:[(courseItemModel.getScore?:@"0") stringByAppendingFormat:@"/%@分",courseItemModel.totalScore]  defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0x333333, 1),NSFontAttributeName:[UIFont systemFontOfSize:11]}];
     

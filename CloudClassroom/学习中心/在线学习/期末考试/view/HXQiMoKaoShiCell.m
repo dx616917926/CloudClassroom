@@ -48,30 +48,38 @@
 }
 
 #pragma mark - Setter
--(void)setExamParaModel:(HXExamParaModel *)examParaModel{
-    _examParaModel = examParaModel;
+-(void)setExamModel:(HXExamModel *)examModel{
+    _examModel = examModel;
     
     [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
     
-    self.courseNameLabel.text = examParaModel.examTitle;
-    self.ciShuContentLabel.text = HXIntToString(examParaModel.leftExamNum);
-    NSString *beginTime = [HXCommonUtil timestampSwitchTime:([examParaModel.beginTime integerValue]/1000) andFormatter:nil];
-    NSString *endTime = [HXCommonUtil timestampSwitchTime:([examParaModel.endTime integerValue]/1000) andFormatter:nil];
-    self.timeContentLabel.text = [NSString stringWithFormat: @"%@   --   %@",beginTime,endTime];
-    self.tipLabel.hidden = [HXCommonUtil isNull:examParaModel.showMessage];
-    self.tipLabel.text = examParaModel.showMessage;
+    self.courseNameLabel.text = examModel.examTitle;
+    self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
+    self.timeContentLabel.text = [NSString stringWithFormat:@"%@   --   %@",[HXCommonUtil timestampSwitchTime:[examModel.beginTime integerValue]/1000 andFormatter:nil],[HXCommonUtil timestampSwitchTime:[examModel.endTime integerValue]/1000 andFormatter:nil]];
     
-    self.chechRecordBtn.hidden = !examParaModel.allowSeeResult;
+    self.chechRecordBtn.hidden = (examModel.leftExamNum == examModel.maxExamNum);
     
-    ///是否能考试或者看课
-    if(examParaModel.canExam){
-        self.startKaoShiBtn.enabled =YES;
-        self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-    }else{
-        self.startKaoShiBtn.enabled =NO;
-        self.startKaoShiBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    self.startKaoShiBtn.enabled = examModel.canExam;
+    self.startKaoShiBtn.backgroundColor = examModel.canExam? COLOR_WITH_ALPHA(0x2E5BFD, 1):COLOR_WITH_ALPHA(0xC6C8D0, 1);
+    
+    self.tipLabel.hidden =!(![HXCommonUtil isNull:examModel.showMessage]&&!examModel.canExam);
+    self.tipLabel.text = examModel.showMessage;
+}
+
+#pragma mark - Event
+-(void)chechRecord:(UIButton *)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chechExamRecord:)]) {
+        [self.delegate chechExamRecord:self.examModel];
     }
 }
+
+-(void)startKaoShi:(UIButton *)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:)]) {
+        [self.delegate startExam:self.examModel];
+    }
+}
+
+
 
 #pragma mark - UI
 -(void)createUI{
@@ -183,7 +191,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+        
     }
     return _courseNameLabel;
 }
@@ -216,7 +224,7 @@
         _ciShuContentLabel.textAlignment = NSTextAlignmentRight;
         _ciShuContentLabel.font = HXFont(15);
         _ciShuContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _ciShuContentLabel.text = @"9";
+        
     }
     return _ciShuContentLabel;
 }
@@ -239,7 +247,7 @@
         _timeContentLabel.textAlignment = NSTextAlignmentLeft;
         _timeContentLabel.font = HXFont(15);
         _timeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeContentLabel.text = @"2020.05.31 00:00   --   2022.06.31 23:59";
+       
     }
     return _timeContentLabel;
 }
@@ -264,6 +272,7 @@
         _chechRecordBtn.titleLabel.font = HXBoldFont(14);
         [_chechRecordBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
         [_chechRecordBtn setTitle:@"查看考试记录" forState:UIControlStateNormal];
+        [_chechRecordBtn addTarget:self action:@selector(chechRecord:) forControlEvents:UIControlEventTouchUpInside];
         _chechRecordBtn.hidden = YES;
     }
     return _chechRecordBtn;
@@ -277,6 +286,7 @@
         [_startKaoShiBtn setImage:[UIImage imageNamed:@"pingshizuoye_icon"] forState:UIControlStateNormal];
         [_startKaoShiBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_startKaoShiBtn setTitle:@"开始考试" forState:UIControlStateNormal];
+        [_startKaoShiBtn addTarget:self action:@selector(startKaoShi:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startKaoShiBtn;
 }
