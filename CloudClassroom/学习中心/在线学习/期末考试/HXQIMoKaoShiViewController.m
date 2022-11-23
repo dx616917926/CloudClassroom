@@ -147,7 +147,6 @@
             });
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
@@ -176,7 +175,6 @@
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
@@ -195,7 +193,6 @@
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
@@ -214,8 +211,7 @@
         NSLog(@"%@",htmlStr);
         [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view hideLoading];
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
+        [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
@@ -243,8 +239,7 @@
             
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
+        [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
     

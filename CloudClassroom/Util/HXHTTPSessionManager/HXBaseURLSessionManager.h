@@ -81,6 +81,15 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_FaceMatch                                           @"/api/FaceList/FaceMatch"
 
 
+/*******************************************************************************证件照上传*******************************************************************************************************/
+//获取证件照信息
+#define HXPOST_GetPapersPhotoInfo                                  @"/api/MyPhotoUpload/GetPapersPhotoInfo"
+
+//上传证件照
+#define HXPOST_SavePhotoUpload                                     @"/api/MyPhotoUpload/SavePhotoUpload"
+
+//确认照片
+#define HXPOST_ComfirmPhoto                                        @"/api/MyPhotoUpload/ComfirmPhoto"
 
 
 /*******************************************************************************成绩相关操作*******************************************************************************************************/

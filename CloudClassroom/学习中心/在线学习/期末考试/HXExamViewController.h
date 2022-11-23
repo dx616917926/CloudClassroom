@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///考卷模型
 @property(nonatomic, strong) HXExamPaperModel *examPaperModel;
 
+
+
 @end
 
 NS_ASSUME_NONNULL_END

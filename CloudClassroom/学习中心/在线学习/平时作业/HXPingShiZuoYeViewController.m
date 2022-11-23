@@ -129,7 +129,7 @@
     }];
 }
 
-#pragma mark - 请求授权
+#pragma mark - 1.请求授权
 -(void)requestAuthorize:(HXExamParaModel *)examPara{
     
     [self.view showLoading];
@@ -147,12 +147,11 @@
             });
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
 
-//获取考试列表
+#pragma mark - 2.获取考试列表
 -(void)requestExamModulesListData:(HXExamParaModel *)examPara{
     
     [self.view showLoading];
@@ -176,12 +175,11 @@
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
 
-#pragma mark - 获取考试的链接
+#pragma mark - 4.获取考试的链接
 -(void)getExamUrl:(NSString *)examStartPath{
     
     [self.view showLoading];
@@ -195,12 +193,11 @@
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
 
-#pragma mark - 获取考试的HTMLStr参数
+#pragma mark - 5.获取考试的HTMLStr参数
 -(void)getEaxmHTMLStr:(NSString *)examUrl{
     
     [self.view showLoading];
@@ -214,12 +211,12 @@
         NSLog(@"%@",htmlStr);
         [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view hideLoading];
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
+        [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
 
+#pragma mark - 6.用html作为参数去获取试卷json数据
 -(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
     
     NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
@@ -243,8 +240,7 @@
             
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
+        [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
     
@@ -256,7 +252,7 @@
 
 
 
-#pragma mark - <HXPingShiZuoYeCellDelegate>开始作业
+#pragma mark - 3.开始考试
 -(void)startExam:(HXExamModel *)examModel{
     //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
     [self.view showLoading];
@@ -273,7 +269,6 @@
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
-        [self.view hideLoading];
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
     

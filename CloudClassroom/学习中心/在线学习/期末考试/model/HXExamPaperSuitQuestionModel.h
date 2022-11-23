@@ -43,7 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 ///问答题子问题数组
 @property(nonatomic, strong) NSArray<HXExamPaperSubQuestionModel *> *subQuestions;
 
-
+//
+@property (nonatomic,assign) BOOL shouldScroll;
+///复合题中小题的位置（从0 开始）
+@property (nonatomic,assign) NSInteger fuhe_position;
 
 @end
 

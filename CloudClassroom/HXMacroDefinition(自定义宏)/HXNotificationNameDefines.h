@@ -18,4 +18,7 @@
 static NSString * const kChangeMajorSuccessNotification = @"ChangeMajorSuccessNotification";
 
 
+
+
+
 #endif /* HXNotificationNameDefines_h */

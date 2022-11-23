@@ -18,6 +18,9 @@
 @property(nonatomic,strong) UILabel *tiXingNameLabel;
 //问题标题
 @property(nonatomic,strong) DTAttributedLabel *attributedTitleLabel;
+//分数
+@property(nonatomic,strong) UIImageView *fenShuBgImageView;
+@property(nonatomic,strong) UILabel *fenShuLabel;
 //A
 @property(nonatomic,strong) UIView *aChoiceView;
 @property(nonatomic,strong) UIImageView *aImageView;
@@ -58,7 +61,7 @@
     if(self){
         self.backgroundColor = [UIColor clearColor];
         self.viewMaxRect = CGRectMake(0, 0, kScreenWidth-20, CGFLOAT_HEIGHT_UNKNOWN);
-        self.choiceMaxRect = CGRectMake(0, 0, kScreenWidth-55, CGFLOAT_HEIGHT_UNKNOWN);
+        self.choiceMaxRect = CGRectMake(0, 0, kScreenWidth-65, CGFLOAT_HEIGHT_UNKNOWN);
         [self createUI];
     }
     return self;
@@ -71,26 +74,61 @@
         UIView *sender = ges.view;
         UIImageView *selectImagView = [sender.superview viewWithTag:1111111];
         
+        NSMutableArray *choices = [NSMutableArray array];
+        
         if (sender==self.aTapView) {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[0];
             choiceModel.isSelected = !choiceModel.isSelected;
             selectImagView.image = [UIImage imageNamed:(choiceModel.isSelected?@"select_icon":@"noselect_icon")];
+            self.aTapView.backgroundColor = choiceModel.isSelected?ExamSelectColor:ExamUnSelectColor;
+            if (choiceModel.isSelected) {
+                [choices addObject:choiceModel.choice_order];
+            }else{
+                [choices removeObject:choiceModel.choice_order];
+            }
         }else if (sender==self.bTapView) {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[1];
             choiceModel.isSelected = !choiceModel.isSelected;
             selectImagView.image = [UIImage imageNamed:(choiceModel.isSelected?@"select_icon":@"noselect_icon")];
+            self.bTapView.backgroundColor = choiceModel.isSelected?ExamSelectColor:ExamUnSelectColor;
+            if (choiceModel.isSelected) {
+                [choices addObject:choiceModel.choice_order];
+            }else{
+                [choices removeObject:choiceModel.choice_order];
+            }
         }else if (sender==self.cTapView) {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[2];
             choiceModel.isSelected = !choiceModel.isSelected;
             selectImagView.image = [UIImage imageNamed:(choiceModel.isSelected?@"select_icon":@"noselect_icon")];
+            self.cTapView.backgroundColor = choiceModel.isSelected?ExamSelectColor:ExamUnSelectColor;
+            if (choiceModel.isSelected) {
+                [choices addObject:choiceModel.choice_order];
+            }else{
+                [choices removeObject:choiceModel.choice_order];
+            }
         }else if (sender==self.dTapView) {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[3];
             choiceModel.isSelected = !choiceModel.isSelected;
             selectImagView.image = [UIImage imageNamed:(choiceModel.isSelected?@"select_icon":@"noselect_icon")];
+            self.dTapView.backgroundColor = choiceModel.isSelected?ExamSelectColor:ExamUnSelectColor;
+            if (choiceModel.isSelected) {
+                [choices addObject:choiceModel.choice_order];
+            }else{
+                [choices removeObject:choiceModel.choice_order];
+            }
         }else {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[4];
             choiceModel.isSelected = !choiceModel.isSelected;
             selectImagView.image = [UIImage imageNamed:(choiceModel.isSelected?@"select_icon":@"noselect_icon")];
+            self.eTapView.backgroundColor = choiceModel.isSelected?ExamSelectColor:ExamUnSelectColor;
+            if (choiceModel.isSelected) {
+                [choices addObject:choiceModel.choice_order];
+            }else{
+                [choices removeObject:choiceModel.choice_order];
+            }
+        }
+        if (choices.count>0) {
+            self.examPaperSuitQuestionModel.answer = [choices componentsJoinedByString:@","];
         }
         
     }else{
@@ -99,10 +137,14 @@
             return;
         }
         UIImageView *unSelectImagView = [self.selectView.superview viewWithTag:1111111];
+        UIView *unSelectTapView = [self.selectView.superview viewWithTag:2222222];
         unSelectImagView.image = [UIImage imageNamed:@"noselect_icon"];
+        unSelectTapView.backgroundColor = ExamUnSelectColor;
         
         UIImageView *selectImagView = [sender.superview viewWithTag:1111111];
+        UIView *selectTapView = [sender.superview viewWithTag:2222222];
         selectImagView.image = [UIImage imageNamed:@"select_icon"];
+        selectTapView.backgroundColor = ExamSelectColor;
         self.selectView = sender;
         NSInteger selectIndex;
         if (self.selectView==self.aTapView) {
@@ -118,6 +160,7 @@
         [self.examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (idx==selectIndex) {
                 obj.isSelected = YES;
+                self.examPaperSuitQuestionModel.answer =obj.choice_order;
             }else{
                 obj.isSelected = NO;
             }
@@ -139,6 +182,8 @@
     [self.attributedTitleLabel updateLayout];
     self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
     [self.attributedTitleLabel relayoutText];
+    //分数
+    self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
     
     //选项
     self.aChoiceView.hidden = YES;
@@ -147,6 +192,12 @@
     self.dChoiceView.hidden = YES;
     self.eChoiceView.hidden = YES;
     self.selectView = nil;
+    self.aTapView.backgroundColor = ExamUnSelectColor;
+    self.bTapView.backgroundColor = ExamUnSelectColor;
+    self.cTapView.backgroundColor = ExamUnSelectColor;
+    self.dTapView.backgroundColor = ExamUnSelectColor;
+    self.eTapView.backgroundColor = ExamUnSelectColor;
+
     
     BOOL isDuoXuan= self.examPaperSuitQuestionModel.isDuoXuan;
     
@@ -162,6 +213,9 @@
         self.aImageView.image = [UIImage imageNamed:(aModel.isSelected?@"select_icon":@"noselect_icon")];
         if (aModel.isSelected&&!isDuoXuan) {
             self.selectView = self.aTapView;
+            self.aTapView.backgroundColor =  ExamSelectColor;
+        }else{
+            self.aTapView.backgroundColor = (aModel.isSelected?ExamSelectColor:ExamUnSelectColor);
         }
         
         //B
@@ -175,6 +229,9 @@
         self.bImageView.image = [UIImage imageNamed:(bModel.isSelected?@"select_icon":@"noselect_icon")];
         if (bModel.isSelected&&!isDuoXuan) {
             self.selectView = self.bTapView;
+            self.bTapView.backgroundColor =  ExamSelectColor;
+        }else{
+            self.bTapView.backgroundColor = (bModel.isSelected?ExamSelectColor:ExamUnSelectColor);
         }
         
         //C
@@ -189,6 +246,9 @@
             self.cImageView.image = [UIImage imageNamed:(cModel.isSelected?@"select_icon":@"noselect_icon")];
             if (cModel.isSelected&&!isDuoXuan) {
                 self.selectView = self.cTapView;
+                self.cTapView.backgroundColor =  ExamSelectColor;
+            }else{
+                self.cTapView.backgroundColor = (cModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
         }
         
@@ -204,6 +264,9 @@
             self.dImageView.image = [UIImage imageNamed:(dModel.isSelected?@"select_icon":@"noselect_icon")];
             if (dModel.isSelected&&!isDuoXuan) {
                 self.selectView = self.dTapView;
+                self.dTapView.backgroundColor =  ExamSelectColor;
+            }else{
+                self.dTapView.backgroundColor = (dModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
         }
         
@@ -219,6 +282,9 @@
             self.eImageView.image = [UIImage imageNamed:(eModel.isSelected?@"select_icon":@"noselect_icon")];
             if (eModel.isSelected&&!isDuoXuan) {
                 self.selectView = self.eTapView;
+                self.eTapView.backgroundColor = ExamSelectColor;
+            }else{
+                self.eTapView.backgroundColor = (eModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
         }
     }
@@ -462,6 +528,7 @@
     [self addSubview:self.mainScrollView];
     [self.mainScrollView addSubview:self.tiXingNameLabel];
     [self.mainScrollView addSubview:self.attributedTitleLabel];
+    [self.mainScrollView addSubview:self.fenShuBgImageView];
     
     [self.mainScrollView addSubview:self.aChoiceView];
     [self.mainScrollView addSubview:self.bChoiceView];
@@ -483,6 +550,14 @@
     .rightSpaceToView(self.mainScrollView, 10)
     .heightIs(50);
     
+    self.fenShuBgImageView.sd_layout
+    .topSpaceToView(self.mainScrollView, 0)
+    .rightEqualToView(self.mainScrollView)
+    .widthIs(32)
+    .heightEqualToWidth();
+    
+    self.fenShuLabel.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 5, 0, 0));
+    
     //A
     self.aChoiceView.sd_layout
     .topSpaceToView(self.attributedTitleLabel, 10)
@@ -491,7 +566,7 @@
     
     self.aImageView.sd_layout
     .centerYEqualToView(self.aChoiceView)
-    .leftSpaceToView(self.aChoiceView, 0)
+    .leftSpaceToView(self.aChoiceView, 10)
     .widthIs(25)
     .heightEqualToWidth();
     
@@ -503,7 +578,7 @@
     
     [self.aChoiceView setupAutoHeightWithBottomView:self.aChoiceLabel bottomMargin:10];
     self.aTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    
+    self.aTapView.sd_cornerRadius = @4;
     //B
     self.bChoiceView.sd_layout
     .topSpaceToView(self.aChoiceView, 10)
@@ -512,7 +587,7 @@
     
     self.bImageView.sd_layout
     .centerYEqualToView(self.bChoiceView)
-    .leftSpaceToView(self.bChoiceView, 0)
+    .leftSpaceToView(self.bChoiceView, 10)
     .widthIs(25)
     .heightEqualToWidth();
     
@@ -524,7 +599,7 @@
     
     [self.bChoiceView setupAutoHeightWithBottomView:self.bChoiceLabel bottomMargin:10];
     self.bTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    
+    self.bTapView.sd_cornerRadius = @4;
     //C
     self.cChoiceView.sd_layout
     .topSpaceToView(self.bChoiceView, 10)
@@ -533,7 +608,7 @@
     
     self.cImageView.sd_layout
     .centerYEqualToView(self.cChoiceView)
-    .leftSpaceToView(self.cChoiceView, 0)
+    .leftSpaceToView(self.cChoiceView, 10)
     .widthIs(25)
     .heightEqualToWidth();
     
@@ -545,7 +620,7 @@
     
     [self.cChoiceView setupAutoHeightWithBottomView:self.cChoiceLabel bottomMargin:10];
     self.cTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    
+    self.cTapView.sd_cornerRadius = @4;
     //D
     self.dChoiceView.sd_layout
     .topSpaceToView(self.cChoiceView, 10)
@@ -554,7 +629,7 @@
     
     self.dImageView.sd_layout
     .centerYEqualToView(self.dChoiceView)
-    .leftSpaceToView(self.dChoiceView, 0)
+    .leftSpaceToView(self.dChoiceView, 10)
     .widthIs(25)
     .heightEqualToWidth();
     
@@ -566,7 +641,7 @@
     
     [self.dChoiceView setupAutoHeightWithBottomView:self.dChoiceLabel bottomMargin:10];
     self.dTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    
+    self.dTapView.sd_cornerRadius = @4;
     //E
     self.eChoiceView.sd_layout
     .topSpaceToView(self.dChoiceView, 10)
@@ -575,7 +650,7 @@
     
     self.eImageView.sd_layout
     .centerYEqualToView(self.eChoiceView)
-    .leftSpaceToView(self.eChoiceView, 0)
+    .leftSpaceToView(self.eChoiceView, 10)
     .widthIs(25)
     .heightEqualToWidth();
     
@@ -587,7 +662,7 @@
     
     [self.eChoiceView setupAutoHeightWithBottomView:self.eChoiceLabel bottomMargin:10];
     self.eTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
-    
+    self.eTapView.sd_cornerRadius = @4;
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.eChoiceView bottomMargin:50];
     
@@ -623,6 +698,27 @@
     return _attributedTitleLabel;
 }
 
+-(UIImageView *)fenShuBgImageView{
+    if (!_fenShuBgImageView) {
+        _fenShuBgImageView = [[UIImageView alloc] init];
+        _fenShuBgImageView.clipsToBounds = YES;
+        _fenShuBgImageView.image = [UIImage imageNamed:@"exam_score"];
+        [_fenShuBgImageView addSubview:self.fenShuLabel];
+    }
+    return _fenShuBgImageView;
+}
+
+-(UILabel *)fenShuLabel{
+    if (!_fenShuLabel) {
+        _fenShuLabel = [[UILabel alloc] init];
+        _fenShuLabel.textAlignment=NSTextAlignmentCenter;
+        _fenShuLabel.textColor = COLOR_WITH_ALPHA(0xF8A528, 1);
+        _fenShuLabel.font = HXFont(12);
+    }
+    return _fenShuLabel;
+}
+
+
 -(UIView *)aChoiceView{
     if (!_aChoiceView) {
         _aChoiceView = [[UIView alloc] init];
@@ -636,7 +732,8 @@
 -(UIView *)aTapView{
     if (!_aTapView) {
         _aTapView = [[UIView alloc] init];
-        _aTapView.backgroundColor = COLOR_WITH_ALPHA(0x000000, 0.05);
+        _aTapView.tag = 2222222;
+        _aTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_aTapView addGestureRecognizer:tap];
     }
@@ -675,7 +772,8 @@
 -(UIView *)bTapView{
     if (!_bTapView) {
         _bTapView = [[UIView alloc] init];
-        _bTapView.backgroundColor = COLOR_WITH_ALPHA(0x000000, 0.05);
+        _bTapView.tag = 2222222;
+        _bTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_bTapView addGestureRecognizer:tap];
     }
@@ -715,7 +813,8 @@
 -(UIView *)cTapView{
     if (!_cTapView) {
         _cTapView = [[UIView alloc] init];
-        _cTapView.backgroundColor = COLOR_WITH_ALPHA(0x000000, 0.05);
+        _cTapView.tag = 2222222;
+        _cTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_cTapView addGestureRecognizer:tap];
     }
@@ -754,7 +853,8 @@
 -(UIView *)dTapView{
     if (!_dTapView) {
         _dTapView = [[UIView alloc] init];
-        _dTapView.backgroundColor = COLOR_WITH_ALPHA(0x000000, 0.05);
+        _dTapView.tag = 2222222;
+        _dTapView.backgroundColor = ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_dTapView addGestureRecognizer:tap];
     }
@@ -793,7 +893,8 @@
 -(UIView *)eTapView{
     if (!_eTapView) {
         _eTapView = [[UIView alloc] init];
-        _eTapView.backgroundColor = COLOR_WITH_ALPHA(0x000000, 0.05);
+        _eTapView.tag = 2222222;
+        _eTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_eTapView addGestureRecognizer:tap];
     }

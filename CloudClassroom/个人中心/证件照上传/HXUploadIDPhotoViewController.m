@@ -7,6 +7,8 @@
 
 #import "HXUploadIDPhotoViewController.h"
 #import "HXFanKuiYouWuViewController.h"
+#import "HXPhotoInfoModel.h"
+#import "SDWebImage.h"
 
 @interface HXUploadIDPhotoViewController ()
 
@@ -29,6 +31,8 @@
 @property(nonatomic,strong) UIButton *confirmBtn;
 @property(nonatomic,strong) UIButton *tipResultBtn;
 
+@property(nonatomic,strong) HXPhotoInfoModel *photoInfoModel;
+
 @end
 
 @implementation HXUploadIDPhotoViewController
@@ -40,16 +44,84 @@
     //UI
     [self createUI];
     
-    self.photoImageView.hidden = self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;
-    self.addPhotoBtn.hidden = self.goUploadBtn.hidden = YES;
+    //获取证件照信息
+    [self getPapersPhotoInfo];
+    
+   
 }
 
+
+#pragma mark - 获取证件照信息
+-(void)getPapersPhotoInfo{
+    NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"student_id":HXSafeString(student_id)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetPapersPhotoInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.photoInfoModel = [HXPhotoInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            //刷新界面UI
+            [self refreshUI];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+//刷新界面UI
+-(void)refreshUI{
+    
+    if ([HXCommonUtil isNull:self.photoInfoModel.imgUrl]) {//没照片
+        self.photoImageView.hidden = self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
+        self.addPhotoBtn.hidden = self.goUploadBtn.hidden = NO;
+    }else{
+        self.photoImageView.hidden = self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;
+        self.addPhotoBtn.hidden = self.goUploadBtn.hidden = YES;
+        [self.photoImageView sd_setImageWithURL:HXSafeURL(self.photoInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+        ///照片确认状态    0:未确认       1:已确认
+        if (self.photoInfoModel.comStatus==1) {
+            self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
+            self.tipResultBtn.hidden = NO;
+        }else{
+            self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;
+            self.tipResultBtn.hidden = YES;
+        }
+    }
+}
 
 #pragma mark - Event
 -(void)fanKuiYouWu:(UIButton *)sender{
     
     HXFanKuiYouWuViewController *vc = [[HXFanKuiYouWuViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+//确认照片
+-(void)confirm:(UIButton *)sender{
+    sender.userInteractionEnabled =NO;
+    NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"student_id":HXSafeString(student_id),
+        @"comstatus":@(1)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_ComfirmPhoto needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        sender.userInteractionEnabled = YES;
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message =[dictionary stringValueForKey:@"message"];
+        if (success) {
+            [self.view showSuccessWithMessage:message];
+            self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
+            self.tipResultBtn.hidden = NO;
+        }else{
+            [self.view showTostWithMessage:message];;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        sender.userInteractionEnabled = YES;
+    }];
     
 }
 
@@ -391,6 +463,7 @@
         [_confirmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_confirmBtn setTitle:@"确认无误" forState:UIControlStateNormal];
         _confirmBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        [_confirmBtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
         _confirmBtn.hidden = YES;
     }
     return _confirmBtn;

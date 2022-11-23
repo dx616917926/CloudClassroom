@@ -18,6 +18,10 @@
 //问题标题
 @property(nonatomic,strong) DTAttributedLabel *attributedTitleLabel;
 
+//分数
+@property(nonatomic,strong) UIImageView *fenShuBgImageView;
+@property(nonatomic,strong) UILabel *fenShuLabel;
+
 //子问题的容器
 @property(nonatomic,strong) UIView *subContainerView;
 
@@ -28,7 +32,8 @@
 
 @property(nonatomic,strong) UICollectionView *subCollectionView;
 
-
+///子问题当前的位置
+@property (nonatomic, strong) NSIndexPath *indexPathNow;
 
 @end
 
@@ -43,6 +48,10 @@
         [self createUI];
     }
     return self;
+}
+
+-(void)dealloc{
+    [HXNotificationCenter removeObserver:self];
 }
 
 #pragma mark - Event
@@ -68,7 +77,6 @@
 #pragma mark - Setter
 -(void)setExamPaperSuitQuestionModel:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
     
-    
     _examPaperSuitQuestionModel = examPaperSuitQuestionModel;
     
     self.tiXingNameLabel.text = examPaperSuitQuestionModel.pqt_title;
@@ -78,11 +86,25 @@
     [self.attributedTitleLabel updateLayout];
     self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
     
+    //分数
+    self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
     
     [self.subCollectionView reloadData];
+    //复归原位
+    [self scrollSubPosition:0];
+    
+
 }
 
 
+#pragma mark - 滑动复合题型子题到相应位置
+-(void)scrollSubPosition:(NSInteger)position{
+    [self.subCollectionView setContentOffset:CGPointMake(kScreenWidth*position, 0) animated:NO];
+    
+    CGPoint pInView = [self.subContainerView convertPoint:self.subCollectionView.center toView:self.subCollectionView];
+    NSIndexPath *indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
+    self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
+}
 
 #pragma mark - <DTAttributedTextContentViewDelegate>
 //图片占位
@@ -200,6 +222,14 @@
 }
 
 
+#pragma mark - <UIScrollViewDelegate>
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    CGPoint pInView = [self.subContainerView convertPoint:self.subCollectionView.center toView:self.subCollectionView];
+    self.indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
+    self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(self.indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
+    
+}
 
 #pragma mark - <UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -209,7 +239,6 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-//    HXExamPaperSubQuestionModel *examPaperSubQuestionModel = self.examPaperSuitQuestionModel.subQuestions[indexPath.row];
     HXExamSubChoiceCell *choiceCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamSubChoiceCell" forIndexPath:indexPath];
     return choiceCell;
 
@@ -234,12 +263,18 @@
     
     [self.mainScrollView addSubview:self.tiXingNameLabel];
     [self.mainScrollView addSubview:self.attributedTitleLabel];
+    [self.mainScrollView addSubview:self.fenShuBgImageView];
     
     [self.subContainerView addSubview:self.topTapContainerView];
     [self.subContainerView addSubview:self.subCollectionView];
     
     
-    self.mainScrollView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
+    self.mainScrollView.sd_layout
+    .topSpaceToView(self, 0)
+    .leftSpaceToView(self, 0)
+    .rightSpaceToView(self, 0)
+    .heightIs((kScreenHeight-kNavigationBarHeight-72)*0.5);
+    [self.mainScrollView updateLayout];
     
     self.tiXingNameLabel.sd_layout
     .topSpaceToView(self.mainScrollView, 20)
@@ -253,11 +288,19 @@
     .rightSpaceToView(self.mainScrollView, 10)
     .heightIs(50);
     
-    [self.mainScrollView setupAutoContentSizeWithBottomView:self.attributedTitleLabel bottomMargin:kScreenHeight*0.5+kNavigationBarHeight];
+    self.fenShuBgImageView.sd_layout
+    .topSpaceToView(self.mainScrollView, 0)
+    .rightEqualToView(self.mainScrollView)
+    .widthIs(32)
+    .heightEqualToWidth();
+    
+    self.fenShuLabel.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 5, 0, 0));
+    
+    [self.mainScrollView setupAutoContentSizeWithBottomView:self.attributedTitleLabel bottomMargin:50];
     
     
     self.subContainerView.sd_layout
-    .topSpaceToView(self, kScreenHeight*0.5-kNavigationBarHeight)
+    .topSpaceToView(self.mainScrollView, 0)
     .leftSpaceToView(self, 0)
     .rightSpaceToView(self, 0)
     .bottomEqualToView(self);
@@ -272,7 +315,7 @@
     .topSpaceToView(self.topTapContainerView, 0)
     .leftSpaceToView(self.subContainerView, 0)
     .rightSpaceToView(self.subContainerView, 0)
-    .heightIs(kScreenHeight-kNavigationBarHeight-44);
+    .bottomEqualToView(self.subContainerView);
     
     self.checkSubLabel.sd_layout
     .centerYEqualToView(self.topTapContainerView)
@@ -317,10 +360,31 @@
     return _attributedTitleLabel;
 }
 
+-(UIImageView *)fenShuBgImageView{
+    if (!_fenShuBgImageView) {
+        _fenShuBgImageView = [[UIImageView alloc] init];
+        _fenShuBgImageView.clipsToBounds = YES;
+        _fenShuBgImageView.image = [UIImage imageNamed:@"exam_score"];
+        [_fenShuBgImageView addSubview:self.fenShuLabel];
+    }
+    return _fenShuBgImageView;
+}
+
+-(UILabel *)fenShuLabel{
+    if (!_fenShuLabel) {
+        _fenShuLabel = [[UILabel alloc] init];
+        _fenShuLabel.textAlignment=NSTextAlignmentCenter;
+        _fenShuLabel.textColor = COLOR_WITH_ALPHA(0xF8A528, 1);
+        _fenShuLabel.font = HXFont(12);
+    }
+    return _fenShuLabel;
+}
+
+
 -(UIView *)subContainerView{
     if (!_subContainerView) {
         _subContainerView = [[UIView alloc] init];
-        _subContainerView.backgroundColor = UIColor.redColor;
+        _subContainerView.backgroundColor = UIColor.whiteColor;
     }
     return _subContainerView;
 }
@@ -356,7 +420,7 @@
         _subNOLabel.font = HXFont(16);
         _subNOLabel.textAlignment = NSTextAlignmentLeft;
         _subNOLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _subNOLabel.text = @"1/4";
+        
     }
     return _subNOLabel;
 }
@@ -365,7 +429,7 @@
     if (!_subCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight- kNavigationBarHeight);
+        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight-kNavigationBarHeight-(kScreenHeight-kNavigationBarHeight-72)*0.5-44-72);
         _subCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _subCollectionView.backgroundColor = [UIColor whiteColor];
         _subCollectionView.showsVerticalScrollIndicator = NO;

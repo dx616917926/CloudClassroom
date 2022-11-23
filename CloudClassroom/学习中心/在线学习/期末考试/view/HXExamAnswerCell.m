@@ -18,6 +18,10 @@
 //问题标题
 @property(nonatomic,strong) DTAttributedLabel *attributedTitleLabel;
 
+//分数
+@property(nonatomic,strong) UIImageView *fenShuBgImageView;
+@property(nonatomic,strong) UILabel *fenShuLabel;
+
 @property(nonatomic,strong) UIView *grayView;
 @property(nonatomic,strong) IQTextView *textView;
 
@@ -51,6 +55,9 @@
     self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
     [self.attributedTitleLabel updateLayout];
     self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
+    
+    //分数
+    self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
     
     self.textView.text = examPaperSuitQuestionModel.answer;
     
@@ -187,6 +194,7 @@
     [self addSubview:self.mainScrollView];
     [self.mainScrollView addSubview:self.tiXingNameLabel];
     [self.mainScrollView addSubview:self.attributedTitleLabel];
+    [self.mainScrollView addSubview:self.fenShuBgImageView];
     
     [self.mainScrollView addSubview:self.grayView];
     [self.grayView addSubview:self.textView];
@@ -204,6 +212,14 @@
     .leftSpaceToView(self.mainScrollView, 10)
     .rightSpaceToView(self.mainScrollView, 10)
     .heightIs(50);
+    
+    self.fenShuBgImageView.sd_layout
+    .topSpaceToView(self.mainScrollView, 0)
+    .rightEqualToView(self.mainScrollView)
+    .widthIs(32)
+    .heightEqualToWidth();
+    
+    self.fenShuLabel.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 5, 0, 0));
     
     
     self.grayView.sd_layout
@@ -247,6 +263,26 @@
         _attributedTitleLabel.delegate = self;
     }
     return _attributedTitleLabel;
+}
+
+-(UIImageView *)fenShuBgImageView{
+    if (!_fenShuBgImageView) {
+        _fenShuBgImageView = [[UIImageView alloc] init];
+        _fenShuBgImageView.clipsToBounds = YES;
+        _fenShuBgImageView.image = [UIImage imageNamed:@"exam_score"];
+        [_fenShuBgImageView addSubview:self.fenShuLabel];
+    }
+    return _fenShuBgImageView;
+}
+
+-(UILabel *)fenShuLabel{
+    if (!_fenShuLabel) {
+        _fenShuLabel = [[UILabel alloc] init];
+        _fenShuLabel.textAlignment=NSTextAlignmentCenter;
+        _fenShuLabel.textColor = COLOR_WITH_ALPHA(0xF8A528, 1);
+        _fenShuLabel.font = HXFont(12);
+    }
+    return _fenShuLabel;
 }
 
 -(UIView *)grayView{

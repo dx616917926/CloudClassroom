@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel;
 
+//滑动复合题型子题到相应位置
+-(void)scrollSubPosition:(NSInteger)position;
 
 @end
 

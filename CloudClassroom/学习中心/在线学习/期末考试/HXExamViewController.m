@@ -6,6 +6,7 @@
 //
 
 #import "HXExamViewController.h"
+#import "HXAnswerSheetViewController.h"
 #import "HXExamChoiceCell.h"//选择题
 #import "HXExamAnswerCell.h"//问答题
 #import "HXExamFuHeCell.h"//复合题
@@ -15,11 +16,13 @@
 
 @property(nonatomic,strong) UIView *navBarView;
 @property(nonatomic,strong) UILabel *titleLabel;
-@property(nonatomic,strong) UIButton *closeBtn;
-@property(nonatomic,strong) UIButton *rightBtn;
+@property(nonatomic,strong) UIButton *jiaoJuanBtn;
+@property(nonatomic,strong) UIButton *answerSheetBtn;
 
+@property(nonatomic,strong) UIView *bottomView;
 @property(nonatomic,strong) UIButton *upBtn;
 @property(nonatomic,strong) UIButton *downBtn;
+
 
 @property(nonatomic,strong) UICollectionView *mainCollectionView;
 
@@ -27,6 +30,11 @@
 
 ///当前的位置
 @property (nonatomic, strong) NSIndexPath *indexPathNow;
+
+///复合题中小题的位置（从0 开始）
+@property (nonatomic,assign) BOOL shouldScroll;;
+@property (nonatomic,assign) NSInteger fuhe_position;
+
 
 @end
 
@@ -74,7 +82,7 @@
         [examQuestionTypeModel.paperSuitQuestions enumerateObjectsUsingBlock:^(HXExamPaperSuitQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = obj;
             examPaperSuitQuestionModel.pqt_title = examQuestionTypeModel.pqt_title;
-            examPaperSuitQuestionModel.isDuoXuan = (examPaperSuitQuestionModel.subQuestions.count==0&&examPaperSuitQuestionModel.questionChoices.count>4);
+            examPaperSuitQuestionModel.isDuoXuan = (examPaperSuitQuestionModel.subQuestions.count==0&&[examPaperSuitQuestionModel.pqt_title containsString:@"多选题"]);
             examPaperSuitQuestionModel.isWenDa = (examPaperSuitQuestionModel.subQuestions.count==0&&examPaperSuitQuestionModel.questionChoices.count==0);
             examPaperSuitQuestionModel.isFuHe = (examPaperSuitQuestionModel.subQuestions.count>0&&examPaperSuitQuestionModel.questionChoices.count==0);
             [self.dataArray addObject:obj];
@@ -84,8 +92,30 @@
 }
 
 #pragma mark - Event
--(void)close{
+-(void)jiaoJuan:(UIButton *)sender{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)clickAnswerSheet:(UIButton *)sender{
+    HXAnswerSheetViewController *vc = [[HXAnswerSheetViewController alloc] init];
+    vc.examPaperModel = self.examPaperModel;
+    vc.isEnterExam = YES;
+    vc.examVc = self;
+    //点击答题卡题目回调
+    WeakSelf(weakSelf);
+    vc.answerSheetBlock = ^(NSInteger position, NSInteger fuhe_position, BOOL isFuhe) {
+        StrongSelf(strongSelf);
+        [strongSelf.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:position inSection:0] atScrollPosition:(UICollectionViewScrollPositionNone) animated:NO];
+        CGPoint pInView = [self.view convertPoint:self.mainCollectionView.center toView:self.mainCollectionView];
+        self.indexPathNow = [self.mainCollectionView indexPathForItemAtPoint:pInView];
+        if (isFuhe) {
+            //滑动复合题型子题到相应位置
+            [self.mainCollectionView reloadItemsAtIndexPaths:@[self.indexPathNow]];
+            HXExamFuHeCell *fuHeCell = (HXExamFuHeCell *)[self.mainCollectionView cellForItemAtIndexPath:self.indexPathNow];
+            [fuHeCell scrollSubPosition:fuhe_position];
+        }
+    };
+    [self presentViewController:vc animated:NO completion:nil];
 }
 
 
@@ -156,6 +186,7 @@
     if (examPaperSuitQuestionModel.isFuHe) {
         HXExamFuHeCell *fuHeCell = (HXExamFuHeCell *)cell;
         fuHeCell.examPaperSuitQuestionModel = examPaperSuitQuestionModel;
+        
     }else if (examPaperSuitQuestionModel.isWenDa) {
         HXExamAnswerCell *answerCell = (HXExamAnswerCell *)cell;
         answerCell.examPaperSuitQuestionModel = examPaperSuitQuestionModel;
@@ -163,8 +194,6 @@
         HXExamChoiceCell *choiceCell = (HXExamChoiceCell *)cell;
         choiceCell.examPaperSuitQuestionModel = examPaperSuitQuestionModel;
     }
-    
-   
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
@@ -174,15 +203,18 @@
 
 #pragma mark - UI
 -(void)createUI{
+    
     [self.view addSubview:self.navBarView];
     [self.view addSubview:self.mainCollectionView];
-    [self.view addSubview:self.upBtn];
-    [self.view addSubview:self.downBtn];
-    
+    [self.view addSubview:self.bottomView];
+
     
     [self.navBarView addSubview:self.titleLabel];
-    [self.navBarView addSubview:self.closeBtn];
-    [self.navBarView addSubview:self.rightBtn];
+    [self.navBarView addSubview:self.jiaoJuanBtn];
+    [self.navBarView addSubview:self.answerSheetBtn];
+    
+    [self.bottomView addSubview:self.upBtn];
+    [self.bottomView addSubview:self.downBtn];
     
     
     
@@ -193,43 +225,76 @@
     .rightEqualToView(self.view)
     .heightIs(kNavigationBarHeight);
     
+    self.bottomView.sd_layout
+    .bottomSpaceToView(self.view, 0)
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .heightIs(72);
+    
     self.mainCollectionView.sd_layout
     .topSpaceToView(self.navBarView, 0)
-    .bottomEqualToView(self.view)
+    .bottomSpaceToView(self.bottomView, 0)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view);
     
-    self.titleLabel.sd_layout
-    .topSpaceToView(self.navBarView, kStatusBarHeight)
-    .centerXEqualToView(self.navBarView)
-    .widthIs(kScreenWidth-140)
-    .heightIs(kNavigationBarHeight-kStatusBarHeight);
-    
-    self.closeBtn.sd_layout
+        
+    self.jiaoJuanBtn.sd_layout
     .centerYEqualToView(self.titleLabel)
-    .leftEqualToView(self.navBarView)
-    .widthIs(60)
-    .heightIs(44);
+    .leftSpaceToView(self.navBarView, 12)
+    .widthIs(65)
+    .heightIs(30);
     
     
-    self.rightBtn.sd_layout
+    self.answerSheetBtn.sd_layout
     .centerYEqualToView(self.titleLabel)
     .rightEqualToView(self.navBarView)
     .widthIs(60)
     .heightIs(44);
     
+    self.titleLabel.sd_layout
+    .topSpaceToView(self.navBarView, kStatusBarHeight)
+    .leftSpaceToView(self.jiaoJuanBtn,10)
+    .rightSpaceToView(self.answerSheetBtn,10)
+    .heightIs(kNavigationBarHeight-kStatusBarHeight);
+    
     self.upBtn.sd_layout
-    .centerYEqualToView(self.view)
-    .leftSpaceToView(self.view, 0)
-    .widthIs(42)
-    .heightIs(60);
+    .centerYEqualToView(self.bottomView)
+    .leftSpaceToView(self.bottomView, 20)
+    .widthIs(130)
+    .heightIs(40);
+    self.upBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    self.upBtn.imageView.sd_layout
+    .centerYEqualToView(self.upBtn)
+    .leftSpaceToView(self.upBtn, 32)
+    .widthIs(6)
+    .heightIs(11);
+    
+    self.upBtn.titleLabel.sd_layout
+    .centerYEqualToView(self.upBtn)
+    .leftSpaceToView(self.self.upBtn.imageView, 6)
+    .rightEqualToView(self.upBtn)
+    .heightIs(20);
+    
     
     self.downBtn.sd_layout
-    .centerYEqualToView(self.upBtn)
-    .rightSpaceToView(self.view, 0)
-    .widthIs(42)
-    .heightIs(60);
+    .centerYEqualToView(self.bottomView)
+    .rightSpaceToView(self.bottomView, 20)
+    .widthRatioToView(self.upBtn, 1)
+    .heightRatioToView(self.upBtn, 1);
+    self.downBtn.sd_cornerRadiusFromHeightRatio=@0.5;
     
+    self.downBtn.imageView.sd_layout
+    .centerYEqualToView(self.downBtn)
+    .rightSpaceToView(self.downBtn, 32)
+    .widthIs(6)
+    .heightIs(11);
+    
+    self.downBtn.titleLabel.sd_layout
+    .centerYEqualToView(self.downBtn)
+    .rightSpaceToView(self.self.downBtn.imageView, 6)
+    .leftEqualToView(self.downBtn)
+    .heightIs(20);
     
 }
 
@@ -260,29 +325,29 @@
     return _titleLabel;
 }
 
--(UIButton *)closeBtn{
-    if (!_closeBtn) {
-        _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_closeBtn setImage:[UIImage imageNamed:@"closewhite_icon"] forState:UIControlStateNormal];
-        [_closeBtn addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+-(UIButton *)jiaoJuanBtn{
+    if (!_jiaoJuanBtn) {
+        _jiaoJuanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_jiaoJuanBtn setImage:[UIImage imageNamed:@"jiaojuan_icon"] forState:UIControlStateNormal];
+        [_jiaoJuanBtn addTarget:self action:@selector(jiaoJuan:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _closeBtn;
+    return _jiaoJuanBtn;
 }
 
--(UIButton *)rightBtn{
-    if (!_rightBtn) {
-        _rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_rightBtn setImage:[UIImage imageNamed:@"exam_menu"] forState:UIControlStateNormal];
-        [_rightBtn addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+-(UIButton *)answerSheetBtn{
+    if (!_answerSheetBtn) {
+        _answerSheetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_answerSheetBtn setImage:[UIImage imageNamed:@"exam_menu"] forState:UIControlStateNormal];
+        [_answerSheetBtn addTarget:self action:@selector(clickAnswerSheet:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _rightBtn;
+    return _answerSheetBtn;
 }
 
 -(UICollectionView *)mainCollectionView{
     if (!_mainCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight- kNavigationBarHeight);
+        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight- kNavigationBarHeight-72);
         _mainCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _mainCollectionView.backgroundColor = [UIColor whiteColor];
         _mainCollectionView.showsVerticalScrollIndicator = NO;
@@ -298,11 +363,27 @@
     return _mainCollectionView;
 }
 
+-(UIView *)bottomView{
+    if (!_bottomView) {
+        _bottomView = [[UIView alloc] init];
+        _bottomView.backgroundColor = UIColor.whiteColor;
+        _bottomView.layer.shadowColor = COLOR_WITH_ALPHA(0x000000, 0.19).CGColor;
+        _bottomView.layer.shadowOffset = CGSizeMake(0,-2);
+        _bottomView.layer.shadowOpacity = 1;
+        _bottomView.layer.shadowRadius = 25;
+    }
+    return _bottomView;
+}
 
 -(UIButton *)upBtn{
     if (!_upBtn) {
         _upBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_upBtn setImage:[UIImage imageNamed:@"exam_left_switch"] forState:UIControlStateNormal];
+        _upBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        _upBtn.titleLabel.font= HXBoldFont(14);
+        _upBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+        [_upBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_upBtn setTitle:@"上一题" forState:UIControlStateNormal];
+        [_upBtn setImage:[UIImage imageNamed:@"up_icon"] forState:UIControlStateNormal];
         [_upBtn addTarget:self action:@selector(upClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _upBtn;
@@ -311,7 +392,12 @@
 -(UIButton *)downBtn{
     if (!_downBtn) {
         _downBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_downBtn setImage:[UIImage imageNamed:@"exam_right_switch"] forState:UIControlStateNormal];
+        _downBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        _downBtn.titleLabel.font= HXBoldFont(14);
+        _downBtn.titleLabel.textAlignment = NSTextAlignmentRight;
+        [_downBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [_downBtn setTitle:@"下一题" forState:UIControlStateNormal];
+        [_downBtn setImage:[UIImage imageNamed:@"down_icon"] forState:UIControlStateNormal];
         [_downBtn addTarget:self action:@selector(downClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _downBtn;
