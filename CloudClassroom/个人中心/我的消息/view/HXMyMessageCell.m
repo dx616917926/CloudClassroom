@@ -38,6 +38,16 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setMyMessageInfoModel:(HXMyMessageInfoModel *)myMessageInfoModel{
+    _myMessageInfoModel = myMessageInfoModel;
+    
+    self.messageIcon.image = [UIImage imageNamed:(myMessageInfoModel.statusID==0? @"messasgeweidu_icon":@"messasgeyidu_icon")];
+    self.titleLabel.text = HXSafeString(myMessageInfoModel.messagetitle);
+    self.timeLabel.text = HXSafeString(myMessageInfoModel.sendtime);
+    self.contentLabel.text = HXSafeString(myMessageInfoModel.messagecontent);
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -98,7 +108,6 @@
 - (UIImageView *)messageIcon{
     if (!_messageIcon) {
         _messageIcon = [[UIImageView alloc] init];
-        _messageIcon.image = [UIImage imageNamed:@"messasgeweidu_icon"];
     }
     return _messageIcon;
 }
@@ -108,7 +117,7 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = HXBoldFont(15);
         _titleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _titleLabel.text = @"暑假学习情况";
+        
     }
     return _titleLabel;
 }
@@ -119,7 +128,7 @@
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.font = HXFont(12);
         _timeLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeLabel.text = @"2022.07.28 09:37";
+        
     }
     return _timeLabel;
 }
@@ -131,7 +140,7 @@
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         _contentLabel.font = HXFont(13);
         _contentLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _contentLabel.text = @"您的课程学习未完成50%，请您尽快完成学习...";
+        
     }
     return _contentLabel;
 }

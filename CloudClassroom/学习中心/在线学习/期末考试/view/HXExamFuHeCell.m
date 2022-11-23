@@ -22,11 +22,9 @@
 @property(nonatomic,strong) UIImageView *fenShuBgImageView;
 @property(nonatomic,strong) UILabel *fenShuLabel;
 
-//子问题的容器
-@property(nonatomic,strong) UIView *subContainerView;
 
 //跟着手势滑动的view
-@property(nonatomic,strong) UIView *topTapContainerView;
+@property(nonatomic,strong) UIView *mSplitView;
 @property(nonatomic,strong) UILabel *checkSubLabel;//查看小题
 @property(nonatomic,strong) UILabel *subNOLabel;//小题序号
 
@@ -54,25 +52,6 @@
     [HXNotificationCenter removeObserver:self];
 }
 
-#pragma mark - Event
-
-//平移手势
-- (void)handlePan:(UIPanGestureRecognizer*)recognizer{
-    
-    CGPoint translation = [recognizer translationInView:self];
-    
-    int y = self.subContainerView.frame.origin.y+ translation.y-44;
-    int h = kScreenHeight-kNavigationBarHeight-44;
-    //不能超出这个范围
-    if (y >(kNavigationBarHeight) && y < h) {
-        self.subContainerView.center = CGPointMake(self.subContainerView.center.x,
-                                                   self.subContainerView.center.y + translation.y);
-        
-    }
-    [recognizer setTranslation:CGPointZero inView:self];
-    
-}
-
 
 #pragma mark - Setter
 -(void)setExamPaperSuitQuestionModel:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
@@ -93,18 +72,48 @@
     //复归原位
     [self scrollSubPosition:0];
     
+    //把移动归位
+    self.mainScrollView.frame = CGRectMake(0, 0, kScreenWidth, ((kScreenHeight-kNavigationBarHeight-ExamBottomViewHeight)*0.5));
+    self.mSplitView.frame = CGRectMake(0, CGRectGetMaxY(self.mainScrollView.frame), kScreenWidth, ExamSplitViewHeight);
+    self.subCollectionView.frame = CGRectMake(0, CGRectGetMaxY(self.mSplitView.frame), kScreenWidth, ExamSubChoiceCellHeight);
 
 }
 
 
-#pragma mark - 滑动复合题型子题到相应位置
--(void)scrollSubPosition:(NSInteger)position{
-    [self.subCollectionView setContentOffset:CGPointMake(kScreenWidth*position, 0) animated:NO];
+#pragma mark - 复合题型子题的平移手势、轻击手势
+//平移手势
+- (void)handlePan:(UIPanGestureRecognizer*)recognizer{
     
-    CGPoint pInView = [self.subContainerView convertPoint:self.subCollectionView.center toView:self.subCollectionView];
-    NSIndexPath *indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
-    self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
+    CGPoint translation = [recognizer translationInView:self];
+    CGFloat y = recognizer.view.frame.origin.y + translation.y;
+    CGFloat h = ExamSubChoiceCellHeight;
+    //不能超出这个范围
+    if (y > 0 && y < h) {
+        recognizer.view.center = CGPointMake(kScreenWidth*0.5,recognizer.view.center.y + translation.y);
+        self.mainScrollView.frame = CGRectMake(self.mainScrollView.frame.origin.x, self.mainScrollView.frame.origin.y, kScreenWidth, y);
+        self.subCollectionView.frame = CGRectMake(self.subCollectionView.frame.origin.x, self.subCollectionView.frame.origin.y + translation.y, kScreenWidth, h);
+    }
+    [recognizer setTranslation:CGPointZero inView:self];
+    
 }
+
+
+//轻击手势
+- (void)handleTap:(UITapGestureRecognizer*)recognizer
+{
+    if (recognizer.view.frame.origin.y != 0) {
+        //不在顶部，回到顶部
+        self.mainScrollView.frame =CGRectMake(0,0, kScreenWidth, 0);
+        recognizer.view.frame = CGRectMake(0, 0, kScreenWidth, ExamSplitViewHeight);
+        self.subCollectionView.frame = CGRectMake(0, ExamSplitViewHeight, kScreenWidth,ExamSubChoiceCellHeight);
+    }else{
+        //在顶部，归位
+        self.mainScrollView.frame = CGRectMake(0, 0, kScreenWidth, ((kScreenHeight-kNavigationBarHeight-ExamBottomViewHeight)*0.5));
+        self.mSplitView.frame = CGRectMake(0, CGRectGetMaxY(self.mainScrollView.frame), kScreenWidth, ExamSplitViewHeight);
+        self.subCollectionView.frame = CGRectMake(0, CGRectGetMaxY(self.mSplitView.frame), kScreenWidth, ExamSubChoiceCellHeight);
+    }
+}
+
 
 #pragma mark - <DTAttributedTextContentViewDelegate>
 //图片占位
@@ -132,11 +141,7 @@
 }
 
 
-
-
-
-#pragma mark - <DTLazyImageViewDelegate>
-//懒加载获取图片大小
+#pragma mark - <DTLazyImageViewDelegate>懒加载获取图片大小
 - (void)lazyImageView:(DTLazyImageView *)lazyImageView didChangeImageSize:(CGSize)size {
     NSURL *url = lazyImageView.url;
     CGSize imageSize = size;
@@ -188,7 +193,8 @@
     
 }
 
-#pragma mark - private Methods
+
+#pragma mark - Private Methods
 //使用HtmlString,和最大左右间距，计算视图的高度
 - (CGSize)getAttributedTextHeightHtml:(NSString *)htmlString with_viewMaxRect:(CGRect)_viewMaxRect{
     //获取富文本
@@ -222,20 +228,33 @@
 }
 
 
-#pragma mark - <UIScrollViewDelegate>
+#pragma mark - Public Methods 点击答题卡，子题滑动到相应位置
+-(void)scrollSubPosition:(NSInteger)position{
+    //点击答题卡
+    [self.subCollectionView setContentOffset:CGPointMake(kScreenWidth*position, 0) animated:NO];
+    
+    CGPoint pInView = [self convertPoint:self.subCollectionView.center toView:self.subCollectionView];
+    NSIndexPath *indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
+    self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
+}
+
+
+#pragma mark - <UIScrollViewDelegate>子题滑动结束
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    CGPoint pInView = [self.subContainerView convertPoint:self.subCollectionView.center toView:self.subCollectionView];
+    CGPoint pInView = [self convertPoint:self.subCollectionView.center toView:self.subCollectionView];
     self.indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
     self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(self.indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
     
 }
+
 
 #pragma mark - <UICollectionViewDelegate,UICollectionViewDataSource>
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.examPaperSuitQuestionModel.subQuestions.count;
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -244,6 +263,7 @@
 
 }
 
+
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     HXExamPaperSubQuestionModel *examPaperSubQuestionModel = self.examPaperSuitQuestionModel.subQuestions[indexPath.row];
     HXExamSubChoiceCell *choiceCell = (HXExamSubChoiceCell *)cell;
@@ -251,30 +271,29 @@
 
 }
 
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     return 0;
 }
 
+
 #pragma mark - UI布局
 -(void)createUI{
+    
     [self addSubview:self.mainScrollView];
-    [self addSubview:self.subContainerView];
+    [self addSubview:self.mSplitView];
+    [self addSubview:self.subCollectionView];
     
     
     [self.mainScrollView addSubview:self.tiXingNameLabel];
     [self.mainScrollView addSubview:self.attributedTitleLabel];
     [self.mainScrollView addSubview:self.fenShuBgImageView];
     
-    [self.subContainerView addSubview:self.topTapContainerView];
-    [self.subContainerView addSubview:self.subCollectionView];
+
     
-    
-    self.mainScrollView.sd_layout
-    .topSpaceToView(self, 0)
-    .leftSpaceToView(self, 0)
-    .rightSpaceToView(self, 0)
-    .heightIs((kScreenHeight-kNavigationBarHeight-72)*0.5);
-    [self.mainScrollView updateLayout];
+    self.mainScrollView.frame = CGRectMake(0, 0, kScreenWidth, ((kScreenHeight-kNavigationBarHeight-ExamBottomViewHeight)*0.5));
+    self.mSplitView.frame = CGRectMake(0, CGRectGetMaxY(self.mainScrollView.frame), kScreenWidth, ExamSplitViewHeight);
+    self.subCollectionView.frame = CGRectMake(0, CGRectGetMaxY(self.mSplitView.frame), kScreenWidth, ExamSubChoiceCellHeight);
     
     self.tiXingNameLabel.sd_layout
     .topSpaceToView(self.mainScrollView, 20)
@@ -299,37 +318,21 @@
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.attributedTitleLabel bottomMargin:50];
     
     
-    self.subContainerView.sd_layout
-    .topSpaceToView(self.mainScrollView, 0)
-    .leftSpaceToView(self, 0)
-    .rightSpaceToView(self, 0)
-    .bottomEqualToView(self);
-
-    self.topTapContainerView.sd_layout
-    .topSpaceToView(self.subContainerView, 0)
-    .leftSpaceToView(self.subContainerView, 0)
-    .rightSpaceToView(self.subContainerView, 0)
-    .heightIs(44);
-    
-    self.subCollectionView.sd_layout
-    .topSpaceToView(self.topTapContainerView, 0)
-    .leftSpaceToView(self.subContainerView, 0)
-    .rightSpaceToView(self.subContainerView, 0)
-    .bottomEqualToView(self.subContainerView);
-    
+    //查看小题
     self.checkSubLabel.sd_layout
-    .centerYEqualToView(self.topTapContainerView)
-    .centerXEqualToView(self.topTapContainerView).offset(-10)
+    .centerYEqualToView(self.mSplitView)
+    .centerXEqualToView(self.mSplitView).offset(-10)
     .heightIs(20);
     [self.checkSubLabel setSingleLineAutoResizeWithMaxWidth:100];
    
     self.subNOLabel.sd_layout
-    .centerYEqualToView(self.topTapContainerView)
+    .centerYEqualToView(self.mSplitView)
     .leftSpaceToView(self.checkSubLabel, 10)
     .widthIs(60)
     .heightIs(20);
    
 }
+
 
 #pragma mark - LazyLoad
 -(UIScrollView *)mainScrollView{
@@ -342,6 +345,7 @@
     return _mainScrollView;
 }
 
+
 -(UILabel *)tiXingNameLabel{
     if (!_tiXingNameLabel) {
         _tiXingNameLabel = [[UILabel alloc] init];
@@ -352,6 +356,7 @@
     return _tiXingNameLabel;
 }
 
+
 - (DTAttributedLabel *)attributedTitleLabel{
     if (!_attributedTitleLabel) {
         _attributedTitleLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
@@ -359,6 +364,7 @@
     }
     return _attributedTitleLabel;
 }
+
 
 -(UIImageView *)fenShuBgImageView{
     if (!_fenShuBgImageView) {
@@ -369,6 +375,7 @@
     }
     return _fenShuBgImageView;
 }
+
 
 -(UILabel *)fenShuLabel{
     if (!_fenShuLabel) {
@@ -381,27 +388,23 @@
 }
 
 
--(UIView *)subContainerView{
-    if (!_subContainerView) {
-        _subContainerView = [[UIView alloc] init];
-        _subContainerView.backgroundColor = UIColor.whiteColor;
+-(UIView *)mSplitView{
+    if (!_mSplitView) {
+        _mSplitView = [[UIView alloc] init];
+        _mSplitView.backgroundColor = COLOR_WITH_ALPHA(0xF2F2F2, 1);
+        [_mSplitView addSubview:self.checkSubLabel];
+        [_mSplitView addSubview:self.subNOLabel];
+        //平移手势
+        UIPanGestureRecognizer *panGestureRecognizer =[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
+        [_mSplitView addGestureRecognizer:panGestureRecognizer];
+        
+        //轻击手势
+        UITapGestureRecognizer *tapGestureRecognizer =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
+        [_mSplitView addGestureRecognizer:tapGestureRecognizer];
     }
-    return _subContainerView;
+    return _mSplitView;
 }
 
-
--(UIView *)topTapContainerView{
-    if (!_topTapContainerView) {
-        _topTapContainerView = [[UIView alloc] init];
-        _topTapContainerView.backgroundColor = COLOR_WITH_ALPHA(0xF2F2F2, 1);
-        [_topTapContainerView addSubview:self.checkSubLabel];
-        [_topTapContainerView addSubview:self.subNOLabel];
-//        //平移手势
-//        UIPanGestureRecognizer *panGestureRecognizer =[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(handlePan:)];
-//        [_topTapContainerView addGestureRecognizer:panGestureRecognizer];
-    }
-    return _topTapContainerView;
-}
 
 -(UILabel *)checkSubLabel{
     if (!_checkSubLabel) {
@@ -414,6 +417,7 @@
     return _checkSubLabel;
 }
 
+
 -(UILabel *)subNOLabel{
     if (!_subNOLabel) {
         _subNOLabel = [[UILabel alloc] init];
@@ -425,11 +429,12 @@
     return _subNOLabel;
 }
 
+
 -(UICollectionView *)subCollectionView{
     if (!_subCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight-kNavigationBarHeight-(kScreenHeight-kNavigationBarHeight-72)*0.5-44-72);
+        layout.itemSize = CGSizeMake(kScreenWidth, ExamSubChoiceCellHeight);
         _subCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _subCollectionView.backgroundColor = [UIColor whiteColor];
         _subCollectionView.showsVerticalScrollIndicator = NO;

@@ -7,6 +7,8 @@
 
 #import "HXUploadIDPhotoViewController.h"
 #import "HXFanKuiYouWuViewController.h"
+#import "UIViewController+HXExtension.h"
+#import "HXPhotoManager.h"
 #import "HXPhotoInfoModel.h"
 #import "SDWebImage.h"
 
@@ -32,6 +34,9 @@
 @property(nonatomic,strong) UIButton *tipResultBtn;
 
 @property(nonatomic,strong) HXPhotoInfoModel *photoInfoModel;
+
+@property(nonatomic,strong) HXPhotoManager *photoManager;
+
 
 @end
 
@@ -93,6 +98,59 @@
 }
 
 #pragma mark - Event
+//选择照片
+-(void)addPhoto:(UIButton *)sender{
+    WeakSelf(weakSelf);
+    [self hx_presentSelectPhotoControllerWithManager:self.photoManager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
+        HXPhotoModel *photoModel = allList.firstObject;
+        // 因为是编辑过的照片所以直接取
+        weakSelf.photoImageView.hidden = NO;
+        weakSelf.addPhotoBtn.hidden = YES;
+        weakSelf.photoImageView.image = photoModel.photoEdit.editPreviewImage;
+        
+    } cancel:nil];
+
+}
+
+-(void)tapPhotoImageView:(UITapGestureRecognizer *)tap{
+    //无照片添加照片
+    if ([HXCommonUtil isNull:self.photoInfoModel.imgUrl ]){
+        [self addPhoto:nil];
+    }
+    
+}
+
+//上传照片
+-(void)uploadPhoto:(UIButton *)sender{
+    NSString *encodedImageStr = [self imageChangeBase64:self.photoImageView.image];
+    if (!self.photoImageView.image){
+        [self.view showTostWithMessage:@"请添加图片"];
+        return;
+    }
+    
+    sender.userInteractionEnabled =NO;
+    NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"student_id":HXSafeString(student_id),
+        @"sourseImgBase64":HXSafeString(encodedImageStr)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_SavePhotoUpload needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        sender.userInteractionEnabled = YES;
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message =[dictionary stringValueForKey:@"message"];
+        if (success) {
+            [self.view showSuccessWithMessage:message];
+            //上传成功，重新获取一次照片信息
+            [self getPapersPhotoInfo];
+        }else{
+            [self.view showTostWithMessage:message];;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        sender.userInteractionEnabled = YES;
+    }];
+    
+}
+
 -(void)fanKuiYouWu:(UIButton *)sender{
     
     HXFanKuiYouWuViewController *vc = [[HXFanKuiYouWuViewController alloc] init];
@@ -123,6 +181,15 @@
         sender.userInteractionEnabled = YES;
     }];
     
+}
+
+
+#pragma mark -- image转化成Base64位
+-(NSString *)imageChangeBase64: (UIImage *)image{
+    UIImage*compressImage = [HXCommonUtil compressImageSize:image toByte:250000];
+    NSData*imageData =  UIImageJPEGRepresentation(compressImage, 1);
+    NSLog(@"压缩后图片大小：%.2f M",(float)imageData.length/(1024*1024.0f));
+    return [NSString stringWithFormat:@"%@",[imageData base64EncodedStringWithOptions:0]];
 }
 
 #pragma mark - UI
@@ -286,7 +353,23 @@
     
 }
 
+#pragma mark - lazyLoad
 
+- (HXPhotoManager *)photoManager {
+    if (!_photoManager) {
+        _photoManager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhotoAndVideo];
+        _photoManager.selectPhotoFinishDismissAnimated = YES;
+        _photoManager.cameraFinishDismissAnimated = YES;
+        _photoManager.type = HXPhotoManagerSelectedTypePhoto;
+        _photoManager.configuration.singleJumpEdit = YES;
+        _photoManager.configuration.singleSelected = YES;
+        _photoManager.configuration.lookGifPhoto = NO;
+        _photoManager.configuration.lookLivePhoto = NO;
+        _photoManager.configuration.photoEditConfigur.aspectRatio = HXPhotoEditAspectRatioType_Custom;
+        _photoManager.configuration.photoEditConfigur.onlyCliping = YES;
+    }
+    return _photoManager;
+}
 
 -(UIScrollView *)mainScrollView{
     if (!_mainScrollView) {
@@ -401,6 +484,7 @@
         [_uploadPhotoBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_uploadPhotoBtn setImage:[UIImage imageNamed:@"uploadphoto_icon"] forState:UIControlStateNormal];
         [_uploadPhotoBtn setTitle:@"上传照片" forState:UIControlStateNormal];
+        
     }
     return _uploadPhotoBtn;
 }
@@ -409,6 +493,7 @@
     if (!_addPhotoBtn) {
         _addPhotoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_addPhotoBtn setImage:[UIImage imageNamed:@"addphoto_icon"] forState:UIControlStateNormal];
+        [_addPhotoBtn addTarget:self action:@selector(addPhoto:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _addPhotoBtn;
 }
@@ -417,9 +502,11 @@
     if (!_photoImageView) {
         _photoImageView = [[UIImageView alloc] init];
         _photoImageView.clipsToBounds = YES;
+        _photoImageView.userInteractionEnabled = YES;
         _photoImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _photoImageView.image = [UIImage imageNamed:@"zhengqueshifanphoto_icon"];
         _photoImageView.hidden = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPhotoImageView:)];
+        [_photoImageView addGestureRecognizer:tap];
     }
     return _photoImageView;
 }
@@ -433,7 +520,7 @@
         [_goUploadBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_goUploadBtn setTitle:@"去上传" forState:UIControlStateNormal];
         _goUploadBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-
+        [_goUploadBtn addTarget:self action:@selector(uploadPhoto:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _goUploadBtn;
 }

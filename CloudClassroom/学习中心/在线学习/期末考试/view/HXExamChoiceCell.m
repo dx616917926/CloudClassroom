@@ -72,7 +72,7 @@
     
     if (self.examPaperSuitQuestionModel.isDuoXuan) {
         UIView *sender = ges.view;
-        UIImageView *selectImagView = [sender.superview viewWithTag:1111111];
+        UIImageView *selectImagView = [sender.superview viewWithTag:ExamChoiceImageViewTag];
         
         NSMutableArray *choices = [NSMutableArray array];
         
@@ -136,13 +136,13 @@
         if (sender==self.selectView) {
             return;
         }
-        UIImageView *unSelectImagView = [self.selectView.superview viewWithTag:1111111];
-        UIView *unSelectTapView = [self.selectView.superview viewWithTag:2222222];
+        UIImageView *unSelectImagView = [self.selectView.superview viewWithTag:ExamChoiceImageViewTag];
+        UIView *unSelectTapView = [self.selectView.superview viewWithTag:ExamChoiceTapViewTag];
         unSelectImagView.image = [UIImage imageNamed:@"noselect_icon"];
         unSelectTapView.backgroundColor = ExamUnSelectColor;
         
-        UIImageView *selectImagView = [sender.superview viewWithTag:1111111];
-        UIView *selectTapView = [sender.superview viewWithTag:2222222];
+        UIImageView *selectImagView = [sender.superview viewWithTag:ExamChoiceImageViewTag];
+        UIView *selectTapView = [sender.superview viewWithTag:ExamChoiceTapViewTag];
         selectImagView.image = [UIImage imageNamed:@"select_icon"];
         selectTapView.backgroundColor = ExamSelectColor;
         self.selectView = sender;
@@ -732,7 +732,7 @@
 -(UIView *)aTapView{
     if (!_aTapView) {
         _aTapView = [[UIView alloc] init];
-        _aTapView.tag = 2222222;
+        _aTapView.tag = ExamChoiceTapViewTag;
         _aTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_aTapView addGestureRecognizer:tap];
@@ -743,7 +743,7 @@
 -(UIImageView *)aImageView{
     if (!_aImageView) {
         _aImageView = [[UIImageView alloc] init];
-        _aImageView.tag = 1111111;
+        _aImageView.tag = ExamChoiceImageViewTag;
         _aImageView.image = [UIImage imageNamed:@"noselect_icon"];
         _aImageView.userInteractionEnabled = NO;
     }
@@ -772,7 +772,7 @@
 -(UIView *)bTapView{
     if (!_bTapView) {
         _bTapView = [[UIView alloc] init];
-        _bTapView.tag = 2222222;
+        _bTapView.tag = ExamChoiceTapViewTag;
         _bTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_bTapView addGestureRecognizer:tap];
@@ -784,7 +784,7 @@
 -(UIImageView *)bImageView{
     if (!_bImageView) {
         _bImageView = [[UIImageView alloc] init];
-        _bImageView.tag = 1111111;
+        _bImageView.tag = ExamChoiceImageViewTag;
         _bImageView.image = [UIImage imageNamed:@"noselect_icon"];
         _bImageView.userInteractionEnabled = NO;
     }
@@ -813,7 +813,7 @@
 -(UIView *)cTapView{
     if (!_cTapView) {
         _cTapView = [[UIView alloc] init];
-        _cTapView.tag = 2222222;
+        _cTapView.tag = ExamChoiceTapViewTag;
         _cTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_cTapView addGestureRecognizer:tap];
@@ -824,7 +824,7 @@
 -(UIImageView *)cImageView{
     if (!_cImageView) {
         _cImageView = [[UIImageView alloc] init];
-        _cImageView.tag = 1111111;
+        _cImageView.tag = ExamChoiceImageViewTag;
         _cImageView.image = [UIImage imageNamed:@"noselect_icon"];
         _cImageView.userInteractionEnabled = NO;
     }
@@ -853,7 +853,7 @@
 -(UIView *)dTapView{
     if (!_dTapView) {
         _dTapView = [[UIView alloc] init];
-        _dTapView.tag = 2222222;
+        _dTapView.tag = ExamChoiceTapViewTag;
         _dTapView.backgroundColor = ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_dTapView addGestureRecognizer:tap];
@@ -864,7 +864,7 @@
 -(UIImageView *)dImageView{
     if (!_dImageView) {
         _dImageView = [[UIImageView alloc] init];
-        _dImageView.tag = 1111111;
+        _dImageView.tag = ExamChoiceImageViewTag;
         _dImageView.image = [UIImage imageNamed:@"noselect_icon"];
         _dImageView.userInteractionEnabled = NO;
     }
@@ -893,7 +893,7 @@
 -(UIView *)eTapView{
     if (!_eTapView) {
         _eTapView = [[UIView alloc] init];
-        _eTapView.tag = 2222222;
+        _eTapView.tag = ExamChoiceTapViewTag;
         _eTapView.backgroundColor =  ExamUnSelectColor;
         UITapGestureRecognizer *tap =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectChoice:)];
         [_eTapView addGestureRecognizer:tap];
@@ -904,7 +904,7 @@
 -(UIImageView *)eImageView{
     if (!_eImageView) {
         _eImageView = [[UIImageView alloc] init];
-        _eImageView.tag = 1111111;
+        _eImageView.tag = ExamChoiceImageViewTag;
         _eImageView.image = [UIImage imageNamed:@"noselect_icon"];
         _eImageView.userInteractionEnabled = NO;
     }

@@ -81,15 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_FaceMatch                                           @"/api/FaceList/FaceMatch"
 
 
-/*******************************************************************************证件照上传*******************************************************************************************************/
-//获取证件照信息
-#define HXPOST_GetPapersPhotoInfo                                  @"/api/MyPhotoUpload/GetPapersPhotoInfo"
 
-//上传证件照
-#define HXPOST_SavePhotoUpload                                     @"/api/MyPhotoUpload/SavePhotoUpload"
-
-//确认照片
-#define HXPOST_ComfirmPhoto                                        @"/api/MyPhotoUpload/ComfirmPhoto"
 
 
 /*******************************************************************************成绩相关操作*******************************************************************************************************/
@@ -123,6 +115,27 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_SaveErrorFeedback                                   @"/api/ExamList/SaveErrorFeedback"
 
 
+/*******************************************************************************证件照上传*******************************************************************************************************/
+//获取证件照信息
+#define HXPOST_GetPapersPhotoInfo                                  @"/api/MyPhotoUpload/GetPapersPhotoInfo"
+
+//上传证件照
+#define HXPOST_SavePhotoUpload                                     @"/api/MyPhotoUpload/SavePhotoUpload"
+
+//确认照片
+#define HXPOST_ComfirmPhoto                                        @"/api/MyPhotoUpload/ComfirmPhoto"
+
+
+
+/*******************************************************************************我的消息*******************************************************************************************************/
+//获取我的消息
+#define HXPOST_GetMessageInfo                                     @"/api/MyMessage/GetMessageInfo"
+
+//消息一键已读
+#define HXPOST_UpdateMessageStatusByStudentId                     @"/api/MyMessage/UpdateMessageStatusByStudentId"
+
+//查看消息详情
+#define HXPOST_GetMessageDetailInfo                               @"/api/MyMessage/GetMessageDetailInfo"
 
 
 @interface HXBaseURLSessionManager : AFHTTPSessionManager

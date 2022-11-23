@@ -13,6 +13,8 @@
 @property(nonatomic,strong) UIButton *yiJianYiDuBtn;
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXMyMessageViewController
@@ -23,21 +25,73 @@
     
     //UI
     [self createUI];
+    
+    //获取我的消息
+    [self getMessageInfo];
 }
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
+#pragma mark - 获取我的消息
+-(void)getMessageInfo{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId),
+        @"type":@(1)//类型: 1学生，2老师，3管理员
+
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            //查出是否有未读
+            __block BOOL weiDu = NO;
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMyMessageInfoModel *model = obj;
+                if (model.statusID==0) {
+                    weiDu = YES;
+                    *stop = YES;
+                    return;
+                }
+            }];
+            self.yiJianYiDuBtn.selected = !weiDu;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+#pragma mark - 消息一键已读
+-(void)upDateMessageStatusByStudentId{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId),
+        @"type":@(1)//类型: 1学生，2老师，3管理员
+
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_UpdateMessageStatusByStudentId needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+    
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.yiJianYiDuBtn.selected = YES;
+            //重新获取消息
+            [self getMessageInfo];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark - Event
 -(void)yiJianYiDu:(UIButton *)sender{
-    
-    sender.selected = !sender.selected;
-    
+    if (sender.isSelected) {
+        return;
+    }
+    [self upDateMessageStatusByStudentId];
 }
 
 #pragma mark - UI
@@ -76,13 +130,10 @@
     self.noDataTipView.type = NoType3;
    
     
-    // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    // 下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getMessageInfo)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
     
 }
 
@@ -92,7 +143,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -112,6 +163,7 @@
         cell = [[HXMyMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myMessageCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.myMessageInfoModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -121,6 +173,13 @@
 }
 
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 - (UIButton *)yiJianYiDuBtn{
     if (!_yiJianYiDuBtn) {
         _yiJianYiDuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -132,6 +191,7 @@
         [_yiJianYiDuBtn setImage:[UIImage imageNamed:@"noyidu_icon"] forState:UIControlStateNormal];
         [_yiJianYiDuBtn setImage:[UIImage imageNamed:@"yidu_icon"] forState:UIControlStateSelected];
         [_yiJianYiDuBtn addTarget:self action:@selector(yiJianYiDu:) forControlEvents:UIControlEventTouchUpInside];
+        _yiJianYiDuBtn.selected = YES;
     }
     return _yiJianYiDuBtn;
 }

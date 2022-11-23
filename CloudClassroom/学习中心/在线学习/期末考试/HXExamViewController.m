@@ -229,7 +229,7 @@
     .bottomSpaceToView(self.view, 0)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
-    .heightIs(72);
+    .heightIs(ExamBottomViewHeight);
     
     self.mainCollectionView.sd_layout
     .topSpaceToView(self.navBarView, 0)
@@ -347,7 +347,7 @@
     if (!_mainCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight- kNavigationBarHeight-72);
+        layout.itemSize = CGSizeMake(kScreenWidth, kScreenHeight- kNavigationBarHeight-ExamBottomViewHeight);
         _mainCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _mainCollectionView.backgroundColor = [UIColor whiteColor];
         _mainCollectionView.showsVerticalScrollIndicator = NO;

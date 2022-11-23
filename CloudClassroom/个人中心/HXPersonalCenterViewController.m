@@ -18,7 +18,7 @@
 #import "UIImage+Extension.h"
 #import "HXFaceRecognitionTool.h"
 #import "HXHomeStudentInfoModel.h"
-
+#import "HXMyMessageInfoModel.h"
 
 @interface HXPersonalCenterViewController ()<UIScrollViewDelegate>
 
@@ -69,8 +69,17 @@
     
     //UI
     [self createUI];
+    //
+    [self loadData];
+    //登录成功的通知
+    [HXNotificationCenter addObserver:self selector:@selector(loadData) name:LOGINSUCCESS object:nil];
+}
+
+-(void)loadData{
     //获取首页信息
     [self getHomeStudentInfo];
+    //获取我的消息数
+    [self getMessageInfo];
 }
 
 #pragma mark - 获取首页信息
@@ -80,7 +89,7 @@
         @"major_id":HXSafeString(major_id)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        
+        [self.mainScrollView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
             self.homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
@@ -90,9 +99,45 @@
             self.nameLabel.text = self.homeStudentInfoModel.name;
         }
     } failure:^(NSError * _Nonnull error) {
-        
+        [self.mainScrollView.mj_header endRefreshing];
     }];
     
+}
+
+#pragma mark - 获取我的消息数
+-(void)getMessageInfo{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId),
+        @"type":@(1)//类型: 1学生，2老师，3管理员
+
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            //查出是否有未读
+            __block NSInteger count = 0;
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMyMessageInfoModel *model = obj;
+                // 0表示未读  1表示已读
+                if (model.statusID==0) {
+                    count++;
+                }
+            }];
+            if (count>0) {
+                self.messageRedImageView.hidden = NO;
+                self.messageNumlabel.text = count>99?@"99+":HXIntToString(count);
+            }else{
+                self.messageRedImageView.hidden = NO;
+                self.messageNumlabel.text = nil;
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark -Event
@@ -396,6 +441,11 @@
     [self.bottomContainerView setupAutoMarginFlowItems:self.bottomBujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:26 horizontalEdgeInset:15];
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.bottomContainerView bottomMargin:100];
+    
+    // 下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainScrollView.mj_header = header;
 }
 
 #pragma mark - LazyLoad
@@ -638,6 +688,7 @@
     if (!_messageRedImageView) {
         _messageRedImageView = [[UIImageView alloc] init];
         _messageRedImageView.image = [UIImage resizedImageWithName:@"messagered_icon"];
+        _messageRedImageView.hidden = YES;
     }
     return _messageRedImageView;
 }
@@ -648,7 +699,6 @@
         _messageNumlabel.textAlignment = NSTextAlignmentCenter;
         _messageNumlabel.textColor = UIColor.whiteColor;
         _messageNumlabel.font = HXBoldFont(11);
-        _messageNumlabel.text = @"99+";
     }
     return _messageNumlabel;
 }

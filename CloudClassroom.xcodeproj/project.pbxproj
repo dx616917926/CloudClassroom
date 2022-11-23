@@ -222,6 +222,7 @@
 		04A67BB029238F990035C294 /* HXExamQuestionChoiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A67BAF29238F990035C294 /* HXExamQuestionChoiceModel.m */; };
 		04A67BB3292392800035C294 /* HXExamPaperSubQuestionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A67BB2292392800035C294 /* HXExamPaperSubQuestionModel.m */; };
 		04A67BB6292393420035C294 /* HXExamSubQuestionChoicesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A67BB5292393420035C294 /* HXExamSubQuestionChoicesModel.m */; };
+		04AB5238292DC7B700A268DD /* HXMyMessageInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */; };
 		04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B782CE290683E6008AE8DB /* HXMoocViewController.m */; };
 		04C0B795291B47BC0025F213 /* HXExamSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C0B794291B47BC0025F213 /* HXExamSessionManager.m */; };
 		04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */; };
@@ -665,6 +666,8 @@
 		04A67BB2292392800035C294 /* HXExamPaperSubQuestionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamPaperSubQuestionModel.m; sourceTree = "<group>"; };
 		04A67BB4292393420035C294 /* HXExamSubQuestionChoicesModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamSubQuestionChoicesModel.h; sourceTree = "<group>"; };
 		04A67BB5292393420035C294 /* HXExamSubQuestionChoicesModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamSubQuestionChoicesModel.m; sourceTree = "<group>"; };
+		04AB5236292DC7B700A268DD /* HXMyMessageInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageInfoModel.h; sourceTree = "<group>"; };
+		04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMyMessageInfoModel.m; sourceTree = "<group>"; };
 		04B782CD290683E6008AE8DB /* HXMoocViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXMoocViewController.h; sourceTree = "<group>"; };
 		04B782CE290683E6008AE8DB /* HXMoocViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXMoocViewController.m; sourceTree = "<group>"; };
 		04C0B793291B47BC0025F213 /* HXExamSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamSessionManager.h; sourceTree = "<group>"; };
@@ -1604,9 +1607,9 @@
 		0490DDA628C1D677009BA325 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				04A5713F292489590058A87D /* DTCoreTextToolsHeader.h */,
 				0490DDAA28C1D6DF009BA325 /* HXQiMoKaoShiCell.h */,
 				0490DDAB28C1D6DF009BA325 /* HXQiMoKaoShiCell.m */,
-				04A5713F292489590058A87D /* DTCoreTextToolsHeader.h */,
 				04A5713C292481E90058A87D /* HXExamChoiceCell.h */,
 				04A5713D292481E90058A87D /* HXExamChoiceCell.m */,
 				0492C2AF29262B0900E45226 /* HXExamAnswerCell.h */,
@@ -1776,6 +1779,7 @@
 		04A1FEC528C9BD8000626409 /* 我的消息 */ = {
 			isa = PBXGroup;
 			children = (
+				04AB5235292DC75E00A268DD /* model */,
 				04A1FEC628C9BD8000626409 /* view */,
 				046E3F3728CB230B00FF188A /* HXMyMessageViewController.h */,
 				046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */,
@@ -1836,6 +1840,15 @@
 				04A67BAF29238F990035C294 /* HXExamQuestionChoiceModel.m */,
 				04A67BB4292393420035C294 /* HXExamSubQuestionChoicesModel.h */,
 				04A67BB5292393420035C294 /* HXExamSubQuestionChoicesModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		04AB5235292DC75E00A268DD /* model */ = {
+			isa = PBXGroup;
+			children = (
+				04AB5236292DC7B700A268DD /* HXMyMessageInfoModel.h */,
+				04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -2089,6 +2102,7 @@
 				048B31F428DDA94900871C34 /* HXZiLiaoDownLoadCell.m in Sources */,
 				0477318228F54C1000E640D2 /* HXCourseScoreRankModel.m in Sources */,
 				04A67BB6292393420035C294 /* HXExamSubQuestionChoicesModel.m in Sources */,
+				04AB5238292DC7B700A268DD /* HXMyMessageInfoModel.m in Sources */,
 				0473F3CB28E579610085DBE4 /* CalendarConfig.m in Sources */,
 				049858F528F6B03400F04D4F /* HXCourseItemModel.m in Sources */,
 				048B7D5F28BDA20A006EBAAE /* HXBaseViewController.m in Sources */,
