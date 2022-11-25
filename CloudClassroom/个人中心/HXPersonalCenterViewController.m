@@ -109,6 +109,8 @@
     
     NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
+        @"pageindex":@(1),
+        @"pagesize":@(50),
         @"studentid":HXSafeString(studentId),
         @"type":@(1)//类型: 1学生，2老师，3管理员
 
@@ -116,8 +118,9 @@
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
+        NSDictionary *dic= [dictionary dictionaryValueForKey:@"data"];
         if (success) {
-            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:[HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:dic[@"items"]]];
             //查出是否有未读
             __block NSInteger count = 0;
             [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -131,7 +134,7 @@
                 self.messageRedImageView.hidden = NO;
                 self.messageNumlabel.text = count>99?@"99+":HXIntToString(count);
             }else{
-                self.messageRedImageView.hidden = NO;
+                self.messageRedImageView.hidden = YES;
                 self.messageNumlabel.text = nil;
             }
         }

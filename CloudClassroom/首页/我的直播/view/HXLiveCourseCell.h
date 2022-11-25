@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXLiveCourseModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXLiveCourseCell : UITableViewCell
+
+@property(nonatomic,strong) HXLiveCourseModel *liveCourseModel;
 
 @end
 

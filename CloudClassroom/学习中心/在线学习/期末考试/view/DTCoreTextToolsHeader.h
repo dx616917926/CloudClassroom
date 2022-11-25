@@ -19,7 +19,7 @@
 #define   ExamErrorSelectColor         COLOR_WITH_ALPHA(0xF05151, 0.04)
 
 #define   ExamSplitViewHeight          44
-#define   ExamBottomViewHeight         72
+#define   ExamBottomViewHeight         (72+kScreenBottomMargin)
 #define   ExamSubChoiceCellHeight      (kScreenHeight-kNavigationBarHeight-ExamSplitViewHeight-ExamBottomViewHeight)
 
 #endif /* DTCoreTextToolsHeader_h */

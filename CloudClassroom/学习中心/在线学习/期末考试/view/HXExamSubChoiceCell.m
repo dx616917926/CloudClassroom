@@ -113,6 +113,8 @@
     
     _examPaperSubQuestionModel = examPaperSubQuestionModel;
     
+    //设置偏移归位
+    [self.mainScrollView setContentOffset:CGPointZero];
     
     CGSize textSize = [self getAttributedTextHeightHtml:examPaperSubQuestionModel.serialNoHtmlTitle  with_viewMaxRect:self.viewMaxRect];
     self.attributedTitleLabel.sd_layout.heightIs(textSize.height);

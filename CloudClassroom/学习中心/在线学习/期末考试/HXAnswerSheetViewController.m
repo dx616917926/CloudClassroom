@@ -117,14 +117,14 @@
     [self.mainScrollView updateLayout];
     
     //绘制答题卡
-    [self drawTheMenulist];
+    [self drawTheMenuList];
     
     
 }
 
 
 #pragma mark - 绘制答题卡
-- (void)drawTheMenulist{
+- (void)drawTheMenuList{
     
     //默认 每个题的按钮size 为 48*48（4寸） title 的高度为40
     int rowNum = 5;

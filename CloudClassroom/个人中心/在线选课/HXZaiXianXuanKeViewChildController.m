@@ -31,6 +31,8 @@
 
 @property(nonatomic,strong) HXShowMoneyDetailsrView *showMoneyDetailsrView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXZaiXianXuanKeViewChildController
@@ -41,13 +43,48 @@
     
     //UI
     [self createUI];
+    //获取选课列表
+    [self getCourseOrder];
+}
+
+#pragma mark - 获取选课列表
+-(void)getCourseOrder{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCourseOrder needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXCourseOrderModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
-#pragma mark - Event
-//查看明细
+#pragma mark - 查看明细
 -(void)checkDetails:(UIControl *)sender{
+    __block NSMutableArray *array = [NSMutableArray array];
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXCourseOrderModel *model = obj;
+        if (model.isSeleted) {
+            [array addObject:model];
+        }
+    }];
     
+    if (array.count==0) {
+        [self.view showTostWithMessage:@"请选择课程"];
+        return;
+    }
+    self.showMoneyDetailsrView.isHaveXueQi = YES;
+    self.showMoneyDetailsrView.dataArray = array;
     WeakSelf(weakSelf);
     self.showMoneyDetailsrView.callBack = ^{
         weakSelf.checkDetailsBtn.selected = weakSelf.showMoneyDetailsrView.isShow;
@@ -64,28 +101,91 @@
     }
         
 }
-//结算
+#pragma mark - 结算
 -(void)jieSuan:(UIControl *)sender{
     
     if (self.showMoneyDetailsrView.isShow) {
         [self.showMoneyDetailsrView dismiss];
     }
-    HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
-    vc.isHaveXueQi = NO;
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    __block NSMutableArray *array = [NSMutableArray array];
+    __block NSMutableArray *termCourseIDsArray = [NSMutableArray array];
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXCourseOrderModel *model = obj;
+        if (model.isSeleted) {
+            [array addObject:model];
+            [termCourseIDsArray addObject:model.termCourse_id];
+        }
+    }];
+    
+    if (array.count==0) {
+        [self.view showTostWithMessage:@"请选择课程"];
+        return;
+    }
+    
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSString *termcourseids = [termCourseIDsArray componentsJoinedByString:@","];
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId),
+        @"termcourseids":HXSafeString(termcourseids)
+    };
+    [self.view showLoading];
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_CourseOrderAdd needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        [self.view hideLoading];
+        if (success) {
+            HXCourseJieSuanModel *jieSuanModel = [HXCourseJieSuanModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
+            vc.isHaveXueQi = YES;
+            vc.jieSuanModel = jieSuanModel;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.view hideLoading];
+    }];
+    
 
 }
 
 
-//全选
+#pragma mark - 全选
 -(void)allSelect:(UIControl *)sender{
     sender.selected = !sender.selected;
+
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXCourseOrderModel *model = obj;
+        model.isSeleted = sender.selected;
+    }];
+    [self.mainTableView reloadData];
+    //计算合计
+    [self calculateTotalPrice];
 
     if (self.showMoneyDetailsrView.isShow) {
         [self.showMoneyDetailsrView dismiss];
     }
 }
 
+#pragma mark - 计算合计
+-(void)calculateTotalPrice{
+    __block CGFloat total = 0.00;
+    __block NSInteger count = 0;
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXCourseOrderModel *model = obj;
+        if (model.isSeleted) {
+            total+=model.iPrice;
+            count++;
+        }
+    }];
+    
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
+    NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    
+    self.selectNumLabel.text = [NSString stringWithFormat:@"已选%ld个",(long)count];
+}
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -93,14 +193,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 80;
 }
 
 
@@ -113,6 +213,7 @@
         cell = [[HXZaiXianXuanKeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:zaiXianXuanKeCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.courseOrderModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -120,6 +221,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    HXCourseOrderModel *model = self.dataArray[indexPath.row];
+    model.isSeleted = !model.isSeleted;
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    //计算合计
+    [self calculateTotalPrice];
 }
 
 #pragma mark - UI
@@ -216,6 +322,7 @@
     .bottomSpaceToView(self.checkDetailsBtn, 0)
     .heightIs(20);
     
+    
     [self.totalPriceLabel setSingleLineAutoResizeWithMaxWidth:150];
     
     self.heJiLabel.sd_layout
@@ -263,6 +370,13 @@
 }
 
 #pragma mark -LazyLoad
+
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
 
 - (UIView *)paoMaDengView{
     if (!_paoMaDengView) {
@@ -398,7 +512,8 @@
         _totalPriceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _totalPriceLabel.textAlignment = NSTextAlignmentRight;
         _totalPriceLabel.isAttributedContent = YES;
-        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"100." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥100.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"0." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥0.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        
     }
     return _totalPriceLabel;
 }
@@ -410,7 +525,7 @@
         _selectNumLabel.textAlignment = NSTextAlignmentRight;
         _selectNumLabel.font = HXFont(12);
         _selectNumLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _selectNumLabel.text = @"已选2个";
+        
     }
     return _selectNumLabel;
 }

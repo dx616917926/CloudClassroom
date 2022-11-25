@@ -46,9 +46,19 @@
         self.xueQiBtn.sd_layout.widthIs(0);
         self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 0);
     }else{
-        self.xueQiBtn.sd_layout.widthIs(50);
+        self.xueQiBtn.sd_layout.widthIs(80);
         self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 8);
     }
+}
+
+-(void)setCourseOrderModel:(HXCourseOrderModel *)courseOrderModel{
+    
+    [self.xueQiBtn setTitle:[NSString stringWithFormat:@"第%@学期",courseOrderModel.term] forState:UIControlStateNormal];
+    self.courseNameLabel.text = courseOrderModel.termCourseName;
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",courseOrderModel.iPrice];
+    NSArray *tempArray = [HXFloatToString(courseOrderModel.iPrice) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
 }
 
 #pragma mark - UI
@@ -72,7 +82,7 @@
     self.xueQiBtn.sd_layout
     .centerYEqualToView(self.bigBackgroundView)
     .leftSpaceToView(self.bigBackgroundView, 16)
-    .widthIs(50)
+    .widthIs(80)
     .heightIs(21);
     self.xueQiBtn.sd_cornerRadius=@2;
     
@@ -102,7 +112,7 @@
         _xueQiBtn.titleLabel.font = HXBoldFont(15);
         _xueQiBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 0.1);
         [_xueQiBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
-        [_xueQiBtn setTitle:@"2022" forState:UIControlStateNormal];
+        
     }
     return _xueQiBtn;
 }
@@ -112,7 +122,6 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(15);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"马克思主义基本原理概论";
     }
     return _courseNameLabel;
 }
@@ -125,7 +134,7 @@
         _priceLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
         _priceLabel.textAlignment = NSTextAlignmentRight;
         _priceLabel.isAttributedContent = YES;
-        _priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"50." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥50.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        
     }
     return _priceLabel;
 }

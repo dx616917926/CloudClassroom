@@ -67,7 +67,7 @@
     return self;
 }
 
-#pragma mark - Event
+#pragma mark - Event  选择题点击
 -(void)selectChoice:(UIGestureRecognizer *)ges{
     
     if (self.examPaperSuitQuestionModel.isDuoXuan) {
@@ -129,6 +129,8 @@
         }
         if (choices.count>0) {
             self.examPaperSuitQuestionModel.answer = [choices componentsJoinedByString:@","];
+        }else{
+            self.examPaperSuitQuestionModel.answer = @"";
         }
         
     }else{

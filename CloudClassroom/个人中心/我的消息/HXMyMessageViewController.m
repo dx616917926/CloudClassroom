@@ -6,12 +6,15 @@
 //
 
 #import "HXMyMessageViewController.h"
+#import "HXMessageDetailInfoViewController.h"
 #import "HXMyMessageCell.h"
 
 @interface HXMyMessageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong) UIButton *yiJianYiDuBtn;
 @property(nonatomic,strong) UITableView *mainTableView;
+
+@property(nonatomic,assign) NSInteger pageIndex;
 
 @property(nonatomic,strong) NSMutableArray *dataArray;
 
@@ -33,8 +36,13 @@
 #pragma mark - 获取我的消息
 -(void)getMessageInfo{
     
+    self.pageIndex = 1;
+    
     NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    
     NSDictionary *dic =@{
+        @"pageindex":@(self.pageIndex),
+        @"pagesize":@(15),
         @"studentid":HXSafeString(studentId),
         @"type":@(1)//类型: 1学生，2老师，3管理员
 
@@ -42,10 +50,16 @@
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
+        NSDictionary *dic= [dictionary dictionaryValueForKey:@"data"];
         if (success) {
-            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:dic[@"items"]];
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
+            if (list.count == 15) {
+                self.mainTableView.mj_footer.hidden = NO;
+            }else{
+                self.mainTableView.mj_footer.hidden = YES;
+            }
             [self.mainTableView reloadData];
             //查出是否有未读
             __block BOOL weiDu = NO;
@@ -61,6 +75,52 @@
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
+    }];
+}
+
+-(void)loadMoreData{
+    
+    self.pageIndex++;
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    
+    NSDictionary *dic =@{
+        @"pageindex":@(self.pageIndex),
+        @"pagesize":@(15),
+        @"studentid":HXSafeString(studentId),
+        @"type":@(1)//类型: 1学生，2老师，3管理员
+
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMessageInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_footer endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSDictionary *dic= [dictionary dictionaryValueForKey:@"data"];
+        if (success) {
+            NSArray *list = [HXMyMessageInfoModel mj_objectArrayWithKeyValuesArray:dic[@"items"]];
+            if (list.count == 15) {
+                self.mainTableView.mj_footer.hidden = NO;
+            }else{
+                self.mainTableView.mj_footer.hidden = YES;
+            }
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            //查出是否有未读
+            __block BOOL weiDu = NO;
+            [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMyMessageInfoModel *model = obj;
+                if (model.statusID==0) {
+                    weiDu = YES;
+                    *stop = YES;
+                    return;
+                }
+            }];
+            self.yiJianYiDuBtn.selected = !weiDu;
+        }else{
+            self.pageIndex--;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_footer endRefreshing];
+        self.pageIndex--;
     }];
 }
 
@@ -134,6 +194,9 @@
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getMessageInfo)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
+    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    self.mainTableView.mj_footer = footer;
+    self.mainTableView.mj_footer.hidden = YES;
     
 }
 
@@ -170,6 +233,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    HXMessageDetailInfoViewController *vc =[[HXMessageDetailInfoViewController alloc] init];
+    vc.myMessageInfoModel = self.dataArray[indexPath.row];
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 #pragma mark -LazyLoad

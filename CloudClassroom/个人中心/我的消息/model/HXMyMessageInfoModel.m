@@ -9,4 +9,11 @@
 
 @implementation HXMyMessageInfoModel
 
+
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{
+        @"messageDetail_Id" : @"id"
+    };
+}
 @end

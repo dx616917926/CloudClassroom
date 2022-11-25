@@ -10,6 +10,7 @@
 #import "IQKeyboardManager.h"
 #import "IDLFaceSDK/IDLFaceSDK.h"
 #import "FaceParameterConfig.h"
+#import "WXApi.h"
 
 @interface AppDelegate ()
 
@@ -71,6 +72,26 @@
     [[FaceSDKManager sharedInstance] setLicenseID:FACE_LICENSE_ID andLocalLicenceFile:licensePath andRemoteAuthorize:true];
     NSLog(@"canWork = %d",[[FaceSDKManager sharedInstance] canWork]);
     NSLog(@"version = %@",[[FaceSDKManager sharedInstance] getVersion]);
+    
+    
+#if 1
+    //微信配置
+#ifdef DEBUG
+    //在register之前打开log, 后续可以根据log排查问题
+    [WXApi startLogByLevel:WXLogLevelDetail logBlock:^(NSString *log) {
+        NSLog(@"WeChatSDK: %@", log);
+    }];
+#endif
+    //向微信注册
+    BOOL sc =  [WXApi registerApp:WeiXin_APP_ID universalLink:UNIVERSAL_LINK];
+    
+//    if (!PRODUCTIONMODE) {
+//        //调用自检函数,仅用于新接入SDK时调试使用，请勿在正式环境的调用
+//        [WXApi checkUniversalLinkReady:^(WXULCheckStep step, WXCheckULStepResult* result) {
+//            NSLog(@"自检函数:%@, %u, %@, %@", @(step), result.success, result.errorInfo, result.suggestion);
+//        }];
+//    }
+#endif
 }
 
 

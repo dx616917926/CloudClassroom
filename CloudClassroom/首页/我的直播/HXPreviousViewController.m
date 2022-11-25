@@ -26,11 +26,38 @@
     
     //UI
     [self createUI];
+    //获取每一门课的直播列表
+    [self getDirectBroadcastDetail];
 }
 
-#pragma mark -
--(void)getScoreList{
-    [self.mainTableView.mj_header endRefreshing];
+#pragma mark - 获取每一门课的直播列表
+-(void)getDirectBroadcastDetail{
+    
+    NSString *classID = [HXPublicParamTool sharedInstance].class_id;
+    
+    NSDictionary *dic =@{
+        @"classid":HXSafeString(classID),
+        @"dbtype":@(self.liveCourseModel.dbType),
+        @"dbmanageid":HXSafeString(self.liveCourseModel.dbManageID),
+        @"selecttype":@(1)//0全部直播 1往期直播
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetDirectBroadcastDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXLiveDetailModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            if (list.count==0) {
+                [self.mainTableView addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
@@ -81,11 +108,11 @@
     .bottomSpaceToView(self.view, 0);
     [self.mainTableView updateLayout];
     
-    self.noDataTipView.tipTitle = @"暂无考试成绩～";
+    self.noDataTipView.tipTitle = @"暂无直播～";
     self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getScoreList)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getDirectBroadcastDetail)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
     

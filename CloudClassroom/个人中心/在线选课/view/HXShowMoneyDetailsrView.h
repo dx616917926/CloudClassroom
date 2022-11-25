@@ -23,6 +23,7 @@ typedef void (^CallBack)(void);
 @property(nonatomic,copy) CallBack callBack;
 
 -(void)show;
+
 -(void)dismiss;
 
 @end

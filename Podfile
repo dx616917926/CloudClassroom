@@ -38,7 +38,7 @@ target 'CloudClassroom' do
   
   pod 'AlipaySDK-iOS', '~> 15.8.8'
   
-  pod 'WechatOpenSDK', '~> 1.8.7.1'
+  pod 'WechatOpenSDK', '~> 1.8.6.2'
   
   pod 'DTCoreText', '~> 1.6.20'
 

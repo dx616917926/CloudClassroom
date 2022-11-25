@@ -10,9 +10,11 @@
 #import "HXExamChoiceCell.h"//选择题
 #import "HXExamAnswerCell.h"//问答题
 #import "HXExamFuHeCell.h"//复合题
+#import "HXFloatButtonView.h"
+#import "HXExamErrorReportView.h"
 #import "IQKeyboardManager.h"
 
-@interface HXExamViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface HXExamViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HXFloatButtonViewDelegate>
 
 @property(nonatomic,strong) UIView *navBarView;
 @property(nonatomic,strong) UILabel *titleLabel;
@@ -25,6 +27,9 @@
 
 
 @property(nonatomic,strong) UICollectionView *mainCollectionView;
+
+//错误反馈按钮
+@property(nonatomic, strong) HXFloatButtonView *errorReportButton;
 
 @property(nonatomic,strong) NSMutableArray *dataArray;
 
@@ -92,10 +97,13 @@
 }
 
 #pragma mark - Event
+//交卷
 -(void)jiaoJuan:(UIButton *)sender{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//点击答题卡
 -(void)clickAnswerSheet:(UIButton *)sender{
     HXAnswerSheetViewController *vc = [[HXAnswerSheetViewController alloc] init];
     vc.examPaperModel = self.examPaperModel;
@@ -158,6 +166,26 @@
 
 }
 
+#pragma mark - <HXFloatButtonViewDelegate>点击错反馈按钮
+- (void)didClickFloatButtonView:(HXFloatButtonView *)floatView
+{
+    if (floatView == self.errorReportButton) {
+        
+//        if (self.curQuestion && self.examAdminPath) {
+//
+//            NSString *questionId = [NSString stringWithFormat:@"%d",self.curQuestion._id];
+//
+//            if ([self.curQuestion isComplex] && self.subPosition >= 0) {
+//                //
+//                HXQuestionInfo *sub = [self.curQuestion.subs objectAtIndex:self.subPosition];
+//                questionId = [NSString stringWithFormat:@"%d",sub._id];
+//            }
+//            //弹出错题反馈界面
+            HXExamErrorReportView *reportView = [[HXExamErrorReportView alloc] init];
+            [reportView showInViewController:self];
+//        }
+    }
+}
 
 #pragma mark - <UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -258,7 +286,7 @@
     .heightIs(kNavigationBarHeight-kStatusBarHeight);
     
     self.upBtn.sd_layout
-    .centerYEqualToView(self.bottomView)
+    .centerYEqualToView(self.bottomView).offset(-(kScreenBottomMargin*0.5))
     .leftSpaceToView(self.bottomView, 20)
     .widthIs(130)
     .heightIs(40);
@@ -278,7 +306,7 @@
     
     
     self.downBtn.sd_layout
-    .centerYEqualToView(self.bottomView)
+    .centerYEqualToView(self.upBtn)
     .rightSpaceToView(self.bottomView, 20)
     .widthRatioToView(self.upBtn, 1)
     .heightRatioToView(self.upBtn, 1);
@@ -296,7 +324,24 @@
     .leftEqualToView(self.downBtn)
     .heightIs(20);
     
+    //创建错题反馈按钮
+    [self createErrorReportButtonView];
+    
+    [self.view bringSubviewToFront:self.navBarView];
+    [self.view bringSubviewToFront:self.bottomView];
 }
+
+// 创建错题反馈按钮
+- (void)createErrorReportButtonView {
+    if (!self.errorReportButton) {
+        self.errorReportButton = [[HXFloatButtonView alloc] initWithFrame:CGRectMake(kScreenWidth - 70, kScreenHeight - ExamBottomViewHeight- 120, 60, 60)];
+        self.errorReportButton.delegate = self;
+        self.errorReportButton.contentImage = [UIImage imageNamed:@"exam_error_report_btn"];
+        self.errorReportButton.marginBottom = ExamBottomViewHeight;
+        [self.view addSubview:self.errorReportButton];
+    }
+}
+
 
 
 #pragma mark - LazyLoad

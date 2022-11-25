@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*******************************************************************************登录*******************************************************************************************************/
+
+
+#pragma mark ----------------------------------------------登录-------------------------------------------------
+
 #define HXPOST_GetDomainNameList                                  @"/api/User/GetList"//获取域名
 
 //刷新JWT的Token（如果返回false，则表示要重新登录）
@@ -29,7 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_UpdatePassword                                     @"/api/Login/UpdatePassword"
 
 
-/*******************************************************************************补考相关操作*******************************************************************************************************/
+
+#pragma mark ----------------------------------------------补考相关操作-------------------------------------------------
+
 //获取补考列表
 #define HXPOST_GetBKList                                           @"/api/BKList/GetBKList"
 
@@ -37,7 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_GetBKExamList                                       @"/api/BKList/GetBKExamList"
 
 
-/*******************************************************************************正考相关操作*******************************************************************************************************/
+#pragma mark ----------------------------------------------正考相关操作-------------------------------------------------
+
 //获取学习列表(当前学期和全部学期)
 #define HXPOST_GetOnlineCourseList                                 @"/api/CourseList/GetOnlineCourseList"
 
@@ -58,7 +64,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-/*******************************************************************************学员首页相关接口*******************************************************************************************************/
+#pragma mark ----------------------------------------------学员首页相关接口-------------------------------------------------
+
 //获取首页信息
 #define HXPOST_GetHomeStudentInfo                                  @"/api/MyHomeIndex/GetHomeStudentInfo"
 
@@ -73,7 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-/*******************************************************************************人脸识别相关信息*******************************************************************************************************/
+#pragma mark ----------------------------------------------人脸识别相关信息-------------------------------------------------
+
 //获取人脸识别设置
 #define HXPOST_GetFaceSet                                          @"/api/FaceList/GetFaceSet"
 
@@ -81,10 +89,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_FaceMatch                                           @"/api/FaceList/FaceMatch"
 
 
+#pragma mark ----------------------------------------------成绩相关操作-------------------------------------------------
 
-
-
-/*******************************************************************************成绩相关操作*******************************************************************************************************/
 //总评成绩查询
 #define HXPOST_GetZKScore                                   @"/api/ScoreList/GetZKScore"
 
@@ -95,7 +101,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_GetZKScoreDetail                             @"/api/ScoreList/GetZKScoreDetail"
 
 
-/*******************************************************************************考试相关接口*******************************************************************************************************/
+
+#pragma mark ----------------------------------------------考试相关接口-------------------------------------------------
+
 //开始考试
 #define HXPOST_BeginExam                                           @"/api/ExamList/BeginExam"
 
@@ -115,7 +123,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_SaveErrorFeedback                                   @"/api/ExamList/SaveErrorFeedback"
 
 
-/*******************************************************************************证件照上传*******************************************************************************************************/
+#pragma mark ----------------------------------------------证件照上传-------------------------------------------------
+
 //获取证件照信息
 #define HXPOST_GetPapersPhotoInfo                                  @"/api/MyPhotoUpload/GetPapersPhotoInfo"
 
@@ -127,7 +136,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-/*******************************************************************************我的消息*******************************************************************************************************/
+#pragma mark ----------------------------------------------我的消息-------------------------------------------------
+
 //获取我的消息
 #define HXPOST_GetMessageInfo                                     @"/api/MyMessage/GetMessageInfo"
 
@@ -136,6 +146,38 @@ NS_ASSUME_NONNULL_BEGIN
 
 //查看消息详情
 #define HXPOST_GetMessageDetailInfo                               @"/api/MyMessage/GetMessageDetailInfo"
+
+
+#pragma mark ----------------------------------------------缴费相关操作-------------------------------------------------
+
+//选课列表
+#define HXPOST_GetCourseOrder                                     @"/api/OrderList/GetCourseOrder"
+
+//已缴费列表
+#define HXPOST_GetCoursePayOrder                                  @"/api/OrderList/GetCoursePayOrder"
+
+//结算（去下单）
+#define HXPOST_CourseOrderAdd                                     @"/api/OrderList/CourseOrderAdd"
+
+//支付宝、微信支付
+#define HXPOST_CourseOrderPay                                     @"/api/OrderList/Pay"
+
+
+
+
+#pragma mark ----------------------------------------------直播管理接口-------------------------------------------------
+
+//直播课程列表
+#define HXPOST_GetDirectBroadcastList                             @"/api/DirectBroadcastList/GetDirectBroadcastList"
+
+//每一门课的直播列表
+#define HXPOST_GetDirectBroadcastDetail                           @"/api/DirectBroadcastList/GetDirectBroadcastDetail"
+
+//每一次直播明细
+#define HXPOST_GetLiveDetail                                      @"/api/DirectBroadcastList/GetLiveDetail"
+
+
+
 
 
 @interface HXBaseURLSessionManager : AFHTTPSessionManager

@@ -80,8 +80,13 @@ isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bo
 //url字符串转码处理
 #define HXSafeURL(urlStr)   [NSURL URLWithString:[HXCommonUtil stringEncoding:urlStr]]
 
+
+
 ///自定义颜色
 #define COLOR_WITH_ALPHA(colorValue, alphaValue) [UIColor colorWithRed:((float)((colorValue & 0xFF0000) >> 16))/255.0 green:((float)((colorValue & 0xFF00) >> 8))/255.0 blue:((float)(colorValue & 0xFF))/255.0 alpha:alphaValue]
+
+//默认主题
+#define  HXThemeBlue   COLOR_WITH_ALPHA(0x2E5BFD, 1)  //蓝色
 
 //通用视图控制器背景颜色
 #define VCBackgroundColor   COLOR_WITH_ALPHA(0xECF0FB, 1)

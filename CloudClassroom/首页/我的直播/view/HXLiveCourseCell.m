@@ -52,6 +52,19 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setLiveCourseModel:(HXLiveCourseModel *)liveCourseModel{
+    
+    _liveCourseModel = liveCourseModel;
+    
+    self.courseNameLabel.text = liveCourseModel.termCourseName;
+    self.totalContentLabel.text = HXIntToString(liveCourseModel.dbTotalNum);
+    self.yiContentLabel.text =HXIntToString(liveCourseModel.dbPlayNum);
+    self.watchContentLabel.text = HXIntToString(liveCourseModel.dbJoinNum);
+    self.nextTimeContentLabel.text = liveCourseModel.dbNextTime;
+}
+
+#pragma mark - Eventt
 -(void)check:(UIButton *)sender{
     
     
@@ -190,7 +203,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"大学英语";
+        
     }
     return _courseNameLabel;
 }
@@ -228,7 +241,7 @@
         _yiContentLabel.textAlignment = NSTextAlignmentCenter;
         _yiContentLabel.font = HXBoldFont(12);
         _yiContentLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _yiContentLabel.text = @"10";
+        
     }
     return _yiContentLabel;
 }
@@ -250,7 +263,7 @@
         _totalContentLabel.textAlignment = NSTextAlignmentCenter;
         _totalContentLabel.font = HXBoldFont(12);
         _totalContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _totalContentLabel.text = @"20";
+        
     }
     return _totalContentLabel;
 }
@@ -272,7 +285,7 @@
         _watchContentLabel.textAlignment = NSTextAlignmentCenter;
         _watchContentLabel.font = HXBoldFont(12);
         _watchContentLabel.textColor = COLOR_WITH_ALPHA(0x5DC367, 1);
-        _watchContentLabel.text = @"5";
+        
     }
     return _watchContentLabel;
 }
@@ -308,7 +321,7 @@
         _nextTimeContentLabel = [[UILabel alloc] init];
         _nextTimeContentLabel.font = HXFont(14);
         _nextTimeContentLabel.textColor = COLOR_WITH_ALPHA(0xFFA41B, 1);
-        _nextTimeContentLabel.text = @"2022.09.02 10:00";
+        
     }
     return _nextTimeContentLabel;
 }

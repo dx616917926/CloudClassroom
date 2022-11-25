@@ -176,6 +176,11 @@
 		04905F0F28F3B326000A8078 /* HXCourseInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F0E28F3B326000A8078 /* HXCourseInfoModel.m */; };
 		04905F1228F3EAC1000A8078 /* HXMessageInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F1128F3EAC1000A8078 /* HXMessageInfoModel.m */; };
 		04905F1528F3F3DF000A8078 /* HXHomeMenuModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F1428F3F3DF000A8078 /* HXHomeMenuModel.m */; };
+		0490950A29305C34002B6FAA /* HXMessageDetailInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490950929305C34002B6FAA /* HXMessageDetailInfoViewController.m */; };
+		0490950D29305CA3002B6FAA /* HXMyMessageDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490950C29305CA3002B6FAA /* HXMyMessageDetailModel.m */; };
+		0490951029305D82002B6FAA /* HXMessageAttachmentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490950F29305D82002B6FAA /* HXMessageAttachmentModel.m */; };
+		049095172930B78C002B6FAA /* HXLiveCourseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049095162930B78C002B6FAA /* HXLiveCourseModel.m */; };
+		0490951A2930B8BB002B6FAA /* HXLiveDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049095192930B8BB002B6FAA /* HXLiveDetailModel.m */; };
 		0490BBAA28C835000095FF39 /* HXScoreDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490BBA928C835000095FF39 /* HXScoreDetailsViewController.m */; };
 		0490BBAD28C879020095FF39 /* HXMyBuKaoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490BBAC28C879020095FF39 /* HXMyBuKaoViewController.m */; };
 		0490BBB028C8799C0095FF39 /* HXMyBuKaoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0490BBAF28C8799C0095FF39 /* HXMyBuKaoCell.m */; };
@@ -223,7 +228,13 @@
 		04A67BB3292392800035C294 /* HXExamPaperSubQuestionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A67BB2292392800035C294 /* HXExamPaperSubQuestionModel.m */; };
 		04A67BB6292393420035C294 /* HXExamSubQuestionChoicesModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A67BB5292393420035C294 /* HXExamSubQuestionChoicesModel.m */; };
 		04AB5238292DC7B700A268DD /* HXMyMessageInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */; };
+		04AB523C292E1F8D00A268DD /* HXFloatButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */; };
 		04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B782CE290683E6008AE8DB /* HXMoocViewController.m */; };
+		04BB4826292F01930096C0CC /* HXExamErrorReportView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4824292F01920096C0CC /* HXExamErrorReportView.m */; };
+		04BB482A292F10340096C0CC /* HXCourseOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4829292F10340096C0CC /* HXCourseOrderModel.m */; };
+		04BB482D292F11300096C0CC /* HXCoursePayOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB482C292F11300096C0CC /* HXCoursePayOrderModel.m */; };
+		04BB4833292F4B540096C0CC /* HXOrderDetailInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4832292F4B540096C0CC /* HXOrderDetailInfoModel.m */; };
+		04BB4836292F4C700096C0CC /* HXCourseJieSuanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4835292F4C700096C0CC /* HXCourseJieSuanModel.m */; };
 		04C0B795291B47BC0025F213 /* HXExamSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C0B794291B47BC0025F213 /* HXExamSessionManager.m */; };
 		04DA873F28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */; };
 		04E6177E29220CDE00D380FC /* HXExamModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6177D29220CDE00D380FC /* HXExamModel.m */; };
@@ -573,6 +584,16 @@
 		04905F1128F3EAC1000A8078 /* HXMessageInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMessageInfoModel.m; sourceTree = "<group>"; };
 		04905F1328F3F3DF000A8078 /* HXHomeMenuModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXHomeMenuModel.h; sourceTree = "<group>"; };
 		04905F1428F3F3DF000A8078 /* HXHomeMenuModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXHomeMenuModel.m; sourceTree = "<group>"; };
+		0490950829305C34002B6FAA /* HXMessageDetailInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMessageDetailInfoViewController.h; sourceTree = "<group>"; };
+		0490950929305C34002B6FAA /* HXMessageDetailInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMessageDetailInfoViewController.m; sourceTree = "<group>"; };
+		0490950B29305CA3002B6FAA /* HXMyMessageDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageDetailModel.h; sourceTree = "<group>"; };
+		0490950C29305CA3002B6FAA /* HXMyMessageDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMyMessageDetailModel.m; sourceTree = "<group>"; };
+		0490950E29305D82002B6FAA /* HXMessageAttachmentModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMessageAttachmentModel.h; sourceTree = "<group>"; };
+		0490950F29305D82002B6FAA /* HXMessageAttachmentModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMessageAttachmentModel.m; sourceTree = "<group>"; };
+		049095152930B78C002B6FAA /* HXLiveCourseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXLiveCourseModel.h; sourceTree = "<group>"; };
+		049095162930B78C002B6FAA /* HXLiveCourseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXLiveCourseModel.m; sourceTree = "<group>"; };
+		049095182930B8BB002B6FAA /* HXLiveDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXLiveDetailModel.h; sourceTree = "<group>"; };
+		049095192930B8BB002B6FAA /* HXLiveDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXLiveDetailModel.m; sourceTree = "<group>"; };
 		0490BBA828C835000095FF39 /* HXScoreDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXScoreDetailsViewController.h; sourceTree = "<group>"; };
 		0490BBA928C835000095FF39 /* HXScoreDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXScoreDetailsViewController.m; sourceTree = "<group>"; };
 		0490BBAB28C879020095FF39 /* HXMyBuKaoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyBuKaoViewController.h; sourceTree = "<group>"; };
@@ -668,8 +689,20 @@
 		04A67BB5292393420035C294 /* HXExamSubQuestionChoicesModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamSubQuestionChoicesModel.m; sourceTree = "<group>"; };
 		04AB5236292DC7B700A268DD /* HXMyMessageInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageInfoModel.h; sourceTree = "<group>"; };
 		04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMyMessageInfoModel.m; sourceTree = "<group>"; };
+		04AB523A292E1F8C00A268DD /* HXFloatButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXFloatButtonView.h; sourceTree = "<group>"; };
+		04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFloatButtonView.m; sourceTree = "<group>"; };
 		04B782CD290683E6008AE8DB /* HXMoocViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXMoocViewController.h; sourceTree = "<group>"; };
 		04B782CE290683E6008AE8DB /* HXMoocViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXMoocViewController.m; sourceTree = "<group>"; };
+		04BB4824292F01920096C0CC /* HXExamErrorReportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXExamErrorReportView.m; sourceTree = "<group>"; };
+		04BB4825292F01930096C0CC /* HXExamErrorReportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXExamErrorReportView.h; sourceTree = "<group>"; };
+		04BB4828292F10340096C0CC /* HXCourseOrderModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseOrderModel.h; sourceTree = "<group>"; };
+		04BB4829292F10340096C0CC /* HXCourseOrderModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCourseOrderModel.m; sourceTree = "<group>"; };
+		04BB482B292F11300096C0CC /* HXCoursePayOrderModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCoursePayOrderModel.h; sourceTree = "<group>"; };
+		04BB482C292F11300096C0CC /* HXCoursePayOrderModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCoursePayOrderModel.m; sourceTree = "<group>"; };
+		04BB4831292F4B540096C0CC /* HXOrderDetailInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXOrderDetailInfoModel.h; sourceTree = "<group>"; };
+		04BB4832292F4B540096C0CC /* HXOrderDetailInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXOrderDetailInfoModel.m; sourceTree = "<group>"; };
+		04BB4834292F4C700096C0CC /* HXCourseJieSuanModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseJieSuanModel.h; sourceTree = "<group>"; };
+		04BB4835292F4C700096C0CC /* HXCourseJieSuanModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCourseJieSuanModel.m; sourceTree = "<group>"; };
 		04C0B793291B47BC0025F213 /* HXExamSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamSessionManager.h; sourceTree = "<group>"; };
 		04C0B794291B47BC0025F213 /* HXExamSessionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamSessionManager.m; sourceTree = "<group>"; };
 		04DA873D28D0828C00FAFE93 /* HXFanKuiYouWuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFanKuiYouWuViewController.h; sourceTree = "<group>"; };
@@ -1051,8 +1084,6 @@
 				0479599928DADBC7001F8BC6 /* view */,
 				0479599A28DADC67001F8BC6 /* HXFinancePaymentViewController.h */,
 				0479599B28DADC67001F8BC6 /* HXFinancePaymentViewController.m */,
-				047959A628DAFB54001F8BC6 /* HXJieSuanViewController.h */,
-				047959A728DAFB54001F8BC6 /* HXJieSuanViewController.m */,
 			);
 			path = "财务缴费";
 			sourceTree = "<group>";
@@ -1062,8 +1093,6 @@
 			children = (
 				0479599D28DADE7D001F8BC6 /* HXFinancePaymentCell.h */,
 				0479599E28DADE7D001F8BC6 /* HXFinancePaymentCell.m */,
-				047959A928DB098C001F8BC6 /* HXJieSuanCell.h */,
-				047959AA28DB098C001F8BC6 /* HXJieSuanCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1254,6 +1283,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				04AB5239292E1F8C00A268DD /* HXFloatButtonView */,
 				043E9913290275EE00A8E6DA /* TXMoviePlayer */,
 				0473F3B728E579610085DBE4 /* Calendar */,
 				0470DC3328DC0F97007A25DC /* HXFileManager */,
@@ -1528,6 +1558,17 @@
 			path = "个人中心";
 			sourceTree = "<group>";
 		};
+		049095142930B77E002B6FAA /* model */ = {
+			isa = PBXGroup;
+			children = (
+				049095152930B78C002B6FAA /* HXLiveCourseModel.h */,
+				049095162930B78C002B6FAA /* HXLiveCourseModel.m */,
+				049095182930B8BB002B6FAA /* HXLiveDetailModel.h */,
+				049095192930B8BB002B6FAA /* HXLiveDetailModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		0490DD9328C19114009BA325 /* 期末考试 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1620,6 +1661,8 @@
 				046EBCFB2927640E006BC51F /* HXExamSubChoiceCell.m */,
 				048806B1292B21AE007DF135 /* HXQuestionBtn.h */,
 				048806B2292B21AE007DF135 /* HXQuestionBtn.m */,
+				04BB4825292F01930096C0CC /* HXExamErrorReportView.h */,
+				04BB4824292F01920096C0CC /* HXExamErrorReportView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1691,7 +1734,7 @@
 		049CFB9028FD53E90083DF77 /* 我的直播 */ = {
 			isa = PBXGroup;
 			children = (
-				049CFB9128FD53E90083DF77 /* model */,
+				049095142930B77E002B6FAA /* model */,
 				049CFB9228FD53E90083DF77 /* view */,
 				049CFB9328FD54990083DF77 /* HXLiveCourseViewController.h */,
 				049CFB9428FD54990083DF77 /* HXLiveCourseViewController.m */,
@@ -1705,13 +1748,6 @@
 				0480AE1828FE8F700091D733 /* HXLiveDetailViewController.m */,
 			);
 			path = "我的直播";
-			sourceTree = "<group>";
-		};
-		049CFB9128FD53E90083DF77 /* model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = model;
 			sourceTree = "<group>";
 		};
 		049CFB9228FD53E90083DF77 /* view */ = {
@@ -1783,6 +1819,8 @@
 				04A1FEC628C9BD8000626409 /* view */,
 				046E3F3728CB230B00FF188A /* HXMyMessageViewController.h */,
 				046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */,
+				0490950829305C34002B6FAA /* HXMessageDetailInfoViewController.h */,
+				0490950929305C34002B6FAA /* HXMessageDetailInfoViewController.m */,
 			);
 			path = "我的消息";
 			sourceTree = "<group>";
@@ -1799,6 +1837,7 @@
 		04A1FEC728C9BD8000626409 /* 在线选课 */ = {
 			isa = PBXGroup;
 			children = (
+				04BB4827292F0FFD0096C0CC /* model */,
 				04A1FEC828C9BD8000626409 /* view */,
 				04A1FEC928C9BDEE00626409 /* HXZaiXianXuanKeViewController.h */,
 				04A1FECA28C9BDEE00626409 /* HXZaiXianXuanKeViewController.m */,
@@ -1806,6 +1845,8 @@
 				04A1FECD28C9C04800626409 /* HXZaiXianXuanKeViewChildController.m */,
 				04A1FECF28C9C07E00626409 /* HXYiJiaoFeiViewController.h */,
 				04A1FED028C9C07E00626409 /* HXYiJiaoFeiViewController.m */,
+				047959A628DAFB54001F8BC6 /* HXJieSuanViewController.h */,
+				047959A728DAFB54001F8BC6 /* HXJieSuanViewController.m */,
 			);
 			path = "在线选课";
 			sourceTree = "<group>";
@@ -1821,6 +1862,8 @@
 				04A1FED928C9E3DA00626409 /* HXShowMoneyDetailsrView.m */,
 				046E3F3428CACB3000FF188A /* HXXuanKeMoneyDetailCell.h */,
 				046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */,
+				047959A928DB098C001F8BC6 /* HXJieSuanCell.h */,
+				047959AA28DB098C001F8BC6 /* HXJieSuanCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1847,8 +1890,36 @@
 		04AB5235292DC75E00A268DD /* model */ = {
 			isa = PBXGroup;
 			children = (
+				0490950B29305CA3002B6FAA /* HXMyMessageDetailModel.h */,
+				0490950C29305CA3002B6FAA /* HXMyMessageDetailModel.m */,
 				04AB5236292DC7B700A268DD /* HXMyMessageInfoModel.h */,
 				04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */,
+				0490950E29305D82002B6FAA /* HXMessageAttachmentModel.h */,
+				0490950F29305D82002B6FAA /* HXMessageAttachmentModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		04AB5239292E1F8C00A268DD /* HXFloatButtonView */ = {
+			isa = PBXGroup;
+			children = (
+				04AB523A292E1F8C00A268DD /* HXFloatButtonView.h */,
+				04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */,
+			);
+			path = HXFloatButtonView;
+			sourceTree = "<group>";
+		};
+		04BB4827292F0FFD0096C0CC /* model */ = {
+			isa = PBXGroup;
+			children = (
+				04BB4828292F10340096C0CC /* HXCourseOrderModel.h */,
+				04BB4829292F10340096C0CC /* HXCourseOrderModel.m */,
+				04BB482B292F11300096C0CC /* HXCoursePayOrderModel.h */,
+				04BB482C292F11300096C0CC /* HXCoursePayOrderModel.m */,
+				04BB4834292F4C700096C0CC /* HXCourseJieSuanModel.h */,
+				04BB4835292F4C700096C0CC /* HXCourseJieSuanModel.m */,
+				04BB4831292F4B540096C0CC /* HXOrderDetailInfoModel.h */,
+				04BB4832292F4B540096C0CC /* HXOrderDetailInfoModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -2026,6 +2097,7 @@
 				0470DC3628DC0FB4007A25DC /* HXFileManager.m in Sources */,
 				048A650929091DDE00CE52FA /* HXScoreDetailModel.m in Sources */,
 				0470DC2928DC0EB7007A25DC /* VICacheConfiguration.m in Sources */,
+				0490950D29305CA3002B6FAA /* HXMyMessageDetailModel.m in Sources */,
 				048B7D5E28BDA20A006EBAAE /* XLPageViewControllerUtil.m in Sources */,
 				0498D020292CC94700D59C9E /* HXPhotoInfoModel.m in Sources */,
 				048B7D4F28BDA20A006EBAAE /* NSString+Base64.m in Sources */,
@@ -2044,6 +2116,7 @@
 				0470DC2828DC0EB7007A25DC /* VIMediaCacheWorker.m in Sources */,
 				04905F1228F3EAC1000A8078 /* HXMessageInfoModel.m in Sources */,
 				049858F228F6AFE600F04D4F /* HXCourseReportModel.m in Sources */,
+				04BB482D292F11300096C0CC /* HXCoursePayOrderModel.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				049D570728E28DDF009F09F2 /* HXZiLiaoUploadCell.m in Sources */,
@@ -2052,6 +2125,7 @@
 				048B7CA128BD9D89006EBAAE /* AppDelegate.m in Sources */,
 				048B7D6928BDA20A006EBAAE /* HXCommonUtil.m in Sources */,
 				048B7D6528BDA20A006EBAAE /* CustomIOSAlertView.m in Sources */,
+				04AB523C292E1F8D00A268DD /* HXFloatButtonView.m in Sources */,
 				0490BBAA28C835000095FF39 /* HXScoreDetailsViewController.m in Sources */,
 				048A0ED328C083610077F40A /* HXOnlineLearnShowTipView.m in Sources */,
 				048B7D5928BDA20A006EBAAE /* XLPageViewController.m in Sources */,
@@ -2092,6 +2166,7 @@
 				048806B0292B0A27007DF135 /* HXAnswerSheetViewController.m in Sources */,
 				04C0B795291B47BC0025F213 /* HXExamSessionManager.m in Sources */,
 				04A67BAD29238DEA0035C294 /* HXExamPaperSuitQuestionModel.m in Sources */,
+				04BB4833292F4B540096C0CC /* HXOrderDetailInfoModel.m in Sources */,
 				048B7D3728BDA20A006EBAAE /* HXCircleView.m in Sources */,
 				04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */,
 				048B7D6328BDA20A006EBAAE /* HXBaseTableViewCell.m in Sources */,
@@ -2105,6 +2180,7 @@
 				04AB5238292DC7B700A268DD /* HXMyMessageInfoModel.m in Sources */,
 				0473F3CB28E579610085DBE4 /* CalendarConfig.m in Sources */,
 				049858F528F6B03400F04D4F /* HXCourseItemModel.m in Sources */,
+				04BB4826292F01930096C0CC /* HXExamErrorReportView.m in Sources */,
 				048B7D5F28BDA20A006EBAAE /* HXBaseViewController.m in Sources */,
 				0490BBAD28C879020095FF39 /* HXMyBuKaoViewController.m in Sources */,
 				048B7D3628BDA20A006EBAAE /* HXCalendarManager.m in Sources */,
@@ -2134,6 +2210,7 @@
 				046EBCFC2927640E006BC51F /* HXExamSubChoiceCell.m in Sources */,
 				0470DC4028DC5887007A25DC /* HXSchoolModel.m in Sources */,
 				0471DE7328C6DA300071FECE /* HXZaiXianXueQiCell.m in Sources */,
+				04BB482A292F10340096C0CC /* HXCourseOrderModel.m in Sources */,
 				048B7D5128BDA20A006EBAAE /* UIImage+Extension.m in Sources */,
 				048A0ED728C09DBD0077F40A /* HXTeachPlanCell.m in Sources */,
 				048B7D5528BDA20A006EBAAE /* NSDate+HXDate.m in Sources */,
@@ -2161,6 +2238,7 @@
 				048B7D4A28BDA20A006EBAAE /* HXNavigationController.m in Sources */,
 				0492C2B129262B0900E45226 /* HXExamAnswerCell.m in Sources */,
 				0471DE7628C6DD510071FECE /* HXZaiXianCell.m in Sources */,
+				0490951029305D82002B6FAA /* HXMessageAttachmentModel.m in Sources */,
 				048B7D7628BDA89B006EBAAE /* HXHomePageViewController.m in Sources */,
 				04A5713E292481E90058A87D /* HXExamChoiceCell.m in Sources */,
 				04A1FED728C9D9E600626409 /* HXYiJiaoFeiCell.m in Sources */,
@@ -2174,6 +2252,7 @@
 				04905F0C28F3AEF7000A8078 /* HXSemesterModel.m in Sources */,
 				047959AB28DB098C001F8BC6 /* HXJieSuanCell.m in Sources */,
 				048B7D5A28BDA20A006EBAAE /* XLPageSegmentedTitleView.m in Sources */,
+				0490951A2930B8BB002B6FAA /* HXLiveDetailModel.m in Sources */,
 				048B7D3A28BDA20A006EBAAE /* HXCalendarCollectionViewFlowLayout.m in Sources */,
 				048B7D3928BDA20A006EBAAE /* HXCalendarDayItem.m in Sources */,
 				040890F928BDAF5E007844E8 /* HXMainTabBar.m in Sources */,
@@ -2192,6 +2271,7 @@
 				0470DC2D28DC0EB7007A25DC /* NSString+VIMD5.m in Sources */,
 				04905F0928F3AE5E000A8078 /* HXMajorInfoModel.m in Sources */,
 				0470CC0028FE399B0061010B /* HXAllLiveViewController.m in Sources */,
+				04BB4836292F4C700096C0CC /* HXCourseJieSuanModel.m in Sources */,
 				048B7D6128BDA20A006EBAAE /* HXPullRefreshViewController.m in Sources */,
 				048B7D5828BDA20A006EBAAE /* HXBaseURLSessionManager.m in Sources */,
 				047BDB4928F56D1C003F3A69 /* HXFindPasswordViewController.m in Sources */,
@@ -2205,7 +2285,9 @@
 				04A5713829247B9C0058A87D /* HXExamViewController.m in Sources */,
 				0490DDA528C1D40C009BA325 /* HXPingShiZuoYeViewController.m in Sources */,
 				047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */,
+				049095172930B78C002B6FAA /* HXLiveCourseModel.m in Sources */,
 				048B7D4028BDA20A006EBAAE /* NSDate+CXCategory.m in Sources */,
+				0490950A29305C34002B6FAA /* HXMessageDetailInfoViewController.m in Sources */,
 				0475F90828C5EF4900CCBA07 /* HXZaiXianBuKaoViewController.m in Sources */,
 				048A0ECC28C059050077F40A /* HXFaceTimeTableViewController.m in Sources */,
 				04905F1528F3F3DF000A8078 /* HXHomeMenuModel.m in Sources */,

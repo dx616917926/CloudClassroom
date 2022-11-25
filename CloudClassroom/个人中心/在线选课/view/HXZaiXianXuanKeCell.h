@@ -6,10 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HXCourseOrderModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXZaiXianXuanKeCell : UITableViewCell
+
+@property(nonatomic,strong) HXCourseOrderModel *courseOrderModel;
 
 @end
 

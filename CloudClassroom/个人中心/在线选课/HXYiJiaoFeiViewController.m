@@ -12,6 +12,8 @@
 
 @property(nonatomic,strong) UITableView *mainTableView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXYiJiaoFeiViewController
@@ -22,14 +24,34 @@
     
     //UI
     [self createUI];
+    //获取已缴费列表
+    [self getCoursePayOrder];
 }
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
-}
-
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+#pragma mark - 获取已缴费列表
+-(void)getCoursePayOrder{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCoursePayOrder needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXCoursePayOrderModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            if (list.count==0) {
+                [self.mainTableView addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 #pragma mark - UI
@@ -50,12 +72,10 @@
 
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getCoursePayOrder)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+   
     
 }
 
@@ -65,9 +85,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
-
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -84,6 +103,7 @@
         cell = [[HXYiJiaoFeiCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yiJiaoFeiCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.coursePayOrderModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -93,6 +113,14 @@
 }
 
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];

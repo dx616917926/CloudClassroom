@@ -1000,7 +1000,6 @@
 		05FF013EB28DE4AE68FCF6366690F492 /* HX_PhotoEditViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HX_PhotoEditViewController.m; path = HXPhotoPicker/HXPhotoEdit/Controller/HX_PhotoEditViewController.m; sourceTree = "<group>"; };
 		061961FE0B21027F2A3FB4AC10D52B92 /* UIImage+DTFoundation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+DTFoundation.m"; path = "Core/Source/iOS/UIImage+DTFoundation.m"; sourceTree = "<group>"; };
 		062AF3F631ADB25530E6C16817F2FB7B /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/PhotosUI.framework; sourceTree = DEVELOPER_DIR; };
-		069F24073A69043800E5CF829EFADE7D /* WXApiObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = OpenSDK1.8.7.1/WXApiObject.h; sourceTree = "<group>"; };
 		06D2A71F3272FB7D92131E434D42E758 /* UIImageView+HXExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+HXExtension.h"; path = "HXPhotoPicker/Category/UIImageView+HXExtension.h"; sourceTree = "<group>"; };
 		072DA3F627F9897C943069D46FF42BE9 /* NSAttributedString+DTCoreText.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+DTCoreText.m"; path = "Core/Source/NSAttributedString+DTCoreText.m"; sourceTree = "<group>"; };
 		07702E3AC95B6B763C991EA6F8932407 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"; sourceTree = "<group>"; };
@@ -1069,7 +1068,6 @@
 		1B282552D100D1BC525898DBE4D38E76 /* UIImage+Metadata.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Metadata.h"; path = "SDWebImage/Core/UIImage+Metadata.h"; sourceTree = "<group>"; };
 		1B64233A74180F1030E3425A7D472249 /* AFNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworking-dummy.m"; sourceTree = "<group>"; };
 		1B9254807CFDE96B595175596954F589 /* SDAssociatedObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAssociatedObject.h; path = SDWebImage/Private/SDAssociatedObject.h; sourceTree = "<group>"; };
-		1B935E973DC65EA1262E4F78F3A2B321 /* WechatOpenSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WechatOpenSDK.debug.xcconfig; sourceTree = "<group>"; };
 		1BAB5E690EF41BA0ACF02737428559FD /* HXPhotoEditSplashView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXPhotoEditSplashView.m; path = HXPhotoPicker/HXPhotoEdit/View/HXPhotoEditSplashView.m; sourceTree = "<group>"; };
 		1C07AD8BFB86F6FEB2355F2D0A47E8BB /* HXCustomCollectionReusableView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXCustomCollectionReusableView.m; path = HXPhotoPicker/View/HXCustomCollectionReusableView.m; sourceTree = "<group>"; };
 		1C95B87EFF003C4451AAF0D55320190C /* SDWebImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageManager.m; path = SDWebImage/Core/SDWebImageManager.m; sourceTree = "<group>"; };
@@ -1148,13 +1146,14 @@
 		34619AA64F171FE2741983DED3FC2509 /* HXPhotoEditResizeControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoEditResizeControl.h; path = HXPhotoPicker/HXPhotoEdit/View/HXPhotoEditResizeControl.h; sourceTree = "<group>"; };
 		346200D43B5E838AFEB8A7020F997D11 /* NSFileWrapper+DTCopying.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSFileWrapper+DTCopying.m"; path = "Core/Source/NSFileWrapper+DTCopying.m"; sourceTree = "<group>"; };
 		346AC2B5191B746C67200B08F08A1A79 /* NSArray+DTError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSArray+DTError.m"; path = "Core/Source/NSArray+DTError.m"; sourceTree = "<group>"; };
-		346DD4D46B95EF84893D2AA399AA5601 /* WechatOpenSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WechatOpenSDK.release.xcconfig; sourceTree = "<group>"; };
+		34FC352D0D961C29C27DCD9BDB086932 /* libWeChatSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = OpenSDK1.8.6.2/libWeChatSDK.a; sourceTree = "<group>"; };
 		35A8EBF764EF26458AA70AA71355F452 /* MJFoundation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJFoundation.m; path = MJExtension/MJFoundation.m; sourceTree = "<group>"; };
 		36333FF8C5220DA2677ACBCDEACDB8A3 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkReachabilityManager.m; path = AFNetworking/AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
 		3678B8926EF94992870417655F849466 /* GKPhotoManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GKPhotoManager.h; path = GKPhotoBrowser/Core/GKPhotoManager.h; sourceTree = "<group>"; };
 		36A8398514BC573AB2B5F5E19B417ACE /* AlipaySDK-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "AlipaySDK-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		36E006E41BD8CBD6801F53272580D6E3 /* SDAnimatedImageView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAnimatedImageView.m; path = SDWebImage/Core/SDAnimatedImageView.m; sourceTree = "<group>"; };
 		36E925D83391D77BF41557BAC4F02277 /* HXCollectionView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXCollectionView.h; path = HXPhotoPicker/View/HXCollectionView.h; sourceTree = "<group>"; };
+		370463CB0A4E4F91DAB14C5046A8BC05 /* WXApiObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WXApiObject.h; path = OpenSDK1.8.6.2/WXApiObject.h; sourceTree = "<group>"; };
 		370E03AF610A8B986DAC8693CBA1C03E /* SDWebImageCacheSerializer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageCacheSerializer.h; path = SDWebImage/Core/SDWebImageCacheSerializer.h; sourceTree = "<group>"; };
 		3744FEC29AD0D09F050EBD17C4B57740 /* NSArray+MASAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+MASAdditions.h"; path = "Masonry/NSArray+MASAdditions.h"; sourceTree = "<group>"; };
 		37BD78A7E85521DD29B6E009F5A9197C /* DTAttributedTextView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTAttributedTextView.h; path = Core/Source/DTAttributedTextView.h; sourceTree = "<group>"; };
@@ -1242,6 +1241,7 @@
 		528CB9BEF7303980141335B98CA592C3 /* SDAnimatedImagePlayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAnimatedImagePlayer.m; path = SDWebImage/Core/SDAnimatedImagePlayer.m; sourceTree = "<group>"; };
 		5298EABB8DBEF33EA4A0621F94207899 /* DTCoreText-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DTCoreText-umbrella.h"; sourceTree = "<group>"; };
 		529DBDCA265D0725986FC2501E937543 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = src/fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		52C237320F052BC5A192EFEC73B30284 /* WechatOpenSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WechatOpenSDK.debug.xcconfig; sourceTree = "<group>"; };
 		52ECB583B2CC19F9AA9E4BEC8D3BC540 /* SDImageHEICCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageHEICCoder.m; path = SDWebImage/Core/SDImageHEICCoder.m; sourceTree = "<group>"; };
 		5338EC747917CBF90DD0512DB1B41BC1 /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
 		53BBD17F91A5D885EE21188C70BD87B6 /* ResourceBundle-Resources-DTCoreText-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-Resources-DTCoreText-Info.plist"; sourceTree = "<group>"; };
@@ -1419,6 +1419,7 @@
 		854073AC8212819D3A055A5C8B62E798 /* UIView+MMLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIView+MMLayout.m"; sourceTree = "<group>"; };
 		8540D5C3273DDF49AB2D2E26801591AB /* FMDatabaseQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseQueue.m; path = src/fmdb/FMDatabaseQueue.m; sourceTree = "<group>"; };
 		85A12106A689E5C12CFE3A301062444A /* UIImage+ExtendedCacheData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+ExtendedCacheData.h"; path = "SDWebImage/Core/UIImage+ExtendedCacheData.h"; sourceTree = "<group>"; };
+		85E4A2AE0B1644C7F0D6CBEF368882E3 /* WXApi.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = OpenSDK1.8.6.2/WXApi.h; sourceTree = "<group>"; };
 		85F0A324BF3415E19EDB343A53DEE46A /* HXPhotoPersentInteractiveTransition.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXPhotoPersentInteractiveTransition.m; path = HXPhotoPicker/TransitionAnimation/HXPhotoPersentInteractiveTransition.m; sourceTree = "<group>"; };
 		868FA06BD5F2B254FF862E8C449A0898 /* NSData+ImageContentType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+ImageContentType.m"; path = "SDWebImage/Core/NSData+ImageContentType.m"; sourceTree = "<group>"; };
 		86BC2B6EA37463DC62E86AF140792815 /* SDImageIOAnimatedCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageIOAnimatedCoder.h; path = SDWebImage/Core/SDImageIOAnimatedCoder.h; sourceTree = "<group>"; };
@@ -1454,7 +1455,6 @@
 		8EC9408F868688C1351AC4C4E21729A8 /* DTCoreGraphicsUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DTCoreGraphicsUtils.m; path = Core/Source/DTCoreGraphicsUtils.m; sourceTree = "<group>"; };
 		8EE0390B9AABD4D5499B7F2AB196755B /* DTBlockFunctions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTBlockFunctions.h; path = Core/Source/DTBlockFunctions.h; sourceTree = "<group>"; };
 		8F04ADF0F7BAD5BDE165BC0CEBAB2907 /* AFImageDownloader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFImageDownloader.h; path = "UIKit+AFNetworking/AFImageDownloader.h"; sourceTree = "<group>"; };
-		8F0EC703C8E7992DCBE252AC971C9360 /* WechatAuthSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WechatAuthSDK.h; path = OpenSDK1.8.7.1/WechatAuthSDK.h; sourceTree = "<group>"; };
 		8F2ABD96E5E4EC017DCCBFBBDFEB5C7F /* DTListItemHTMLElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTListItemHTMLElement.h; path = Core/Source/DTListItemHTMLElement.h; sourceTree = "<group>"; };
 		8F5B515F53CEBD6A29F74B369A393241 /* GKCover.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GKCover.debug.xcconfig; sourceTree = "<group>"; };
 		8F6ED2B6E514239E6278E9298588FBDE /* HXFullScreenCameraPlayView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HXFullScreenCameraPlayView.m; path = HXPhotoPicker/View/HXFullScreenCameraPlayView.m; sourceTree = "<group>"; };
@@ -1518,7 +1518,6 @@
 		A05BF2789C5FD50C28A157E21ED2134A /* NSString+DTFormatNumbers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+DTFormatNumbers.m"; path = "Core/Source/NSString+DTFormatNumbers.m"; sourceTree = "<group>"; };
 		A128DD28E7FC20F5EED2F3836EA5F000 /* MJRefreshComponent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshComponent.m; path = MJRefresh/Base/MJRefreshComponent.m; sourceTree = "<group>"; };
 		A169F5740AE3777C1B009411CA2D575A /* FMDB-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FMDB-prefix.pch"; sourceTree = "<group>"; };
-		A22E22562B51E25E341935B707C3CD7B /* libWeChatSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = OpenSDK1.8.7.1/libWeChatSDK.a; sourceTree = "<group>"; };
 		A24985245BFFEF217E52656BB7199BDF /* FMDatabase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = src/fmdb/FMDatabase.m; sourceTree = "<group>"; };
 		A2A998E73EFA99C172FC773E3A24130E /* DTStylesheetHTMLElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTStylesheetHTMLElement.h; path = Core/Source/DTStylesheetHTMLElement.h; sourceTree = "<group>"; };
 		A2AD4EB5B7A87F13239FE2BFE9E21C8D /* DTAccessibilityElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTAccessibilityElement.h; path = Core/Source/DTAccessibilityElement.h; sourceTree = "<group>"; };
@@ -1610,7 +1609,6 @@
 		BA5464532DC53FB303647874860EA74B /* NSURL+DTComparing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSURL+DTComparing.h"; path = "Core/Source/NSURL+DTComparing.h"; sourceTree = "<group>"; };
 		BAF8EE4930004CE19139464A93287968 /* NSAttributedString+SmallCaps.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSAttributedString+SmallCaps.m"; path = "Core/Source/NSAttributedString+SmallCaps.m"; sourceTree = "<group>"; };
 		BB7F063F730EFF10D3EE93A5053F1FE0 /* SDImageLoadersManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageLoadersManager.h; path = SDWebImage/Core/SDImageLoadersManager.h; sourceTree = "<group>"; };
-		BC18F91D596439B56A5952515DAAB979 /* WXApi.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WXApi.h; path = OpenSDK1.8.7.1/WXApi.h; sourceTree = "<group>"; };
 		BC26FFBD14354DB983D241B5A51D8B2D /* NSBundle+HXPhotoPicker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSBundle+HXPhotoPicker.m"; path = "HXPhotoPicker/Category/NSBundle+HXPhotoPicker.m"; sourceTree = "<group>"; };
 		BC386BC34BBBA30DB4FD4493DE4ADBD1 /* HXViewHUD-HXViewHUD */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "HXViewHUD-HXViewHUD"; path = HXViewHUD.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4C8E129C1AD57B99F5ACACF00E37C9 /* HXPhotoCustomNavigationBar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoCustomNavigationBar.h; path = HXPhotoPicker/View/HXPhotoCustomNavigationBar.h; sourceTree = "<group>"; };
@@ -1717,6 +1715,7 @@
 		DB2422B0F376C231FB72E6D0CF7B006F /* DTTextHTMLElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DTTextHTMLElement.h; path = Core/Source/DTTextHTMLElement.h; sourceTree = "<group>"; };
 		DB3896753640751297571E0BFC23B7A7 /* HXPhotoPreviewVideoViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoPreviewVideoViewCell.h; path = HXPhotoPicker/View/HXPhotoPreviewVideoViewCell.h; sourceTree = "<group>"; };
 		DB3E3E1FAC8FE0B7782C1A8E12138500 /* NSURL+DTUnshorten.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSURL+DTUnshorten.m"; path = "Core/Source/NSURL+DTUnshorten.m"; sourceTree = "<group>"; };
+		DBC6AA68441CF7CF4CF1E921499F9CF9 /* WechatAuthSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WechatAuthSDK.h; path = OpenSDK1.8.6.2/WechatAuthSDK.h; sourceTree = "<group>"; };
 		DBCA08DCB7685A4EF2F63976A445A94A /* SDWebImageCacheSerializer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCacheSerializer.m; path = SDWebImage/Core/SDWebImageCacheSerializer.m; sourceTree = "<group>"; };
 		DC564E87C1220D28647D3FCAB6DCF80E /* SDAutoLayout-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDAutoLayout-dummy.m"; sourceTree = "<group>"; };
 		DC67685004DF636777EA8CBC07CD407C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
@@ -1794,6 +1793,7 @@
 		F1C2D13DDDA7AAF9367E72AFDF492B5D /* AFSecurityPolicy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFSecurityPolicy.h; path = AFNetworking/AFSecurityPolicy.h; sourceTree = "<group>"; };
 		F1DD8E6CF9ED368224C3BB24C5427CF4 /* HXPhotoEditTransition.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoEditTransition.h; path = HXPhotoPicker/TransitionAnimation/HXPhotoEditTransition.h; sourceTree = "<group>"; };
 		F1F583ED9177F5798A72502AA7F35FEF /* HXViewHUD-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "HXViewHUD-Info.plist"; sourceTree = "<group>"; };
+		F2007B9A231D2AF9CAF991D051774393 /* WechatOpenSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WechatOpenSDK.release.xcconfig; sourceTree = "<group>"; };
 		F27DC1F51E0A48E6DB60D9941666AEB1 /* AFNetworking-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "AFNetworking-Info.plist"; sourceTree = "<group>"; };
 		F287848F0AEB0785A1FF3D1F5C1D8A17 /* MJExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MJExtension-umbrella.h"; sourceTree = "<group>"; };
 		F2BDB5FACFCE4B062BBBD8DDC0E0F6A4 /* DTTextAttachment.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DTTextAttachment.m; path = Core/Source/DTTextAttachment.m; sourceTree = "<group>"; };
@@ -2149,14 +2149,17 @@
 			name = standard;
 			sourceTree = "<group>";
 		};
-		2B78BF43E0D2C9B664856F0617033AD0 /* Support Files */ = {
+		2EE0D48D4E0FCF6051D02FEFFCC7DCBD /* WechatOpenSDK */ = {
 			isa = PBXGroup;
 			children = (
-				1B935E973DC65EA1262E4F78F3A2B321 /* WechatOpenSDK.debug.xcconfig */,
-				346DD4D46B95EF84893D2AA399AA5601 /* WechatOpenSDK.release.xcconfig */,
+				DBC6AA68441CF7CF4CF1E921499F9CF9 /* WechatAuthSDK.h */,
+				85E4A2AE0B1644C7F0D6CBEF368882E3 /* WXApi.h */,
+				370463CB0A4E4F91DAB14C5046A8BC05 /* WXApiObject.h */,
+				CAA01354AB81F82BAA11F0CBC4985437 /* Frameworks */,
+				7C1E4D787C5C0E5B04F6C04C3631F6BA /* Support Files */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/WechatOpenSDK";
+			name = WechatOpenSDK;
+			path = WechatOpenSDK;
 			sourceTree = "<group>";
 		};
 		315AA75D2BBE5221C62C991B917F8792 /* Support Files */ = {
@@ -2770,6 +2773,16 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		7C1E4D787C5C0E5B04F6C04C3631F6BA /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				52C237320F052BC5A192EFEC73B30284 /* WechatOpenSDK.debug.xcconfig */,
+				F2007B9A231D2AF9CAF991D051774393 /* WechatOpenSDK.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/WechatOpenSDK";
+			sourceTree = "<group>";
+		};
 		8DA690C37177DC31E5239CF3B0BE8785 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -3122,14 +3135,6 @@
 			name = Security;
 			sourceTree = "<group>";
 		};
-		B4334E928E4F55EFA3BB62DE22DE7F00 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A22E22562B51E25E341935B707C3CD7B /* libWeChatSDK.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		B4A32EC23BF18A4B6A9F21C72FF2379D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -3166,6 +3171,14 @@
 				36333FF8C5220DA2677ACBCDEACDB8A3 /* AFNetworkReachabilityManager.m */,
 			);
 			name = Reachability;
+			sourceTree = "<group>";
+		};
+		CAA01354AB81F82BAA11F0CBC4985437 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34FC352D0D961C29C27DCD9BDB086932 /* libWeChatSDK.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -3288,19 +3301,6 @@
 				DB3E3E1FAC8FE0B7782C1A8E12138500 /* NSURL+DTUnshorten.m */,
 			);
 			name = Core;
-			sourceTree = "<group>";
-		};
-		DE0C796F1604F2B36006A8D49C74DC4E /* WechatOpenSDK */ = {
-			isa = PBXGroup;
-			children = (
-				8F0EC703C8E7992DCBE252AC971C9360 /* WechatAuthSDK.h */,
-				BC18F91D596439B56A5952515DAAB979 /* WXApi.h */,
-				069F24073A69043800E5CF829EFADE7D /* WXApiObject.h */,
-				B4334E928E4F55EFA3BB62DE22DE7F00 /* Frameworks */,
-				2B78BF43E0D2C9B664856F0617033AD0 /* Support Files */,
-			);
-			name = WechatOpenSDK;
-			path = WechatOpenSDK;
 			sourceTree = "<group>";
 		};
 		E301D351804B41A5678405CE3E46F894 /* AlipaySDK-iOS */ = {
@@ -3448,7 +3448,7 @@
 				19E5D7DFCCA21C2F67ABA8184B6C4B9D /* MMLayout */,
 				0F307A78C6FDE3FF3D6444EA020640EB /* SDAutoLayout */,
 				3F832001198C137F7C6C05C427B32011 /* SDWebImage */,
-				DE0C796F1604F2B36006A8D49C74DC4E /* WechatOpenSDK */,
+				2EE0D48D4E0FCF6051D02FEFFCC7DCBD /* WechatOpenSDK */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -5267,7 +5267,7 @@
 		};
 		19EB48C8530FBA1DDEA8FFCDD602F307 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 346DD4D46B95EF84893D2AA399AA5601 /* WechatOpenSDK.release.xcconfig */;
+			baseConfigurationReference = F2007B9A231D2AF9CAF991D051774393 /* WechatOpenSDK.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -6371,7 +6371,7 @@
 		};
 		E9034C3C8B274D7A7C62065B44D4B763 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B935E973DC65EA1262E4F78F3A2B321 /* WechatOpenSDK.debug.xcconfig */;
+			baseConfigurationReference = 52C237320F052BC5A192EFEC73B30284 /* WechatOpenSDK.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

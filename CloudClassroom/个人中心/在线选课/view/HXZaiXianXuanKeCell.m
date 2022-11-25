@@ -12,6 +12,7 @@
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UIButton *selectBtn;
 @property(nonatomic,strong) UILabel *courseNameLabel;
+@property(nonatomic,strong) UILabel *termLabel;
 @property(nonatomic,strong) UILabel *priceLabel;
 
 
@@ -38,6 +39,22 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setCourseOrderModel:(HXCourseOrderModel *)courseOrderModel{
+    
+    _courseOrderModel = courseOrderModel;
+    
+    self.selectBtn.selected = courseOrderModel.isSeleted;
+    
+    self.courseNameLabel.text = courseOrderModel.termCourseName;
+    self.termLabel.text = [NSString stringWithFormat:@"第%@学期",courseOrderModel.term];
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",courseOrderModel.iPrice];
+    NSArray *tempArray = [HXFloatToString(courseOrderModel.iPrice) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -47,6 +64,7 @@
     [self.contentView addSubview:self.bigBackgroundView];
     [self.bigBackgroundView addSubview:self.selectBtn];
     [self.bigBackgroundView addSubview:self.courseNameLabel];
+    [self.bigBackgroundView addSubview:self.termLabel];
     [self.bigBackgroundView addSubview:self.priceLabel];
     
     self.bigBackgroundView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(8, 12, 8, 12));
@@ -65,11 +83,17 @@
     .heightIs(20);
     
     self.courseNameLabel.sd_layout
-    .centerYEqualToView(self.bigBackgroundView)
+    .centerYEqualToView(self.bigBackgroundView).offset(-10)
     .leftSpaceToView(self.selectBtn, 12)
     .rightSpaceToView(self.priceLabel, 16)
     .heightIs(21);
     
+    
+    self.termLabel.sd_layout
+    .topSpaceToView(self.courseNameLabel, 2)
+    .leftEqualToView(self.courseNameLabel)
+    .rightEqualToView(self.courseNameLabel)
+    .heightIs(16);
     
 }
 
@@ -98,9 +122,19 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(15);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"马克思主义基本原理概论";
+        
     }
     return _courseNameLabel;
+}
+
+- (UILabel *)termLabel{
+    if (!_termLabel) {
+        _termLabel = [[UILabel alloc] init];
+        _termLabel.font = HXFont(11);
+        _termLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
+        
+    }
+    return _termLabel;
 }
 
 
@@ -111,7 +145,7 @@
         _priceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _priceLabel.textAlignment = NSTextAlignmentRight;
         _priceLabel.isAttributedContent = YES;
-        _priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"50." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥50.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        
     }
     return _priceLabel;
 }

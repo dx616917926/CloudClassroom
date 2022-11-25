@@ -58,7 +58,7 @@
     [self.bigBackgroundView addSubview:self.messageIcon];
     [self.bigBackgroundView addSubview:self.titleLabel];
     [self.bigBackgroundView addSubview:self.timeLabel];
-    [self.bigBackgroundView addSubview:self.contentLabel];
+//    [self.bigBackgroundView addSubview:self.contentLabel];
    
     
     self.bigBackgroundView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(6, 12, 6, 12));
@@ -71,23 +71,23 @@
     .heightEqualToWidth();
     
     self.timeLabel.sd_layout
-    .topSpaceToView(self.bigBackgroundView, 16)
+    .centerYEqualToView(self.messageIcon)
     .rightSpaceToView(self.bigBackgroundView, 16)
     .heightIs(17);
-    [self.timeLabel setSingleLineAutoResizeWithMaxWidth:120];
+    [self.timeLabel setSingleLineAutoResizeWithMaxWidth:150];
     
     
     self.titleLabel.sd_layout
-    .centerYEqualToView(self.timeLabel)
+    .centerYEqualToView(self.messageIcon)
     .leftSpaceToView(self.messageIcon, 12)
     .rightSpaceToView(self.timeLabel, 16)
     .heightIs(21);
     
-    self.contentLabel.sd_layout
-    .topSpaceToView(self.titleLabel, 8)
-    .leftEqualToView(self.titleLabel)
-    .rightEqualToView(self.timeLabel)
-    .heightIs(18);
+//    self.contentLabel.sd_layout
+//    .topSpaceToView(self.titleLabel, 8)
+//    .leftEqualToView(self.titleLabel)
+//    .rightEqualToView(self.timeLabel)
+//    .heightIs(18);
     
     
     

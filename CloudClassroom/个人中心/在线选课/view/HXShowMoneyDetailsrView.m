@@ -8,6 +8,7 @@
 #import "HXShowMoneyDetailsrView.h"
 #import "HXXuanKeMoneyDetailCell.h"
 
+
 @interface HXShowMoneyDetailsrView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong) UIView *maskView;
@@ -20,10 +21,7 @@
 @property(nonatomic,strong) UILabel *heJiLabel;
 @property(nonatomic,strong) UILabel *totalPriceLabel;
 
-//记录初始选择
-@property(nonatomic,assign) NSInteger selectIndex;
-@property(nonatomic,assign) BOOL isRefresh;
-@property(nonatomic,strong) HXMajorModel *selectMajorModel;
+
 
 @end
 
@@ -42,15 +40,17 @@
 #pragma mark - Setter
 -(void)setDataArray:(NSArray *)dataArray{
     _dataArray = dataArray;
+    //计算合计
+    __block CGFloat total = 0.00;
     [dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        HXMajorModel *model = obj;
-        if (model.isSelected) {
-            self.selectIndex = idx;
-            self.selectMajorModel = model;
-            *stop = YES;
-            return;
-        }
+        HXCourseOrderModel *model = obj;
+        total+=model.iPrice;
     }];
+    
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
+    NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
 }
 
 -(void)setIsHaveXueQi:(BOOL)isHaveXueQi{
@@ -73,9 +73,6 @@
         }
     }];
     [self.tableView reloadData];
-    
-    ///滑动到选择的项中间
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)dismiss{
@@ -140,8 +137,6 @@
     .rightEqualToView(self.bigBackGroundView)
     .bottomSpaceToView(self.bigBackGroundView, 0);
     
-    
-   
 
 }
 
@@ -154,7 +149,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return self.dataArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -171,6 +166,7 @@
         cell = [[HXXuanKeMoneyDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xuanKeMoneyDetailCellIdentifier];
     }
     cell.isHaveXueQi = self.isHaveXueQi;
+    cell.courseOrderModel = self.dataArray[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -281,7 +277,7 @@
         _totalPriceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _totalPriceLabel.textAlignment = NSTextAlignmentRight;
         _totalPriceLabel.isAttributedContent = YES;
-        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"100." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥100.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"0." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥0.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
     }
     return _totalPriceLabel;
 }

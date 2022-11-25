@@ -25,11 +25,35 @@
     
     //UI
     [self createUI];
+    //获取直播课程列表
+    [self getDirectBroadcastList];
 }
 
-#pragma mark - 获取直播课程
--(void)getBKList{
-    [self.mainTableView.mj_header endRefreshing];
+#pragma mark - 获取直播课程列表
+-(void)getDirectBroadcastList{
+    
+    NSString *classID = [HXPublicParamTool sharedInstance].class_id;
+    
+    NSDictionary *dic =@{
+        @"classid":HXSafeString(classID)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetDirectBroadcastList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXLiveCourseModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            if (list.count==0) {
+                [self.mainTableView addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
@@ -39,7 +63,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;//self.dataArray.count;
+    return self.dataArray.count;
 }
 
 
@@ -58,12 +82,14 @@
         cell = [[HXLiveCourseCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:liveCourseCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.liveCourseModel = self.dataArray[indexPath.row];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HXMyLiveViewController *vc = [[HXMyLiveViewController alloc] init];
+    vc.liveCourseModel = self.dataArray[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -84,7 +110,7 @@
     self.noDataTipView.frame = self.mainTableView.frame;
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getBKList)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getDirectBroadcastList)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
  
