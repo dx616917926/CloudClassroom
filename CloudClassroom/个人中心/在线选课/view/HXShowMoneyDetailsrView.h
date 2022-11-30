@@ -6,13 +6,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXMajorModel.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^CallBack)(void);
 
 @interface HXShowMoneyDetailsrView : UIView
+
+//fromFalg 1:在线选课  2:财务缴费
+@property(nonatomic,assign) NSInteger fromFalg;
 
 @property(nonatomic,strong) NSArray *dataArray;
 

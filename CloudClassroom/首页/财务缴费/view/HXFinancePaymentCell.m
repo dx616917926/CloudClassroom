@@ -44,6 +44,26 @@
     return self;
 }
 
+#pragma mark - Setter
+
+-(void)setStudentFeeModel:(HXStudentFeeModel *)studentFeeModel{
+    
+    _studentFeeModel = studentFeeModel;
+    
+    self.selectBtn.selected = studentFeeModel.isSeleted;
+    
+    [self.xueQiBtn setTitle:studentFeeModel.batchName forState:UIControlStateNormal];
+    self.feeNameLabel.text = studentFeeModel.paybackName;
+    self.majorContentLabel.text = studentFeeModel.majorlongname;
+    self.jiaoXueDianContentLabel.text = studentFeeModel.subSchoolName;
+    
+    
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",studentFeeModel.balance];
+    NSArray *tempArray = [HXFloatToString(studentFeeModel.balance) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -128,6 +148,7 @@
         _selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_selectBtn setImage:[UIImage imageNamed:@"noselect_icon"] forState:UIControlStateNormal];
         [_selectBtn setImage:[UIImage imageNamed:@"select_icon"] forState:UIControlStateSelected];
+        _selectBtn.userInteractionEnabled = NO;
     }
     return _selectBtn;
 }
@@ -138,7 +159,7 @@
         _xueQiBtn.titleLabel.font = HXBoldFont(15);
         _xueQiBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 0.1);
         [_xueQiBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
-        [_xueQiBtn setTitle:@"2022" forState:UIControlStateNormal];
+        
     }
     return _xueQiBtn;
 }
@@ -148,7 +169,7 @@
         _feeNameLabel = [[UILabel alloc] init];
         _feeNameLabel.font = HXBoldFont(15);
         _feeNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _feeNameLabel.text = @"学杂费";
+        
     }
     return _feeNameLabel;
 }
@@ -161,7 +182,7 @@
         _priceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _priceLabel.textAlignment = NSTextAlignmentRight;
         _priceLabel.isAttributedContent = YES;
-        _priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"50." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥50.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        
     }
     return _priceLabel;
 }
@@ -183,7 +204,7 @@
         _majorContentLabel.textAlignment = NSTextAlignmentRight;
         _majorContentLabel.font = HXFont(12);
         _majorContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _majorContentLabel.text = @"函授 高起专 法学";
+        
     }
     return _majorContentLabel;
 }
@@ -205,7 +226,7 @@
         _jiaoXueDianContentLabel.textAlignment = NSTextAlignmentRight;
         _jiaoXueDianContentLabel.font = HXFont(12);
         _jiaoXueDianContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _jiaoXueDianContentLabel.text = @"北上教育";
+       
     }
     return _jiaoXueDianContentLabel;
 }

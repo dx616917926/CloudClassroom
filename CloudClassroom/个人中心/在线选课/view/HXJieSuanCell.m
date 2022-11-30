@@ -52,6 +52,7 @@
 }
 
 
+//在线选课费项
 -(void)setOrderDetailInfoModel:(HXOrderDetailInfoModel *)orderDetailInfoModel{
     
     _orderDetailInfoModel = orderDetailInfoModel;
@@ -64,6 +65,19 @@
     self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
 }
 
+//财务缴费费项
+-(void)setFeeDetailInfoModel:(HXFeeDetailInfoModel *)feeDetailInfoModel{
+    
+    _feeDetailInfoModel = feeDetailInfoModel;
+    
+    [self.xueQiBtn setTitle:feeDetailInfoModel.batchName forState:UIControlStateNormal];
+    self.titleLabel.text = feeDetailInfoModel.payBackName;
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",feeDetailInfoModel.price];
+    NSArray *tempArray = [HXFloatToString(feeDetailInfoModel.price) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    
+}
 
 #pragma mark - Setter
 -(void)setIsFirst:(BOOL)isFirst{

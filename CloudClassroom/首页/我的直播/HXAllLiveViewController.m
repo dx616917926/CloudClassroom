@@ -31,6 +31,14 @@
     [self getDirectBroadcastDetail];
 }
 
+
+#pragma mark - Setter
+
+-(void)setLiveCourseModel:(HXLiveCourseModel *)liveCourseModel{
+    _liveCourseModel = liveCourseModel;
+}
+
+
 #pragma mark - 获取每一门课的直播列表
 -(void)getDirectBroadcastDetail{
     
@@ -94,6 +102,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HXLiveDetailViewController *vc = [[HXLiveDetailViewController alloc] init];
+    HXLiveDetailModel *liveDetailModel = self.dataArray[indexPath.row];
+    vc.liveDetailModel = liveDetailModel;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

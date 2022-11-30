@@ -9,22 +9,21 @@
 #define SetUp_h
 
 //友盟统计appkey
-#define  UMAPPKEY  @"612709d410c4020b03eed728"
+#define  UMAPPKEY          @"612709d410c4020b03eed728"
 
-//wx3c80146b928cdc2c  wx6735cead4aae981c
 //微信appid
-#define WeiXin_APP_ID       @"wx4f5db3101ba7caf2"
+#define WeiXin_APP_ID       @"wx6735cead4aae981c"
 
 //微信UniversalLink    https://www.edu-edu.com/open_app/gaojijiao/
 #define UNIVERSAL_LINK      @"https://xsjy.hlw-study.com/minedu/"
 
+//第三方应用返回APP需要的
+#define APPScheme           @"edu-gjj"
 
 
 
 //md5密钥
 #define  Md5Key     @"1poiulk*&"
-
-
 
 
 //更新地址

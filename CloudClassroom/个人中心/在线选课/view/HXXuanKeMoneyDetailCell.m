@@ -45,9 +45,6 @@
     if (!isHaveXueQi) {
         self.xueQiBtn.sd_layout.widthIs(0);
         self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 0);
-    }else{
-        self.xueQiBtn.sd_layout.widthIs(80);
-        self.courseNameLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 8);
     }
 }
 
@@ -57,6 +54,18 @@
     self.courseNameLabel.text = courseOrderModel.termCourseName;
     NSString *content = [NSString stringWithFormat:@"￥%.2f",courseOrderModel.iPrice];
     NSArray *tempArray = [HXFloatToString(courseOrderModel.iPrice) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+}
+
+-(void)setStudentFeeModel:(HXStudentFeeModel *)studentFeeModel{
+    
+    _studentFeeModel = studentFeeModel;
+    
+    [self.xueQiBtn setTitle:studentFeeModel.batchName forState:UIControlStateNormal];
+    self.courseNameLabel.text = studentFeeModel.paybackName;
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",studentFeeModel.balance];
+    NSArray *tempArray = [HXFloatToString(studentFeeModel.balance) componentsSeparatedByString:@"."];
     NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
     self.priceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
 }
@@ -82,9 +91,16 @@
     self.xueQiBtn.sd_layout
     .centerYEqualToView(self.bigBackgroundView)
     .leftSpaceToView(self.bigBackgroundView, 16)
-    .widthIs(80)
     .heightIs(21);
     self.xueQiBtn.sd_cornerRadius=@2;
+    
+    self.xueQiBtn.titleLabel.sd_layout
+    .centerYEqualToView(self.xueQiBtn)
+    .leftSpaceToView(self.xueQiBtn, 5)
+    .heightRatioToView(self.xueQiBtn, 1);
+    [self.xueQiBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:150];
+    
+    [self.xueQiBtn setupAutoWidthWithRightView:self.xueQiBtn.titleLabel rightMargin:5];
     
     self.courseNameLabel.sd_layout
     .centerYEqualToView(self.bigBackgroundView)

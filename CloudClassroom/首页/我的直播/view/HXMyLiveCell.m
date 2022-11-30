@@ -12,7 +12,7 @@
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UIImageView *courseIcon;
 @property(nonatomic,strong) UILabel *courseNameLabel;
-@property(nonatomic,strong) UILabel *numLabel;
+
 
 @property(nonatomic,strong) UIButton *stateBtn;
 @property(nonatomic,strong) UIImageView *arrowIcon;
@@ -52,6 +52,86 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setLiveDetailModel:(HXLiveDetailModel *)liveDetailModel{
+    
+    _liveDetailModel = liveDetailModel;
+    
+    self.courseNameLabel.text = liveDetailModel.termCourseName;
+    
+    ///直播状态（0未开始 1正在直播 2已结束）
+    if (liveDetailModel.dbStatus==0) {
+        [self.stateBtn setTitle:@"未开播" forState:UIControlStateNormal];
+        self.stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEFEFEF, 1);
+        [self.stateBtn setTitleColor:COLOR_WITH_ALPHA(0x737373, 1) forState:UIControlStateNormal];
+        
+        self.watchBtn.hidden = NO;
+        self.watchStateLabel.hidden = YES;
+        self.tipLabel.hidden = YES;
+        self.watchBtn.enabled = NO;
+        [self.watchBtn setTitle:@"去观看" forState:UIControlStateNormal];
+        self.watchBtn.backgroundColor = COLOR_WITH_ALPHA(0xC6C8D0, 1);
+        [self.watchBtn setTitleColor:COLOR_WITH_ALPHA(0xFFFFFF, 1) forState:UIControlStateNormal];
+        
+    }else if (liveDetailModel.dbStatus==1) {
+        [self.stateBtn setTitle:@"正在直播" forState:UIControlStateNormal];
+        self.stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEFFFEC, 1);
+        [self.stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+        
+        self.watchBtn.hidden = NO;
+        self.watchStateLabel.hidden = NO;
+        self.tipLabel.hidden = YES;
+        self.watchBtn.enabled = YES;
+        [self.watchBtn setTitle:@"去观看" forState:UIControlStateNormal];
+        self.watchBtn.backgroundColor = COLOR_WITH_ALPHA(0xECF4FF, 1);
+        [self.watchBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
+        
+        ///参与状态（0未参与 1已参与）
+        if (liveDetailModel.joinStatus==0) {
+            self.watchStateLabel.text = @"未观看";
+            self.watchStateLabel.textColor = COLOR_WITH_ALPHA(0xFFA41B, 1);
+        }else{
+            self.watchStateLabel.text = @"已观看";
+            self.watchStateLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        }
+        
+    }else{
+        self.watchStateLabel.hidden = NO;
+        [self.stateBtn setTitle:@"已结束" forState:UIControlStateNormal];
+        self.stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEFEFEF, 1);
+        [self.stateBtn setTitleColor:COLOR_WITH_ALPHA(0x737373, 1) forState:UIControlStateNormal];
+        
+        //回放提示信息，如果有文字，则放文字，没有则显示回放按钮
+        if ([HXCommonUtil isNull:liveDetailModel.playMessage]) {
+            self.watchBtn.hidden = NO;
+            self.tipLabel.hidden = YES;
+            self.watchBtn.enabled = YES;
+            [self.watchBtn setTitle:@"观看回放" forState:UIControlStateNormal];
+            self.watchBtn.backgroundColor = COLOR_WITH_ALPHA(0xECF4FF, 1);
+            [self.watchBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
+        }else{
+            self.watchBtn.hidden = YES;
+            self.tipLabel.hidden = NO;
+            self.tipLabel.text = liveDetailModel.playMessage;
+        }
+        
+        ///参与状态（0未参与 1已参与）
+        if (liveDetailModel.joinStatus==0) {
+            self.watchStateLabel.text = @"未观看";
+            self.watchStateLabel.textColor = COLOR_WITH_ALPHA(0xFFA41B, 1);
+        }else{
+            self.watchStateLabel.text = @"已观看";
+            self.watchStateLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        }
+    }
+    
+    self.liveTimeContentLabel.text = liveDetailModel.dbTime;
+    self.liveTeacherContentLabel.text = liveDetailModel.teacherName;
+   
+   
+}
+
+
 -(void)watch:(UIButton *)sender{
     
     
@@ -66,7 +146,6 @@
     [self.contentView addSubview:self.bigBackgroundView];
     [self.bigBackgroundView addSubview:self.courseIcon];
     [self.bigBackgroundView addSubview:self.courseNameLabel];
-    [self.bigBackgroundView addSubview:self.numLabel];
     [self.bigBackgroundView addSubview:self.stateBtn];
     [self.bigBackgroundView addSubview:self.arrowIcon];
     [self.bigBackgroundView addSubview:self.liveTimeTitleLabel];
@@ -94,11 +173,7 @@
     .heightIs(20);
     [self.courseNameLabel setSingleLineAutoResizeWithMaxWidth:200];
     
-    self.numLabel.sd_layout
-    .centerYEqualToView(self.courseIcon)
-    .leftSpaceToView(self.courseNameLabel, 0)
-    .heightIs(17);
-    [self.numLabel setSingleLineAutoResizeWithMaxWidth:80];
+    
     
     self.arrowIcon.sd_layout
     .centerYEqualToView(self.courseIcon)
@@ -184,28 +259,19 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(14);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"大学英语";
+        
     }
     return _courseNameLabel;
 }
 
-- (UILabel *)numLabel{
-    if (!_numLabel) {
-        _numLabel = [[UILabel alloc] init];
-        _numLabel.font = HXFont(12);
-        _numLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _numLabel.text = @"（第3次）";
-    }
-    return _numLabel;
-}
+
 
 
 - (UIButton *)stateBtn{
     if (!_stateBtn) {
         _stateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEFFFEC, 1);
         _stateBtn.titleLabel.font = HXFont(12);
-        [_stateBtn setTitle:@"正在直播" forState:UIControlStateNormal];
+        _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEFFFEC, 1);
         [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
     }
     return _stateBtn;
@@ -238,7 +304,7 @@
         _liveTimeContentLabel.textAlignment = NSTextAlignmentRight;
         _liveTimeContentLabel.font = HXFont(15);
         _liveTimeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _liveTimeContentLabel.text = @"2022.07.07 19:00-20:00";
+        
     }
     return _liveTimeContentLabel;
 }
@@ -260,7 +326,7 @@
         _liveTeacherContentLabel.textAlignment = NSTextAlignmentRight;
         _liveTeacherContentLabel.font = HXFont(15);
         _liveTeacherContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _liveTeacherContentLabel.text = @"张小小";
+        
     }
     return _liveTeacherContentLabel;
 }
@@ -271,7 +337,7 @@
         _watchStateLabel.textAlignment = NSTextAlignmentLeft;
         _watchStateLabel.font = HXFont(14);
         _watchStateLabel.textColor = COLOR_WITH_ALPHA(0xFFA41B, 1);
-        _watchStateLabel.text = @"未观看";
+        
     }
     return _watchStateLabel;
 }
@@ -283,7 +349,7 @@
         _tipLabel.font = HXFont(14);
         _tipLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _tipLabel.hidden  = YES;
-        _tipLabel.text = @"未在回放时间内";
+        
     }
     return _tipLabel;
 }
@@ -292,10 +358,7 @@
 - (UIButton *)watchBtn{
     if (!_watchBtn) {
         _watchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _watchBtn.backgroundColor = COLOR_WITH_ALPHA(0xECF4FF, 1);
         _watchBtn.titleLabel.font = HXBoldFont(14);
-        [_watchBtn setTitle:@"观看回放" forState:UIControlStateNormal];
-        [_watchBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
         [_watchBtn addTarget:self action:@selector(watch:) forControlEvents:UIControlEventTouchUpInside];
         _watchBtn.userInteractionEnabled = NO;
     }

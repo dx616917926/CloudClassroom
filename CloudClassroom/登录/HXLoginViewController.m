@@ -116,6 +116,7 @@
             [HXPublicParamTool sharedInstance].subSchool_id = subSchool_id;
             [HXPublicParamTool sharedInstance].studentState_id = studentState_id;
             [HXPublicParamTool sharedInstance].uuid = uuid;
+            
             //发送登录成功的通知
             [HXNotificationCenter postNotificationName:LOGINSUCCESS object:nil];
             [weakSelf dismissViewControllerAnimated:YES completion:^{

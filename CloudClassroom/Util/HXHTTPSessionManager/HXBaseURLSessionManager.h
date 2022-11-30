@@ -147,6 +147,9 @@ NS_ASSUME_NONNULL_BEGIN
 //查看消息详情
 #define HXPOST_GetMessageDetailInfo                               @"/api/MyMessage/GetMessageDetailInfo"
 
+//获取未读消息数
+#define HXPOST_GetNoReadCount                                     @"/api/MyMessage/GetNoReadCount"
+
 
 #pragma mark ----------------------------------------------缴费相关操作-------------------------------------------------
 
@@ -164,6 +167,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+#pragma mark ----------------------------------------------财务缴费相关操作-------------------------------------------------
+
+//财务缴费列表
+#define HXPOST_GetFeeList                                         @"/api/FeeList/GetCourseFeeList"
+
+//财务已缴费列表
+#define HXPOST_GetCourseFeeHaveList                               @"/api/FeeList/GetCourseFeeHaveList"
+
+//结算（去下单）
+#define HXPOST_FeeOrderAdd                                        @"/api/FeeList/FeeOrderAdd"
+
+
+
 
 #pragma mark ----------------------------------------------直播管理接口-------------------------------------------------
 
@@ -173,7 +189,7 @@ NS_ASSUME_NONNULL_BEGIN
 //每一门课的直播列表
 #define HXPOST_GetDirectBroadcastDetail                           @"/api/DirectBroadcastList/GetDirectBroadcastDetail"
 
-//每一次直播明细
+//获取直播详情
 #define HXPOST_GetLiveDetail                                      @"/api/DirectBroadcastList/GetLiveDetail"
 
 

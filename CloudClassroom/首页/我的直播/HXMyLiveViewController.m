@@ -35,6 +35,11 @@
     [self.pageViewController.view removeFromSuperview];
 }
 
+#pragma mark - Setter
+-(void)setLiveCourseModel:(HXLiveCourseModel *)liveCourseModel{
+    _liveCourseModel = liveCourseModel;
+}
+
 #pragma mark - UI
 -(void)createUI{
     
@@ -78,9 +83,11 @@
 - (UIViewController *)pageViewController:(XLPageViewController *)pageViewController viewControllerForIndex:(NSInteger)index {
     if (index==0) {
         HXAllLiveViewController *vc = [[HXAllLiveViewController alloc] init];
+        vc.liveCourseModel = self.liveCourseModel;
         return vc;
     }else if (index==1) {
         HXPreviousViewController *vc = [[HXPreviousViewController alloc] init];
+        vc.liveCourseModel = self.liveCourseModel;
         return vc;
     }
     return nil;

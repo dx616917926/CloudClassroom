@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HXOrderDetailInfoModel.h"
+#import "HXFeeDetailInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,8 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) BOOL isLast;
 //是否有学期
 @property(nonatomic,assign) BOOL isHaveXueQi;
-
+//在线选课费项
 @property(nonatomic,strong) HXOrderDetailInfoModel *orderDetailInfoModel;
+//财务缴费费项
+@property(nonatomic,strong) HXFeeDetailInfoModel *feeDetailInfoModel;
 
 @end
 

@@ -7,13 +7,14 @@
 
 #import "HXLiveDetailViewController.h"
 
+
 @interface HXLiveDetailViewController ()
 
 @property(nonatomic,strong) UIScrollView *mainScrollView;
 
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UILabel *courseNameLabel;
-@property(nonatomic,strong) UILabel *numLabel;
+
 
 
 ///直播时间
@@ -35,6 +36,7 @@
 @property(nonatomic,strong) UILabel *introductionTitleLabel;
 @property(nonatomic,strong) UILabel *introductionContentLabel;
 
+
 @end
 
 @implementation HXLiveDetailViewController
@@ -45,12 +47,51 @@
     
     //UI
     [self createUI];
+    
+    //获取直播详情
+    [self getLiveDetail];
 }
 
--(void)getBKList{
-    
-    [self.mainScrollView.mj_header endRefreshing];
+#pragma mark - Setter
+-(void)setLiveDetailModel:(HXLiveDetailModel *)liveDetailModel{
+    _liveDetailModel = liveDetailModel;
 }
+
+#pragma mark - 获取直播详情
+-(void)getLiveDetail{
+    
+    NSDictionary *dic =@{
+        @"detailid":HXSafeString(self.liveDetailModel.detailID),
+        @"dbtype":@(self.liveDetailModel.dbType),
+        @"studentid":HXSafeString(self.liveDetailModel.student_id)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetLiveDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainScrollView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.liveDetailModel = [HXLiveDetailModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            //刷新UI
+            [self refreshUI];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainScrollView.mj_header endRefreshing];
+    }];
+    
+}
+
+
+//刷新UI
+-(void)refreshUI{
+    
+    self.courseNameLabel.text = self.liveDetailModel.termCourseName;
+    self.liveTimeContentLabel.text = self.liveDetailModel.dbTime;
+    self.liveTeacherContentLabel.text = self.liveDetailModel.teacherName;
+    self.liveDurationContentLabel.text = [NSString stringWithFormat:@"%ld/%ld",(long)self.liveDetailModel.dbLearnTime,(long)self.liveDetailModel.dbTotalTime];
+    self.reviewDurationContentLabel.text = [NSString stringWithFormat:@"%ld/%ld",(long)self.liveDetailModel.playLearnTime,(long)self.liveDetailModel.dbTotalTime];
+    self.reviewNumContentLabel.text = HXIntToString(self.liveDetailModel.playLearnCount);
+    self.introductionContentLabel.text = self.liveDetailModel.dbMemo;
+}
+
 
 #pragma mark - UI
 -(void)createUI{
@@ -59,7 +100,7 @@
     [self.view addSubview:self.mainScrollView];
     [self.mainScrollView addSubview:self.bigBackgroundView];
     [self.bigBackgroundView addSubview:self.courseNameLabel];
-    [self.bigBackgroundView addSubview:self.numLabel];
+    
     [self.bigBackgroundView addSubview:self.liveTimeTitleLabel];
     [self.bigBackgroundView addSubview:self.liveTimeContentLabel];
     [self.bigBackgroundView addSubview:self.liveTeacherTitleLabel];
@@ -91,14 +132,10 @@
     .rightSpaceToView(self.bigBackgroundView, 20)
     .heightIs(23);
     
-    self.numLabel.sd_layout
-    .topSpaceToView(self.courseNameLabel, 0)
-    .leftEqualToView(self.courseNameLabel)
-    .rightEqualToView(self.courseNameLabel)
-    .heightIs(17);
+    
     
     self.liveTimeTitleLabel.sd_layout
-    .topSpaceToView(self.numLabel, 21)
+    .topSpaceToView(self.courseNameLabel, 38)
     .leftEqualToView(self.courseNameLabel)
     .widthIs((kScreenWidth-40)*0.5)
     .heightIs(20);
@@ -219,21 +256,12 @@
         _courseNameLabel.textAlignment = NSTextAlignmentCenter;
         _courseNameLabel.font = HXBoldFont(16);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _courseNameLabel.text = @"广告策划与创意";
+        
     }
     return _courseNameLabel;
 }
 
-- (UILabel *)numLabel{
-    if (!_numLabel) {
-        _numLabel = [[UILabel alloc] init];
-        _numLabel.textAlignment = NSTextAlignmentCenter;
-        _numLabel.font = HXFont(12);
-        _numLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _numLabel.text = @"（第3次）";
-    }
-    return _numLabel;
-}
+
 
 
 
@@ -254,7 +282,7 @@
         _liveTimeContentLabel.textAlignment = NSTextAlignmentLeft;
         _liveTimeContentLabel.font = HXFont(15);
         _liveTimeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _liveTimeContentLabel.text = @"2022.07.07 19:00-20:00";
+        
     }
     return _liveTimeContentLabel;
 }
@@ -276,7 +304,7 @@
         _liveTeacherContentLabel.textAlignment = NSTextAlignmentLeft;
         _liveTeacherContentLabel.font = HXFont(15);
         _liveTeacherContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _liveTeacherContentLabel.text = @"张小小";
+       
     }
     return _liveTeacherContentLabel;
 }
@@ -298,7 +326,7 @@
         _liveDurationContentLabel.textAlignment = NSTextAlignmentLeft;
         _liveDurationContentLabel.font = HXFont(15);
         _liveDurationContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _liveDurationContentLabel.text = @"20/50";
+        
     }
     return _liveDurationContentLabel;
 }
@@ -320,7 +348,7 @@
         _reviewDurationContentLabel.textAlignment = NSTextAlignmentLeft;
         _reviewDurationContentLabel.font = HXFont(15);
         _reviewDurationContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _reviewDurationContentLabel.text = @"200/50";
+        
     }
     return _reviewDurationContentLabel;
 }
@@ -342,7 +370,7 @@
         _reviewNumContentLabel.textAlignment = NSTextAlignmentLeft;
         _reviewNumContentLabel.font = HXFont(15);
         _reviewNumContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _reviewNumContentLabel.text = @"3";
+        
     }
     return _reviewNumContentLabel;
 }
@@ -365,7 +393,7 @@
         _introductionContentLabel.font = HXFont(15);
         _introductionContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
         _introductionContentLabel.numberOfLines=0;
-        _introductionContentLabel.text = @"这里是直播简介这里是直播简介这里是直播简介这里是直,播简介这里是直播简介这里是直播简介这里是直播简介这里是直播简介这里是直播简介这里是直播简介.";
+        
     }
     return _introductionContentLabel;
 }

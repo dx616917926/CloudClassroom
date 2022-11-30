@@ -38,24 +38,48 @@
 
 
 #pragma mark - Setter
--(void)setDataArray:(NSArray *)dataArray{
-    _dataArray = dataArray;
-    //计算合计
-    __block CGFloat total = 0.00;
-    [dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        HXCourseOrderModel *model = obj;
-        total+=model.iPrice;
-    }];
-    
-    NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
-    NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
-    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
-    self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+//fromFalg 1:在线选课  2:财务缴费
+-(void)setFromFalg:(NSInteger)fromFalg{
+    _fromFalg = fromFalg;
 }
 
 -(void)setIsHaveXueQi:(BOOL)isHaveXueQi{
     _isHaveXueQi = isHaveXueQi;
 }
+
+-(void)setDataArray:(NSArray *)dataArray{
+    
+    _dataArray = dataArray;
+    //fromFalg 1:在线选课  2:财务缴费
+    if (self.fromFalg==1) {
+        //计算合计
+        __block CGFloat total = 0.00;
+        [dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            HXCourseOrderModel *model = obj;
+            total+=model.iPrice;
+        }];
+        
+        NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
+        NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
+        NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+        self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    }else if (self.fromFalg==2) {
+        //计算合计
+        __block CGFloat total = 0.00;
+        [dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            HXStudentFeeModel *model = obj;
+            total+=model.balance;
+        }];
+        
+        NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
+        NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
+        NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+        self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    }
+    
+}
+
+
 
 
 #pragma mark - Public Method
@@ -166,7 +190,11 @@
         cell = [[HXXuanKeMoneyDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xuanKeMoneyDetailCellIdentifier];
     }
     cell.isHaveXueQi = self.isHaveXueQi;
-    cell.courseOrderModel = self.dataArray[indexPath.row];
+    if (self.fromFalg==1) {
+        cell.courseOrderModel = self.dataArray[indexPath.row];
+    }else if (self.fromFalg==2) {
+        cell.studentFeeModel = self.dataArray[indexPath.row];
+    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

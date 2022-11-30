@@ -11,6 +11,7 @@
 #import "HXPhotoManager.h"
 #import "HXPhotoInfoModel.h"
 #import "SDWebImage.h"
+#import "NSString+Base64.h"
 
 @interface HXUploadIDPhotoViewController ()
 

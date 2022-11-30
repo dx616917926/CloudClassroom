@@ -28,6 +28,7 @@
 		045F218A28D05948007023D7 /* QRCodeReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218528D05948007023D7 /* QRCodeReader.m */; };
 		045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218628D05948007023D7 /* UIImage+QRCode.m */; };
 		045F218F28D06753007023D7 /* HXUploadIDPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */; };
+		046DB75F2935F21A00D39CB6 /* HXStudentFeeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 046DB75E2935F21A00D39CB6 /* HXStudentFeeModel.m */; };
 		046E3F3628CACB3000FF188A /* HXXuanKeMoneyDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */; };
 		046E3F3928CB230B00FF188A /* HXMyMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046E3F3828CB230B00FF188A /* HXMyMessageViewController.m */; };
 		046EBCF929275718006BC51F /* HXExamFuHeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 046EBCF829275718006BC51F /* HXExamFuHeCell.m */; };
@@ -171,6 +172,7 @@
 		048B7D7628BDA89B006EBAAE /* HXHomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7528BDA89B006EBAAE /* HXHomePageViewController.m */; };
 		048B7D7A28BDA8F1006EBAAE /* HXLearnCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7928BDA8F1006EBAAE /* HXLearnCenterViewController.m */; };
 		048B7D7E28BDA944006EBAAE /* HXPersonalCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048B7D7D28BDA944006EBAAE /* HXPersonalCenterViewController.m */; };
+		048E432729373F5600EC043A /* HXFeeDetailInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 048E432629373F5600EC043A /* HXFeeDetailInfoModel.m */; };
 		04905F0928F3AE5E000A8078 /* HXMajorInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F0828F3AE5E000A8078 /* HXMajorInfoModel.m */; };
 		04905F0C28F3AEF7000A8078 /* HXSemesterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F0B28F3AEF7000A8078 /* HXSemesterModel.m */; };
 		04905F0F28F3B326000A8078 /* HXCourseInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04905F0E28F3B326000A8078 /* HXCourseInfoModel.m */; };
@@ -291,6 +293,8 @@
 		045F218628D05948007023D7 /* UIImage+QRCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+QRCode.m"; sourceTree = "<group>"; };
 		045F218D28D06753007023D7 /* HXUploadIDPhotoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXUploadIDPhotoViewController.h; sourceTree = "<group>"; };
 		045F218E28D06753007023D7 /* HXUploadIDPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXUploadIDPhotoViewController.m; sourceTree = "<group>"; };
+		046DB75D2935F21A00D39CB6 /* HXStudentFeeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXStudentFeeModel.h; sourceTree = "<group>"; };
+		046DB75E2935F21A00D39CB6 /* HXStudentFeeModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXStudentFeeModel.m; sourceTree = "<group>"; };
 		046E3F3428CACB3000FF188A /* HXXuanKeMoneyDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXXuanKeMoneyDetailCell.h; sourceTree = "<group>"; };
 		046E3F3528CACB3000FF188A /* HXXuanKeMoneyDetailCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXXuanKeMoneyDetailCell.m; sourceTree = "<group>"; };
 		046E3F3728CB230B00FF188A /* HXMyMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMyMessageViewController.h; sourceTree = "<group>"; };
@@ -574,6 +578,8 @@
 		048B7D7928BDA8F1006EBAAE /* HXLearnCenterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXLearnCenterViewController.m; sourceTree = "<group>"; };
 		048B7D7C28BDA944006EBAAE /* HXPersonalCenterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalCenterViewController.h; sourceTree = "<group>"; };
 		048B7D7D28BDA944006EBAAE /* HXPersonalCenterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPersonalCenterViewController.m; sourceTree = "<group>"; };
+		048E432529373F5600EC043A /* HXFeeDetailInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFeeDetailInfoModel.h; sourceTree = "<group>"; };
+		048E432629373F5600EC043A /* HXFeeDetailInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFeeDetailInfoModel.m; sourceTree = "<group>"; };
 		04905F0728F3AE5E000A8078 /* HXMajorInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMajorInfoModel.h; sourceTree = "<group>"; };
 		04905F0828F3AE5E000A8078 /* HXMajorInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMajorInfoModel.m; sourceTree = "<group>"; };
 		04905F0A28F3AEF7000A8078 /* HXSemesterModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSemesterModel.h; sourceTree = "<group>"; };
@@ -809,6 +815,15 @@
 				04DA873E28D0828C00FAFE93 /* HXFanKuiYouWuViewController.m */,
 			);
 			path = "证件照上传";
+			sourceTree = "<group>";
+		};
+		046DB75C2935F20400D39CB6 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				046DB75D2935F21A00D39CB6 /* HXStudentFeeModel.h */,
+				046DB75E2935F21A00D39CB6 /* HXStudentFeeModel.m */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 		0470DC0928DC0EB7007A25DC /* VIMediaCache */ = {
@@ -1081,6 +1096,7 @@
 		0479599828DADBC7001F8BC6 /* 财务缴费 */ = {
 			isa = PBXGroup;
 			children = (
+				046DB75C2935F20400D39CB6 /* model */,
 				0479599928DADBC7001F8BC6 /* view */,
 				0479599A28DADC67001F8BC6 /* HXFinancePaymentViewController.h */,
 				0479599B28DADC67001F8BC6 /* HXFinancePaymentViewController.m */,
@@ -1920,6 +1936,8 @@
 				04BB4835292F4C700096C0CC /* HXCourseJieSuanModel.m */,
 				04BB4831292F4B540096C0CC /* HXOrderDetailInfoModel.h */,
 				04BB4832292F4B540096C0CC /* HXOrderDetailInfoModel.m */,
+				048E432529373F5600EC043A /* HXFeeDetailInfoModel.h */,
+				048E432629373F5600EC043A /* HXFeeDetailInfoModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -2224,6 +2242,7 @@
 				0479599F28DADE7D001F8BC6 /* HXFinancePaymentCell.m in Sources */,
 				048B7D6628BDA20A006EBAAE /* ViewFrameAccessor.m in Sources */,
 				048B7D6428BDA20A006EBAAE /* HXCheckUpdateTool.m in Sources */,
+				046DB75F2935F21A00D39CB6 /* HXStudentFeeModel.m in Sources */,
 				0478DA6928D84FEB00B645DE /* HXXueFeiCell.m in Sources */,
 				04A1FECE28C9C04800626409 /* HXZaiXianXuanKeViewChildController.m in Sources */,
 				048B7D6828BDA20A006EBAAE /* HXPublicParamTool.m in Sources */,
@@ -2260,6 +2279,7 @@
 				040890FF28BDFD5F007844E8 /* HXCurrentLearCell.m in Sources */,
 				049858EE28F6A34100F04D4F /* HXScoreModel.m in Sources */,
 				0470DC2A28DC0EB7007A25DC /* VICacheManager.m in Sources */,
+				048E432729373F5600EC043A /* HXFeeDetailInfoModel.m in Sources */,
 				045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */,
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,

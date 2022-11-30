@@ -6,10 +6,15 @@
 //
 
 #import "HXBaseViewController.h"
+#import "HXLiveDetailModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXLiveDetailViewController : HXBaseViewController
+
+@property(nonatomic,strong) HXLiveDetailModel *liveDetailModel;
+
+
 
 @end
 

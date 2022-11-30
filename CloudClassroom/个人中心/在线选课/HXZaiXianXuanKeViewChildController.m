@@ -83,6 +83,7 @@
         [self.view showTostWithMessage:@"请选择课程"];
         return;
     }
+    self.showMoneyDetailsrView.fromFalg = 1;
     self.showMoneyDetailsrView.isHaveXueQi = YES;
     self.showMoneyDetailsrView.dataArray = array;
     WeakSelf(weakSelf);
@@ -137,6 +138,7 @@
         [self.view hideLoading];
         if (success) {
             HXCourseJieSuanModel *jieSuanModel = [HXCourseJieSuanModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            jieSuanModel.fromFalg = 1;
             HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
             vc.isHaveXueQi = YES;
             vc.jieSuanModel = jieSuanModel;

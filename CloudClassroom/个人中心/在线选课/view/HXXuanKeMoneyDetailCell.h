@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HXCourseOrderModel.h"
+#import "HXStudentFeeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) BOOL isHaveXueQi;
 
 @property(nonatomic,strong) HXCourseOrderModel *courseOrderModel;
+
+@property(nonatomic,strong) HXStudentFeeModel *studentFeeModel;
 
 @end
 

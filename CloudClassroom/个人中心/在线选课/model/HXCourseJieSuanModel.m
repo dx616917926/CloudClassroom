@@ -12,7 +12,8 @@
 + (NSDictionary *)mj_objectClassInArray
 {
     return @{
-             @"courseInfo" : @"HXOrderDetailInfoModel"
+             @"courseInfo" : @"HXOrderDetailInfoModel",
+             @"feeInfo" : @"HXFeeDetailInfoModel"
              };
 }
 

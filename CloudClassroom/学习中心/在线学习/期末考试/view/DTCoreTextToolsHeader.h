@@ -10,6 +10,7 @@
 
 #import "DTCoreText.h"
 #import "DTAnimatedGIF.h"
+#import "UIImage+DTFoundation.h"
 
 #define   ExamChoiceImageViewTag       1111111
 #define   ExamChoiceTapViewTag         2222222

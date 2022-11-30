@@ -113,6 +113,7 @@
         _selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_selectBtn setImage:[UIImage imageNamed:@"noselect_icon"] forState:UIControlStateNormal];
         [_selectBtn setImage:[UIImage imageNamed:@"select_icon"] forState:UIControlStateSelected];
+        _selectBtn.userInteractionEnabled = NO;
     }
     return _selectBtn;
 }

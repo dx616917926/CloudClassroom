@@ -27,6 +27,8 @@
 
 @property(nonatomic,strong) HXShowMoneyDetailsrView *showMoneyDetailsrView;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXFinancePaymentViewController
@@ -37,13 +39,50 @@
     
     //UI
     [self createUI];
+    //获取财务缴费列表
+    [self getFeeList];
 }
 
+#pragma mark - 获取财务缴费列表
+-(void)getFeeList{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFeeList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXStudentFeeModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+}
 
-#pragma mark - Event
-//查看明细
+#pragma mark - 查看明细
+
 -(void)checkDetails:(UIControl *)sender{
     
+    __block NSMutableArray *array = [NSMutableArray array];
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXStudentFeeModel *model = obj;
+        if (model.isSeleted) {
+            [array addObject:model];
+        }
+    }];
+    
+    if (array.count==0) {
+        [self.view showTostWithMessage:@"请选择缴费项目"];
+        return;
+    }
+    self.showMoneyDetailsrView.fromFalg = 2;
+    self.showMoneyDetailsrView.isHaveXueQi = YES;
+    self.showMoneyDetailsrView.dataArray = array;
     WeakSelf(weakSelf);
     self.showMoneyDetailsrView.callBack = ^{
         weakSelf.checkDetailsBtn.selected = weakSelf.showMoneyDetailsrView.isShow;
@@ -56,25 +95,90 @@
     }
         
 }
-//结算
+
+#pragma mark - 结算
 -(void)jieSuan:(UIControl *)sender{
     
     if (self.showMoneyDetailsrView.isShow) {
         [self.showMoneyDetailsrView dismiss];
     }
-    HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
-    vc.isHaveXueQi = YES;
-    [self.navigationController pushViewController:vc animated:YES];
+    
+    __block NSMutableArray *array = [NSMutableArray array];
+    __block NSMutableArray *batchIDsArray = [NSMutableArray array];
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXStudentFeeModel *model = obj;
+        if (model.isSeleted) {
+            [array addObject:model];
+            [batchIDsArray addObject:model.batchID];
+        }
+    }];
+    
+    if (array.count==0) {
+        [self.view showTostWithMessage:@"请选择缴费项目"];
+        return;
+    }
+    
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSString *batchIDs = [batchIDsArray componentsJoinedByString:@","];
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId),
+        @"batchid":HXSafeString(batchIDs)
+    };
+    [self.view showLoading];
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_FeeOrderAdd needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        [self.view hideLoading];
+        if (success) {
+            HXCourseJieSuanModel *jieSuanModel = [HXCourseJieSuanModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            jieSuanModel.fromFalg = 2;
+            HXJieSuanViewController *vc = [[HXJieSuanViewController alloc] init];
+            vc.isHaveXueQi = YES;
+            vc.jieSuanModel = jieSuanModel;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.view hideLoading];
+    }];
+    
 }
-//全选
+#pragma mark - 全选
 -(void)allSelect:(UIControl *)sender{
     sender.selected = !sender.selected;
+
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXStudentFeeModel *model = obj;
+        model.isSeleted = sender.selected;
+    }];
+    [self.mainTableView reloadData];
+    //计算合计
+    [self calculateTotalPrice];
 
     if (self.showMoneyDetailsrView.isShow) {
         [self.showMoneyDetailsrView dismiss];
     }
 }
 
+#pragma mark - 计算合计
+-(void)calculateTotalPrice{
+    __block CGFloat total = 0.00;
+    __block NSInteger count = 0;
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXStudentFeeModel *model = obj;
+        if (model.isSeleted) {
+            total+=model.balance;
+            count++;
+        }
+    }];
+    
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
+    NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    
+    self.selectNumLabel.text = [NSString stringWithFormat:@"已选%ld个",(long)count];
+}
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -82,7 +186,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -102,12 +206,17 @@
         cell = [[HXFinancePaymentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:financePaymentCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.studentFeeModel = self.dataArray[indexPath.row];
     return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    HXStudentFeeModel *model = self.dataArray[indexPath.row];
+    model.isSeleted = !model.isSeleted;
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    //计算合计
+    [self calculateTotalPrice];
     
 }
 
@@ -225,6 +334,13 @@
 
 #pragma mark -LazyLoad
 
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -329,7 +445,7 @@
         _totalPriceLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _totalPriceLabel.textAlignment = NSTextAlignmentRight;
         _totalPriceLabel.isAttributedContent = YES;
-        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"100." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥100.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        _totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"0." needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥0.00" defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
     }
     return _totalPriceLabel;
 }
@@ -341,7 +457,6 @@
         _selectNumLabel.textAlignment = NSTextAlignmentRight;
         _selectNumLabel.font = HXFont(12);
         _selectNumLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _selectNumLabel.text = @"已选2个";
     }
     return _selectNumLabel;
 }

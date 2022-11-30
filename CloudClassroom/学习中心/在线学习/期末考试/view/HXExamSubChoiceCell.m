@@ -7,6 +7,7 @@
 
 #import "HXExamSubChoiceCell.h"
 #import "IQTextView.h"
+#import "NSString+Base64.h"
 
 @interface HXExamSubChoiceCell ()<DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UITextViewDelegate>
 @property(nonatomic,assign) CGRect viewMaxRect;
@@ -52,7 +53,10 @@
 @property(nonatomic,strong) UIView *selectView;
 
 
+@property(nonatomic,assign) BOOL once;
+
 @end
+
 
 @implementation HXExamSubChoiceCell
 
@@ -113,15 +117,14 @@
     
     _examPaperSubQuestionModel = examPaperSubQuestionModel;
     
+    
     //设置偏移归位
     [self.mainScrollView setContentOffset:CGPointZero];
     
     CGSize textSize = [self getAttributedTextHeightHtml:examPaperSubQuestionModel.serialNoHtmlTitle  with_viewMaxRect:self.viewMaxRect];
     self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
     [self.attributedTitleLabel updateLayout];
-    [self.attributedTitleLabel relayoutText];
     self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSubQuestionModel.serialNoHtmlTitle];
-    
     //分数
     self.fenShuLabel.text = [examPaperSubQuestionModel.sub_scoreStr stringByAppendingString:@"'"];
     
@@ -229,11 +232,6 @@
             }
         }
     }
-    
-    
-   
-    
-    
 }
 
 #pragma mark - <UITextViewDelegate>
@@ -251,16 +249,26 @@
         NSString *imageURL = [NSString stringWithFormat:@"%@", attachment.contentURL];
         DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
         imageView.delegate = self;
-        imageView.contentMode = UIViewContentModeScaleToFill;
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.image = [(DTImageTextAttachment *)attachment image];
         imageView.url = attachment.contentURL;
         imageView.userInteractionEnabled = NO;
+        
         if ([imageURL containsString:@"gif"]) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 NSData *gifData = [NSData dataWithContentsOfURL:attachment.contentURL];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     imageView.image = DTAnimatedGIFFromData(gifData);
                 });
+            });
+        }else if([imageURL containsString:@"data:image/png;base64,"]){//base64字符串转为图片
+            NSArray *array = [imageURL componentsSeparatedByString:@"data:image/png;base64,"];
+            NSString *base64Str = array.lastObject;
+            NSData *imageData =[[NSData alloc] initWithBase64EncodedString:base64Str options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIImage *image = [UIImage imageWithData:imageData];
+                imageView.image = image;
             });
         }
         return imageView;

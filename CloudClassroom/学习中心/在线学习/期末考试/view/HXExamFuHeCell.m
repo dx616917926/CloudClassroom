@@ -119,7 +119,7 @@
 //图片占位
 - (UIView *)attributedTextContentView:(DTAttributedTextContentView *)attributedTextContentView viewForAttachment:(DTTextAttachment *)attachment frame:(CGRect)frame{
     
-    if([attachment isKindOfClass:[DTImageTextAttachment class]]){
+    if([attachment isKindOfClass:[DTImageTextAttachment class]]){//超过规定宽度，等比例缩放
         NSString *imageURL = [NSString stringWithFormat:@"%@", attachment.contentURL];
         DTLazyImageView *imageView = [[DTLazyImageView alloc] initWithFrame:frame];
         imageView.delegate = self;
@@ -133,6 +133,14 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     imageView.image = DTAnimatedGIFFromData(gifData);
                 });
+            });
+        }else if([imageURL containsString:@"data:image/png;base64,"]){//base64字符串转为图片
+            NSArray *array = [imageURL componentsSeparatedByString:@"data:image/png;base64,"];
+            NSString *base64Str = array.lastObject;
+            NSData *imageData =[[NSData alloc] initWithBase64EncodedString:base64Str options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIImage *image = [UIImage imageWithData:imageData];
+                imageView.image = image;
             });
         }
         return imageView;
@@ -268,7 +276,7 @@
     HXExamPaperSubQuestionModel *examPaperSubQuestionModel = self.examPaperSuitQuestionModel.subQuestions[indexPath.row];
     HXExamSubChoiceCell *choiceCell = (HXExamSubChoiceCell *)cell;
     choiceCell.examPaperSubQuestionModel = examPaperSubQuestionModel;
-
+    
 }
 
 

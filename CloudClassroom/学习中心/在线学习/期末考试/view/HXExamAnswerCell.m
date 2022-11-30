@@ -88,6 +88,14 @@
                     imageView.image = DTAnimatedGIFFromData(gifData);
                 });
             });
+        }else if([imageURL containsString:@"data:image/png;base64,"]){//base64字符串转为图片
+            NSArray *array = [imageURL componentsSeparatedByString:@"data:image/png;base64,"];
+            NSString *base64Str = array.lastObject;
+            NSData *imageData =[[NSData alloc] initWithBase64EncodedString:base64Str options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIImage *image = [UIImage imageWithData:imageData];
+                imageView.image = image;
+            });
         }
         return imageView;
     }
