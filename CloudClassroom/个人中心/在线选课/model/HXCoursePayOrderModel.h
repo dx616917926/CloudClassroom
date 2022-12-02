@@ -29,8 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *order_date;
 ///金额
 @property(nonatomic, assign) CGFloat price;
-///缴费方式 1支付宝 2微信  3银联
-@property(nonatomic, assign) NSInteger order_type;
+///缴费方式 
+@property(nonatomic, copy) NSString *order_type;
 
 @end
 

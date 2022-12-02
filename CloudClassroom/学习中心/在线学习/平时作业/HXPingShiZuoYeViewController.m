@@ -45,15 +45,15 @@
 
 #pragma mark - 获取人脸识别设置
 -(void)getFaceSet{
-
+    
     NSString *majorid = [HXPublicParamTool sharedInstance].major_id;
     NSDictionary *dic =@{
         @"majorid":HXSafeString(majorid),
         //班级计划学期ID（如果是补考，传补考开课ID）
-        @"termcourseid":HXSafeString(self.courseInfoModel.termCourseID),
+        @"termcourseid":(self.isBuKao?HXSafeString(self.buKaoModel.bkCourse_id):HXSafeString(self.courseInfoModel.termCourseID)),
         //模块类型 1课件 2作业 3期末 0补考
         @"coursetype":(self.isBuKao?@"0":@"2")
-
+        
     };
     
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetFaceSet needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
@@ -115,10 +115,9 @@
         [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
-            NSArray *list = [HXKeJianOrExamInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
-            self.keJianOrExamInfoModel = list.firstObject;
-            if (![HXCommonUtil isNull: self.keJianOrExamInfoModel.examPara.examURL]) {
-                [self requestAuthorize: self.keJianOrExamInfoModel.examPara];
+            self.keJianOrExamInfoModel = [HXKeJianOrExamInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            if (![HXCommonUtil isNull:self.keJianOrExamInfoModel.examPara.examURL]) {
+                [self requestAuthorize:self.keJianOrExamInfoModel.examPara];
             }else{
                 [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
             }

@@ -6,13 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HXFaceTimeTableModel.h"
+#import "HXFaceTimeCourseDetailModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXFaceTimeTableShowView : UIView
 
-@property(nonatomic,strong) HXFaceTimeTableModel *faceTimeTableModel;
+@property(nonatomic,strong) HXFaceTimeCourseDetailModel *faceTimeCourseDetailModel;
 
 -(void)show;
 

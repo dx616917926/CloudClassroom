@@ -50,13 +50,20 @@
     self.payType = 0;
     //UI
     [self createUI];
+    
+    //监听支付成功通知，返回上个界面
+    [HXNotificationCenter addObserver:self selector:@selector(popBack) name:kPaySuccessNotification object:nil];
 }
+
+#pragma mark - 监听支付成功通知，返回上个界面
+-(void)popBack{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Setter
 -(void)setJieSuanModel:(HXCourseJieSuanModel *)jieSuanModel{
     _jieSuanModel = jieSuanModel;
-    
 }
-
 
 #pragma mark - Event
 -(void)selectPayMethod:(UIButton *)sender{
@@ -386,7 +393,7 @@
     //fromFalg 1:在线选课  2:财务缴费
     if (self.jieSuanModel.fromFalg==1) {
         [self.dataArray addObjectsFromArray:self.jieSuanModel.courseInfo];
-    }else if (self.jieSuanModel.fromFalg==1) {
+    }else if (self.jieSuanModel.fromFalg==2) {
         [self.dataArray addObjectsFromArray:self.jieSuanModel.feeInfo];
     }
 

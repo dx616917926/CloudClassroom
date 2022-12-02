@@ -62,7 +62,7 @@
     
     NSDictionary *dic =@{
         @"detailid":HXSafeString(self.liveDetailModel.detailID),
-        @"dbtype":@(self.liveDetailModel.dbType),
+        @"dbtype":HXIntToString(self.liveDetailModel.dbType),
         @"studentid":HXSafeString(self.liveDetailModel.student_id)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetLiveDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
@@ -83,7 +83,7 @@
 //刷新UI
 -(void)refreshUI{
     
-    self.courseNameLabel.text = self.liveDetailModel.termCourseName;
+    self.courseNameLabel.text = self.liveDetailModel.dbName;
     self.liveTimeContentLabel.text = self.liveDetailModel.dbTime;
     self.liveTeacherContentLabel.text = self.liveDetailModel.teacherName;
     self.liveDurationContentLabel.text = [NSString stringWithFormat:@"%ld/%ld",(long)self.liveDetailModel.dbLearnTime,(long)self.liveDetailModel.dbTotalTime];

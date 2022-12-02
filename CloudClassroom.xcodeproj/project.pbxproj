@@ -57,7 +57,6 @@
 		0471DE7628C6DD510071FECE /* HXZaiXianCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471DE7528C6DD510071FECE /* HXZaiXianCell.m */; };
 		047382EE28DD81870029EC99 /* HXModifyPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */; };
 		0473F3AF28E530C90085DBE4 /* HXFaceTimeTableShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */; };
-		0473F3B328E53A5E0085DBE4 /* HXFaceTimeTableModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */; };
 		0473F3B628E577CB0085DBE4 /* HXCalendarViewShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B528E577CB0085DBE4 /* HXCalendarViewShowView.m */; };
 		0473F3C928E579610085DBE4 /* MCalendarCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3B828E579610085DBE4 /* MCalendarCollectionCell.m */; };
 		0473F3CA28E579610085DBE4 /* MImageTitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0473F3BD28E579610085DBE4 /* MImageTitleButton.m */; };
@@ -196,6 +195,9 @@
 		0491582B290A8299002E985B /* HXExamPromiseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0491582A290A8299002E985B /* HXExamPromiseView.m */; };
 		0491582E290A8621002E985B /* HXFaceRecognitionTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0491582D290A8621002E985B /* HXFaceRecognitionTool.m */; };
 		0492C2B129262B0900E45226 /* HXExamAnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0492C2B029262B0900E45226 /* HXExamAnswerCell.m */; };
+		0494D745293896EA008FDE41 /* HXCourseArrangingInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D744293896EA008FDE41 /* HXCourseArrangingInfoModel.m */; };
+		0494D748293897C7008FDE41 /* HXCourseArrangingDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D747293897C7008FDE41 /* HXCourseArrangingDateModel.m */; };
+		0494D74B29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D74A29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m */; };
 		049858E628F6686500F04D4F /* HXClassPlanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858E528F6686500F04D4F /* HXClassPlanModel.m */; };
 		049858EA28F671E000F04D4F /* HXBuKaoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858E928F671E000F04D4F /* HXBuKaoModel.m */; };
 		049858EE28F6A34100F04D4F /* HXScoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858ED28F6A34100F04D4F /* HXScoreModel.m */; };
@@ -350,8 +352,6 @@
 		047382ED28DD81870029EC99 /* HXModifyPwdViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXModifyPwdViewController.m; sourceTree = "<group>"; };
 		0473F3AD28E530C90085DBE4 /* HXFaceTimeTableShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeTableShowView.h; sourceTree = "<group>"; };
 		0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeTableShowView.m; sourceTree = "<group>"; };
-		0473F3B128E53A5E0085DBE4 /* HXFaceTimeTableModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeTableModel.h; sourceTree = "<group>"; };
-		0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeTableModel.m; sourceTree = "<group>"; };
 		0473F3B428E577CB0085DBE4 /* HXCalendarViewShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCalendarViewShowView.h; sourceTree = "<group>"; };
 		0473F3B528E577CB0085DBE4 /* HXCalendarViewShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCalendarViewShowView.m; sourceTree = "<group>"; };
 		0473F3B828E579610085DBE4 /* MCalendarCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCalendarCollectionCell.m; sourceTree = "<group>"; };
@@ -627,6 +627,12 @@
 		0491582D290A8621002E985B /* HXFaceRecognitionTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceRecognitionTool.m; sourceTree = "<group>"; };
 		0492C2AF29262B0900E45226 /* HXExamAnswerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamAnswerCell.h; sourceTree = "<group>"; };
 		0492C2B029262B0900E45226 /* HXExamAnswerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamAnswerCell.m; sourceTree = "<group>"; };
+		0494D743293896EA008FDE41 /* HXCourseArrangingInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseArrangingInfoModel.h; sourceTree = "<group>"; };
+		0494D744293896EA008FDE41 /* HXCourseArrangingInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCourseArrangingInfoModel.m; sourceTree = "<group>"; };
+		0494D746293897C7008FDE41 /* HXCourseArrangingDateModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseArrangingDateModel.h; sourceTree = "<group>"; };
+		0494D747293897C7008FDE41 /* HXCourseArrangingDateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCourseArrangingDateModel.m; sourceTree = "<group>"; };
+		0494D74929389A39008FDE41 /* HXFaceTimeCourseDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeCourseDetailModel.h; sourceTree = "<group>"; };
+		0494D74A29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeCourseDetailModel.m; sourceTree = "<group>"; };
 		049858E428F6686500F04D4F /* HXClassPlanModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXClassPlanModel.h; sourceTree = "<group>"; };
 		049858E528F6686500F04D4F /* HXClassPlanModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXClassPlanModel.m; sourceTree = "<group>"; };
 		049858E828F671E000F04D4F /* HXBuKaoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXBuKaoModel.h; sourceTree = "<group>"; };
@@ -922,8 +928,6 @@
 		0473F3AC28E530A40085DBE4 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				0473F3B128E53A5E0085DBE4 /* HXFaceTimeTableModel.h */,
-				0473F3B228E53A5E0085DBE4 /* HXFaceTimeTableModel.m */,
 				0473F3AD28E530C90085DBE4 /* HXFaceTimeTableShowView.h */,
 				0473F3AE28E530C90085DBE4 /* HXFaceTimeTableShowView.m */,
 				0473F3B428E577CB0085DBE4 /* HXCalendarViewShowView.h */,
@@ -1182,6 +1186,7 @@
 		048A0EC128C0583B0077F40A /* 面授课表 */ = {
 			isa = PBXGroup;
 			children = (
+				0494D742293896A5008FDE41 /* model */,
 				0473F3AC28E530A40085DBE4 /* view */,
 				048A0ECA28C059050077F40A /* HXFaceTimeTableViewController.h */,
 				048A0ECB28C059050077F40A /* HXFaceTimeTableViewController.m */,
@@ -1696,6 +1701,19 @@
 			path = view;
 			sourceTree = "<group>";
 		};
+		0494D742293896A5008FDE41 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				0494D743293896EA008FDE41 /* HXCourseArrangingInfoModel.h */,
+				0494D744293896EA008FDE41 /* HXCourseArrangingInfoModel.m */,
+				0494D746293897C7008FDE41 /* HXCourseArrangingDateModel.h */,
+				0494D747293897C7008FDE41 /* HXCourseArrangingDateModel.m */,
+				0494D74929389A39008FDE41 /* HXFaceTimeCourseDetailModel.h */,
+				0494D74A29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		049858E328F6684800F04D4F /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -2119,7 +2137,9 @@
 				048B7D5E28BDA20A006EBAAE /* XLPageViewControllerUtil.m in Sources */,
 				0498D020292CC94700D59C9E /* HXPhotoInfoModel.m in Sources */,
 				048B7D4F28BDA20A006EBAAE /* NSString+Base64.m in Sources */,
+				0494D745293896EA008FDE41 /* HXCourseArrangingInfoModel.m in Sources */,
 				04A67BB029238F990035C294 /* HXExamQuestionChoiceModel.m in Sources */,
+				0494D74B29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m in Sources */,
 				048B7D5B28BDA20A006EBAAE /* XLPageBasicTitleView.m in Sources */,
 				04A1FED128C9C07E00626409 /* HXYiJiaoFeiViewController.m in Sources */,
 				048B7D3828BDA20A006EBAAE /* HXCalendarContentView.m in Sources */,
@@ -2187,6 +2207,7 @@
 				04BB4833292F4B540096C0CC /* HXOrderDetailInfoModel.m in Sources */,
 				048B7D3728BDA20A006EBAAE /* HXCircleView.m in Sources */,
 				04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */,
+				0494D748293897C7008FDE41 /* HXCourseArrangingDateModel.m in Sources */,
 				048B7D6328BDA20A006EBAAE /* HXBaseTableViewCell.m in Sources */,
 				0470DC2E28DC0EB7007A25DC /* VIContentInfo.m in Sources */,
 				048B7D4228BDA20A006EBAAE /* HXBarButtonItem.m in Sources */,
@@ -2233,7 +2254,6 @@
 				048A0ED728C09DBD0077F40A /* HXTeachPlanCell.m in Sources */,
 				048B7D5528BDA20A006EBAAE /* NSDate+HXDate.m in Sources */,
 				0490DDAC28C1D6DF009BA325 /* HXQiMoKaoShiCell.m in Sources */,
-				0473F3B328E53A5E0085DBE4 /* HXFaceTimeTableModel.m in Sources */,
 				048A0EC628C058910077F40A /* HXOnlineLearnViewController.m in Sources */,
 				04A67BB3292392800035C294 /* HXExamPaperSubQuestionModel.m in Sources */,
 				0490DDB028C1E0A0009BA325 /* HXStudyReportViewController.m in Sources */,

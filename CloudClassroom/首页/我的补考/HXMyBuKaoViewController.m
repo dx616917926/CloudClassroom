@@ -40,7 +40,7 @@
     };
     
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetBKList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        
+        [self.mainTableView.mj_header endRefreshing];
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
             NSArray *list = [HXBuKaoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
@@ -49,7 +49,7 @@
             [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
-        
+        [self.mainTableView.mj_header endRefreshing];
     }];
 }
 

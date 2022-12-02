@@ -38,8 +38,10 @@
 
 #pragma mark - 获取首页菜单
 -(void)getHomeMenu{
-    
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:NO  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+    NSDictionary *dic = @{
+        @"type":@(1)//菜单类型：1首页菜单，2个人中心菜单，3个人中心附件菜单
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -55,19 +57,22 @@
     ///移除重新布局
     [self.bujuBtns removeAllObjects];
     [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //移除关联对象
+        objc_removeAssociatedObjects(obj);
         [obj removeFromSuperview];
         obj = nil;
     }];
     
-    [self.bujuArray removeAllObjects];
+    
     [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if(obj.isShow==1){
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, obj.moduleCode, OBJC_ASSOCIATION_RETAIN);
             btn.titleLabel.textAlignment = NSTextAlignmentCenter;
             btn.titleLabel.font = HXFont(13);
             [btn setTitle:obj.moduleName forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-            NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
             [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
             [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
             [_btnsContainerView addSubview:btn];
@@ -87,41 +92,41 @@
                 .heightIs(17);
         }
     }];
-    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
 }
 
 #pragma mark - Event
 -(void)handleHomeMenuClick:(UIButton *)sender{
     
-    NSString *tittle = [sender titleForState:UIControlStateNormal];
+    NSString *moduleCode = objc_getAssociatedObject(sender, &kMenuBtnModuleCode);
     
-    if([tittle isEqualToString:@"在线缴费"]){
+    if([moduleCode isEqualToString:@"OnlineFee"]){//在线缴费
         HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"缴费查询"]){
+    }else if([moduleCode isEqualToString:@"FeeQuery"]){//缴费查询
         HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"成绩查询"]){
+    }else if([moduleCode isEqualToString:@"ScoreQuery"]){//成绩查询
         HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"我的补考"]){
+    }else if([moduleCode isEqualToString:@"BKList"]){//我的补考
         HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"毕业论文"]){
+    }else if([moduleCode isEqualToString:@"GraduationThesis"]){//毕业论文
         
         
-    }else if([tittle isEqualToString:@"学位英语"]){
+    }else if([moduleCode isEqualToString:@"DegreeEnglish"]){//学位英语
         HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
         degreeEnglishShowView.type = WeiKaiFangBaoMingType;
         [degreeEnglishShowView show];
-    }else if([tittle isEqualToString:@"我的直播"]){
+    }else if([moduleCode isEqualToString:@"ZBList"]){//我的直播
         HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else if([tittle isEqualToString:@"资料上传"]){
+    }else if([moduleCode isEqualToString:@"DataUpload"]){//DataUpload
         HXZiLiaoUploadViewController *vc = [[HXZiLiaoUploadViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"毕业登记表"]){
+    }else if([moduleCode isEqualToString:@"Registration"]){//毕业登记表
         
     }
     
@@ -153,7 +158,7 @@
             .heightIs(17);
     }
     
-    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
     self.btnsContainerView.sd_cornerRadius = @8;
     
 }
@@ -163,15 +168,15 @@
     if (!_bujuArray) {
         _bujuArray = [NSMutableArray array];
         [_bujuArray addObjectsFromArray:@[
-            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"handleEventTag":@(5001),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"handleEventTag":@(5002),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"handleEventTag":@(5003),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"handleEventTag":@(5004),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"学位英语",@"iconName":@"english_icon",@"handleEventTag":@(5005),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"handleEventTag":@(5006),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"资料上传",@"iconName":@"zlupload_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业登记表",@"iconName":@"bydjb_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"moduleCode":@"OnlineFee",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"moduleCode":@"FeeQuery",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"moduleCode":@"ScoreQuery",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"moduleCode":@"BKList",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"moduleCode":@"GraduationThesis",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"学位英语",@"iconName":@"english_icon",@"moduleCode":@"DegreeEnglish",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"moduleCode":@"ZBList",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"资料上传",@"iconName":@"zlupload_icon",@"moduleCode":@"DataUpload",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业登记表",@"iconName":@"bydjb_icon",@"moduleCode":@"Registration",@"isShow":@(1)} mutableCopy],
         ]];
     }
     return _bujuArray;
@@ -195,7 +200,8 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.titleLabel.textAlignment = NSTextAlignmentCenter;
             btn.titleLabel.font = HXFont(13);
-            btn.tag = [dic[@"handleEventTag"] integerValue];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, dic[@"moduleCode"], OBJC_ASSOCIATION_RETAIN);
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];

@@ -48,6 +48,22 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setCoursePayOrderModel:(HXCoursePayOrderModel *)coursePayOrderModel{
+    
+    _coursePayOrderModel = coursePayOrderModel;
+    
+    self.courseNameLabel.text = coursePayOrderModel.termCourseName;
+    self.timeContentLabel.text = coursePayOrderModel.order_date;
+    self.orderNoContentLabel.text = coursePayOrderModel.order_no;
+    NSString *content = [NSString stringWithFormat:@"￥%.2f",coursePayOrderModel.price];
+    NSArray *tempArray = [HXFloatToString(coursePayOrderModel.price) componentsSeparatedByString:@"."];
+    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+    self.priceContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+    self.paymentMethodContentLabel.text = coursePayOrderModel.order_type;
+
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -146,7 +162,7 @@
         _courseNameLabel = [[UILabel alloc] init];
         _courseNameLabel.font = HXBoldFont(15);
         _courseNameLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _courseNameLabel.text = @"中国近代史纲要";
+        
     }
     return _courseNameLabel;
 }
@@ -169,7 +185,7 @@
         _timeContentLabel.textAlignment = NSTextAlignmentRight;
         _timeContentLabel.font = HXFont(15);
         _timeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeContentLabel.text = @"2020.05.31 20:00";
+        
     }
     return _timeContentLabel;
 }
@@ -190,7 +206,7 @@
         _orderNoContentLabel.textAlignment = NSTextAlignmentRight;
         _orderNoContentLabel.font = HXFont(15);
         _orderNoContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _orderNoContentLabel.text = @"202206239876855";
+       
     }
     return _orderNoContentLabel;
 }
@@ -212,7 +228,7 @@
         _priceContentLabel.font = HXFont(15);
         _priceContentLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
         _priceContentLabel.isAttributedContent = YES;
-        _priceContentLabel.attributedText = [HXCommonUtil getAttributedStringWith:@"50." needAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:14]} content:@"￥50.00" defaultAttributed:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:11]}];
+        
     }
     return _priceContentLabel;
 }
@@ -234,7 +250,7 @@
         _paymentMethodContentLabel.textAlignment = NSTextAlignmentRight;
         _paymentMethodContentLabel.font = HXFont(15);
         _paymentMethodContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _paymentMethodContentLabel.text = @"微信支付";
+        
     }
     return _paymentMethodContentLabel;
 }

@@ -41,14 +41,22 @@
 
 
 #pragma mark -Setter
--(void)setFaceTimeTableModel:(HXFaceTimeTableModel *)faceTimeTableModel{
-    _faceTimeTableModel = faceTimeTableModel;
+-(void)setFaceTimeCourseDetailModel:(HXFaceTimeCourseDetailModel *)faceTimeCourseDetailModel{
+    _faceTimeCourseDetailModel = faceTimeCourseDetailModel;
     
-    self.courseNameContentLabel.text = faceTimeTableModel.courseName;
-    self.timeContentLabel.text = faceTimeTableModel.time;
-    self.addressContentLabel.text = faceTimeTableModel.address;
-    self.teacherContentLabel.text = faceTimeTableModel.teacher;
-    self.statusContentLabel.text = faceTimeTableModel.status;
+    self.courseNameContentLabel.text = faceTimeCourseDetailModel.termCourseName;
+    self.timeContentLabel.text = faceTimeCourseDetailModel.classTime;
+    self.addressContentLabel.text = faceTimeCourseDetailModel.roomName;
+    self.teacherContentLabel.text = faceTimeCourseDetailModel.teacherName;
+    //课程状态 0未开始 1进行中  2已结束
+    if (faceTimeCourseDetailModel.courseState==0) {
+        self.statusContentLabel.text = @"未开始";
+    }else if (faceTimeCourseDetailModel.courseState==1) {
+        self.statusContentLabel.text = @"进行中";
+    }else if (faceTimeCourseDetailModel.courseState==2) {
+        self.statusContentLabel.text = @"已结束";
+    }
+    
 }
 
 

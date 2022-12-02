@@ -28,6 +28,8 @@
 #import "HXMessageInfoModel.h"
 #import "HXHomeMenuModel.h"
 
+#import <objc/runtime.h>
+
 @interface HXHomePageViewController ()<UITableViewDelegate,UITableViewDataSource,HXCurrentLearCellDelegate>
 
 
@@ -97,8 +99,10 @@
 #pragma mark - 获取首页信息
 -(void)getHomeStudentInfo{
     NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
-        @"major_id":HXSafeString(major_id)
+        @"major_id":HXSafeString(major_id),
+        @"studentid":HXSafeString(studentid)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainTableView.mj_header endRefreshing];
@@ -204,8 +208,10 @@
 
 #pragma mark - 获取首页菜单
 -(void)getHomeMenu{
-    
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:NO  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+    NSDictionary *dic = @{
+        @"type":@(1)//菜单类型：1首页菜单，2个人中心菜单，3个人中心附件菜单
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
@@ -222,75 +228,82 @@
     ///移除重新布局
     [self.bujuBtns removeAllObjects];
     [self.btnsContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //移除关联对象
+        objc_removeAssociatedObjects(obj);
         [obj removeFromSuperview];
         obj = nil;
     }];
     
-    [self.bujuArray removeAllObjects];
-    if(list.count<=8){
-        [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if(obj.isShow==1){
-                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                btn.titleLabel.textAlignment = NSTextAlignmentCenter;
-                btn.titleLabel.font = HXFont(13);
-                [btn setTitle:obj.moduleName forState:UIControlStateNormal];
-                [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-                NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
-                [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
-                [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
-                [_btnsContainerView addSubview:btn];
-                [self.bujuBtns addObject:btn];
-                
-                btn.sd_layout.heightIs(73);
-                btn.imageView.sd_layout
-                    .centerXEqualToView(btn)
-                    .topSpaceToView(btn, 0)
-                    .widthIs(47)
-                    .heightEqualToWidth();
-                
-                btn.titleLabel.sd_layout
-                    .bottomSpaceToView(btn, 0)
-                    .leftEqualToView(btn)
-                    .rightEqualToView(btn)
-                    .heightIs(17);
-            }
+    
+    __block NSMutableArray *tempArray =[NSMutableArray array];
+    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.isShow==1){
+            [tempArray addObject:obj];
+        }
+    }];
+    if(tempArray.count<=8){
+        [tempArray enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, obj.moduleCode, OBJC_ASSOCIATION_RETAIN);
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnsContainerView addSubview:btn];
+            [self.bujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
         }];
     }else{
-        NSArray *tempList = [list subarrayWithRange:NSMakeRange(0, 7)];
+        NSArray *tempList = [tempArray subarrayWithRange:NSMakeRange(0, 7)];
         [tempList enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if(obj.isShow==1){
-                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                btn.titleLabel.textAlignment = NSTextAlignmentCenter;
-                btn.titleLabel.font = HXFont(13);
-                [btn setTitle:obj.moduleName forState:UIControlStateNormal];
-                [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-                NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
-                [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
-                [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
-                [_btnsContainerView addSubview:btn];
-                [self.bujuBtns addObject:btn];
-                
-                btn.sd_layout.heightIs(73);
-                btn.imageView.sd_layout
-                    .centerXEqualToView(btn)
-                    .topSpaceToView(btn, 0)
-                    .widthIs(47)
-                    .heightEqualToWidth();
-                
-                btn.titleLabel.sd_layout
-                    .bottomSpaceToView(btn, 0)
-                    .leftEqualToView(btn)
-                    .rightEqualToView(btn)
-                    .heightIs(17);
-            }
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, obj.moduleCode, OBJC_ASSOCIATION_RETAIN);
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnsContainerView addSubview:btn];
+            [self.bujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
         }];
         //更多
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        //将数据关联按钮
+        objc_setAssociatedObject(btn, &kMenuBtnModuleCode, @"More", OBJC_ASSOCIATION_RETAIN);
         btn.titleLabel.textAlignment = NSTextAlignmentCenter;
         btn.titleLabel.font = HXFont(13);
         [btn setTitle:@"更多" forState:UIControlStateNormal];
         [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
-        NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
         [btn setImage:[UIImage imageNamed:@"more_icon"] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(handleHomeMenuClick:) forControlEvents:UIControlEventTouchUpInside];
         [_btnsContainerView addSubview:btn];
@@ -311,43 +324,43 @@
     }
     
         
-    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+    [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
 }
 
 #pragma mark - Event
 -(void)handleHomeMenuClick:(UIButton *)sender{
     
-    NSString *tittle = [sender titleForState:UIControlStateNormal];
+    NSString *moduleCode = objc_getAssociatedObject(sender, &kMenuBtnModuleCode);
     
-    if([tittle isEqualToString:@"在线缴费"]){
+    if([moduleCode isEqualToString:@"OnlineFee"]){//在线缴费
         HXFinancePaymentViewController *vc = [[HXFinancePaymentViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"缴费查询"]){
+    }else if([moduleCode isEqualToString:@"FeeQuery"]){//缴费查询
         HXPaymentQueryViewController *vc = [[HXPaymentQueryViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"成绩查询"]){
+    }else if([moduleCode isEqualToString:@"ScoreQuery"]){//成绩查询
         HXScoreQueryViewController *vc = [[HXScoreQueryViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"我的补考"]){
+    }else if([moduleCode isEqualToString:@"BKList"]){//我的补考
         HXMyBuKaoViewController *vc = [[HXMyBuKaoViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([tittle isEqualToString:@"毕业论文"]){
+    }else if([moduleCode isEqualToString:@"GraduationThesis"]){//毕业论文
         
         
-    }else if([tittle isEqualToString:@"学位英语"]){
+    }else if([moduleCode isEqualToString:@"DegreeEnglish"]){//学位英语
         HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
         degreeEnglishShowView.type = WeiKaiFangBaoMingType;
         [degreeEnglishShowView show];
-    }else if([tittle isEqualToString:@"我的直播"]){
+    }else if([moduleCode isEqualToString:@"ZBList"]){//我的直播
         HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         
-    }else if([tittle isEqualToString:@"更多"]){
+    }else if([moduleCode isEqualToString:@"More"]){//更多
         HXFunctionCenterViewController *vc = [[HXFunctionCenterViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
@@ -805,7 +818,7 @@
                 .heightIs(17);
         }
         
-        [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:60 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
+        [self.btnsContainerView setupAutoMarginFlowItems:self.bujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:20];
         self.btnsContainerView.sd_cornerRadius = @8;
         
         self.currentLearContainerView.sd_layout
@@ -849,14 +862,14 @@
     if (!_bujuArray) {
         _bujuArray = [NSMutableArray array];
         [_bujuArray addObjectsFromArray:@[
-            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"handleEventTag":@(5000),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"handleEventTag":@(5001),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"handleEventTag":@(5002),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"handleEventTag":@(5003),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"handleEventTag":@(5004),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"学位英语",@"iconName":@"english_icon",@"handleEventTag":@(5005),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"handleEventTag":@(5006),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"更多",@"iconName":@"more_icon",@"handleEventTag":@(5007),@"isShow":@(1)} mutableCopy]
+            [@{@"title":@"在线缴费",@"iconName":@"caiwujiaofei_icon",@"moduleCode":@"OnlineFee",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"缴费查询",@"iconName":@"payquery_icon",@"moduleCode":@"FeeQuery",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"成绩查询",@"iconName":@"scorequery_icon",@"moduleCode":@"ScoreQuery",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"我的补考",@"iconName":@"mybukao_icon",@"moduleCode":@"BKList",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业论文",@"iconName":@"lunwen_icon",@"moduleCode":@"GraduationThesis",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"学位英语",@"iconName":@"english_icon",@"moduleCode":@"DegreeEnglish",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"我的直播",@"iconName":@"zhibo_icon",@"moduleCode":@"ZBList",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"更多",@"iconName":@"more_icon",@"moduleCode":@"More",@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _bujuArray;
@@ -880,7 +893,8 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.titleLabel.textAlignment = NSTextAlignmentCenter;
             btn.titleLabel.font = HXFont(13);
-            btn.tag = [dic[@"handleEventTag"] integerValue];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, dic[@"moduleCode"], OBJC_ASSOCIATION_RETAIN);
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];

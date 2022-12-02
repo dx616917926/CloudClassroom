@@ -126,6 +126,8 @@
                 case 9000:
                 {
                     [self.window showTostWithMessage:@"支付成功"];
+                    //支付成功通知
+                    [HXNotificationCenter postNotificationName:kPaySuccessNotification object:nil];
                 }
                     break;
                 case 8000:
@@ -230,6 +232,8 @@
             case WXSuccess:
             {// 支付成功，向后台发送消息
                 [self.window showTostWithMessage:@"支付成功"];
+                //支付成功通知
+                [HXNotificationCenter postNotificationName:kPaySuccessNotification object:nil];
             }
                 break;
             case WXErrCodeCommon:

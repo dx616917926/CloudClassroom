@@ -41,7 +41,19 @@
     [self createUI];
     //获取财务缴费列表
     [self getFeeList];
+    //监听支付成功通知，重新获取数据
+    [HXNotificationCenter addObserver:self selector:@selector(paySuccess) name:kPaySuccessNotification object:nil];
 }
+
+
+#pragma mark -监听支付成功通知，重新获取数据
+-(void)paySuccess{
+    //延迟获取，不然出现接口失败
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self getFeeList];
+    });
+}
+
 
 #pragma mark - 获取财务缴费列表
 -(void)getFeeList{
@@ -58,6 +70,8 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
+            //计算合计
+            [self calculateTotalPrice];
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
@@ -223,7 +237,7 @@
 #pragma mark - UI
 -(void)createUI{
     
-    self.sc_navigationBar.title = @"财务缴费";
+    self.sc_navigationBar.title = @"在线缴费";
     
     [self.view addSubview:self.mainTableView];
     [self.view addSubview:self.bottomView];
@@ -318,18 +332,13 @@
     .rightEqualToView(self.view)
     .bottomSpaceToView(self.bottomView, 0);
     
-    
     self.noDataTipView.tipTitle = @"暂无缴费内容～";
     
-    
-    
     // 刷新
-//    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-//    header.automaticallyChangeAlpha = YES;
-//    self.mainTableView.mj_header = header;
-//    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-//    self.mainTableView.mj_footer = footer;
-//    self.mainTableView.mj_footer.hidden = YES;
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getFeeList)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainTableView.mj_header = header;
+
 }
 
 #pragma mark -LazyLoad

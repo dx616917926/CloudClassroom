@@ -194,6 +194,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+#pragma mark ----------------------------------------------面授课表接口-------------------------------------------------
+
+//面授课表
+#define HXPOST_GetCourseArrangingList                             @"/api/CourseArrangingList/GetCourseArrangingList"
+
+//面授课表详情
+#define HXPOST_GetCourseArrangingDetai                            @"/api/CourseArrangingList/GetCourseArrangingDetai"
+
+
+
+
 
 
 @interface HXBaseURLSessionManager : AFHTTPSessionManager

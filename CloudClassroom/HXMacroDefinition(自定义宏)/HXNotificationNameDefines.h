@@ -17,8 +17,10 @@
 //修改专业通知
 static NSString * const kChangeMajorSuccessNotification = @"ChangeMajorSuccessNotification";
 
+//支付成功通知
+static NSString * const kPaySuccessNotification = @"PaySuccessNotification";
 
-
-
+//首页菜单按钮编码
+static NSString * kMenuBtnModuleCode = @"MenuBtnModuleCode";
 
 #endif /* HXNotificationNameDefines_h */

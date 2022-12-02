@@ -45,6 +45,18 @@
     [self createUI];
     //获取选课列表
     [self getCourseOrder];
+    
+    //监听支付成功通知，重新获取数据
+    [HXNotificationCenter addObserver:self selector:@selector(paySuccess) name:kPaySuccessNotification object:nil];
+}
+
+
+#pragma mark -监听支付成功通知，重新获取数据
+-(void)paySuccess{
+    //延迟获取，不然出现接口失败
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self getCourseOrder];
+    });
 }
 
 #pragma mark - 获取选课列表
@@ -62,6 +74,8 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
+            //计算合计
+            [self calculateTotalPrice];
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
@@ -358,12 +372,10 @@
     [self.loopView start];
     
     // 刷新
-//    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-//    header.automaticallyChangeAlpha = YES;
-//    self.mainTableView.mj_header = header;
-//    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-//    self.mainTableView.mj_footer = footer;
-//    self.mainTableView.mj_footer.hidden = YES;
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getCourseOrder)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainTableView.mj_header = header;
+
     
     
     self.noDataTipView.tipTitle = @"暂无购买课程～";

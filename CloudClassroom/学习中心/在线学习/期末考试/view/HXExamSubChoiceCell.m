@@ -151,6 +151,7 @@
         self.eChoiceView.hidden = YES;
         self.grayView.hidden = NO;
         self.selectView = nil;
+        self.textView.text = examPaperSubQuestionModel.answer;
         
     }else{//选择题
         self.grayView.hidden = YES;

@@ -29,6 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *majorlongName;
 //年级
 @property(nonatomic, copy) NSString *enterDate;
+//本期合格课程
+@property(nonatomic, copy) NSString *termQuaCourseCount;
+//累计合格课程
+@property(nonatomic, copy) NSString *totalQuaCourseCount;
 
 @end
 

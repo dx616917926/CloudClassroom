@@ -11,6 +11,8 @@
 #import <objc/runtime.h>
 #import "NSDate+Calendar.h"
 
+#import "HXCourseArrangingInfoModel.h"
+
 const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 
 //单个课表高度
@@ -40,6 +42,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
 //选择日期
 @property (nonatomic, strong) NSDate *selectedDate;
 
+@property (nonatomic, strong) HXCourseArrangingInfoModel *courseArrangingInfoModel;
 
 @end
 
@@ -49,55 +52,42 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
-    self.items = [NSMutableArray array];
-    NSArray *courseNames = @[@"电子商务运营实务",@"英语",@"新媒体运营实务",@"中国近代史纲要",@"数学",@"新媒体运营实务",@"毛泽东思想和中国特色社会主义理论体系概论",@"中国近代史纲要"];
-    NSArray *times = @[@"2022年09月26日  8:30-12:30",@"2022年10月01日  16:30-17:00",@"2022年02月10日  7:00-8:00",@"2022年12月06日  13:00-14:30",@"2022年09月26日  8:30-12:30",@"2022年10月01日  16:30-17:00",@"2022年02月10日  7:00-8:00",@"2022年12月06日  13:00-14:30"];
-    NSArray *addresss = @[@"一栋教学楼 1712",@"八栋教学楼 1024",@"五栋教学楼 6666",@"九栋教学楼 0909",@"一栋教学楼 1712",@"八栋教学楼 1024",@"五栋教学楼 6666",@"九栋教学楼 0909"];
-    NSArray *teachers = @[@"曹明德",@"张无忌",@"徐晓",@"韩梅梅",@"曹明德",@"张无忌",@"徐晓",@"韩梅梅"];
-    NSArray *statuss = @[@"已结束",@"进行中",@"未开始",@"已结束",@"已结束",@"进行中",@"未开始",@"已结束"];
-    for (int i=0; i<12; i++) {
-        HXFaceTimeTableModel *model = [HXFaceTimeTableModel new];
-        model.courseName = courseNames[arc4random()%7];
-        model.time = times[arc4random()%7];
-        model.address = addresss[arc4random()%7];
-        model.teacher = teachers[arc4random()%7];
-        model.status = statuss[arc4random()%7];
-        [self.items addObject:model];
-    }
-    
     //默认当前日期
     self.selectedDate = [NSDate date];
     
     [self createUI];
+    
+    [self getCourseArrangingList];
 }
 
 
-#pragma mark - Event
--(void)selectRiQi:(UIButton *)sender{
-    
-    self.calendarView.startDate = self.selectedDate;
-    [self.calendarView show];
-    WeakSelf(weakSelf);
-    self.calendarView.confirmBlock = ^(NSDate *date) {
-        weakSelf.selectedDate = date;
-        [weakSelf refreshUI];
+
+#pragma mark - 获取面授课表数据
+-(void)getCourseArrangingList{
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
+    NSString *dayTime = [self.selectedDate stringWithFormat:@"YYYY-MM-dd"];
+    NSDictionary *dic =@{
+        @"daytime":HXSafeString(dayTime),
+        @"studentid":HXSafeString(studentid)
     };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCourseArrangingList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.courseArrangingInfoModel = [HXCourseArrangingInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            [self refreshUI];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
 }
 
-//回到今天
--(void)backToday:(UIButton *)sender{
-    
-    self.selectedDate = [NSDate date];
-    self.calendarView.startDate = [NSDate date];
-    
-    [self refreshUI];
-}
-
+#pragma mark - 刷新UI
 -(void)refreshUI{
     
-    NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
-    [self.riQiBtn setTitle:str forState:UIControlStateNormal];
+   
+    [self.riQiBtn setTitle:self.courseArrangingInfoModel.arrangingDateName forState:UIControlStateNormal];
     
     for (int i=0; i<6; i++) {
         UIView *viewContainer =[self.mainScrollView viewWithTag:5000+i];
@@ -112,7 +102,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         viewContainer = nil;
     }
     
-    
+    //周一到周末7列数据
     for (int i=0; i<6; i++) {
         UIView *viewContainer =[[UIView alloc] init];
         [self.mainScrollView addSubview:viewContainer];
@@ -124,57 +114,105 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         .heightRatioToView(self.columnContainerView, 1);
     }
     
-    NSArray *counts = @[@12,@2,@6,@8,@7,@10,@5,@4,@9];
+    //随机颜色
     NSArray *colors = @[COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1)];
     
-    for (int i=0; i<6; i++) {
+    for (int i=0; i<self.courseArrangingInfoModel.respCourseArrangingDates.count; i++) {
         
         UIView *viewContainer =[self.mainScrollView viewWithTag:5000+i];
         
-        for (int j=0; j<[counts[i] integerValue]; j++) {
-            HXFaceTimeTableModel *item = self.items[arc4random()%7];
-            UIView *view =[[UIView alloc] init];
-            view.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-            [viewContainer addSubview:view];
-            view.hidden= arc4random()%2==1?YES:NO;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-            [view addGestureRecognizer:tap];
-            //将数据关联按钮
-            objc_setAssociatedObject(view, &ColorViewWithItemKey, item, OBJC_ASSOCIATION_RETAIN);
+        HXCourseArrangingDateModel *courseArrangingDateModel = self.courseArrangingInfoModel.respCourseArrangingDates[i];
+        
+        if (courseArrangingDateModel.respCourseArranging.count>0) {
             
-            UIView *colorview =[[UIView alloc] init];
-            colorview.backgroundColor = colors[j+i];
-            [view addSubview:colorview];
-            
-            UILabel *label = [[UILabel alloc] init];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.font =HXBoldFont(13);
-            label.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-            label.numberOfLines = 0;
-            label.lineBreakMode = NSLineBreakByTruncatingTail;
-            label.text = item.courseName;
-            [colorview addSubview:label];
-            
-            view.sd_layout
-            .topSpaceToView(viewContainer, j*kKeBiaoItemHeight)
-            .leftEqualToView(viewContainer)
-            .rightEqualToView(viewContainer)
-            .heightIs(kKeBiaoItemHeight);
-            
-            colorview.sd_layout.spaceToSuperView(UIEdgeInsetsMake(3, 3, 3, 3));
-            colorview.sd_cornerRadius =@4;
-            
-            label.sd_layout.spaceToSuperView(UIEdgeInsetsMake(2, 5, 2, 5));
+            for (int j=0; j<courseArrangingDateModel.respCourseArranging.count; j++) {
+                
+                HXFaceTimeCourseDetailModel *item = courseArrangingDateModel.respCourseArranging[j];
+                
+                UIView *view =[[UIView alloc] init];
+                view.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
+                [viewContainer addSubview:view];
+                UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+                [view addGestureRecognizer:tap];
+                //将数据关联按钮
+                objc_setAssociatedObject(view, &ColorViewWithItemKey, item, OBJC_ASSOCIATION_RETAIN);
+                UIView *colorview =[[UIView alloc] init];
+                colorview.backgroundColor = colors[j+i];
+                [view addSubview:colorview];
+                
+                UILabel *label = [[UILabel alloc] init];
+                label.textAlignment = NSTextAlignmentCenter;
+                label.font =HXBoldFont(13);
+                label.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
+                label.numberOfLines = 0;
+                label.lineBreakMode = NSLineBreakByTruncatingTail;
+                label.text = item.termCourseName;
+                [colorview addSubview:label];
+                
+                view.sd_layout
+                .topSpaceToView(viewContainer, j*kKeBiaoItemHeight)
+                .leftEqualToView(viewContainer)
+                .rightEqualToView(viewContainer)
+                .heightIs(kKeBiaoItemHeight);
+                
+                colorview.sd_layout.spaceToSuperView(UIEdgeInsetsMake(3, 3, 3, 3));
+                colorview.sd_cornerRadius =@4;
+                
+                label.sd_layout.spaceToSuperView(UIEdgeInsetsMake(2, 5, 2, 5));
+            }
         }
     }
 }
 
+#pragma mark - 选择时间
+-(void)selectRiQi:(UIButton *)sender{
+    
+    self.calendarView.startDate = self.selectedDate;
+    [self.calendarView show];
+    WeakSelf(weakSelf);
+    self.calendarView.confirmBlock = ^(NSDate *date) {
+        weakSelf.selectedDate = date;
+        //获取面授课表数据
+        [weakSelf getCourseArrangingList];
+    };
+}
+
+#pragma mark - 回到今天
+-(void)backToday:(UIButton *)sender{
+    
+    self.selectedDate = [NSDate date];
+    self.calendarView.startDate = [NSDate date];
+    
+    //获取面授课表数据
+    [self getCourseArrangingList];
+}
+
+
+#pragma mark - 点击课程
 -(void)tap:(UITapGestureRecognizer *)ges{
     UIView *view = ges.view;
-    HXFaceTimeTableModel *model = objc_getAssociatedObject(view, &ColorViewWithItemKey);
-    HXFaceTimeTableShowView *faceTimeTableShowView =[[HXFaceTimeTableShowView alloc] init];
-    faceTimeTableShowView.faceTimeTableModel = model;
-    [faceTimeTableShowView show];
+    HXFaceTimeCourseDetailModel *faceTimeCourseDetailModel = objc_getAssociatedObject(view, &ColorViewWithItemKey);
+    
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"id":HXSafeString(faceTimeCourseDetailModel.paiKeId),
+        @"studentid":HXSafeString(studentid)
+    };
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCourseArrangingDetai needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            HXFaceTimeCourseDetailModel *model = [HXFaceTimeCourseDetailModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
+            HXFaceTimeTableShowView *faceTimeTableShowView =[[HXFaceTimeTableShowView alloc] init];
+            faceTimeTableShowView.faceTimeCourseDetailModel = model;
+            [faceTimeTableShowView show];
+        }else{
+            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"message"]];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+    
 }
 
 #pragma mark - UI
@@ -258,6 +296,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     .leftEqualToView(self.mainScrollView)
     .widthIs(kLeftColumnWidth);
     
+    //12节课
     NSArray *columns = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12"];
     UIView *lastView;
     for (int i=0; i<columns.count; i++) {
@@ -277,7 +316,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
     }
     [self.columnContainerView setupAutoHeightWithBottomView:lastView bottomMargin:0];
     
-    
+    //周一到周末
     for (int i=0; i<weeks.count; i++) {
         UIView *viewContainer =[[UIView alloc] init];
         [self.mainScrollView addSubview:viewContainer];
@@ -289,51 +328,7 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         .heightRatioToView(self.columnContainerView, 1);
     }
     
-    NSArray *counts = @[@12,@2,@6,@8,@7,@10,@5,@4,@9];
-    NSArray *colors = @[COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x69D360, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1),COLOR_WITH_ALPHA(0xF45E5E, 1),COLOR_WITH_ALPHA(0xFFAF38, 1),COLOR_WITH_ALPHA(0x39A0FF, 1),COLOR_WITH_ALPHA(0xBD5CF9, 1)];
     
-    for (int i=0; i<weeks.count; i++) {
-        
-        UIView *viewContainer =[self.mainScrollView viewWithTag:5000+i];
-        
-        for (int j=0; j<[counts[i] integerValue]; j++) {
-            HXFaceTimeTableModel *item = self.items[j];
-            UIView *view =[[UIView alloc] init];
-            view.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-            [viewContainer addSubview:view];
-            view.hidden= arc4random()%2==1?YES:NO;
-            
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-            [view addGestureRecognizer:tap];
-            
-            //将数据关联按钮
-            objc_setAssociatedObject(view, &ColorViewWithItemKey, item, OBJC_ASSOCIATION_RETAIN);
-            
-            UIView *colorview =[[UIView alloc] init];
-            colorview.backgroundColor = colors[j+i];
-            [view addSubview:colorview];
-            
-            UILabel *label = [[UILabel alloc] init];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.font =HXBoldFont(13);
-            label.textColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-            label.numberOfLines = 0;
-            label.lineBreakMode = NSLineBreakByTruncatingTail;
-            label.text = item.courseName;
-            [colorview addSubview:label];
-            
-            view.sd_layout
-            .topSpaceToView(viewContainer, j*kKeBiaoItemHeight)
-            .leftEqualToView(viewContainer)
-            .rightEqualToView(viewContainer)
-            .heightIs(kKeBiaoItemHeight);
-            
-            colorview.sd_layout.spaceToSuperView(UIEdgeInsetsMake(3, 3, 3, 3));
-            colorview.sd_cornerRadius =@4;
-            
-            label.sd_layout.spaceToSuperView(UIEdgeInsetsMake(2, 5, 2, 5));
-        }
-    }
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.columnContainerView bottomMargin:0];
 }
@@ -357,8 +352,6 @@ const NSString * ColorViewWithItemKey = @"ColorViewWithItemKey";
         [_riQiBtn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
         [_riQiBtn setImage:[UIImage imageNamed:@"set_arrow"] forState:UIControlStateNormal];
         [_riQiBtn addTarget:self action:@selector(selectRiQi:) forControlEvents:UIControlEventTouchUpInside];
-        NSString *str = [NSString stringWithFormat:@"%@年%@月%@日  周%@  第%@周 ", @([self.selectedDate year]),@([self.selectedDate month]),@([self.selectedDate day]),[self.selectedDate weekdayString], @([self.selectedDate weekInMonth])];
-        [_riQiBtn setTitle:str forState:UIControlStateNormal];
     }
     return _riQiBtn;
 }

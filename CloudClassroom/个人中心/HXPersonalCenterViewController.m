@@ -19,6 +19,7 @@
 #import "HXFaceRecognitionTool.h"
 #import "HXHomeStudentInfoModel.h"
 #import "HXMyMessageInfoModel.h"
+#import "HXHomeMenuModel.h"
 
 @interface HXPersonalCenterViewController ()<UIScrollViewDelegate>
 
@@ -47,7 +48,7 @@
 @property(nonatomic,strong) UIView *middleContainerView;
 @property(nonatomic,strong) NSMutableArray *middleBujuArray;
 @property(nonatomic,strong) NSMutableArray *middleBujuBtns;
-@property(nonatomic,strong) UIView *btnsContainerView;
+
 
 @property(nonatomic,strong) UIImageView *messageRedImageView;
 @property(nonatomic,strong) UILabel *messageNumlabel;
@@ -80,13 +81,19 @@
     [self getHomeStudentInfo];
     //获取未读消息数
     [self getNoReadCount];
+    //获取个人中心菜单
+    [self getMiddleMenuList];
+    //获取个人中心附件菜单
+    [self getBottomMenuList];
 }
 
 #pragma mark - 获取首页信息
 -(void)getHomeStudentInfo{
     NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+    NSString *studentid = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
-        @"major_id":HXSafeString(major_id)
+        @"major_id":HXSafeString(major_id),
+        @"studentid":HXSafeString(studentid)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeStudentInfo needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainScrollView.mj_header endRefreshing];
@@ -97,11 +104,49 @@
             [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
             [self.headImageView sd_setImageWithURL:HXSafeURL(self.homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
             self.nameLabel.text = self.homeStudentInfoModel.name;
+            
+            self.benQiNumLabel.text = self.homeStudentInfoModel.termQuaCourseCount;
+            self.leiJiNumLabel.text = self.homeStudentInfoModel.totalQuaCourseCount;
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainScrollView.mj_header endRefreshing];
     }];
     
+}
+
+
+#pragma mark - 获取个人中心菜单
+-(void)getMiddleMenuList{
+    NSDictionary *dic = @{
+        @"type":@(2)//菜单类型：1首页菜单，2个人中心菜单，3个人中心附件菜单
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXHomeMenuModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self refreshMiddleMenuLayout:list];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 获取个人中心附件菜单
+-(void)getBottomMenuList{
+    NSDictionary *dic = @{
+        @"type":@(3)//菜单类型：1首页菜单，2个人中心菜单，3个人中心附件菜单
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMenu needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXHomeMenuModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self refreshBottomMenuLayout:list];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark - 获取未读消息数
@@ -133,6 +178,93 @@
     }];
 }
 
+
+#pragma mark - 重新布局个人中心菜单
+-(void)refreshMiddleMenuLayout:(NSArray<HXHomeMenuModel*>*)list{
+    ///移除重新布局
+    [self.middleBujuBtns removeAllObjects];
+    [self.middleContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //移除关联对象
+        objc_removeAssociatedObjects(obj);
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    
+    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.isShow==1){
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, obj.moduleCode, OBJC_ASSOCIATION_RETAIN);
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.middleContainerView addSubview:btn];
+            [self.middleBujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
+        }
+    }];
+    [self.middleContainerView setupAutoMarginFlowItems:self.middleBujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:40 horizontalEdgeInset:15];
+}
+
+#pragma mark - 重新布局个人中心附件菜单
+-(void)refreshBottomMenuLayout:(NSArray<HXHomeMenuModel*>*)list{
+    ///移除重新布局
+    [self.bottomBujuBtns removeAllObjects];
+    [self.bottomContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //移除关联对象
+        objc_removeAssociatedObjects(obj);
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    
+    [list enumerateObjectsUsingBlock:^(HXHomeMenuModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.isShow==1){
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, obj.moduleCode, OBJC_ASSOCIATION_RETAIN);
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.titleLabel.font = HXFont(13);
+            [btn setTitle:obj.moduleName forState:UIControlStateNormal];
+            [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
+            [btn sd_setImageWithURL:HXSafeURL(obj.moduleIcon)  forState:UIControlStateNormal placeholderImage:nil];
+            [btn addTarget:self action:@selector(handleMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.bottomContainerView addSubview:btn];
+            [self.bottomBujuBtns addObject:btn];
+            
+            btn.sd_layout.heightIs(73);
+            btn.imageView.sd_layout
+                .centerXEqualToView(btn)
+                .topSpaceToView(btn, 0)
+                .widthIs(47)
+                .heightEqualToWidth();
+            
+            btn.titleLabel.sd_layout
+                .bottomSpaceToView(btn, 0)
+                .leftEqualToView(btn)
+                .rightEqualToView(btn)
+                .heightIs(17);
+        }
+    }];
+    [self.bottomContainerView setupAutoMarginFlowItems:self.bottomBujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:26 horizontalEdgeInset:15];
+}
+
 #pragma mark -Event
 
 -(void)checkPersonalInfor:(UIButton *)sender{
@@ -142,79 +274,53 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleMiddleClick:(UIButton *)sender{
-    NSInteger flag = sender.tag;
-    switch (flag) {
-        case 3000://我的消息
-        {
-            HXMyMessageViewController *vc = [[HXMyMessageViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3001://证件照上传
-        {
-            HXUploadIDPhotoViewController *vc = [[HXUploadIDPhotoViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3002://人脸识别
-        {
-            HXFaceConfigObject *faceConfig = [[HXFaceConfigObject alloc] init];
-            faceConfig.imageStatus = ([HXCommonUtil isNull:self.homeStudentInfoModel.imgUrl]?-1:1);
-            faceConfig.imageURL = self.homeStudentInfoModel.imgUrl;
-            faceConfig.courseType = 4;
-            HXFaceRecognitionView *faceView = [[HXFaceRecognitionView alloc] init];
-            faceView.status = HXFaceRecognitionStatusSimulate;
-            faceView.faceConfig = faceConfig;
-            [faceView showInViewController:self];
-        }
-            break;
-        case 3003://修改密码
-        {
-            HXModifyPwdViewController *vc = [[HXModifyPwdViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3004://资料下载
-        {
-            HXZiLiaoDownLoadViewController *vc = [[HXZiLiaoDownLoadViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3005://在线选课
-        {
-            HXZaiXianXuanKeViewController *vc = [[HXZaiXianXuanKeViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3006://设置
-        {
-            HXSettingViewController *vc = [[HXSettingViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3007://资料上传
-        {
-            HXZiLiaoUploadViewController *vc = [[HXZiLiaoUploadViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case 3008://毕业登记表
-        {
-            
-        }
-            break;
-            
-        default:
-            break;
+
+
+-(void)handleMenuClick:(UIButton *)sender{
+    
+    NSString *moduleCode = objc_getAssociatedObject(sender, &kMenuBtnModuleCode);
+    
+    if([moduleCode isEqualToString:@"MessageList"]){//我的消息
+        HXMyMessageViewController *vc = [[HXMyMessageViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"UpPhoto"]){//证件照上传
+        HXUploadIDPhotoViewController *vc = [[HXUploadIDPhotoViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"FacerRZ"]){//人脸识别
+        HXFaceConfigObject *faceConfig = [[HXFaceConfigObject alloc] init];
+        faceConfig.imageStatus = ([HXCommonUtil isNull:self.homeStudentInfoModel.imgUrl]?-1:1);
+        faceConfig.imageURL = self.homeStudentInfoModel.imgUrl;
+        faceConfig.courseType = 4;
+        HXFaceRecognitionView *faceView = [[HXFaceRecognitionView alloc] init];
+        faceView.status = HXFaceRecognitionStatusSimulate;
+        faceView.faceConfig = faceConfig;
+        [faceView showInViewController:self];
+    }else if([moduleCode isEqualToString:@"UpPwd"]){//修改密码
+        HXModifyPwdViewController *vc = [[HXModifyPwdViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"Information"]){//资料下载
+        HXZiLiaoDownLoadViewController *vc = [[HXZiLiaoDownLoadViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"ChooseCourse"]){//在线选课
+        HXZaiXianXuanKeViewController *vc = [[HXZaiXianXuanKeViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"Set"]){//设置
+        HXSettingViewController *vc = [[HXSettingViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"DataUpload"]){//资料上传
+        HXZiLiaoUploadViewController *vc = [[HXZiLiaoUploadViewController alloc] init];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else if([moduleCode isEqualToString:@"Registration"]){//毕业登记表
+       
     }
+    
 }
 
 #pragma mark - <UIScrollViewDelegate>根据滑动距离来变化导航栏背景色的alpha
@@ -250,7 +356,7 @@
     [self.leiJiControl addSubview:self.leiJiNumLabel];
     [self.leiJiControl addSubview:self.leiJiTitleLabel];
     
-    [self.middleContainerView addSubview:self.btnsContainerView];
+    
     
     
     self.navBarView.sd_layout
@@ -327,8 +433,7 @@
     self.middleContainerView.sd_layout
     .topSpaceToView(self.keChenContainerView, -20)
     .leftSpaceToView(self.mainScrollView, 12)
-    .rightSpaceToView(self.mainScrollView, 12)
-    .heightIs(216);
+    .rightSpaceToView(self.mainScrollView, 12);
     
     self.bottomContainerView.sd_layout
     .topSpaceToView(self.middleContainerView, 16)
@@ -379,10 +484,6 @@
     .heightIs(17);
     
     
-    self.btnsContainerView.sd_layout
-    .topSpaceToView(self.middleContainerView, 25)
-    .leftEqualToView(self.middleContainerView)
-    .rightEqualToView(self.middleContainerView);
     
     for (UIButton *btn in self.middleBujuBtns) {
         btn.sd_layout.heightIs(60);
@@ -414,7 +515,7 @@
         }
     }
     
-    [self.btnsContainerView setupAutoMarginFlowItems:self.middleBujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:20 horizontalEdgeInset:15];
+    [self.middleContainerView setupAutoMarginFlowItems:self.middleBujuBtns withPerRowItemsCount:4 itemWidth:70 verticalMargin:20 verticalEdgeInset:40 horizontalEdgeInset:15];
     
     for (UIButton *btn in self.bottomBujuBtns) {
         btn.sd_layout.heightIs(60);
@@ -466,7 +567,7 @@
     if (!_mainScrollView) {
         _mainScrollView = [[UIScrollView alloc] init];
         _mainScrollView.backgroundColor = UIColor.clearColor;
-        _mainScrollView.bounces = NO;
+        _mainScrollView.bounces = YES;
         _mainScrollView.delegate = self;
         _mainScrollView.showsVerticalScrollIndicator = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
@@ -574,7 +675,7 @@
         _benQiNumLabel.textAlignment = NSTextAlignmentCenter;
         _benQiNumLabel.font = HXBoldFont(16);
         _benQiNumLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _benQiNumLabel.text = @"1";
+        
     }
     return _benQiNumLabel;
 }
@@ -606,7 +707,7 @@
         _leiJiNumLabel.textAlignment = NSTextAlignmentCenter;
         _leiJiNumLabel.font = HXBoldFont(16);
         _leiJiNumLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _leiJiNumLabel.text = @"0";
+        
     }
     return _leiJiNumLabel;
 }
@@ -622,26 +723,17 @@
     return _leiJiTitleLabel;
 }
 
-- (UIView *)middleContainerView{
-    if (!_middleContainerView) {
-        _middleContainerView = [[UIView alloc] init];
-        _middleContainerView.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
-        _middleContainerView.layer.cornerRadius = 10;
-    }
-    return _middleContainerView;
-}
-
 -(NSMutableArray *)middleBujuArray{
     if (!_middleBujuArray) {
         _middleBujuArray = [NSMutableArray array];
         [_middleBujuArray addObjectsFromArray:@[
-            [@{@"title":@"我的消息",@"iconName":@"mymessage_icon",@"handleEventTag":@(3000),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"证件照上传",@"iconName":@"personidupload_icon",@"handleEventTag":@(3001),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"人脸识别",@"iconName":@"facerecognition_icon",@"handleEventTag":@(3002),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"修改密码",@"iconName":@"changepwd_icon",@"handleEventTag":@(3003),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"资料下载",@"iconName":@"ziliaodownload_icon",@"handleEventTag":@(3004),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"在线选课",@"iconName":@"zaixianxuabke_icon",@"handleEventTag":@(3005),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"设置",@"iconName":@"setting_icon",@"handleEventTag":@(3006),@"isShow":@(1)} mutableCopy]
+            [@{@"title":@"我的消息",@"iconName":@"mymessage_icon",@"moduleCode":@"MessageList",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"证件照上传",@"iconName":@"personidupload_icon",@"moduleCode":@"UpPhoto",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"人脸识别",@"iconName":@"facerecognition_icon",@"moduleCode":@"FacerRZ",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"修改密码",@"iconName":@"changepwd_icon",@"moduleCode":@"UpPwd",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"资料下载",@"iconName":@"ziliaodownload_icon",@"moduleCode":@"Information",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"在线选课",@"iconName":@"zaixianxuabke_icon",@"moduleCode":@"ChooseCourse",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"设置",@"iconName":@"setting_icon",@"moduleCode":@"Set",@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _middleBujuArray;
@@ -655,27 +747,30 @@
     return _middleBujuBtns;
 }
 
-
-- (UIView *)btnsContainerView{
-    if (!_btnsContainerView) {
-        _btnsContainerView = [[UIView alloc] init];
-        _btnsContainerView.backgroundColor = UIColor.whiteColor;
+- (UIView *)middleContainerView{
+    if (!_middleContainerView) {
+        _middleContainerView = [[UIView alloc] init];
+        _middleContainerView.backgroundColor = COLOR_WITH_ALPHA(0xFFFFFF, 1);
+        _middleContainerView.layer.cornerRadius = 10;
         for (int i = 0; i<self.middleBujuArray.count; i++) {
             NSDictionary *dic = self.middleBujuArray[i];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.titleLabel.textAlignment = NSTextAlignmentCenter;
             btn.titleLabel.font = HXBoldFont(13);
-            btn.tag = [dic[@"handleEventTag"] integerValue];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, dic[@"moduleCode"], OBJC_ASSOCIATION_RETAIN);
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(handleMiddleClick:) forControlEvents:UIControlEventTouchUpInside];
-            [_btnsContainerView addSubview:btn];
+            [btn addTarget:self action:@selector(handleMenuClick:) forControlEvents:UIControlEventTouchUpInside];
+            [_middleContainerView addSubview:btn];
             [self.middleBujuBtns addObject:btn];
         }
     }
-    return _btnsContainerView;;
+    return _middleContainerView;
 }
+
+
 
 -(UIImageView *)messageRedImageView{
     if (!_messageRedImageView) {
@@ -701,8 +796,8 @@
     if (!_bottomBujuArray) {
         _bottomBujuArray = [NSMutableArray array];
         [_bottomBujuArray addObjectsFromArray:@[
-            [@{@"title":@"资料上传",@"iconName":@"ziliaoupload_icon",@"handleEventTag":@(3007),@"isShow":@(1)} mutableCopy],
-            [@{@"title":@"毕业登记表",@"iconName":@"dengjibiao_icon",@"handleEventTag":@(3008),@"isShow":@(1)} mutableCopy]
+            [@{@"title":@"资料上传",@"iconName":@"ziliaoupload_icon",@"moduleCode":@"DataUpload",@"isShow":@(1)} mutableCopy],
+            [@{@"title":@"毕业登记表",@"iconName":@"dengjibiao_icon",@"moduleCode":@"Registration",@"isShow":@(1)} mutableCopy]
         ]];
     }
     return _bottomBujuArray;
@@ -725,11 +820,12 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.titleLabel.textAlignment = NSTextAlignmentCenter;
             btn.titleLabel.font = HXBoldFont(13);
-            btn.tag = [dic[@"handleEventTag"] integerValue];
+            //将数据关联按钮
+            objc_setAssociatedObject(btn, &kMenuBtnModuleCode, dic[@"moduleCode"], OBJC_ASSOCIATION_RETAIN);
             [btn setTitle:dic[@"title"] forState:UIControlStateNormal];
             [btn setTitleColor:COLOR_WITH_ALPHA(0x333333, 1) forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:dic[@"iconName"]] forState:UIControlStateNormal];
-            [btn addTarget:self action:@selector(handleMiddleClick:) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:self action:@selector(handleMenuClick:) forControlEvents:UIControlEventTouchUpInside];
             [_bottomContainerView addSubview:btn];
             [self.bottomBujuBtns addObject:btn];
         }

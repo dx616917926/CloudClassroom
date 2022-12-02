@@ -26,6 +26,17 @@
     [self createUI];
     //获取已缴费列表
     [self getCoursePayOrder];
+    //监听支付成功通知，重新获取数据
+    [HXNotificationCenter addObserver:self selector:@selector(paySuccess) name:kPaySuccessNotification object:nil];
+}
+
+
+#pragma mark -监听支付成功通知，重新获取数据
+-(void)paySuccess{
+    //延迟获取，不然出现接口失败
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self getCoursePayOrder];
+    });
 }
 
 #pragma mark - 获取已缴费列表
