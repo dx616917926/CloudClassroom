@@ -10,9 +10,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class HXMyLiveCell;
+
+@protocol HXMyLiveCellDelegate <NSObject>
+
+/// 点击了播放按钮
+- (void)watchLiveWithDetailModel:(HXLiveDetailModel *)liveDetailModel;
+
+@end
+
+
 @interface HXMyLiveCell : UITableViewCell
 
 @property(nonatomic,strong) HXLiveDetailModel *liveDetailModel;
+
+@property(nonatomic, weak) id<HXMyLiveCellDelegate> delegate;
 
 @end
 

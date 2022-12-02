@@ -133,8 +133,9 @@
 
 
 -(void)watch:(UIButton *)sender{
-    
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(watchLiveWithDetailModel:)]) {
+        [self.delegate watchLiveWithDetailModel:self.liveDetailModel];
+    }
 }
 
 #pragma mark - UI

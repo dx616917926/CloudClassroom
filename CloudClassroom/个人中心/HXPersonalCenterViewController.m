@@ -205,11 +205,11 @@
             [self.middleContainerView addSubview:btn];
             [self.middleBujuBtns addObject:btn];
             
-            btn.sd_layout.heightIs(73);
+            btn.sd_layout.heightIs(60);
             btn.imageView.sd_layout
                 .centerXEqualToView(btn)
                 .topSpaceToView(btn, 0)
-                .widthIs(47)
+                .widthIs(30)
                 .heightEqualToWidth();
             
             btn.titleLabel.sd_layout
@@ -248,11 +248,11 @@
             [self.bottomContainerView addSubview:btn];
             [self.bottomBujuBtns addObject:btn];
             
-            btn.sd_layout.heightIs(73);
+            btn.sd_layout.heightIs(60);
             btn.imageView.sd_layout
                 .centerXEqualToView(btn)
                 .topSpaceToView(btn, 0)
-                .widthIs(47)
+                .widthIs(30)
                 .heightEqualToWidth();
             
             btn.titleLabel.sd_layout
