@@ -180,6 +180,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/AliyunPlayer.framework"
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/alivcffmpeg.framework"
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/AliyunMediaDownloader.framework"
+  install_framework "${PODS_ROOT}/BaijiaYun/frameworks/BJYIJKMediaFramework.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DTCoreText/DTCoreText.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DTFoundation/DTFoundation.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
@@ -194,12 +195,16 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDAutoLayout/SDAutoLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework"
+  install_framework "${PODS_ROOT}/Vloud/Vloud/Vloud.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework"
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/AliyunPlayer.framework"
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/alivcffmpeg.framework"
   install_framework "${PODS_ROOT}/AliPlayerSDK_iOS/AliyunMediaDownloader.framework"
+  install_framework "${PODS_ROOT}/BaijiaYun/frameworks/BJYIJKMediaFramework.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DTCoreText/DTCoreText.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DTFoundation/DTFoundation.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
@@ -214,6 +219,9 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDAutoLayout/SDAutoLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework"
+  install_framework "${PODS_ROOT}/Vloud/Vloud/Vloud.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

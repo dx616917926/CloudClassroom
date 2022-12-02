@@ -37,8 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///批次ID
 @property(nonatomic, copy) NSString *batchID;
 
-///是否选择
-@property(nonatomic, assign) BOOL isSeleted;
+
 
 @end
 

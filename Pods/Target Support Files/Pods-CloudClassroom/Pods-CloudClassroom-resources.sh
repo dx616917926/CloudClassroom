@@ -98,9 +98,13 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/AlipaySDK-iOS/AlipaySDK.bundle"
+  install_resource "${PODS_ROOT}/BJLiveBase/frameworks/BJLiveBase.framework/Versions/A/Resources/BJLLocalize.bundle"
+  install_resource "${PODS_ROOT}/BJLiveBase/frameworks/BJLiveBase.framework/Versions/A/Resources/BJLMetal.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/AlipaySDK-iOS/AlipaySDK.bundle"
+  install_resource "${PODS_ROOT}/BJLiveBase/frameworks/BJLiveBase.framework/Versions/A/Resources/BJLLocalize.bundle"
+  install_resource "${PODS_ROOT}/BJLiveBase/frameworks/BJLiveBase.framework/Versions/A/Resources/BJLMetal.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

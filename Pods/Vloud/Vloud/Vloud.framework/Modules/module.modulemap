@@ -1,0 +1,6 @@
+framework module Vloud {
+  umbrella header "Vloud.h"
+
+  export *
+  module * { export * }
+}

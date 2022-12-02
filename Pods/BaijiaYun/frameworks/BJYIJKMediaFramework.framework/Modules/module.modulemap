@@ -1,0 +1,6 @@
+framework module BJYIJKMediaFramework {
+  umbrella header "BJYIJKMediaFramework.h"
+
+  export *
+  module * { export * }
+}

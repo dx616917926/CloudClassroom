@@ -42,6 +42,7 @@
 
 #pragma mark -Setter
 -(void)setFaceTimeCourseDetailModel:(HXFaceTimeCourseDetailModel *)faceTimeCourseDetailModel{
+    
     _faceTimeCourseDetailModel = faceTimeCourseDetailModel;
     
     self.courseNameContentLabel.text = faceTimeCourseDetailModel.termCourseName;

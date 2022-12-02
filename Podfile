@@ -1,6 +1,7 @@
+#source 'https://github.com/CocoaPods/Specs.git'
+source 'https://git2.baijiashilian.com/open-ios/specs.git'
 
-
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 use_frameworks!
 
@@ -12,7 +13,7 @@ target 'CloudClassroom' do
 
   pod 'MJRefresh', '3.1.14.1'
 
-  pod 'SDWebImage', '~> 5.10.0'
+  
 
   pod 'FMDB', '~> 2.6.2'
 
@@ -42,7 +43,16 @@ target 'CloudClassroom' do
   
   pod 'DTCoreText', '~> 1.6.20'
 
-	
- 	
-
+  
+  #百家云不支持iOS 9
+  pod 'SDWebImage', '5.13.1'
+  pod 'SDWebImageWebPCoder', '0.9.0'
+  
+  #  - BaijiaYun(3.13.0)  - Vloud(1.14.1011) - BJLiveBase (3.13.0)
+  pod 'BaijiaYun/_BJLiveCore', '3.13.0'
+  pod 'BaijiaYun/BJYRTCEngine', '3.13.0'
+  #百家云回放
+  pod 'BaijiaYun/BJVideoPlayerCore', '3.13.0'
+  pod 'BaijiaYun/_BJVideoPlayerCore', '3.13.0'
+  
 end

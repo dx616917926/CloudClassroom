@@ -1,0 +1,6 @@
+framework module BRTC {
+  umbrella header "BRTC.h"
+
+  export *
+  module * { export * }
+}

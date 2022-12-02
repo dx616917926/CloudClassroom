@@ -192,6 +192,18 @@ NS_ASSUME_NONNULL_BEGIN
 //获取直播详情
 #define HXPOST_GetLiveDetail                                      @"/api/DirectBroadcastList/GetLiveDetail"
 
+//获取进入直播间的参数
+#define HXPOST_GetEnterInfo                                       @"/api/DirectBroadcastList/GetEnterInfo"
+
+//获取直播回放参数
+#define HXPOST_GetPlayInfo                                        @"/api/DirectBroadcastList/GetPlayInfo"
+
+//直播课程提醒
+#define HXPOST_GetRemind                                          @"/api/DirectBroadcastList/GetRemind"
+
+//直播签到
+#define HXPOST_SignFaceMatchInfo                                  @"/api/DirectBroadcastList/SignFaceMatchInfo"
+
 
 
 #pragma mark ----------------------------------------------面授课表接口-------------------------------------------------
