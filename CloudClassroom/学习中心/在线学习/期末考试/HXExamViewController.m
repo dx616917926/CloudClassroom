@@ -60,8 +60,8 @@
     HXNavigationController * navigationController = (HXNavigationController *)self.navigationController;
     navigationController.enableInnerInactiveGesture = NO;
     
-//    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
-//    manager.enable = NO;
+    //    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+    //    manager.enable = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -70,8 +70,8 @@
     HXNavigationController * navigationController = (HXNavigationController *)self.navigationController;
     navigationController.enableInnerInactiveGesture = YES;
     
-//    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
-//    manager.enable = YES;
+    //    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+    //    manager.enable = YES;
 }
 
 #pragma mark - Setter
@@ -96,10 +96,86 @@
     }];
 }
 
+
+#pragma mark - 提交试题答案
+-(void)saveQuestion:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
+    
+    //问题id截掉"q_"
+    NSString *psqId = HXSafeString([examPaperSuitQuestionModel.psq_id substringFromIndex:2]);
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",self.examPaperModel.domain,self.examPaperModel.userExamId,psqId];
+   
+    NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,self.examPaperModel.userExamId];
+    
+    
+    NSString *answer = HXSafeString(examPaperSuitQuestionModel.answer);
+    //获取当前时间戳
+    NSString *stime = [HXCommonUtil getNowTimeTimestamp];
+    //用于加密的参数,生成m
+    NSDictionary *md5Dic= @{
+        @"answer":answer,
+        @"psqId":psqId,
+        @"stime":stime,
+    };
+
+    NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
+    //拼接请求地址
+    NSString *pingDicUrl = [NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str];
+    
+    [self.view showLoading];
+    
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
+    
+    
+    
+    [manager POST:pingDicUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dictionary = responseObject;
+        [self.view hideLoading];
+        if ([dictionary boolValueForKey:@"success"]) {
+            
+        }else{
+            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
+
 #pragma mark - Event
 //交卷
 -(void)jiaoJuan:(UIButton *)sender{
     [self.navigationController popViewControllerAnimated:YES];
+    
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/submit/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
+   
+    
+    [self.view showLoading];
+    
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
+    
+    [manager POST:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dictionary = responseObject;
+        [self.view hideLoading];
+        if ([dictionary boolValueForKey:@"success"]) {
+            
+        }else{
+            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+    
 }
 
 
@@ -128,6 +204,8 @@
 
 
 
+
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
     CGPoint pInView = [self.view convertPoint:self.mainCollectionView.center toView:self.mainCollectionView];
@@ -140,10 +218,12 @@
         [self.view showTostWithMessage:@"已经是最后一题了"];
     }
     
+    HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row-1];
+    [self saveQuestion:examPaperSuitQuestionModel];
 }
- //上一题
+//上一题
 - (void)upClick {
-        
+    
     if (self.indexPathNow.row > 0) {
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section];
@@ -163,7 +243,7 @@
     }else {
         [self.view showTostWithMessage:@"已经是最后一题了"];
     }
-
+    
 }
 
 #pragma mark - <HXFloatButtonViewDelegate>点击错反馈按钮
@@ -171,19 +251,19 @@
 {
     if (floatView == self.errorReportButton) {
         
-//        if (self.curQuestion && self.examAdminPath) {
-//
-//            NSString *questionId = [NSString stringWithFormat:@"%d",self.curQuestion._id];
-//
-//            if ([self.curQuestion isComplex] && self.subPosition >= 0) {
-//                //
-//                HXQuestionInfo *sub = [self.curQuestion.subs objectAtIndex:self.subPosition];
-//                questionId = [NSString stringWithFormat:@"%d",sub._id];
-//            }
-//            //弹出错题反馈界面
-            HXExamErrorReportView *reportView = [[HXExamErrorReportView alloc] init];
-            [reportView showInViewController:self];
-//        }
+        //        if (self.curQuestion && self.examAdminPath) {
+        //
+        //            NSString *questionId = [NSString stringWithFormat:@"%d",self.curQuestion._id];
+        //
+        //            if ([self.curQuestion isComplex] && self.subPosition >= 0) {
+        //                //
+        //                HXQuestionInfo *sub = [self.curQuestion.subs objectAtIndex:self.subPosition];
+        //                questionId = [NSString stringWithFormat:@"%d",sub._id];
+        //            }
+        //            //弹出错题反馈界面
+        HXExamErrorReportView *reportView = [[HXExamErrorReportView alloc] init];
+        [reportView showInViewController:self];
+        //        }
     }
 }
 
@@ -226,7 +306,7 @@
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     return 0;
-
+    
 }
 
 #pragma mark - UI
@@ -235,7 +315,7 @@
     [self.view addSubview:self.navBarView];
     [self.view addSubview:self.mainCollectionView];
     [self.view addSubview:self.bottomView];
-
+    
     
     [self.navBarView addSubview:self.titleLabel];
     [self.navBarView addSubview:self.jiaoJuanBtn];
@@ -248,81 +328,81 @@
     
     
     self.navBarView.sd_layout
-    .topEqualToView(self.view)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(kNavigationBarHeight);
+        .topEqualToView(self.view)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .heightIs(kNavigationBarHeight);
     
     self.bottomView.sd_layout
-    .bottomSpaceToView(self.view, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(ExamBottomViewHeight);
+        .bottomSpaceToView(self.view, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .heightIs(ExamBottomViewHeight);
     
     self.mainCollectionView.sd_layout
-    .topSpaceToView(self.navBarView, 0)
-    .bottomSpaceToView(self.bottomView, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view);
+        .topSpaceToView(self.navBarView, 0)
+        .bottomSpaceToView(self.bottomView, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view);
     
-        
+    
     self.jiaoJuanBtn.sd_layout
-    .centerYEqualToView(self.titleLabel)
-    .leftSpaceToView(self.navBarView, 12)
-    .widthIs(65)
-    .heightIs(30);
+        .centerYEqualToView(self.titleLabel)
+        .leftSpaceToView(self.navBarView, 12)
+        .widthIs(65)
+        .heightIs(30);
     
     
     self.answerSheetBtn.sd_layout
-    .centerYEqualToView(self.titleLabel)
-    .rightEqualToView(self.navBarView)
-    .widthIs(60)
-    .heightIs(44);
+        .centerYEqualToView(self.titleLabel)
+        .rightEqualToView(self.navBarView)
+        .widthIs(60)
+        .heightIs(44);
     
     self.titleLabel.sd_layout
-    .topSpaceToView(self.navBarView, kStatusBarHeight)
-    .leftSpaceToView(self.jiaoJuanBtn,10)
-    .rightSpaceToView(self.answerSheetBtn,10)
-    .heightIs(kNavigationBarHeight-kStatusBarHeight);
+        .topSpaceToView(self.navBarView, kStatusBarHeight)
+        .leftSpaceToView(self.jiaoJuanBtn,10)
+        .rightSpaceToView(self.answerSheetBtn,10)
+        .heightIs(kNavigationBarHeight-kStatusBarHeight);
     
     self.upBtn.sd_layout
-    .centerYEqualToView(self.bottomView).offset(-(kScreenBottomMargin*0.5))
-    .leftSpaceToView(self.bottomView, 20)
-    .widthIs(130)
-    .heightIs(40);
+        .centerYEqualToView(self.bottomView).offset(-(kScreenBottomMargin*0.5))
+        .leftSpaceToView(self.bottomView, 20)
+        .widthIs(130)
+        .heightIs(40);
     self.upBtn.sd_cornerRadiusFromHeightRatio=@0.5;
     
     self.upBtn.imageView.sd_layout
-    .centerYEqualToView(self.upBtn)
-    .leftSpaceToView(self.upBtn, 32)
-    .widthIs(6)
-    .heightIs(11);
+        .centerYEqualToView(self.upBtn)
+        .leftSpaceToView(self.upBtn, 32)
+        .widthIs(6)
+        .heightIs(11);
     
     self.upBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.upBtn)
-    .leftSpaceToView(self.self.upBtn.imageView, 6)
-    .rightEqualToView(self.upBtn)
-    .heightIs(20);
+        .centerYEqualToView(self.upBtn)
+        .leftSpaceToView(self.self.upBtn.imageView, 6)
+        .rightEqualToView(self.upBtn)
+        .heightIs(20);
     
     
     self.downBtn.sd_layout
-    .centerYEqualToView(self.upBtn)
-    .rightSpaceToView(self.bottomView, 20)
-    .widthRatioToView(self.upBtn, 1)
-    .heightRatioToView(self.upBtn, 1);
+        .centerYEqualToView(self.upBtn)
+        .rightSpaceToView(self.bottomView, 20)
+        .widthRatioToView(self.upBtn, 1)
+        .heightRatioToView(self.upBtn, 1);
     self.downBtn.sd_cornerRadiusFromHeightRatio=@0.5;
     
     self.downBtn.imageView.sd_layout
-    .centerYEqualToView(self.downBtn)
-    .rightSpaceToView(self.downBtn, 32)
-    .widthIs(6)
-    .heightIs(11);
+        .centerYEqualToView(self.downBtn)
+        .rightSpaceToView(self.downBtn, 32)
+        .widthIs(6)
+        .heightIs(11);
     
     self.downBtn.titleLabel.sd_layout
-    .centerYEqualToView(self.downBtn)
-    .rightSpaceToView(self.self.downBtn.imageView, 6)
-    .leftEqualToView(self.downBtn)
-    .heightIs(20);
+        .centerYEqualToView(self.downBtn)
+        .rightSpaceToView(self.self.downBtn.imageView, 6)
+        .leftEqualToView(self.downBtn)
+        .heightIs(20);
     
     //创建错题反馈按钮
     [self createErrorReportButtonView];

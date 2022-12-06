@@ -66,8 +66,20 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
             [self.mainTableView reloadData];
-            //计算合计
-            [self calculateTotalPrice];
+            if (list.count==0) {
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+            
+            //合计
+            if (list.count>0) {
+                HXStudentFeeModel *model = list.firstObject;
+                NSString *content = [NSString stringWithFormat:@"￥%.2f",model.totalBalance];
+                NSArray *tempArray = [HXFloatToString(model.totalBalance) componentsSeparatedByString:@"."];
+                NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
+                self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:16]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}];
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
@@ -112,20 +124,7 @@
 }
 
 
-#pragma mark - 计算合计
--(void)calculateTotalPrice{
-    __block CGFloat total = 0.00;
-    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        HXStudentFeeModel *model = obj;
-        total+=model.balance;
-    }];
-    
-    NSString *content = [NSString stringWithFormat:@"￥%.2f",total];
-    NSArray *tempArray = [HXFloatToString(total) componentsSeparatedByString:@"."];
-    NSString *needStr = [tempArray.firstObject stringByAppendingString:@"."];
-    self.totalPriceLabel.attributedText = [HXCommonUtil getAttributedStringWith:needStr needAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:16]} content:content defaultAttributed:@{NSForegroundColorAttributeName:COLOR_WITH_ALPHA(0xED4F4F, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:12]}];
-    
-}
+
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

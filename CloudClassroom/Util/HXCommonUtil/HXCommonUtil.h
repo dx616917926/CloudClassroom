@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NSString+md5.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -90,6 +91,12 @@ NS_ASSUME_NONNULL_BEGIN
  默认日期格式为:yyyy-MM-dd HH-mm
  */
 +(NSString *)timestampSwitchTime:(NSInteger)timestamp andFormatter:( NSString *_Nullable)format;
+
+//获取当前时间戳有两种方法(以秒为单位)
++(NSString *)getNowTimeTimestamp;
+
+#pragma mark -  md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥Md5Key，生成md5值。
++ (NSString *)getMd5String:(NSDictionary *)dic pingKey:(NSString *_Nullable)pingKey;
 
 @end
 

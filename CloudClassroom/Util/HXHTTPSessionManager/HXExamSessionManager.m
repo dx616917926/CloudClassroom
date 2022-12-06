@@ -22,6 +22,10 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[HXExamSessionManager alloc] init];
+        _sharedClient.requestSerializer= [AFHTTPRequestSerializer serializer];
+//        _sharedClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+//        _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+        _sharedClient.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
         _sharedClient.requestSerializer.timeoutInterval = 60;
     });
     return _sharedClient;
@@ -66,14 +70,25 @@
 #pragma mark - POST请求
 + (void)postDataWithNSString : (NSString * _Nullable)actionUrlStr
                      needMd5 : (BOOL )needMd5
+                     pingKey : (NSString *_Nullable)pingKey
               withDictionary : (NSDictionary * _Nullable)nsDic
                      success : (void (^)(NSDictionary* _Nullable dictionary))success
                      failure : (void (^)(NSError * _Nullable error))failure
 {
    
     HXExamSessionManager * client = [HXExamSessionManager sharedClient];
+   
+    
     NSMutableDictionary * parameters = [NSMutableDictionary dictionary];
-    [parameters addEntriesFromDictionary:nsDic];
+    if(needMd5){
+        //md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥，生成md5值。
+        NSString *md5Str = [self getMd5String:nsDic pingKey:pingKey];
+        NSDictionary *md5Dic = @{@"m":HXSafeString(md5Str)};
+        [parameters addEntriesFromDictionary:nsDic];
+        [parameters addEntriesFromDictionary:md5Dic];
+    }else{
+        [parameters addEntriesFromDictionary:nsDic];
+    }
     [client POST:actionUrlStr parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable dictionary) {
         
         NSLog(@"\n===============================请求地址==============================\n%@\n",task.currentRequest.URL);
@@ -104,7 +119,7 @@
 
 
 #pragma mark -  md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥Md5Key，生成md5值。
-+ (NSString *)getMd5String:(NSDictionary *)dic{
++ (NSString *)getMd5String:(NSDictionary *)dic pingKey:(NSString *)pingKey{
     // 将dic中的全部key取出，并放到数组
     NSArray *keyArray = [dic allKeys];
     // 根据ASCII码,将参数key从小到大排序（升序）
@@ -115,12 +130,12 @@
     for (NSString *str in resultArr) {
         // 将key对应的value，存到数组
         NSString *tempValue = [dic stringValueForKey:str];
-        if (tempValue.length > 0) {
-            [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
-        }
+        [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
     }
     //最后加上密钥
-    [paramValueArr addObject:Md5Key];
+    if (pingKey) {
+        [paramValueArr addObject:pingKey];
+    }
     NSString *paramStr = [[paramValueArr componentsJoinedByString:@"&"] lowercaseString];
     NSLog(@"\n______________________字符串拼接后结果______________________\n%@\n",paramStr);
     NSString *md5String = [paramStr md5String];

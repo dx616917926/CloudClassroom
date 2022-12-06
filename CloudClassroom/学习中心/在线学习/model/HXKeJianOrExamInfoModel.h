@@ -61,6 +61,15 @@ NS_ASSUME_NONNULL_BEGIN
 ///作业考试数组
 @property(nonatomic, strong) HXExamParaModel *examPara;
 
+///
+@property(nonatomic, copy) NSString *examId;
+///
+@property(nonatomic, copy) NSString *paperId;
+///
+@property(nonatomic, copy) NSString *userExamId;
+///
+@property(nonatomic, copy) NSString *userId;
+
 
 @end
 

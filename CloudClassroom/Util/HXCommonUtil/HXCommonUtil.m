@@ -447,4 +447,45 @@
 
 }
 
+//获取当前时间戳有两种方法(以毫秒为单位)
++(NSString *)getNowTimeTimestamp{
+    
+ NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+ [formatter setDateStyle:NSDateFormatterMediumStyle];
+ [formatter setTimeStyle:NSDateFormatterShortStyle];
+ [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"]; // ----------设置你想要的格式,hh与HH的区别:分别表示12小时制,24小时制
+ //设置时区,这个对于时间的处理有时很重要
+ NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+ [formatter setTimeZone:timeZone];
+ NSDate *datenow = [NSDate date];//现在时间,你可以输出来看下是什么格式
+ NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]*1000];
+ return timeSp;
+}
+
+
+#pragma mark -  md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥Md5Key，生成md5值。
++ (NSString *)getMd5String:(NSDictionary *)dic pingKey:(NSString *_Nullable)pingKey{
+    // 将dic中的全部key取出，并放到数组
+    NSArray *keyArray = [dic allKeys];
+    // 根据ASCII码,将参数key从小到大排序（升序）
+    NSArray *resultArr = [keyArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    NSMutableArray *paramValueArr = [NSMutableArray arrayWithCapacity:resultArr.count];
+    for (NSString *str in resultArr) {
+        // 将key对应的value，存到数组
+        NSString *tempValue = [dic stringValueForKey:str];
+        [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
+    }
+    //最后加上密钥
+    if (pingKey) {
+        [paramValueArr addObject:pingKey];
+    }
+    NSString *paramStr = [paramValueArr componentsJoinedByString:@"&"];
+    NSLog(@"\n______________________字符串拼接后结果______________________\n%@\n",paramStr);
+    NSString *md5String = [paramStr md5String];
+    return md5String;
+    
+}
+
 @end

@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamPaperModel : NSObject
 
+///考试系统域名
+@property(nonatomic, copy) NSString *domain;
+///
+@property(nonatomic, copy) NSString *userExamId;
 ///试卷标题
 @property(nonatomic, copy) NSString *paper_title;
 ///试卷标题描述

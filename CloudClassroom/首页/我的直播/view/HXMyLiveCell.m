@@ -361,7 +361,7 @@
         _watchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _watchBtn.titleLabel.font = HXBoldFont(14);
         [_watchBtn addTarget:self action:@selector(watch:) forControlEvents:UIControlEventTouchUpInside];
-        _watchBtn.userInteractionEnabled = NO;
+        _watchBtn.userInteractionEnabled = YES;
     }
     return _watchBtn;
 }

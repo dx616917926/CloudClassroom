@@ -32,6 +32,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL confuseOrder;
 ///
 @property(nonatomic, copy) NSString *examId;
+///
+@property(nonatomic, copy) NSString *paperId;
+///
+@property(nonatomic, copy) NSString *userExamId;
+///
+@property(nonatomic, copy) NSString *userId;
 ///剩余考试次数
 @property(nonatomic, assign) NSInteger leftExamNum;
 ///最大考试次数

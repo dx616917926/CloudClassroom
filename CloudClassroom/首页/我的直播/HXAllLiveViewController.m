@@ -45,32 +45,64 @@
 }
 
 
+#pragma mark - 获取每一门课的直播列表
+-(void)getDirectBroadcastDetail{
+    
+    NSString *classID = [HXPublicParamTool sharedInstance].class_id;
+    
+    NSDictionary *dic =@{
+        @"classid":HXSafeString(classID),
+        @"dbtype":@(self.liveCourseModel.dbType),
+        @"dbmanageid":HXSafeString(self.liveCourseModel.dbManageID),
+        @"selecttype":@(0)//0全部直播 1往期直播
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetDirectBroadcastDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXLiveDetailModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            [self.mainTableView reloadData];
+            if (list.count==0) {
+                [self.mainTableView addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+}
 
-#pragma mark - <HXMyLiveCellDelegate>观看直播
+#pragma mark - <HXMyLiveCellDelegate>观看直播  观看回放
 -(void)watchLiveWithDetailModel:(HXLiveDetailModel *)liveDetailModel{
     
+    
     ///直播状态（0未开始 1正在直播 2已结束）
-    if (liveDetailModel.dbStatus==1) {
+    if (liveDetailModel.dbStatus==1) {//直播
         
         if (@available(iOS 10, *)) {
-            
-            [self.view showLoading];
-
             //获取进入直播间的参数
             NSDictionary *dic = @{
                 @"detailid":HXSafeString(liveDetailModel.detailID),
                 @"studentid":HXSafeString(liveDetailModel.student_id)
                 
             };
+            [self.view showLoading];
             WeakSelf(weakSelf);
             [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetEnterInfo needMd5:YES withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
-                
+                [weakSelf.view hideLoading];
                 BOOL success = [dictionary boolValueForKey:@"success"];
                 if (success) {
-                    [weakSelf.view hideLoading];
-                    
                     HXEnterLiveInfoModel *enterLiveInfoModel =[HXEnterLiveInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
-                    
+//                    enterLiveInfoModel.room_id = @"22120557380310";
+//                    enterLiveInfoModel.sign = @"22971cae1a15bb0bfb76c86eff8e31cb";
+//                    enterLiveInfoModel.user_name= @"我叫小六";
+//                    enterLiveInfoModel.user_number=@"140769";
+//                    enterLiveInfoModel.user_avatar=@"https://resources.edu-xl.com/cjMVC_Test/stuPhoto/022041100080.jpg?50";
+//                    enterLiveInfoModel.user_role= 0;
+//                    enterLiveInfoModel.private_domain=@"e75183803";
                     //创建直播房间
                     BJLRoomID *roomID = [[BJLRoomID alloc] init];
                     roomID.roomID = enterLiveInfoModel.room_id;
@@ -80,9 +112,6 @@
                     roomID.user = user;
                     //进入直播间
                     [weakSelf enterRoomWithRoomID:roomID domain:enterLiveInfoModel.private_domain];
-                }else{
-                    NSString *message = [dictionary stringValueForKey:@"message" WithHolder:@"获取数据失败,请重试!"];
-                    [weakSelf.view showErrorWithMessage:message];
                 }
                 
             } failure:^(NSError *error) {
@@ -97,15 +126,12 @@
             [alertC addAction:confirmAction];
             [self.presentedViewController?self.presentedViewController:self presentViewController:alertC animated:YES completion:nil];
         }
-    }else if (liveDetailModel.dbStatus==2){
+    }else if (liveDetailModel.dbStatus==2){//观看回放
         //不能回放
         if (liveDetailModel.playMessage.length>0) {
             [self.view showTostWithMessage:liveDetailModel.playMessage];
             return;
         }
-        
-        //回放
-        [self.view showLoading];
         
         //获取直播回放参数
         NSDictionary *dic = @{
@@ -113,13 +139,12 @@
             @"studentid":HXSafeString(liveDetailModel.student_id)
         };
         
+        [self.view showLoading];
         WeakSelf(weakSelf);
         [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetPlayInfo needMd5:YES withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
-            
+            [weakSelf.view hideLoading];
             BOOL success = [dictionary boolValueForKey:@"success"];
             if (success) {
-                [weakSelf.view hideLoading];
-    
                 HXLivePlaybackInfoModel *playbackInfoModel =[HXLivePlaybackInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
                 if (playbackInfoModel.playMessage) {
                     [self.view showTostWithMessage:playbackInfoModel.playMessage];
@@ -127,9 +152,6 @@
                 }
                 //进入回放直播间
                 [weakSelf enterPlaybackRoomWithData:playbackInfoModel];
-            }else{
-                NSString *message = [dictionary stringValueForKey:@"message" WithHolder:@"获取数据失败,请重试!"];
-                [weakSelf.view showErrorWithMessage:message];
             }
         } failure:^(NSError *error) {
             [weakSelf.view showErrorWithMessage:@"获取数据失败，请重试！"];
@@ -147,7 +169,7 @@
     if (domain.length) {
         [BJLRoom setPrivateDomainPrefix:domain];
     }
-        
+    //通过roomID创建直播间，如果sdk没有集成type对应的uisdk，返回nil
     BJLRoomViewController *roomViewController = [BJLRoomViewController instanceWithRoomType:BJLRoomVCTypeBigClass roomID:roomID];
     roomViewController.delegate = self;
     [self bjl_presentFullScreenViewController:roomViewController animated:YES completion:nil];
@@ -156,11 +178,11 @@
 //进入回放直播间
 - (void)enterPlaybackRoomWithData:(HXLivePlaybackInfoModel *)livePlaybackInfoModel{
     
-   
+    
     if (livePlaybackInfoModel.private_domain.length) {
         [[BJVAppConfig sharedInstance] setPrivateDomainPrefix:livePlaybackInfoModel.private_domain];
     }
-   
+    
     [BJVideoPlayerCore setTokenDelegate:self];
     
     BJPPlaybackOptions *playbackOptions = [[BJPPlaybackOptions alloc] init];
@@ -169,19 +191,20 @@
     playbackOptions.clipedVersion = -1;
     playbackOptions.userName = HXSafeString(livePlaybackInfoModel.user_name);
     playbackOptions.userNumber = HXSafeString(livePlaybackInfoModel.user_number);
-    
+    //创建回放的room,使用该接口播放回放,可以选择使用avplayer或者ijkplayer播放视频,以及是否使用加密视频
+    //!!!:只有使用ijkplayer才可以播放加密视频,因此选择avplayer播放视频时,是否加密的参数设置无效
     BJPRoomViewController *vc = [BJPRoomViewController onlinePlaybackRoomWithClassID:HXSafeString(livePlaybackInfoModel.classID)
                                                                            sessionID:HXSafeString(livePlaybackInfoModel.sessionID)
                                                                                token:HXSafeString(livePlaybackInfoModel.token)
                                                                            accessKey:nil
                                                                              options:playbackOptions];
     
-//    [vc setCustomLamp:[PUPlayOptionsManager getLamp]];    //跑马灯
+    //    [vc setCustomLamp:[PUPlayOptionsManager getLamp]];    //跑马灯
     [self bjl_presentFullScreenViewController:vc animated:YES completion:nil];
     
-//    bjl_weakify(self);
+    //    bjl_weakify(self);
     [self bjl_observe:BJLMakeMethod(vc, roomDidExit) observer:^BOOL{
-//        bjl_strongify(self);
+        //        bjl_strongify(self);
         // 监听退出直播间, 注意使用weak, 避免循环引用
         NSLog(@"退出回放房间");
         return YES;
@@ -216,11 +239,11 @@
 }
 
 /**
-即将退出直播间 - 正常/异常
-正常退出 `error` 为 `nil`，否则为异常退出
-参考 `BJLErrorCode` */
+ 即将退出直播间 - 正常/异常
+ 正常退出 `error` 为 `nil`，否则为异常退出
+ 参考 `BJLErrorCode` */
 - (void)roomViewController:(BJLRoomViewController *)roomViewController willExitWithError:(nullable BJLError *)error {
-
+    
 }
 
 /**
@@ -230,13 +253,13 @@
 - (void)roomViewController:(BJLRoomViewController *)roomViewController didExitWithError:(nullable BJLError *)error {
     NSLog(@"退出直播间 [%@]",error);
     
-//    if (error) {
-//        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"%@[%ld]",error.localizedDescription,error.code] preferredStyle:UIAlertControllerStyleAlert];
-//        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        }];
-//        [alertC addAction:confirmAction];
-//        [self.presentedViewController?self.presentedViewController:self presentViewController:alertC animated:YES completion:nil];
-//    }
+    //    if (error) {
+    //        UIAlertController *alertC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"%@[%ld]",error.localizedDescription,error.code] preferredStyle:UIAlertControllerStyleAlert];
+    //        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    //        }];
+    //        [alertC addAction:confirmAction];
+    //        [self.presentedViewController?self.presentedViewController:self presentViewController:alertC animated:YES completion:nil];
+    //    }
 }
 
 #pragma mark - <BJVRequestTokenDelegate>
@@ -247,35 +270,7 @@
     completion(@"",nil);
 }
 
-#pragma mark - 获取每一门课的直播列表
--(void)getDirectBroadcastDetail{
-    
-    NSString *classID = [HXPublicParamTool sharedInstance].class_id;
-    
-    NSDictionary *dic =@{
-        @"classid":HXSafeString(classID),
-        @"dbtype":@(self.liveCourseModel.dbType),
-        @"dbmanageid":HXSafeString(self.liveCourseModel.dbManageID),
-        @"selecttype":@(0)//0全部直播 1往期直播
-    };
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetDirectBroadcastDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
-        [self.mainTableView.mj_header endRefreshing];
-        BOOL success = [dictionary boolValueForKey:@"success"];
-        if (success) {
-            NSArray *list = [HXLiveDetailModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
-            [self.dataArray removeAllObjects];
-            [self.dataArray addObjectsFromArray:list];
-            [self.mainTableView reloadData];
-            if (list.count==0) {
-                [self.mainTableView addSubview:self.noDataTipView];
-            }else{
-                [self.noDataTipView removeFromSuperview];
-            }
-        }
-    } failure:^(NSError * _Nonnull error) {
-        [self.mainTableView.mj_header endRefreshing];
-    }];
-}
+
 
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
@@ -290,7 +285,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-   
+    
     return 182;
 }
 
@@ -317,17 +312,19 @@
 }
 
 
+
+
 #pragma mark - UI
 -(void)createUI{
-   
+    
     [self.view addSubview:self.mainTableView];
-   
+    
     
     self.mainTableView.sd_layout
-    .topSpaceToView(self.view, 0)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomSpaceToView(self.view, 0);
+        .topSpaceToView(self.view, 0)
+        .leftEqualToView(self.view)
+        .rightEqualToView(self.view)
+        .bottomSpaceToView(self.view, 0);
     [self.mainTableView updateLayout];
     
     self.noDataTipView.tipTitle = @"暂无直播～";
@@ -374,7 +371,7 @@
         _mainTableView.showsVerticalScrollIndicator = NO;
         UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 10)];
         _mainTableView.tableHeaderView =tableHeaderView;
-       
+        
     }
     return _mainTableView;
 }

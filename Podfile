@@ -51,9 +51,8 @@ target 'CloudClassroom' do
   #  - BaijiaYun(3.13.0)  - Vloud(1.14.1011) - BJLiveBase (3.13.0)
   pod 'BaijiaYun/_BJLiveCore', '3.13.0'
   pod 'BaijiaYun/BJYRTCEngine', '3.13.0'
- # pod 'QBImagePickerController', '3.4.0'
-  
-  
+ 
+
   #百家云回放
   pod 'BaijiaYun/BJVideoPlayerCore', '3.13.0'
   pod 'BaijiaYun/_BJVideoPlayerCore', '3.13.0'

@@ -172,6 +172,7 @@
     }
     cell.isFirst = (indexPath.row==0);
     cell.isLast = (indexPath.row==self.dataArray.count-1);
+    cell.isBoth = (indexPath.row==0&&indexPath.row==self.dataArray.count-1);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.isHaveXueQi = self.isHaveXueQi;
     //fromFalg 1:在线选课  2:财务缴费

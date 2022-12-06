@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 //是否第一和最后
 @property(nonatomic,assign) BOOL isFirst;
 @property(nonatomic,assign) BOOL isLast;
+@property(nonatomic,assign) BOOL isBoth;
 
 @property(nonatomic,strong) HXScoreModel *scoreModel;
 

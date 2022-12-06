@@ -36,7 +36,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *batchName;
 ///批次ID
 @property(nonatomic, copy) NSString *batchID;
-
+///总金额(待缴)
+@property(nonatomic, assign) CGFloat totalBalance;
+///总金额（应缴费用）
+@property(nonatomic, assign) CGFloat totalPayable;
+///总金额（已缴费用）
+@property(nonatomic, assign) CGFloat totalPaidIn;
 
 
 @end

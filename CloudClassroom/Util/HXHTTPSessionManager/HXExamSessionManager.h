@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)postDataWithNSString : (NSString * _Nullable)actionUrlStr
                      needMd5 : (BOOL )needMd5
+                     pingKey : (NSString *_Nullable)pingKey
               withDictionary : (NSDictionary * _Nullable)nsDic
                      success : (void (^)(NSDictionary * _Nullable dictionary))success
                      failure : (void (^)(NSError * _Nullable error))failure;

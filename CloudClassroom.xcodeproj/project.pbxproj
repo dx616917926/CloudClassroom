@@ -485,6 +485,10 @@
 		04E557642939E344009AC15B /* QBCheckmarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E557562939E344009AC15B /* QBCheckmarkView.m */; };
 		04E557652939E344009AC15B /* QBSlomoIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E557582939E344009AC15B /* QBSlomoIconView.m */; };
 		04E557662939E344009AC15B /* QBAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E557592939E344009AC15B /* QBAssetCell.m */; };
+		04E557682939F5C3009AC15B /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E557672939F5C3009AC15B /* Accelerate.framework */; };
+		04E5576A2939F5E7009AC15B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E557692939F5E7009AC15B /* CoreAudio.framework */; };
+		04E5576C2939F607009AC15B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E5576B2939F607009AC15B /* CoreTelephony.framework */; };
+		04E5576E2939F76A009AC15B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E5576D2939F76A009AC15B /* AVFoundation.framework */; };
 		04E6177E29220CDE00D380FC /* HXExamModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6177D29220CDE00D380FC /* HXExamModel.m */; };
 		7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */; };
 /* End PBXBuildFile section */
@@ -1455,6 +1459,10 @@
 		04E557572939E344009AC15B /* QBAlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBAlbumCell.h; sourceTree = "<group>"; };
 		04E557582939E344009AC15B /* QBSlomoIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBSlomoIconView.m; sourceTree = "<group>"; };
 		04E557592939E344009AC15B /* QBAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAssetCell.m; sourceTree = "<group>"; };
+		04E557672939F5C3009AC15B /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		04E557692939F5E7009AC15B /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		04E5576B2939F607009AC15B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		04E5576D2939F76A009AC15B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		04E6177C29220CDE00D380FC /* HXExamModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamModel.h; sourceTree = "<group>"; };
 		04E6177D29220CDE00D380FC /* HXExamModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamModel.m; sourceTree = "<group>"; };
 		3698F3FD4136E7326F9EC5ED /* Pods-CloudClassroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudClassroom.debug.xcconfig"; path = "Target Support Files/Pods-CloudClassroom/Pods-CloudClassroom.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1467,8 +1475,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04E5576E2939F76A009AC15B /* AVFoundation.framework in Frameworks */,
+				04E5576A2939F5E7009AC15B /* CoreAudio.framework in Frameworks */,
 				043E991C290275FC00A8E6DA /* TXMoviePlayer.framework in Frameworks */,
+				04E5576C2939F607009AC15B /* CoreTelephony.framework in Frameworks */,
 				0480D9E428D303B700BA4CE2 /* libc++.tbd in Frameworks */,
+				04E557682939F5C3009AC15B /* Accelerate.framework in Frameworks */,
 				047D23C428D1A24B00514C1C /* IDLFaceSDK.framework in Frameworks */,
 				7AB73CD9353D03A514B869EE /* Pods_CloudClassroom.framework in Frameworks */,
 			);
@@ -3867,6 +3879,10 @@
 		583E0E98BBAEC2425220FE09 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04E5576D2939F76A009AC15B /* AVFoundation.framework */,
+				04E5576B2939F607009AC15B /* CoreTelephony.framework */,
+				04E557692939F5E7009AC15B /* CoreAudio.framework */,
+				04E557672939F5C3009AC15B /* Accelerate.framework */,
 				0480D9E328D3038B00BA4CE2 /* libc++.tbd */,
 				7CDBE119C4301103B7B6DE71 /* Pods_CloudClassroom.framework */,
 			);

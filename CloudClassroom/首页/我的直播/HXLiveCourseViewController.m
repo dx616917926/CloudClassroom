@@ -8,7 +8,7 @@
 #import "HXLiveCourseViewController.h"
 #import "HXMyLiveViewController.h"
 #import "HXLiveCourseCell.h"
-
+#import <AVFoundation/AVFoundation.h>
 @interface HXLiveCourseViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong) UITableView *mainTableView;
@@ -27,6 +27,12 @@
     [self createUI];
     //获取直播课程列表
     [self getDirectBroadcastList];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    //请求麦克风权限
+    [self requestAccessForMedia];
 }
 
 #pragma mark - 获取直播课程列表
@@ -116,6 +122,34 @@
  
 }
 
+#pragma mark - 请求麦克风权限
+- (void)requestAccessForMedia{
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            // 用户同意开启麦克风权限
+            NSLog(@"用户第一次允许了打开麦克风权限");
+        } else {
+            // 用户不同意开启麦克风权限
+            NSLog(@"用户第一次没有允许打开麦克风权限");
+            //弹窗,提示用户跳转到设置页面设置权限
+            [self permissionToRequest];
+        }
+    }];
+}
+
+- (void)permissionToRequest{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"此功能需要您开启麦克风权限,请前往设置中开启" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"下次开启" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"立即开启" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            if([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        });
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 
 #pragma mark -LazyLoad

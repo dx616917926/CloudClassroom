@@ -227,7 +227,7 @@
     
     [self.view showLoading];
     
-    [HXExamSessionManager postDataWithNSString:url needMd5:NO withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
+    [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         [self.view hideLoading];
         NSLog(@"%@",dictionary);
         if (dictionary) {

@@ -158,7 +158,7 @@ const int HXExamErrorReportViewTag = 21237;
     NSString *url = [NSString stringWithFormat:@"%@%@",basePath,HXEXAM_START_JSON];
     NSDictionary *dic = @{@"userExamId":self.userExamId,@"questionId":self.questionId,@"remark":[NSString stringWithFormat:@"%@:%@",type,textView.text]};
     WeakSelf(weakSelf);
-    [HXExamSessionManager postDataWithNSString:url needMd5:NO withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
+    [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         //
         BOOL success = [dictionary boolValueForKey:@"success"];
         if (success) {
