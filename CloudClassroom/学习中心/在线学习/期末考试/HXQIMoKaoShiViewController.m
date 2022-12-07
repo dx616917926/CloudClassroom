@@ -190,7 +190,9 @@
             NSString *examUrl = [dictionary objectForKey:@"url"];
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
             self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
+            //获取考试的HTMLStr参数
             [self getEaxmHTMLStr:examUrl];
+            
         }else{
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
@@ -257,23 +259,25 @@
 #pragma mark - <HXQiMoKaoShiCellDelegate>查看考试记录、开始考试
 -(void)chechExamRecord:(HXExamModel *)examModel{
     
-    //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.keJianOrExamInfoModel.examPara.domain,self.keJianOrExamInfoModel.userExamId];
     [self.view showLoading];
-    NSString * url = [NSString stringWithFormat:@"%@"HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
     
-    [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
-        
-        if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
-            NSString *examStartPath = [dictionary objectForKey:@"url"];
-            //获取考试的链接
-            [self getExamUrl:examStartPath];
-        }else{
-            [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
-        }
-    } failure:^(NSError * _Nullable error) {
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
+    
+    [manager POST:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self.view hideLoading];
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
+        NSDictionary *dictionary = responseObject;
+        if ([dictionary boolValueForKey:@"success"]) {
+            
+        }else{
+            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 

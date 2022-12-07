@@ -12,6 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamPaperSuitQuestionModel : NSObject
 
+///考试系统域名
+@property(nonatomic, copy) NSString *domain;
+///试卷ID
+@property(nonatomic, copy) NSString *userExamId;
+
+
+
 ///题型名称
 @property(nonatomic, copy) NSString *pqt_title;
 //是否是多选题

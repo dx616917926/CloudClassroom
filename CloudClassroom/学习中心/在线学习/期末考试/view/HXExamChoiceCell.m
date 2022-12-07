@@ -74,7 +74,14 @@
         UIView *sender = ges.view;
         UIImageView *selectImagView = [sender.superview viewWithTag:ExamChoiceImageViewTag];
         
-        NSMutableArray *choices = [NSMutableArray array];
+        __block NSMutableArray *choices = [NSMutableArray array];
+        
+        [self.examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
+            if (examQuestionChoiceModel.isSelected) {
+                [choices addObject:examQuestionChoiceModel.choice_order];
+            }
+        }];
         
         if (sender==self.aTapView) {
             HXExamQuestionChoiceModel *choiceModel = self.examPaperSuitQuestionModel.questionChoices[0];

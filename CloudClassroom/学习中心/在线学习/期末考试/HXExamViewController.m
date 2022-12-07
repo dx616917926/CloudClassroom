@@ -86,10 +86,24 @@
         
         [examQuestionTypeModel.paperSuitQuestions enumerateObjectsUsingBlock:^(HXExamPaperSuitQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = obj;
+            //赋值这两项便于后面提交保存
+            examPaperSuitQuestionModel.domain =self.examPaperModel.domain;
+            examPaperSuitQuestionModel.userExamId =self.examPaperModel.userExamId;
+            
+            
             examPaperSuitQuestionModel.pqt_title = examQuestionTypeModel.pqt_title;
             examPaperSuitQuestionModel.isDuoXuan = (examPaperSuitQuestionModel.subQuestions.count==0&&[examPaperSuitQuestionModel.pqt_title containsString:@"多选题"]);
             examPaperSuitQuestionModel.isWenDa = (examPaperSuitQuestionModel.subQuestions.count==0&&examPaperSuitQuestionModel.questionChoices.count==0);
             examPaperSuitQuestionModel.isFuHe = (examPaperSuitQuestionModel.subQuestions.count>0&&examPaperSuitQuestionModel.questionChoices.count==0);
+            //复合题型给子题这两项也赋值
+            if (examPaperSuitQuestionModel.isFuHe) {
+                [examPaperSuitQuestionModel.subQuestions enumerateObjectsUsingBlock:^(HXExamPaperSubQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
+                    //赋值这两项便于后面提交保存
+                    examPaperSubQuestionModel.domain =self.examPaperModel.domain;
+                    examPaperSubQuestionModel.userExamId =self.examPaperModel.userExamId;
+                }];
+            }
             [self.dataArray addObject:obj];
         }];
         
@@ -99,6 +113,11 @@
 
 #pragma mark - 提交试题答案
 -(void)saveQuestion:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
+    
+    //答案非空才保存
+    if ([HXCommonUtil isNull:examPaperSuitQuestionModel.answer]) {
+        return;
+    }
     
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSuitQuestionModel.psq_id substringFromIndex:2]);
@@ -117,10 +136,9 @@
         @"psqId":psqId,
         @"stime":stime,
     };
-
     NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
     //拼接请求地址
-    NSString *pingDicUrl = [NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str];
+    NSString *pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
     
     [self.view showLoading];
     
@@ -128,15 +146,12 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
     manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
     
-    
-    
     [manager POST:pingDicUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dictionary = responseObject;
-        [self.view hideLoading];
         if ([dictionary boolValueForKey:@"success"]) {
-            
+            [self.view showTostWithMessage:@"答案已保存"];
         }else{
             [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
         }
@@ -149,7 +164,7 @@
 #pragma mark - Event
 //交卷
 -(void)jiaoJuan:(UIButton *)sender{
-    [self.navigationController popViewControllerAnimated:YES];
+    
     
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/submit/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
@@ -165,13 +180,14 @@
         NSLog(@"");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dictionary = responseObject;
-        [self.view hideLoading];
         if ([dictionary boolValueForKey:@"success"]) {
-            
+            [self.view showSuccessWithMessage:@"试卷已提交"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }else{
             [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
@@ -217,9 +233,20 @@
     if (self.indexPathNow.row == self.dataArray.count - 1) {
         [self.view showTostWithMessage:@"已经是最后一题了"];
     }
+    //
+    if ((self.indexPathNow.row+1<self.dataArray.count-1)&&(self.indexPathNow.row+1>=0)) {
+        //保存下一题答案
+        HXExamPaperSuitQuestionModel *nextPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row+1];
+        [self saveQuestion:nextPaperSuitQuestionModel];
+    }
     
-    HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row-1];
-    [self saveQuestion:examPaperSuitQuestionModel];
+    if ((self.indexPathNow.row-1<self.dataArray.count-1)&&(self.indexPathNow.row-1>=0)) {
+        //保存上一题答案
+        HXExamPaperSuitQuestionModel *upPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row-1];
+        [self saveQuestion:upPaperSuitQuestionModel];
+    }
+    
+    
 }
 //上一题
 - (void)upClick {
@@ -228,6 +255,10 @@
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section];
         [self.mainCollectionView reloadItemsAtIndexPaths:@[self.indexPathNow]];
+        
+        //保存下一题答案
+        HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row+1];
+        [self saveQuestion:examPaperSuitQuestionModel];
         
     }else {
         [self.view showTostWithMessage:@"已经是第一题了"];
@@ -240,6 +271,11 @@
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section];
         [self.mainCollectionView reloadItemsAtIndexPaths:@[self.indexPathNow]];
+        
+        //保存上一题答案
+        HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row-1];
+        [self saveQuestion:examPaperSuitQuestionModel];
+        
     }else {
         [self.view showTostWithMessage:@"已经是最后一题了"];
     }

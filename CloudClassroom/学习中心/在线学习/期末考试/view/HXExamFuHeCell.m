@@ -254,6 +254,69 @@
     self.indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
     self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(self.indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
     
+    //
+    if ((self.indexPathNow.row+1<self.examPaperSuitQuestionModel.subQuestions.count-1)&&(self.indexPathNow.row+1>=0)) {
+        //保存下一题答案
+        HXExamPaperSubQuestionModel *nextSubQuestionModel = self.examPaperSuitQuestionModel.subQuestions[self.indexPathNow.row+1];
+        [self saveQuestion:nextSubQuestionModel];
+    }
+    
+    if ((self.indexPathNow.row-1<self.examPaperSuitQuestionModel.subQuestions.count-1)&&(self.indexPathNow.row-1>=0)) {
+        //保存上一题答案
+        HXExamPaperSubQuestionModel *upSubQuestionModel = self.examPaperSuitQuestionModel.subQuestions[self.indexPathNow.row-1];
+        [self saveQuestion:upSubQuestionModel];
+    }
+    
+}
+
+#pragma mark - 提交试题答案
+-(void)saveQuestion:(HXExamPaperSubQuestionModel *)examPaperSubQuestionModel{
+    
+    //答案非空才保存
+    if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+        return;
+    }
+    
+    //问题id截掉"q_"
+    NSString *psqId = HXSafeString([examPaperSubQuestionModel.sub_id substringFromIndex:2]);
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
+   
+    NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,examPaperSubQuestionModel.userExamId];
+    
+    
+    NSString *answer = HXSafeString(examPaperSubQuestionModel.answer);
+    //获取当前时间戳
+    NSString *stime = [HXCommonUtil getNowTimeTimestamp];
+    //用于加密的参数,生成m
+    NSDictionary *md5Dic= @{
+        @"answer":answer,
+        @"psqId":psqId,
+        @"stime":stime,
+    };
+    NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
+    //拼接请求地址,并将中文转码
+    NSString *pingDicUrl = [HXCommonUtil stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    
+    [self showLoading];
+    
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
+    
+    [manager POST:pingDicUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dictionary = responseObject;
+        if ([dictionary boolValueForKey:@"success"]) {
+            [self showTostWithMessage:@"答案已保存"];
+        }else{
+            [self showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self showErrorWithMessage:error.description.lowercaseString];
+    }];
 }
 
 
