@@ -354,8 +354,8 @@
     }
     
 #ifdef DEBUG
-    self.accountTextField.text = @"022041100080";//20190005  2021080420
-    self.pwdTextField.text = @"022041100080";//dx123456
+    self.accountTextField.text = @"20190005";//20190005  2021080420
+    self.pwdTextField.text = @"dx123456";//dx123456
 #endif
     
 }

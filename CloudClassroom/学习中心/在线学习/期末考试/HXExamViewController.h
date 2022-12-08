@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamViewController : HXBaseViewController
+
 ///考卷模型
 @property(nonatomic, strong) HXExamPaperModel *examPaperModel;
 

@@ -6,6 +6,7 @@
 //
 
 #import "HXPingShiZuoYeViewController.h"
+#import "HXExamRecordViewController.h"
 #import "HXExamViewController.h"
 #import "HXPingShiZuoYeCell.h"
 #import "HXFaceConfigObject.h"
@@ -33,10 +34,16 @@
     [self createUI];
     //获取人脸识别设置
     [self getFaceSet];
+    
+}
+
+//每次进入重新获取一遍数据
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     //获取正考考试列表和看课列表/获取补考考试列表
     (self.isBuKao?[self getBKExamList]: [self getExamList]);
-   
 }
+
 
 #pragma mark -Setter
 -(void)setCourseInfoModel:(HXCourseInfoModel *)courseInfoModel{
@@ -155,7 +162,7 @@
     
     [self.view showLoading];
     
-    NSString * url = [NSString stringWithFormat:@"%@"HXEXAM_MODULES_LIST,examPara.domain,examPara.moduleCode];
+    NSString * url = [NSString stringWithFormat:HXEXAM_MODULES_LIST,examPara.domain,examPara.moduleCode];
     NSLog(@"\n______________________获取考试列表URL:______________________\n%@\n",url);
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
@@ -187,7 +194,11 @@
         if ([dictionary boolValueForKey:@"success"]) {
             [self.view hideLoading];
             NSString *examUrl = [dictionary objectForKey:@"url"];
+            NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
+            self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
+            //获取考试的HTMLStr参数
             [self getEaxmHTMLStr:examUrl];
+            
         }else{
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
@@ -214,7 +225,6 @@
     }];
 }
 
-
 #pragma mark - 6.用html作为参数去获取试卷json数据
 -(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
     
@@ -226,36 +236,44 @@
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.keJianOrExamInfoModel.examPara.domain,tempB[0],tempB[1],tempB[2]];
     
     [self.view showLoading];
+  
     
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         [self.view hideLoading];
         NSLog(@"%@",dictionary);
         if (dictionary) {
             HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
+            examPaperModel.domain = self.keJianOrExamInfoModel.examPara.domain;
+            examPaperModel.userExamId = self.keJianOrExamInfoModel.userExamId;
             HXExamViewController *examVC = [[HXExamViewController alloc] init];
             examVC.sc_navigationBarHidden = YES;//隐藏导航栏
             examVC.examPaperModel = examPaperModel;
             [self.navigationController pushViewController:examVC animated:YES];
-            
+
         }
     } failure:^(NSError * _Nullable error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
+   
     
 }
 
-
-
-
-
-
+#pragma mark - 查看考试记录
+-(void)chechExamRecord:(HXExamModel *)examModel{
+    
+    self.keJianOrExamInfoModel.examId = examModel.examId;
+    HXExamRecordViewController *vc = [[HXExamRecordViewController alloc] init];
+    vc.keJianOrExamInfoModel = self.keJianOrExamInfoModel;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
 
 #pragma mark - 3.开始考试
 -(void)startExam:(HXExamModel *)examModel{
     //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
     [self.view showLoading];
-    NSString * url = [NSString stringWithFormat:@"%@"HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
+    NSString * url = [NSString stringWithFormat:HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
     
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         

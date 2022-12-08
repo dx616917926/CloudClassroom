@@ -12,12 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamPaperSubQuestionModel : NSObject
 
-
+/***************************自定义数据***********************************/
 ///考试系统域名
 @property(nonatomic, copy) NSString *domain;
 ///试卷ID
 @property(nonatomic, copy) NSString *userExamId;
+///带问题序号加空格的html问题标题(自己加的)
+@property(nonatomic, strong) NSString *serialNoHtmlTitle;
+///答案
+@property(nonatomic, strong) NSString *answer;
 
+
+/***************************接口返回数据***********************************/
 ///子问题标题
 @property(nonatomic, copy) NSString *sub_staticTitle;
 ///子问题code
@@ -31,11 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///子问题序号
 @property(nonatomic, copy) NSString *sub_serial_no;
 
-///带问题序号加空格的html问题标题(自己加的)
-@property(nonatomic, strong) NSString *serialNoHtmlTitle;
 
-///答案
-@property(nonatomic, strong) NSString *answer;
 
 ///子问题选择题选项数组
 @property(nonatomic, strong) NSArray<HXExamSubQuestionChoicesModel *> *subQuestionChoices;

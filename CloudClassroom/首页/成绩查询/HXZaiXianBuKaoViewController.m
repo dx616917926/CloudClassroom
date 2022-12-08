@@ -135,6 +135,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.isFirst = (indexPath.row==0);
     cell.isLast = (indexPath.row==self.bukaoArray.count-1);
+    cell.isBoth = (indexPath.row==0&&indexPath.row==self.bukaoArray.count-1);
     cell.scoreModel = self.bukaoArray[indexPath.row];
     return cell;
 }

@@ -22,6 +22,7 @@
 
 @property(nonatomic,strong) UILabel *tipLabel;
 @property(nonatomic,strong) UIButton *startZuoYeBtn;
+@property(nonatomic,strong) UIButton *chechRecordBtn;
 
 @end
 
@@ -57,6 +58,7 @@
     self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
     self.timeContentLabel.text = [NSString stringWithFormat:@"%@   --   %@",[HXCommonUtil timestampSwitchTime:[examModel.beginTime integerValue]/1000 andFormatter:nil],[HXCommonUtil timestampSwitchTime:[examModel.endTime integerValue]/1000 andFormatter:nil]];
     
+    self.chechRecordBtn.hidden = (examModel.leftExamNum == examModel.maxExamNum);
     
     self.startZuoYeBtn.enabled = examModel.canExam;
     self.startZuoYeBtn.backgroundColor = examModel.canExam? COLOR_WITH_ALPHA(0x2E5BFD, 1):COLOR_WITH_ALPHA(0xC6C8D0, 1);
@@ -75,6 +77,12 @@
     }
 }
 
+-(void)chechRecord:(UIButton *)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chechExamRecord:)]) {
+        [self.delegate chechExamRecord:self.examModel];
+    }
+}
+
 #pragma mark - UI
 -(void)createUI{
 
@@ -89,6 +97,7 @@
     [self.bigBackgroundView addSubview:self.timeTitleLabel];
     [self.bigBackgroundView addSubview:self.timeContentLabel];
     [self.bigBackgroundView addSubview:self.tipLabel];
+    [self.bigBackgroundView addSubview:self.chechRecordBtn];
     [self.bigBackgroundView addSubview:self.startZuoYeBtn];
     
     
@@ -153,11 +162,17 @@
     .rightSpaceToView(self.startZuoYeBtn, 3)
     .heightIs(20);
     
+    self.chechRecordBtn.sd_layout
+    .centerYEqualToView(self.startZuoYeBtn)
+    .rightSpaceToView(self.startZuoYeBtn, 12)
+    .widthIs(108)
+    .heightRatioToView(self.startZuoYeBtn, 1);
+    self.chechRecordBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.tipLabel.sd_layout
     .centerYEqualToView(self.startZuoYeBtn)
     .leftSpaceToView(self.bigBackgroundView, 14)
-    .rightSpaceToView(self.startZuoYeBtn, 20)
+    .rightSpaceToView(self.chechRecordBtn, 20)
     .heightIs(17);
     
 }
@@ -262,6 +277,22 @@
         [_startZuoYeBtn addTarget:self action:@selector(startZuoYe:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startZuoYeBtn;
+}
+
+
+- (UIButton *)chechRecordBtn{
+    if (!_chechRecordBtn) {
+        _chechRecordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _chechRecordBtn.layer.borderWidth = 1;
+        _chechRecordBtn.layer.borderColor = COLOR_WITH_ALPHA(0x2E5BFD, 1).CGColor;
+        _chechRecordBtn.backgroundColor = UIColor.whiteColor;
+        _chechRecordBtn.titleLabel.font = HXBoldFont(14);
+        [_chechRecordBtn setTitleColor:COLOR_WITH_ALPHA(0x2E5BFD, 1) forState:UIControlStateNormal];
+        [_chechRecordBtn setTitle:@"查看作业记录" forState:UIControlStateNormal];
+        [_chechRecordBtn addTarget:self action:@selector(chechRecord:) forControlEvents:UIControlEventTouchUpInside];
+        _chechRecordBtn.hidden = YES;
+    }
+    return _chechRecordBtn;
 }
 
 @end

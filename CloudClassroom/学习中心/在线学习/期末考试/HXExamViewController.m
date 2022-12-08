@@ -79,6 +79,8 @@
     _examPaperModel = examPaperModel;
     
     [self.dataArray removeAllObjects];
+    
+
     //处理试卷数据
     [self.examPaperModel.questionGroups enumerateObjectsUsingBlock:^(HXExamQuestionTypeModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
@@ -108,16 +110,116 @@
         }];
         
     }];
+    
+    //继续作答进来的，要根据题目id找到对应题目，赋值答案
+    if (examPaperModel.isContinuerExam) {
+        [examPaperModel.answers enumerateObjectsUsingBlock:^(HXExamAnswerModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self giveAnswer:obj];
+        }];
+    }
+    
+    NSLog(@"------");
 }
 
+//赋值答案
+-(void)giveAnswer:(HXExamAnswerModel *)answerModel{
+    
+    NSString *qId = [@"q_" stringByAppendingString:answerModel.pqt_id];
+    
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = obj;
+        //先从复合题里找
+        if (examPaperSuitQuestionModel.isFuHe) {
+            
+            [examPaperSuitQuestionModel.subQuestions enumerateObjectsUsingBlock:^(HXExamPaperSubQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
+                
+                if ([examPaperSubQuestionModel.sub_id isEqualToString:qId]) {
+
+                    //复合题里的选择题
+                    if (examPaperSubQuestionModel.subQuestionChoices.count>0) {
+                        [examPaperSubQuestionModel.subQuestionChoices enumerateObjectsUsingBlock:^(HXExamSubQuestionChoicesModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                            HXExamSubQuestionChoicesModel *examSubQuestionChoicesModel = obj;
+                            if ([answerModel.answer containsString:examSubQuestionChoicesModel.subChoice_order]) {
+                                examSubQuestionChoicesModel.isSelected = YES;
+                            }
+                        }];
+                        *stop = YES;
+                        return;
+                    }
+                    
+                    //复合题里的问答题
+                    if (examPaperSubQuestionModel.subQuestionChoices.count==0) {
+                        examPaperSubQuestionModel.answer = answerModel.answer;
+                        *stop = YES;
+                        return;
+                    }
+                }
+                
+            }];
+        }
+        
+        //多选题里找
+        if (examPaperSuitQuestionModel.isDuoXuan) {
+            if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+                
+                [examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
+                    if ([answerModel.answer containsString:examQuestionChoiceModel.choice_order]) {
+                        examQuestionChoiceModel.isSelected = YES;
+                    }
+                }];
+                *stop = YES;
+                return;
+            }
+        }
+        
+        //问答题里找
+        if (examPaperSuitQuestionModel.isWenDa) {
+            if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+                examPaperSuitQuestionModel.answer = answerModel.answer;
+                *stop = YES;
+                return;
+            }
+        }
+        
+        //最后选择题
+        if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+            [examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
+                if ([answerModel.answer containsString:examQuestionChoiceModel.choice_order]) {
+                    examQuestionChoiceModel.isSelected = YES;
+                    *stop = YES;
+                    return;
+                }
+                
+            }];
+            *stop = YES;
+            return;
+        }
+        
+    }];
+    
+    
+}
 
 #pragma mark - 提交试题答案
 -(void)saveQuestion:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
     
-    //答案非空才保存
-    if ([HXCommonUtil isNull:examPaperSuitQuestionModel.answer]) {
+    //复合题保存当前子题答案
+    if (examPaperSuitQuestionModel.isFuHe) {
+        HXExamPaperSubQuestionModel *examPaperSubQuestionModel = examPaperSuitQuestionModel.subQuestions[examPaperSuitQuestionModel.fuhe_position];
+        [self saveSubQuestion:examPaperSubQuestionModel];
         return;
     }
+    
+    //非复合题答案非空才保存
+    if ([HXCommonUtil isNull:examPaperSuitQuestionModel.answer]&&!examPaperSuitQuestionModel.isFuHe) {
+        return;
+    }
+    
     
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSuitQuestionModel.psq_id substringFromIndex:2]);
@@ -140,6 +242,56 @@
     //拼接请求地址
     NSString *pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
     
+    
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
+    
+    [manager POST:pingDicUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dictionary = responseObject;
+        if ([dictionary boolValueForKey:@"success"]) {
+            NSLog(@"答案已保存");
+        }else{
+            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
+
+
+#pragma mark - 提交复合子题试题答案
+-(void)saveSubQuestion:(HXExamPaperSubQuestionModel *)examPaperSubQuestionModel{
+    
+    //答案非空才保存
+    if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+        return;
+    }
+    
+    //问题id截掉"q_"
+    NSString *psqId = HXSafeString([examPaperSubQuestionModel.sub_id substringFromIndex:2]);
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
+   
+    NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,examPaperSubQuestionModel.userExamId];
+    
+    
+    NSString *answer = HXSafeString(examPaperSubQuestionModel.answer);
+    //获取当前时间戳
+    NSString *stime = [HXCommonUtil getNowTimeTimestamp];
+    //用于加密的参数,生成m
+    NSDictionary *md5Dic= @{
+        @"answer":answer,
+        @"psqId":psqId,
+        @"stime":stime,
+    };
+    NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
+    //拼接请求地址,并将中文转码
+    NSString *pingDicUrl = [HXCommonUtil stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    
     [self.view showLoading];
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -151,7 +303,7 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dictionary = responseObject;
         if ([dictionary boolValueForKey:@"success"]) {
-            [self.view showTostWithMessage:@"答案已保存"];
+            NSLog(@"答案已保存");
         }else{
             [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
         }
@@ -161,15 +313,15 @@
     }];
 }
 
-#pragma mark - Event
-//交卷
+#pragma mark - 交卷
 -(void)jiaoJuan:(UIButton *)sender{
     
-    
+    //保存当前答案
+    HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
+    [self saveQuestion:examPaperSuitQuestionModel];
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/submit/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
    
-    
     [self.view showLoading];
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -182,21 +334,110 @@
         NSDictionary *dictionary = responseObject;
         if ([dictionary boolValueForKey:@"success"]) {
             [self.view showSuccessWithMessage:@"试卷已提交"];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
         }else{
             [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
         }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
 }
 
+#pragma mark - 查看试卷
+-(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId{
+    //type1：查看试卷 2:查看分数
+//    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.keJianOrExamInfoModel.examPara.domain,userExamId];
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
+    
+    [self.view showLoading];
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.view hideLoading];
+        NSDictionary *dic = responseObject;
+        [self getExamUrl: [dic stringValueForKey:@"resultUrl"]];
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
 
-//点击答题卡
+
+#pragma mark - 4.获取考试的链接
+-(void)getExamUrl:(NSString *)ur{
+    
+    NSString *pingUrl = [NSString stringWithFormat:@"%@/exam%@",self.examPaperModel.domain,ur];
+    [self.view showLoading];
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    [manager GET:pingUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.view hideLoading];
+        NSDictionary *dic = responseObject;
+        [self getEaxmHTMLStr:[dic stringValueForKey:@"url"]];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
+
+-(void)getEaxmHTMLStr:(NSString *)examUrl{
+
+    
+    [self.view showLoading];
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    //返回的数据不是json
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:examUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.view hideLoading];
+        NSString *htmlStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
+
+#pragma mark - 6.用html作为参数去获取试卷json数据
+-(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
+    
+    NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
+    NSString *t = tempA.lastObject;
+    NSArray *tempB = [t componentsSeparatedByString:@"/"];
+//    NSString *url = @"https://eplatform.edu-edu.com.cn/exam/student/exam/resource/htmlToJson/paper/19745/88111";
+    NSDictionary *dic = @{@"paperHtml":htmlStr};
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.examPaperModel.domain,tempB[0],tempB[1],tempB[2]];
+    
+    [self.view showLoading];
+  
+    
+    [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
+        [self.view hideLoading];
+        NSLog(@"%@",dictionary);
+        if (dictionary) {
+            HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
+        }
+    } failure:^(NSError * _Nullable error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+    
+}
+
+
+
+#pragma mark - 点击答题卡
 -(void)clickAnswerSheet:(UIButton *)sender{
+    
+    //每次切换答题卡保存一下当前问题答案
+    HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
+    [self saveQuestion:examPaperSuitQuestionModel];
+    
+    
     HXAnswerSheetViewController *vc = [[HXAnswerSheetViewController alloc] init];
     vc.examPaperModel = self.examPaperModel;
     vc.isEnterExam = YES;
@@ -216,16 +457,25 @@
         }
     };
     [self presentViewController:vc animated:NO completion:nil];
+    
+    
 }
 
 
 
 
-
+#pragma mark - 滑动切换题目
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
     CGPoint pInView = [self.view convertPoint:self.mainCollectionView.center toView:self.mainCollectionView];
     self.indexPathNow = [self.mainCollectionView indexPathForItemAtPoint:pInView];
+    
+    //将复合题子题位置归零
+    HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
+    if (examPaperSuitQuestionModel.isFuHe) {
+        examPaperSuitQuestionModel.fuhe_position=0;
+    }
+    
     if (self.indexPathNow.row == 0) {
         [self.view showTostWithMessage:@"已经是第一题了"];
     }
@@ -248,13 +498,20 @@
     
     
 }
-//上一题
+
+#pragma mark - 上一题
 - (void)upClick {
     
     if (self.indexPathNow.row > 0) {
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section];
         [self.mainCollectionView reloadItemsAtIndexPaths:@[self.indexPathNow]];
+        
+        //将复合题子题位置归零
+        HXExamPaperSuitQuestionModel *cuurentExamPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
+        if (cuurentExamPaperSuitQuestionModel.isFuHe) {
+            cuurentExamPaperSuitQuestionModel.fuhe_position=0;
+        }
         
         //保存下一题答案
         HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row+1];
@@ -265,12 +522,19 @@
     }
     
 }
-//下一题
+
+#pragma mark - 下一题
 - (void)downClick {
     if (self.indexPathNow.row < self.dataArray.count - 1) {
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section];
         [self.mainCollectionView reloadItemsAtIndexPaths:@[self.indexPathNow]];
+        
+        //将复合题子题位置归零
+        HXExamPaperSuitQuestionModel *cuurentExamPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
+        if (cuurentExamPaperSuitQuestionModel.isFuHe) {
+            cuurentExamPaperSuitQuestionModel.fuhe_position=0;
+        }
         
         //保存上一题答案
         HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row-1];

@@ -45,9 +45,6 @@
     if (!isHaveXueQi) {
         self.xueQiBtn.sd_layout.widthIs(0);
         self.titleLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 0);
-    }else{
-        self.xueQiBtn.sd_layout.widthIs(80);
-        self.titleLabel.sd_layout.leftSpaceToView(self.xueQiBtn, 8);
     }
 }
 
@@ -146,9 +143,16 @@
     self.xueQiBtn.sd_layout
     .centerYEqualToView(self.bigBackgroundView)
     .leftSpaceToView(self.bigBackgroundView, 16)
-    .widthIs(80)
     .heightIs(21);
     self.xueQiBtn.sd_cornerRadius=@2;
+    
+    self.xueQiBtn.titleLabel.sd_layout
+    .centerYEqualToView(self.xueQiBtn)
+    .leftSpaceToView(self.xueQiBtn, 5)
+    .heightRatioToView(self.xueQiBtn, 1);
+    [self.xueQiBtn.titleLabel setSingleLineAutoResizeWithMaxWidth:150];
+    
+    [self.xueQiBtn setupAutoWidthWithRightView:self.xueQiBtn.titleLabel rightMargin:5];
     
     self.titleLabel.sd_layout
     .centerYEqualToView(self.bigBackgroundView)

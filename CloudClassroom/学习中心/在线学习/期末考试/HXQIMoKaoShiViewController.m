@@ -6,11 +6,15 @@
 //
 
 #import "HXQIMoKaoShiViewController.h"
+#import "HXExamRecordViewController.h"//考试记录列表
 #import "HXExamViewController.h"
 #import "HXQiMoKaoShiCell.h"
 #import "HXFaceConfigObject.h"
 #import "HXKeJianOrExamInfoModel.h"
 #import "HXExamPaperModel.h"
+
+#import "HXExamRecordModel.h"
+
 
 @interface HXQIMoKaoShiViewController ()<UITableViewDelegate,UITableViewDataSource,HXQiMoKaoShiCellDelegate>
 
@@ -34,6 +38,12 @@
     [self createUI];
     //获取人脸识别设置
     [self getFaceSet];
+    
+}
+
+//每次进入重新获取一遍数据
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     //获取正考考试列表和看课列表/获取补考考试列表
     (self.isBuKao?[self getBKExamList]: [self getExamList]);
 }
@@ -133,7 +143,6 @@
     
     [self.view showLoading];
     
-   
     [HXExamSessionManager getDataWithNSString:examPara.examURL withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         //
         [self.view hideLoading];
@@ -156,7 +165,7 @@
     
     [self.view showLoading];
     
-    NSString * url = [NSString stringWithFormat:@"%@"HXEXAM_MODULES_LIST,examPara.domain,examPara.moduleCode];
+    NSString * url = [NSString stringWithFormat:HXEXAM_MODULES_LIST,examPara.domain,examPara.moduleCode];
     NSLog(@"\n______________________获取考试列表URL:______________________\n%@\n",url);
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
@@ -192,7 +201,6 @@
             self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
             //获取考试的HTMLStr参数
             [self getEaxmHTMLStr:examUrl];
-            
         }else{
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
@@ -206,6 +214,7 @@
     
     [self.view showLoading];
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+    //返回的数据不是json
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager GET:examUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"");
@@ -231,7 +240,6 @@
     
     [self.view showLoading];
   
-    
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         [self.view hideLoading];
         NSLog(@"%@",dictionary);
@@ -249,36 +257,19 @@
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
-   
-    
 }
 
 
 
 
-#pragma mark - <HXQiMoKaoShiCellDelegate>查看考试记录、开始考试
+#pragma mark - 查看考试记录
 -(void)chechExamRecord:(HXExamModel *)examModel{
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.keJianOrExamInfoModel.examPara.domain,self.keJianOrExamInfoModel.userExamId];
-    [self.view showLoading];
+    self.keJianOrExamInfoModel.examId = examModel.examId;
+    HXExamRecordViewController *vc = [[HXExamRecordViewController alloc] init];
+    vc.keJianOrExamInfoModel = self.keJianOrExamInfoModel;
+    [self.navigationController pushViewController:vc animated:YES];
     
-    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
-    
-    [manager POST:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        NSLog(@"");
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
-        NSDictionary *dictionary = responseObject;
-        if ([dictionary boolValueForKey:@"success"]) {
-            
-        }else{
-            [self.view showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view showErrorWithMessage:error.description.lowercaseString];
-    }];
 }
 
 
@@ -287,7 +278,7 @@
    
     //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
     [self.view showLoading];
-    NSString * url = [NSString stringWithFormat:@"%@"HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
+    NSString * url = [NSString stringWithFormat:HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
     
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         

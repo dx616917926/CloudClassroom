@@ -69,6 +69,19 @@
     }
 }
 
+-(void)setIsBoth:(BOOL)isBoth{
+    _isBoth = isBoth;
+    if (isBoth) {
+        self.bottomLine.hidden = YES;
+        //圆角
+       UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8 ,8)];
+       CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+       maskLayer.frame =self.bigBackgroundView.bounds;
+       maskLayer.path = maskPath.CGPath;
+       self.bigBackgroundView.layer.mask = maskLayer;
+    }
+}
+
 -(void)setScoreModel:(HXScoreModel *)scoreModel{
     
     _scoreModel = scoreModel;

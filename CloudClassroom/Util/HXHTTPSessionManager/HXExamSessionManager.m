@@ -22,9 +22,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[HXExamSessionManager alloc] init];
-        _sharedClient.requestSerializer= [AFHTTPRequestSerializer serializer];
-//        _sharedClient.responseSerializer = [AFHTTPResponseSerializer serializer];
-//        _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
+        _sharedClient.requestSerializer= [AFHTTPRequestSerializer serializer];//非json请求
         _sharedClient.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
         _sharedClient.requestSerializer.timeoutInterval = 60;
     });

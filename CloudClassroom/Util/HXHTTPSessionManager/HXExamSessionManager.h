@@ -11,13 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-///1、获取考试列表  {moduleCode}  班级里已开通模块
-#define    HXEXAM_MODULES_LIST    @"/exam-admin/home/module/exams/mobile/code/%@"  //
+///1、获取考试列表   考试域名: {domain} ， 班级里已开通模块:{moduleCode}
+#define    HXEXAM_MODULES_LIST     @"%@/exam-admin/home/module/exams/mobile/code/%@"  //
 
-///2、开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url      {examId} 考试模块id
-#define   HXEXAM_START_JSON       @"/exam-admin/home/my/exam/start/json/%@?credit=true&site_preference=mobile&ct=client"
+///2、开始考试  用于考试数据的初始化，考试域名: {domain}  ,  考试模块id: {examId}
+#define   HXEXAM_START_JSON        @"%@/exam-admin/home/my/exam/start/json/%@?credit=true&site_preference=mobile&ct=client"
 
-
+///3、查看考试记录 考试域名: {domain}   ,考试模块id: {examId}
+#define   HXEXAM_CheckRecord       @"%@/exam-admin/home/my/exam/view/result/json/%@"
 
 @interface HXExamSessionManager : AFHTTPSessionManager
 

@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///开始作业
 -(void)startExam:(HXExamModel *)examModel;
 
+///查看考试记录
+-(void)chechExamRecord:(HXExamModel *)examModel;
+
 @end
 
 @interface HXPingShiZuoYeCell : UITableViewCell

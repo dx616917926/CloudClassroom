@@ -73,7 +73,7 @@
 -(void)setIsBoth:(BOOL)isBoth{
     _isBoth = isBoth;
     if (isBoth) {
-        self.bottomLine.hidden = NO;
+        self.bottomLine.hidden = YES;
         //圆角
        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bigBackgroundView.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8 ,8)];
        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];

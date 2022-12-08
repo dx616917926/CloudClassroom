@@ -59,6 +59,32 @@
 }
 
 
+#pragma mark - Setter
+-(void)setStudentFeeModel:(HXStudentFeeModel *)studentFeeModel{
+    
+    _studentFeeModel = studentFeeModel;
+    ///缴费状态 0 未缴费 1已缴费
+    if (studentFeeModel.feeStatus==1) {
+        [self.stateBtn setTitle:@"已完成" forState:UIControlStateNormal];
+        self.stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
+        [self.stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+    }else{
+        [self.stateBtn setTitle:@"未支付" forState:UIControlStateNormal];
+        self.stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFDEDED, 1);
+        [self.stateBtn setTitleColor:COLOR_WITH_ALPHA(0xED4F4F, 1) forState:UIControlStateNormal];
+    }
+    
+    self.titleLabel.text = [NSString stringWithFormat:@"%@ %@",studentFeeModel.batchName,studentFeeModel.paybackName];
+    self.majorContentLabel.text = studentFeeModel.majorlongname;
+    self.orderNoContentLabel.text = studentFeeModel.orderNo;
+    self.yingJiaoContentLabel.text = [NSString stringWithFormat:@"￥%.2f",studentFeeModel.payable];
+    self.yiJiaoContentLabel.text = [NSString stringWithFormat:@"￥%.2f",studentFeeModel.paidIn];
+    self.qianJiaoContentLabel.text = [NSString stringWithFormat:@"￥%.2f",studentFeeModel.balance];
+    self.paymentMethodContentLabel.text = studentFeeModel.order_type;
+    self.timeContentLabel.text = studentFeeModel.orderDate;
+    
+    
+}
 
 #pragma mark - UI
 -(void)createUI{
@@ -201,7 +227,7 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = HXBoldFont(15);
         _titleLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _titleLabel.text = @"2021 学杂费";
+        
     }
     return _titleLabel;
 }
@@ -212,7 +238,7 @@
         _stateBtn.titleLabel.font = HXFont(12);
         _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
         [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_stateBtn setTitle:@"已完成" forState:UIControlStateNormal];
+        
     }
     return _stateBtn;
 }
@@ -235,7 +261,7 @@
         _majorContentLabel.textAlignment = NSTextAlignmentRight;
         _majorContentLabel.font = HXFont(15);
         _majorContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _majorContentLabel.text = @"计算机科学与技术";
+        
     }
     return _majorContentLabel;
 }
@@ -257,7 +283,7 @@
         _orderNoContentLabel.textAlignment = NSTextAlignmentRight;
         _orderNoContentLabel.font = HXFont(15);
         _orderNoContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _orderNoContentLabel.text = @"202206239876855";
+        
     }
     return _orderNoContentLabel;
 }
@@ -279,7 +305,7 @@
         _yingJiaoContentLabel.textAlignment = NSTextAlignmentRight;
         _yingJiaoContentLabel.font = HXFont(15);
         _yingJiaoContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _yingJiaoContentLabel.text = @"￥50.00";
+        
     }
     return _yingJiaoContentLabel;
 }
@@ -301,7 +327,7 @@
         _yiJiaoContentLabel.textAlignment = NSTextAlignmentRight;
         _yiJiaoContentLabel.font = HXFont(15);
         _yiJiaoContentLabel.textColor = COLOR_WITH_ALPHA(0xED4F4F, 1);
-        _yiJiaoContentLabel.text = @"￥50.00";
+        
     }
     return _yiJiaoContentLabel;
 }
@@ -323,7 +349,7 @@
         _qianJiaoContentLabel.textAlignment = NSTextAlignmentRight;
         _qianJiaoContentLabel.font = HXFont(15);
         _qianJiaoContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _qianJiaoContentLabel.text = @"0";
+        
     }
     return _qianJiaoContentLabel;
 }
@@ -346,7 +372,7 @@
         _paymentMethodContentLabel.textAlignment = NSTextAlignmentRight;
         _paymentMethodContentLabel.font = HXFont(15);
         _paymentMethodContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _paymentMethodContentLabel.text = @"微信支付";
+        
     }
     return _paymentMethodContentLabel;
 }
@@ -368,7 +394,7 @@
         _timeContentLabel.textAlignment = NSTextAlignmentRight;
         _timeContentLabel.font = HXFont(15);
         _timeContentLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _timeContentLabel.text = @"2020.05.31 20:00";
+        
     }
     return _timeContentLabel;
 }

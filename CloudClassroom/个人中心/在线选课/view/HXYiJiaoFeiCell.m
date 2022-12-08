@@ -11,6 +11,7 @@
 
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UILabel *courseNameLabel;
+@property(nonatomic,strong) UILabel *termLabel;
 
 //支付时间
 @property(nonatomic,strong) UILabel *timeTitleLabel;
@@ -54,6 +55,7 @@
     _coursePayOrderModel = coursePayOrderModel;
     
     self.courseNameLabel.text = coursePayOrderModel.termCourseName;
+    self.termLabel.text = [NSString stringWithFormat:@"第%@学期",coursePayOrderModel.term];
     self.timeContentLabel.text = coursePayOrderModel.order_date;
     self.orderNoContentLabel.text = coursePayOrderModel.order_no;
     NSString *content = [NSString stringWithFormat:@"￥%.2f",coursePayOrderModel.price];
@@ -72,6 +74,7 @@
     
     [self.contentView addSubview:self.bigBackgroundView];
     [self.bigBackgroundView addSubview:self.courseNameLabel];
+    [self.bigBackgroundView addSubview:self.termLabel];
     [self.bigBackgroundView addSubview:self.timeTitleLabel];
     [self.bigBackgroundView addSubview:self.timeContentLabel];
     [self.bigBackgroundView addSubview:self.orderNoTitleLabel];
@@ -86,13 +89,19 @@
     self.bigBackgroundView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(6, 12, 6, 12));
     self.bigBackgroundView.sd_cornerRadius = @8;
     
-    
+    self.termLabel.sd_layout
+    .topSpaceToView(self.bigBackgroundView, 16)
+    .rightSpaceToView(self.bigBackgroundView, 12)
+    .widthIs(70)
+    .heightIs(16);
     
     self.courseNameLabel.sd_layout
     .topSpaceToView(self.bigBackgroundView, 16)
     .leftSpaceToView(self.bigBackgroundView, 12)
-    .rightSpaceToView(self.bigBackgroundView, 12)
+    .rightSpaceToView(self.termLabel, 10)
     .heightIs(21);
+    
+    
     
     self.timeTitleLabel.sd_layout
     .topSpaceToView(self.courseNameLabel, 16)
@@ -165,6 +174,16 @@
         
     }
     return _courseNameLabel;
+}
+
+- (UILabel *)termLabel{
+    if (!_termLabel) {
+        _termLabel = [[UILabel alloc] init];
+        _termLabel.font = HXFont(11);
+        _termLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
+        _termLabel.textAlignment = NSTextAlignmentRight;
+    }
+    return _termLabel;
 }
 
 

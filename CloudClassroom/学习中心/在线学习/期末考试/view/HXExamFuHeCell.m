@@ -240,7 +240,7 @@
 -(void)scrollSubPosition:(NSInteger)position{
     //点击答题卡
     [self.subCollectionView setContentOffset:CGPointMake(kScreenWidth*position, 0) animated:NO];
-    
+    self.examPaperSuitQuestionModel.fuhe_position = position;
     CGPoint pInView = [self convertPoint:self.subCollectionView.center toView:self.subCollectionView];
     NSIndexPath *indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
     self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
@@ -254,6 +254,7 @@
     self.indexPathNow = [self.subCollectionView indexPathForItemAtPoint:pInView];
     self.subNOLabel.text = [NSString stringWithFormat:@"%ld/%lu",(self.indexPathNow.row+1),(unsigned long)self.examPaperSuitQuestionModel.subQuestions.count];
     
+    self.examPaperSuitQuestionModel.fuhe_position = self.indexPathNow.row;
     //
     if ((self.indexPathNow.row+1<self.examPaperSuitQuestionModel.subQuestions.count-1)&&(self.indexPathNow.row+1>=0)) {
         //保存下一题答案
@@ -309,7 +310,7 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dictionary = responseObject;
         if ([dictionary boolValueForKey:@"success"]) {
-            [self showTostWithMessage:@"答案已保存"];
+            NSLog(@"答案已保存");
         }else{
             [self showErrorWithMessage:[dictionary stringValueForKey:@"errMsg"]];
         }

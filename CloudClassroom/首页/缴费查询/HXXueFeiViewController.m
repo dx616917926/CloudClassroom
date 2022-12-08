@@ -27,6 +27,8 @@
 @property(nonatomic,strong) UILabel *qianJiaoTitleLabel;
 @property(nonatomic,strong) UILabel *qianJiaoMoneyLabel;
 
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXXueFeiViewController
@@ -37,16 +39,46 @@
     
     //UI
     [self createUI];
+    
+    //获取财务已缴费列表
+    [self getCourseFeeHaveList];
 }
 
 
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
-}
-
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
+#pragma mark - 获取财务已缴费列表
+-(void)getCourseFeeHaveList{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetCourseFeeHaveList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXStudentFeeModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:list];
+            
+            if (list.count==0) {
+                [self.view addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+            
+            HXStudentFeeModel *model = list.firstObject;
+            
+            self.yingJiaoMoneyLabel.text = [NSString stringWithFormat:@"%.2f",model.totalPayable];
+            self.yiJiaoMoneyLabel.text = [NSString stringWithFormat:@"%.2f",model.totalPaidIn];
+            self.qianJiaoMoneyLabel.text = [NSString stringWithFormat:@"%.2f",model.totalBalance];
+            
+            [self.mainTableView reloadData];
+            
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
 }
 
 
@@ -59,7 +91,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.dataArray.count;
 }
 
 
@@ -79,6 +111,7 @@
         cell = [[HXXueFeiCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:xueFeiCellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.studentFeeModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -106,15 +139,21 @@
    
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getCourseFeeHaveList)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
+   
 }
 
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -263,7 +302,7 @@
         _yingJiaoMoneyLabel.textAlignment = NSTextAlignmentCenter;
         _yingJiaoMoneyLabel.font = HXBoldFont(14);
         _yingJiaoMoneyLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _yingJiaoMoneyLabel.text = @"5000";
+        
     }
     return _yingJiaoMoneyLabel;
 }
@@ -293,7 +332,7 @@
         _yiJiaoMoneyLabel.textAlignment = NSTextAlignmentCenter;
         _yiJiaoMoneyLabel.font = HXBoldFont(14);
         _yiJiaoMoneyLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _yiJiaoMoneyLabel.text = @"2000";
+        
     }
     return _yiJiaoMoneyLabel;
 }
@@ -323,7 +362,7 @@
         _qianJiaoMoneyLabel.textAlignment = NSTextAlignmentCenter;
         _qianJiaoMoneyLabel.font = HXBoldFont(14);
         _qianJiaoMoneyLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _qianJiaoMoneyLabel.text = @"3000";
+        
     }
     return _qianJiaoMoneyLabel;
 }

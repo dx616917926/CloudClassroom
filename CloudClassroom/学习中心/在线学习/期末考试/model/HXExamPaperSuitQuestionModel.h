@@ -12,13 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamPaperSuitQuestionModel : NSObject
 
+/***************************自定义数据***********************************/
+
 ///考试系统域名
 @property(nonatomic, copy) NSString *domain;
 ///试卷ID
 @property(nonatomic, copy) NSString *userExamId;
-
-
-
 ///题型名称
 @property(nonatomic, copy) NSString *pqt_title;
 //是否是多选题
@@ -29,6 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL isFuHe;
 ///答案
 @property(nonatomic, strong) NSString *answer;
+///复合题中小题的位置（从0 开始）
+@property (nonatomic,assign) NSInteger fuhe_position;
+
+
+/***************************接口返回数据***********************************/
 
 ///问题标题
 @property(nonatomic, copy) NSString *psq_staticTitle;
@@ -50,10 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///问答题子问题数组
 @property(nonatomic, strong) NSArray<HXExamPaperSubQuestionModel *> *subQuestions;
 
-//
-@property (nonatomic,assign) BOOL shouldScroll;
-///复合题中小题的位置（从0 开始）
-@property (nonatomic,assign) NSInteger fuhe_position;
+
+
 
 @end
 

@@ -57,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///提示信息
 @property(nonatomic, copy) NSString *showMessage;
 
+
+
 @end
 
 NS_ASSUME_NONNULL_END

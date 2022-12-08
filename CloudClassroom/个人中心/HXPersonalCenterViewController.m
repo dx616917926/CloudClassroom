@@ -288,7 +288,7 @@
         HXUploadIDPhotoViewController *vc = [[HXUploadIDPhotoViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
-    }else if([moduleCode isEqualToString:@"FacerRZ"]){//人脸识别
+    }else if([moduleCode isEqualToString:@"facerRZ"]){//人脸识别
         HXFaceConfigObject *faceConfig = [[HXFaceConfigObject alloc] init];
         faceConfig.imageStatus = ([HXCommonUtil isNull:self.homeStudentInfoModel.imgUrl]?-1:1);
         faceConfig.imageURL = self.homeStudentInfoModel.imgUrl;
