@@ -265,9 +265,9 @@
 #pragma mark - 查看考试记录
 -(void)chechExamRecord:(HXExamModel *)examModel{
     
-    self.keJianOrExamInfoModel.examId = examModel.examId;
     HXExamRecordViewController *vc = [[HXExamRecordViewController alloc] init];
-    vc.keJianOrExamInfoModel = self.keJianOrExamInfoModel;
+    vc.examId = examModel.examId;
+    vc.examPara = self.keJianOrExamInfoModel.examPara;
     [self.navigationController pushViewController:vc animated:YES];
     
 }

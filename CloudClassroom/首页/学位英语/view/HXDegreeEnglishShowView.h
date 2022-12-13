@@ -10,9 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-    FeiBenKeShengType,
-    WeiKaiFangBaoMingType,
-    WeiManZuTiaoJianType,
+    FeiBenKeShengType,//非本科生
+    WeiKaiFangBaoMingType,//未开放报名
+    WeiManZuTiaoJianType,//未满足学位申请的条件
 } DegreeEnglishType;
 
 @interface HXDegreeEnglishShowView : UIView

@@ -87,6 +87,11 @@
         sender.userInteractionEnabled = YES;
         return;
     }
+    if (self.payType==3) {//银联
+       [self.view showTostWithMessage:@"暂不支持银联支付"];
+        sender.userInteractionEnabled = YES;
+        return;
+   }
     
     NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
@@ -106,8 +111,6 @@
                 [self aliPay:[dictionary stringValueForKey:@"data"]];
             }else if (self.payType==2) {//微信支付
                 [self weiXinPay:[dictionary dictionaryValueForKey:@"data"]];
-            }else if (self.payType==3) {//银联
-                [self.view showTostWithMessage:@"暂不支持"];
             }
             
         }

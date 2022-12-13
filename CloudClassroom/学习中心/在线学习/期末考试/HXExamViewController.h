@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///考卷模型
 @property(nonatomic, strong) HXExamPaperModel *examPaperModel;
 
-
+//交卷
+-(void)jiaoJuan;
 
 @end
 

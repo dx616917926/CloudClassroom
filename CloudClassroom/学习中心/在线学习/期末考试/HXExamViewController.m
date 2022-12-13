@@ -314,7 +314,7 @@
 }
 
 #pragma mark - 交卷
--(void)jiaoJuan:(UIButton *)sender{
+-(void)jiaoJuan{
     
     //保存当前答案
     HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
@@ -346,87 +346,7 @@
     
 }
 
-#pragma mark - 查看试卷
--(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId{
-    //type1：查看试卷 2:查看分数
-//    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.keJianOrExamInfoModel.examPara.domain,userExamId];
-    
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
-    
-    [self.view showLoading];
-    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
-    [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        NSLog(@"");
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
-        NSDictionary *dic = responseObject;
-        [self getExamUrl: [dic stringValueForKey:@"resultUrl"]];
-       
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view showErrorWithMessage:error.description.lowercaseString];
-    }];
-}
 
-
-#pragma mark - 4.获取考试的链接
--(void)getExamUrl:(NSString *)ur{
-    
-    NSString *pingUrl = [NSString stringWithFormat:@"%@/exam%@",self.examPaperModel.domain,ur];
-    [self.view showLoading];
-    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
-    [manager GET:pingUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        NSLog(@"");
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
-        NSDictionary *dic = responseObject;
-        [self getEaxmHTMLStr:[dic stringValueForKey:@"url"]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view showErrorWithMessage:error.description.lowercaseString];
-    }];
-}
-
--(void)getEaxmHTMLStr:(NSString *)examUrl{
-
-    
-    [self.view showLoading];
-    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
-    //返回的数据不是json
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager GET:examUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-        NSLog(@"");
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
-        NSString *htmlStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [self.view showErrorWithMessage:error.description.lowercaseString];
-    }];
-}
-
-#pragma mark - 6.用html作为参数去获取试卷json数据
--(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
-    
-    NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
-    NSString *t = tempA.lastObject;
-    NSArray *tempB = [t componentsSeparatedByString:@"/"];
-//    NSString *url = @"https://eplatform.edu-edu.com.cn/exam/student/exam/resource/htmlToJson/paper/19745/88111";
-    NSDictionary *dic = @{@"paperHtml":htmlStr};
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.examPaperModel.domain,tempB[0],tempB[1],tempB[2]];
-    
-    [self.view showLoading];
-  
-    
-    [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
-        [self.view hideLoading];
-        NSLog(@"%@",dictionary);
-        if (dictionary) {
-            HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
-        }
-    } failure:^(NSError * _Nullable error) {
-        [self.view showErrorWithMessage:error.description.lowercaseString];
-    }];
-    
-}
 
 
 
@@ -754,7 +674,7 @@
     if (!_jiaoJuanBtn) {
         _jiaoJuanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_jiaoJuanBtn setImage:[UIImage imageNamed:@"jiaojuan_icon"] forState:UIControlStateNormal];
-        [_jiaoJuanBtn addTarget:self action:@selector(jiaoJuan:) forControlEvents:UIControlEventTouchUpInside];
+        [_jiaoJuanBtn addTarget:self action:@selector(jiaoJuan) forControlEvents:UIControlEventTouchUpInside];
     }
     return _jiaoJuanBtn;
 }

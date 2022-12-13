@@ -58,6 +58,9 @@
 
 -(void)submit{
     [self dismiss];
+    if (self.confirmErrorInfoCallBack) {
+        self.confirmErrorInfoCallBack(self.textView.text);
+    }
 }
 
 #pragma mark -UI

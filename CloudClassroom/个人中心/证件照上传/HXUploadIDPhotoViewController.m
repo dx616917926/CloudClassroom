@@ -53,7 +53,6 @@
     //获取证件照信息
     [self getPapersPhotoInfo];
     
-   
 }
 
 
@@ -155,6 +154,12 @@
 -(void)fanKuiYouWu:(UIButton *)sender{
     
     HXFanKuiYouWuViewController *vc = [[HXFanKuiYouWuViewController alloc] init];
+    WeakSelf(weakSelf);
+    vc.fanKuiYouWuCallBack = ^{
+        StrongSelf(strongSelf);
+        //反馈完重新获取数据
+        [strongSelf getPapersPhotoInfo];
+    };
     [self.navigationController pushViewController:vc animated:YES];
     
 }
@@ -165,7 +170,8 @@
     NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
         @"student_id":HXSafeString(student_id),
-        @"comstatus":@(1)
+        @"comstatus":@(1),
+        @"comments":@""
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_ComfirmPhoto needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         sender.userInteractionEnabled = YES;

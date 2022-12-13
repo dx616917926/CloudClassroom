@@ -79,6 +79,26 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_GetHomeMenu                                         @"/api/MyHomeIndex/GetHomeMenu"
 
 
+#pragma mark ----------------------------------------------个人信息相关操作-------------------------------------------------
+
+//获取个人信息
+#define HXPOST_GetPersonalInfoList                                  @"/api/PersonalInfo/GetPersonalInfoList"
+
+//信息无误确认
+#define HXPOST_ConfirmYesor                                         @"/api/PersonalInfo/ConfirmYesor"
+
+//学生确认签名
+#define HXPOST_SaveStudentSignature                                 @"/api/PersonalInfo/SaveStudentSignature"
+
+//显示签名照片
+#define HXPOST_GetStudentSignature                                  @"/api/PersonalInfo/GetStudentSignature"
+
+
+#pragma mark ----------------------------------------------资源下载-------------------------------------------------
+
+//获取资源列表
+#define HXPOST_GetResource                                  @"/api/MyResource/GetResource"
+
 
 #pragma mark ----------------------------------------------人脸识别相关信息-------------------------------------------------
 

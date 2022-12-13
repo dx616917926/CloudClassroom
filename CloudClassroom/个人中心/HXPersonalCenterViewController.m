@@ -271,6 +271,7 @@
     HXPersonalInforViewController *vc = [[HXPersonalInforViewController alloc] init];
     vc.sc_navigationBarHidden = YES;
     vc.hidesBottomBarWhenPushed = YES;
+    vc.imgUrl = self.homeStudentInfoModel.imgUrl;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -53,7 +53,7 @@
 -(void)jiaoJuan:(UIButton *)sender{
     
     [self dismissViewControllerAnimated:NO completion:^{
-        [self.examVc.navigationController popViewControllerAnimated:YES];
+        [self.examVc jiaoJuan];
     }];
     
 }

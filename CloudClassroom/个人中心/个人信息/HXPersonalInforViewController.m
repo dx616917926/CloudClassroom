@@ -7,7 +7,9 @@
 
 #import "HXPersonalInforViewController.h"
 #import "HXPersonalInforCell.h"
+#import "HXToSignCell.h"
 #import "HXXinXiYouWuShowView.h"
+
 
 @interface HXPersonalInforViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -26,9 +28,14 @@
 @property(nonatomic,strong) UIView *tableFooterView;
 @property(nonatomic,strong) UIButton *xinXiYouWuBtn;
 @property(nonatomic,strong) UIButton *xinXiWuWuBtn;
+//已提交反馈
+@property(nonatomic,strong) UIButton *fanKuiResultBtn;
 
 @property(nonatomic,strong) NSArray *basicInfoArray;
 @property(nonatomic,strong) NSArray *xuexiInfoArray;
+
+
+@property(nonatomic,strong) NSDictionary *personalInfo;
 
 @end
 
@@ -41,10 +48,15 @@
     //UI
     [self createUI];
     
-    //
+    //数据初始化
     [self dataInitialization];
+    //获取个人信息
+    [self getPersonalInfoList];
+    
+    
 }
 
+#pragma mark -数据初始化
 -(void)dataInitialization{
     NSString *path = [[NSBundle mainBundle] pathForResource:@"personalInfor" ofType:@"plist"];
     NSDictionary *personalInforDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
@@ -58,15 +70,182 @@
     [self.mainTableView reloadData];
 }
 
+
+#pragma mark - 获取个人信息
+-(void)getPersonalInfoList{
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetPersonalInfoList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *array = [dictionary objectForKey:@"data"];
+            NSDictionary *personalInfo = array.firstObject;
+            self.personalInfo = personalInfo;
+            [self.basicInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXPersonalInforModel *model = obj;
+                if ([model.title isEqualToString:@"姓名"]) {
+                    model.content = [personalInfo stringValueForKey:@"name"];
+                }else if ([model.title isEqualToString:@"性别"]) {
+                    model.content = [personalInfo stringValueForKey:@"sex"];
+                }else if ([model.title isEqualToString:@"出生日期"]) {
+                    model.content = [personalInfo stringValueForKey:@"birthDate"];
+                }else if ([model.title isEqualToString:@"身份证号"]) {
+                    model.content = [personalInfo stringValueForKey:@"personId"];
+                }else if ([model.title isEqualToString:@"邮政编码"]) {
+                    model.content = [personalInfo stringValueForKey:@"postCode"];
+                }else if ([model.title isEqualToString:@"民族"]) {
+                    model.content = [personalInfo stringValueForKey:@"nationality"];
+                }else if ([model.title isEqualToString:@"政治面貌"]) {
+                    model.content = [personalInfo stringValueForKey:@"politicalStateName"];
+                }else if ([model.title isEqualToString:@"电子邮箱"]) {
+                    model.content = [personalInfo stringValueForKey:@"email"];
+                }else if ([model.title isEqualToString:@"工作单位"]) {
+                    model.content = [personalInfo stringValueForKey:@"company"];
+                }else if ([model.title isEqualToString:@"联系地址"]) {
+                    model.content = [personalInfo stringValueForKey:@"contactAddr"];
+                }
+            }];
+            
+            [self.xuexiInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXPersonalInforModel *model = obj;
+                if ([model.title isEqualToString:@"学号"]) {
+                    model.content = [personalInfo stringValueForKey:@"studentNo"];
+                }else if ([model.title isEqualToString:@"考生号"]) {
+                    model.content = [personalInfo stringValueForKey:@"examineeNo"];
+                }else if ([model.title isEqualToString:@"学籍状态"]) {
+                    model.content = [personalInfo stringValueForKey:@"studentStateName"];
+                }else if ([model.title isEqualToString:@"年级"]) {
+                    model.content = [personalInfo stringValueForKey:@"enterDate"];
+                }else if ([model.title isEqualToString:@"学习形式"]) {
+                    model.content = [personalInfo stringValueForKey:@"studyTypeName"];
+                }else if ([model.title isEqualToString:@"层次"]) {
+                    model.content = [personalInfo stringValueForKey:@"educationName"];
+                }else if ([model.title isEqualToString:@"专业名称"]) {
+                    model.content = [personalInfo stringValueForKey:@"mmajorName"];
+                }else if ([model.title isEqualToString:@"学制"]) {
+                    model.content = [personalInfo stringValueForKey:@"studyYearReal"];
+                }else if ([model.title isEqualToString:@"函授站"]) {
+                    model.content = [personalInfo stringValueForKey:@"subSchoolName"];
+                }else if ([model.title isEqualToString:@"入学日期"]) {
+                    model.content = [personalInfo stringValueForKey:@"rxrq"];
+                }else if ([model.title isEqualToString:@"签名图片"]) {
+                    model.content = @"未签名";
+                }
+            }];
+            //获取签名照片
+            [self getStudentSignature];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 获取签名照片
+-(void)getStudentSignature{
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetStudentSignature needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSDictionary *dic = [dictionary dictionaryValueForKey:@"data"];
+            NSString *studentSignatureImg = [dic stringValueForKey:@"studentSignatureImg"];
+            [self.xuexiInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXPersonalInforModel *model = obj;
+                if ([model.title isEqualToString:@"签名图片"]) {
+                    if ([HXCommonUtil isNull:studentSignatureImg]) {
+                        model.content = @"未签名";
+                    }else{
+                        model.content = @"已签名";
+                    }
+                    model.signImgUrl = studentSignatureImg;
+                }
+                *stop = YES;
+                return;
+            }];
+           
+            NSInteger isConfirmed = [[self.personalInfo stringValueForKey:@"isConfirmed"] integerValue];
+            self.fanKuiResultBtn.hidden = YES;
+            self.xinXiWuWuBtn.hidden = self.xinXiYouWuBtn.hidden = (isConfirmed==1||isConfirmed==2);
+            [self.headImageView sd_setImageWithURL:HXSafeURL(self.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
+            [self.mainTableView reloadData];
+            
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+
+#pragma mark - 信息确认
+-(void)confirmPersonalInfo:(NSString *)errorInfo isConfirmed:(NSInteger)isConfirmed{
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSString *politicalState_id = [self.personalInfo stringValueForKey:@"politicalState_id"];
+    NSString *nationality = [self.personalInfo stringValueForKey:@"nationality"];
+    NSString *postCode = [self.personalInfo stringValueForKey:@"postCode"];
+    NSString *contactTel = [self.personalInfo stringValueForKey:@"contactTel"];
+    NSString *email = [self.personalInfo stringValueForKey:@"email"];
+    NSString *contactAddr = [self.personalInfo stringValueForKey:@"contactAddr"];
+    NSString *company = [self.personalInfo stringValueForKey:@"company"];
+    
+    
+    NSDictionary *dic =@{
+        @"isconfirmed":@(isConfirmed),//1表示确认无误 2表示确认有误
+        @"studentid":HXSafeString(studentId),
+        @"politicalstate_id":politicalState_id,
+        @"nationality":nationality,
+        @"postcode":postCode,
+        @"contacttel":contactTel,
+        @"email":email,
+        @"contactaddr":contactAddr,
+        @"company":company,
+        @"errorinfo":HXSafeString(errorInfo)
+        
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_ConfirmYesor needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            [self.view showTostWithMessage:[dictionary stringValueForKey:@"message"]];
+            self.fanKuiResultBtn.hidden = NO;
+            self.xinXiWuWuBtn.hidden = self.xinXiYouWuBtn.hidden = YES;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+
+
 #pragma mark - Event
 -(void)popBack{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+//跳转H5去签名
+-(void)toSign:(UIButton *)sender{
+    [self.view showTostWithMessage:@"跳转H5去签名"];
+}
+
 -(void)showXinXiYouWuShowView{
     HXXinXiYouWuShowView *xinXiYouWuShowView = [[HXXinXiYouWuShowView alloc] init];
     [xinXiYouWuShowView show];
+    WeakSelf(weakSelf);
+    xinXiYouWuShowView.confirmErrorInfoCallBack = ^(NSString * _Nonnull errorInfo) {
+        StrongSelf(strongSelf);
+        [strongSelf confirmPersonalInfo:errorInfo isConfirmed:2];
+    };
 }
+
+-(void)clickXinXiWuWuBtn:(UIButton *)sender{
+    [self confirmPersonalInfo:nil isConfirmed:1];
+}
+
 
 #pragma mark - <UIScrollViewDelegate>根据滑动距离来变化导航栏背景色的alpha
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -116,26 +295,43 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HXPersonalInforModel *personalInforModel =(indexPath.section==0?self.basicInfoArray[indexPath.row]:self.xuexiInfoArray[indexPath.row]);
-    CGFloat rowHeight = [tableView cellHeightForIndexPath:indexPath
-                                                    model:personalInforModel keyPath:@"personalInforModel"
-                                                cellClass:([HXPersonalInforCell class])
-                                         contentViewWidth:kScreenWidth];
-    return rowHeight;
+    if ([personalInforModel.title isEqualToString:@"签名图片"]) {
+        return 57;
+    }else{
+        CGFloat rowHeight = [tableView cellHeightForIndexPath:indexPath
+                                                        model:personalInforModel keyPath:@"personalInforModel"
+                                                    cellClass:([HXPersonalInforCell class])
+                                             contentViewWidth:kScreenWidth];
+        return rowHeight;
+    }
+    
+   
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *personalInforCellIdentifier = @"HXPersonalInforCellIdentifier";
-    HXPersonalInforCell *cell = [tableView dequeueReusableCellWithIdentifier:personalInforCellIdentifier];
-    if (!cell) {
-        cell = [[HXPersonalInforCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:personalInforCellIdentifier];
-    }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+   
     HXPersonalInforModel *personalInforModel =(indexPath.section==0?self.basicInfoArray[indexPath.row]:self.xuexiInfoArray[indexPath.row]);
-    cell.personalInforModel = personalInforModel;
-    [cell useCellFrameCacheWithIndexPath:indexPath tableView:tableView];
-    return cell;
+    if ([personalInforModel.title isEqualToString:@"签名图片"]) {
+        static NSString *toSignCellIdentifier = @"HXToSignCellIdentifier";
+        HXToSignCell *toSignCell = [tableView dequeueReusableCellWithIdentifier:toSignCellIdentifier];
+        if (!toSignCell) {
+            toSignCell = [[HXToSignCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:toSignCellIdentifier];
+        }
+        [toSignCell.signBtn addTarget:self action:@selector(toSign:) forControlEvents:UIControlEventTouchUpInside];
+        toSignCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        toSignCell.personalInforModel = personalInforModel;
+        return toSignCell;
+    }else{
+        static NSString *personalInforCellIdentifier = @"HXPersonalInforCellIdentifier";
+        HXPersonalInforCell *cell = [tableView dequeueReusableCellWithIdentifier:personalInforCellIdentifier];
+        if (!cell) {
+            cell = [[HXPersonalInforCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:personalInforCellIdentifier];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.personalInforModel = personalInforModel;
+        return cell;
+    }
 }
 
 
@@ -326,6 +522,7 @@
 -(UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc] init];
+        _headImageView.contentMode = UIViewContentModeScaleAspectFill;
         _headImageView.clipsToBounds = YES;
         _headImageView.userInteractionEnabled = YES;
         _headImageView.layer.borderWidth = 2;
@@ -355,6 +552,7 @@
         _tableFooterView.clipsToBounds = YES;
         [_tableFooterView addSubview:self.xinXiWuWuBtn];
         [_tableFooterView addSubview:self.xinXiYouWuBtn];
+        [_tableFooterView addSubview:self.fanKuiResultBtn];
         
        self.xinXiYouWuBtn.sd_layout
         .topSpaceToView(_tableFooterView, 30)
@@ -369,6 +567,13 @@
          .widthRatioToView(self.xinXiYouWuBtn, 1)
          .heightRatioToView(self.xinXiYouWuBtn, 1);
          self.xinXiWuWuBtn.sd_cornerRadiusFromHeightRatio=@0.5;
+        
+        self.fanKuiResultBtn.sd_layout
+        .centerYEqualToView(self.xinXiYouWuBtn)
+        .centerXEqualToView(_tableFooterView)
+        .widthIs(103)
+        .heightIs(26);
+        self.fanKuiResultBtn.sd_cornerRadius =@2;
     
     }
     return _tableFooterView;
@@ -397,8 +602,21 @@
         [_xinXiWuWuBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
         [_xinXiWuWuBtn setTitle:@"信息无误" forState:UIControlStateNormal];
         [_xinXiWuWuBtn setImage:[UIImage imageNamed:@"dagou_icon"] forState:UIControlStateNormal];
+        [_xinXiWuWuBtn addTarget:self action:@selector(clickXinXiWuWuBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _xinXiWuWuBtn;
+}
+
+-(UIButton *)fanKuiResultBtn{
+    if (!_fanKuiResultBtn) {
+        _fanKuiResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _fanKuiResultBtn.titleLabel.font = HXBoldFont(12);
+        _fanKuiResultBtn.backgroundColor= COLOR_WITH_ALPHA(0xEAEAEA, 1);
+        [_fanKuiResultBtn setTitleColor:COLOR_WITH_ALPHA(0x818181, 1) forState:UIControlStateNormal];
+        [_fanKuiResultBtn setTitle:@"已提交反馈" forState:UIControlStateNormal];
+        _fanKuiResultBtn.hidden = YES;
+    }
+    return _fanKuiResultBtn;
 }
 
 

@@ -8,61 +8,61 @@
 			<key>title</key>
 			<string>姓名</string>
 			<key>content</key>
-			<string>张敏</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>性别</string>
 			<key>content</key>
-			<string>女</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>出生日期</string>
 			<key>content</key>
-			<string>19990909</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>身份证号</string>
 			<key>content</key>
-			<string>43233340098774848875575</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
-			<string>籍贯</string>
+			<string>邮政编码</string>
 			<key>content</key>
-			<string>湖南长沙</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>民族</string>
 			<key>content</key>
-			<string>汉族</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>政治面貌</string>
 			<key>content</key>
-			<string>中共党员</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>电子邮箱</string>
 			<key>content</key>
-			<string>157937253@qq.com</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>工作单位</string>
 			<key>content</key>
-			<string>湖南华富海辉教育科技有限公司</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>联系地址</string>
 			<key>content</key>
-			<string>湖南省长沙市天心区雀园路568号创谷长沙天心文化广告产业园</string>
+			<string></string>
 		</dict>
 	</array>
 	<key>xuexiInfoArray</key>
@@ -71,67 +71,67 @@
 			<key>title</key>
 			<string>学号</string>
 			<key>content</key>
-			<string>20220908</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>考生号</string>
 			<key>content</key>
-			<string>196456433</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学籍状态</string>
 			<key>content</key>
-			<string>在籍</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>年级</string>
 			<key>content</key>
-			<string>2021</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学习形式</string>
 			<key>content</key>
-			<string>函授</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>层次</string>
 			<key>content</key>
-			<string>高起专</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>专业名称</string>
 			<key>content</key>
-			<string>法学</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学制</string>
 			<key>content</key>
-			<string>2.5</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>函授站</string>
 			<key>content</key>
-			<string>华夏-北上</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>入学日期</string>
 			<key>content</key>
-			<string>2021年09月01日</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>签名图片</string>
 			<key>content</key>
-			<string>未签名</string>
+			<string></string>
 		</dict>
 	</array>
 </dict>

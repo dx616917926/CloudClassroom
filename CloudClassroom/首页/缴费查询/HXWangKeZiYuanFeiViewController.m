@@ -57,12 +57,18 @@
             NSArray *list = [HXCoursePayOrderModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:list];
-            [self.mainTableView reloadData];
+        
             if (list.count==0) {
                 [self.mainTableView addSubview:self.noDataTipView];
             }else{
                 [self.noDataTipView removeFromSuperview];
             }
+           
+            
+            HXCoursePayOrderModel *model = list.firstObject;
+            self.totalPaymentMoneyLabel.text = [NSString stringWithFormat:@"%.2f",model.totalPayable];
+            self.buyCourseMoneyLabel.text = [NSString stringWithFormat:@"%.2f",model.totalPaidIn];
+            [self.mainTableView reloadData];
         }
     } failure:^(NSError * _Nonnull error) {
         [self.mainTableView.mj_header endRefreshing];
@@ -264,7 +270,7 @@
         _totalPaymentMoneyLabel.textAlignment = NSTextAlignmentCenter;
         _totalPaymentMoneyLabel.font = HXBoldFont(14);
         _totalPaymentMoneyLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _totalPaymentMoneyLabel.text = @"5000";
+        
     }
     return _totalPaymentMoneyLabel;
 }
@@ -294,7 +300,7 @@
         _buyCourseMoneyLabel.textAlignment = NSTextAlignmentCenter;
         _buyCourseMoneyLabel.font = HXBoldFont(14);
         _buyCourseMoneyLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _buyCourseMoneyLabel.text = @"2000";
+        
     }
     return _buyCourseMoneyLabel;
 }

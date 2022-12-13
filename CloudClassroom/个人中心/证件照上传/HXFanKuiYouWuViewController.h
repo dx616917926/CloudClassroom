@@ -9,7 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^FanKuiYouWuCallBack)(void);
+
 @interface HXFanKuiYouWuViewController : HXBaseViewController
+
+@property(nonatomic,copy) FanKuiYouWuCallBack fanKuiYouWuCallBack;
 
 @end
 

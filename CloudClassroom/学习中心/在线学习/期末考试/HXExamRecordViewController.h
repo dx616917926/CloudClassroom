@@ -6,13 +6,15 @@
 //
 
 #import "HXBaseViewController.h"
-#import "HXKeJianOrExamInfoModel.h"
+#import "HXExamParaModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamRecordViewController : HXBaseViewController
 
-@property(nonatomic,strong) HXKeJianOrExamInfoModel *keJianOrExamInfoModel;
+@property(nonatomic, copy) NSString *examId;
+
+@property(nonatomic, strong) HXExamParaModel *examPara;
 
 @end
 

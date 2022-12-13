@@ -25,6 +25,34 @@
     [self createUI];
 }
 
+#pragma mark -提交反馈
+-(void)submit:(UIButton *)sender{
+    sender.userInteractionEnabled =NO;
+    NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"student_id":HXSafeString(student_id),
+        @"comstatus":@(1),
+        @"comments":HXSafeString(self.textView.text)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_ComfirmPhoto needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        sender.userInteractionEnabled = YES;
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        NSString *message =[dictionary stringValueForKey:@"message"];
+        if (success) {
+            [self.view showSuccessWithMessage:message];
+            [self.navigationController popViewControllerAnimated:YES];
+            if (self.fanKuiYouWuCallBack) {
+                self.fanKuiYouWuCallBack();
+            }
+        }else{
+            [self.view showTostWithMessage:message];;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        sender.userInteractionEnabled = YES;
+    }];
+    
+}
+
 #pragma mark - <UITextViewDelegate>
 - (void)textViewDidChange:(UITextView *)textView{
     NSString *toBeString = textView.text;
@@ -130,6 +158,7 @@
         [_submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_submitBtn setTitle:@"提交反馈" forState:UIControlStateNormal];
         _submitBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        [_submitBtn addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _submitBtn;
 }

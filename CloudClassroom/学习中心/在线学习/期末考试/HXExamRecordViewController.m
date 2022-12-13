@@ -19,7 +19,7 @@
 
 //当前继续作答的考试
 @property(nonatomic,strong) HXExamRecordModel *currentExamRecordModel;
-
+//试卷试题
 @property(nonatomic,strong) HXExamPaperModel *examPaperModel;
 
 @end
@@ -36,17 +36,21 @@
 }
 
 #pragma mark - Setter
--(void)setKeJianOrExamInfoModel:(HXKeJianOrExamInfoModel *)keJianOrExamInfoModel{
-    
-    _keJianOrExamInfoModel = keJianOrExamInfoModel;
+
+-(void)setExamId:(NSString *)examId{
+    _examId = examId;
+}
+
+-(void)setExamPara:(HXExamParaModel *)examPara{
+    _examPara = examPara;
 }
 
 #pragma mark - 获取考试记录
 -(void)getExamRecordList{
     
-    NSString *url = [NSString stringWithFormat:HXEXAM_CheckRecord,self.keJianOrExamInfoModel.examPara.domain,self.keJianOrExamInfoModel.examId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_CheckRecord,self.examPara.domain,self.examId];
     
-    HXExamParaModel *examPara = self.keJianOrExamInfoModel.examPara;
+    HXExamParaModel *examPara = self.examPara;
     
     //获取当前时间戳
     NSString *d = [HXCommonUtil getNowTimeTimestamp];
@@ -119,7 +123,7 @@
 
 #pragma mark - 继续作答
 -(void)continueExam:(HXExamRecordModel *)examRecordModel{
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.keJianOrExamInfoModel.examPara.domain,examRecordModel.examId];
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.examPara.domain,examRecordModel.examId];
     
     [self.view showLoading];
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -128,6 +132,7 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self.view hideLoading];
         NSDictionary *dic = responseObject;
+        self.currentExamRecordModel = examRecordModel;
         [self getExamUrl: [dic stringValueForKey:@"resultUrl"]];
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -146,7 +151,7 @@
             [self.view hideLoading];
             NSString *examUrl = [dictionary objectForKey:@"url"];
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
-            self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
+            
             //获取考试的HTMLStr参数
             [self getEaxmHTMLStr:examUrl];
         }else{
@@ -183,7 +188,7 @@
     NSString *t = tempA.lastObject;
     NSArray *tempB = [t componentsSeparatedByString:@"/"];
     NSDictionary *dic = @{@"paperHtml":htmlStr};
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.keJianOrExamInfoModel.examPara.domain,tempB[0],tempB[1],tempB[2]];
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.examPara.domain,tempB[0],tempB[1],tempB[2]];
     
     [self.view showLoading];
   
@@ -192,10 +197,10 @@
         NSLog(@"%@",dictionary);
         if (dictionary) {
             HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
-            examPaperModel.domain = self.keJianOrExamInfoModel.examPara.domain;
+            examPaperModel.domain = self.examPara.domain;
             examPaperModel.userExamId = self.currentExamRecordModel.examId;
             self.examPaperModel = examPaperModel;
-            //
+            //获取当前继续作答的答案链接
             [self getAnswersUer];
             
         }
@@ -228,7 +233,7 @@
 #pragma mark - 获取考试答案
 -(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId{
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.keJianOrExamInfoModel.examPara.domain,userExamId];
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.examPara.domain,userExamId];
     
     [self.view showLoading];
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];

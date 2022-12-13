@@ -236,9 +236,7 @@
     for (NSString *str in resultArr) {
         // 将key对应的value，存到数组
         NSString *tempValue = [dic stringValueForKey:str];
-        if (tempValue.length > 0) {
-            [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
-        }
+        [paramValueArr addObject:[NSString stringWithFormat:@"%@=%@",str,tempValue]];
     }
     //最后加上密钥
     [paramValueArr addObject:Md5Key];

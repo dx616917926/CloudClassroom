@@ -9,7 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^ConfirmErrorInfoCallBack)(NSString *errorInfo);
+
 @interface HXXinXiYouWuShowView : UIView
+
+@property(nonatomic,copy) ConfirmErrorInfoCallBack confirmErrorInfoCallBack;
 
 -(void)show;
 

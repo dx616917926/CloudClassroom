@@ -198,6 +198,8 @@
 		0494D745293896EA008FDE41 /* HXCourseArrangingInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D744293896EA008FDE41 /* HXCourseArrangingInfoModel.m */; };
 		0494D748293897C7008FDE41 /* HXCourseArrangingDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D747293897C7008FDE41 /* HXCourseArrangingDateModel.m */; };
 		0494D74B29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0494D74A29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m */; };
+		0497EBB0294717FD00FF4174 /* HXToSignCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0497EBAF294717FD00FF4174 /* HXToSignCell.m */; };
+		0497EBB42947312600FF4174 /* HXZiLiaoDownLoadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0497EBB32947312600FF4174 /* HXZiLiaoDownLoadModel.m */; };
 		049858E628F6686500F04D4F /* HXClassPlanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858E528F6686500F04D4F /* HXClassPlanModel.m */; };
 		049858EA28F671E000F04D4F /* HXBuKaoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858E928F671E000F04D4F /* HXBuKaoModel.m */; };
 		049858EE28F6A34100F04D4F /* HXScoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049858ED28F6A34100F04D4F /* HXScoreModel.m */; };
@@ -884,6 +886,10 @@
 		0494D747293897C7008FDE41 /* HXCourseArrangingDateModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXCourseArrangingDateModel.m; sourceTree = "<group>"; };
 		0494D74929389A39008FDE41 /* HXFaceTimeCourseDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceTimeCourseDetailModel.h; sourceTree = "<group>"; };
 		0494D74A29389A39008FDE41 /* HXFaceTimeCourseDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFaceTimeCourseDetailModel.m; sourceTree = "<group>"; };
+		0497EBAE294717FD00FF4174 /* HXToSignCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXToSignCell.h; sourceTree = "<group>"; };
+		0497EBAF294717FD00FF4174 /* HXToSignCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXToSignCell.m; sourceTree = "<group>"; };
+		0497EBB22947312600FF4174 /* HXZiLiaoDownLoadModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXZiLiaoDownLoadModel.h; sourceTree = "<group>"; };
+		0497EBB32947312600FF4174 /* HXZiLiaoDownLoadModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXZiLiaoDownLoadModel.m; sourceTree = "<group>"; };
 		049858E428F6686500F04D4F /* HXClassPlanModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXClassPlanModel.h; sourceTree = "<group>"; };
 		049858E528F6686500F04D4F /* HXClassPlanModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXClassPlanModel.m; sourceTree = "<group>"; };
 		049858E828F671E000F04D4F /* HXBuKaoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXBuKaoModel.h; sourceTree = "<group>"; };
@@ -1999,6 +2005,7 @@
 		048B31ED28DDA7B000871C34 /* 资料下载 */ = {
 			isa = PBXGroup;
 			children = (
+				0497EBB12947310E00FF4174 /* model */,
 				048B31EE28DDA7B000871C34 /* view */,
 				048B31EF28DDA83700871C34 /* HXZiLiaoDownLoadViewController.h */,
 				048B31F028DDA83700871C34 /* HXZiLiaoDownLoadViewController.m */,
@@ -2482,6 +2489,15 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		0497EBB12947310E00FF4174 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				0497EBB22947312600FF4174 /* HXZiLiaoDownLoadModel.h */,
+				0497EBB32947312600FF4174 /* HXZiLiaoDownLoadModel.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		049858E328F6684800F04D4F /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -2598,6 +2614,8 @@
 			children = (
 				04A1FEBC28C98B0400626409 /* HXPersonalInforCell.h */,
 				04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */,
+				0497EBAE294717FD00FF4174 /* HXToSignCell.h */,
+				0497EBAF294717FD00FF4174 /* HXToSignCell.m */,
 				049D570828E2C5FF009F09F2 /* HXXinXiYouWuShowView.h */,
 				049D570928E2C5FF009F09F2 /* HXXinXiYouWuShowView.m */,
 			);
@@ -4089,6 +4107,7 @@
 				0490950D29305CA3002B6FAA /* HXMyMessageDetailModel.m in Sources */,
 				04E556E72939D602009AC15B /* BJLDocumentFileManagerViewController+cloud.m in Sources */,
 				048B7D5E28BDA20A006EBAAE /* XLPageViewControllerUtil.m in Sources */,
+				0497EBB42947312600FF4174 /* HXZiLiaoDownLoadModel.m in Sources */,
 				04E556982939D601009AC15B /* BJLScCountDownEditViewController.m in Sources */,
 				04E5570E2939D602009AC15B /* BJLPhotoListCell.m in Sources */,
 				0498D020292CC94700D59C9E /* HXPhotoInfoModel.m in Sources */,
@@ -4446,6 +4465,7 @@
 				04E5575D2939E344009AC15B /* QBVideoIconView.m in Sources */,
 				048E432729373F5600EC043A /* HXFeeDetailInfoModel.m in Sources */,
 				04E556EF2939D602009AC15B /* BJLDocumentFile.m in Sources */,
+				0497EBB0294717FD00FF4174 /* HXToSignCell.m in Sources */,
 				045F217B28D052B6007023D7 /* HXSchoolVerifyViewController.m in Sources */,
 				048B7D5C28BDA20A006EBAAE /* XLPageViewControllerConfig.m in Sources */,
 				040890FA28BDAF5E007844E8 /* HXCustomBtn.m in Sources */,

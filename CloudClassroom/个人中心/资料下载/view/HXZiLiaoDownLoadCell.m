@@ -46,6 +46,26 @@
 }
 
 #pragma mark - Event
+-(void)downLoad:(UIControl *)sender{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(ziLiaoDownLoad:)]) {
+        [self.delegate ziLiaoDownLoad:self.ziLiaoDownLoadModel];
+    }
+}
+
+
+
+#pragma mark - Seter
+-(void)setZiLiaoDownLoadModel:(HXZiLiaoDownLoadModel *)ziLiaoDownLoadModel{
+    
+    _ziLiaoDownLoadModel = ziLiaoDownLoadModel;
+    
+    [self.stateBtn setTitle:(ziLiaoDownLoadModel.isPublic==1?@"公开":@"私密") forState:UIControlStateNormal];
+    self.titleLabel.text = ziLiaoDownLoadModel.resourceRemarks;
+    self.ziLiaoNameLabel.text = ziLiaoDownLoadModel.fileName;
+    self.publishTimeLabel.text = [NSString stringWithFormat:@"发布时间：%@",ziLiaoDownLoadModel.sendTimeStr];
+    self.publishPersonLabel.text = [NSString stringWithFormat:@"发布人：%@",ziLiaoDownLoadModel.operatorName];
+    
+}
 
 
 #pragma mark - UI
@@ -109,7 +129,7 @@
     .topSpaceToView(self.ziLiaoControl, 16)
     .leftEqualToView(self.stateBtn)
     .heightIs(17);
-    [self.publishTimeLabel setSingleLineAutoResizeWithMaxWidth:180];
+    [self.publishTimeLabel setSingleLineAutoResizeWithMaxWidth:210];
     
     self.publishPersonLabel.sd_layout
     .centerYEqualToView(self.publishTimeLabel)
@@ -135,7 +155,6 @@
         _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xFEF6EA, 1);
         _stateBtn.titleLabel.font = HXBoldFont(12);
         [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0xF29D1C, 1) forState:UIControlStateNormal];
-        [_stateBtn setTitle:@"公开" forState:UIControlStateNormal];
         _stateBtn.userInteractionEnabled =NO;
     }
     return _stateBtn;
@@ -146,7 +165,7 @@
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = HXBoldFont(15);
         _titleLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
-        _titleLabel.text = @"这里是资源标题";
+        
     }
     return _titleLabel;
 }
@@ -157,6 +176,7 @@
         _ziLiaoControl.clipsToBounds = YES;
         _ziLiaoControl.layer.borderWidth = 1;
         _ziLiaoControl.layer.borderColor = COLOR_WITH_ALPHA(0xE6EBFD, 1).CGColor;
+        [_ziLiaoControl addTarget:self action:@selector(downLoad:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _ziLiaoControl;
 }
@@ -164,7 +184,7 @@
 - (UIImageView *)ziLiaoIcon{
     if (!_ziLiaoIcon) {
         _ziLiaoIcon = [[UIImageView alloc] init];
-        _ziLiaoIcon.userInteractionEnabled = YES;
+        _ziLiaoIcon.userInteractionEnabled = NO;
         _ziLiaoIcon.image = [UIImage imageNamed:@"word_icon"];
     }
     return _ziLiaoIcon;
@@ -173,7 +193,7 @@
 - (UIImageView *)ziLiaoDownIcon{
     if (!_ziLiaoDownIcon) {
         _ziLiaoDownIcon = [[UIImageView alloc] init];
-        _ziLiaoDownIcon.userInteractionEnabled = YES;
+        _ziLiaoDownIcon.userInteractionEnabled = NO;
         _ziLiaoDownIcon.image = [UIImage imageNamed:@"ziLiaodown_icon"];
     }
     return _ziLiaoDownIcon;
@@ -184,7 +204,7 @@
         _ziLiaoNameLabel = [[UILabel alloc] init];
         _ziLiaoNameLabel.font = HXFont(12);
         _ziLiaoNameLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _ziLiaoNameLabel.text = @"资料名称资料名称.docx";
+        
     }
     return _ziLiaoNameLabel;
 }
@@ -194,7 +214,7 @@
         _publishTimeLabel = [[UILabel alloc] init];
         _publishTimeLabel.font = HXFont(12);
         _publishTimeLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _publishTimeLabel.text = @"发布时间：2021.11.02 17:08:46";
+        
     }
     return _publishTimeLabel;
 }
@@ -205,7 +225,7 @@
         _publishPersonLabel.textAlignment = NSTextAlignmentRight;
         _publishPersonLabel.font = HXFont(12);
         _publishPersonLabel.textColor = COLOR_WITH_ALPHA(0x999999, 1);
-        _publishPersonLabel.text = @"发布人：  张三";
+       
     }
     return _publishPersonLabel;
 }
