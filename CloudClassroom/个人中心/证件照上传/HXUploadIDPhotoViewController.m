@@ -89,10 +89,8 @@
         ///照片确认状态    0:未确认       1:已确认
         if (self.photoInfoModel.comStatus==1) {
             self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
-            self.tipResultBtn.hidden = NO;
         }else{
             self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;
-            self.tipResultBtn.hidden = YES;
         }
     }
 }
@@ -120,7 +118,7 @@
     
 }
 
-//上传照片
+#pragma mark - 上传照片
 -(void)uploadPhoto:(UIButton *)sender{
     NSString *encodedImageStr = [self imageChangeBase64:self.photoImageView.image];
     if (!self.photoImageView.image){
@@ -151,20 +149,25 @@
     
 }
 
+#pragma mark - 反馈有误
 -(void)fanKuiYouWu:(UIButton *)sender{
     
     HXFanKuiYouWuViewController *vc = [[HXFanKuiYouWuViewController alloc] init];
     WeakSelf(weakSelf);
     vc.fanKuiYouWuCallBack = ^{
         StrongSelf(strongSelf);
-        //反馈完重新获取数据
-        [strongSelf getPapersPhotoInfo];
+        //反馈完成
+        strongSelf.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
+        strongSelf.tipResultBtn.hidden = NO;
+        [strongSelf.tipResultBtn setTitleColor:COLOR_WITH_ALPHA(0x818181, 1) forState:UIControlStateNormal];
+        [strongSelf.tipResultBtn setTitle:@"已提交反馈" forState:UIControlStateNormal];
+        strongSelf.tipResultBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAEAEA, 1);
     };
     [self.navigationController pushViewController:vc animated:YES];
     
 }
 
-//确认照片
+#pragma mark -确认无误
 -(void)confirm:(UIButton *)sender{
     sender.userInteractionEnabled =NO;
     NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
@@ -181,6 +184,9 @@
             [self.view showSuccessWithMessage:message];
             self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
             self.tipResultBtn.hidden = NO;
+            [self.tipResultBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
+            [self.tipResultBtn setTitle:@"已确认无误" forState:UIControlStateNormal];
+            self.tipResultBtn.backgroundColor = COLOR_WITH_ALPHA(0xF2FFF3, 1);
         }else{
             [self.view showTostWithMessage:message];;
         }
@@ -569,9 +575,6 @@
         _tipResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _tipResultBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
         _tipResultBtn.titleLabel.font = HXBoldFont(12);
-        [_tipResultBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_tipResultBtn setTitle:@"已确认无误" forState:UIControlStateNormal];
-        _tipResultBtn.backgroundColor = COLOR_WITH_ALPHA(0xF2FFF3, 1);
         _tipResultBtn.hidden = YES;
     }
     return _tipResultBtn;

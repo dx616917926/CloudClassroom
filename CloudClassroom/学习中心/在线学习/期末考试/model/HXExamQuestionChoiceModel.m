@@ -9,6 +9,7 @@
 
 @implementation HXExamQuestionChoiceModel
 
+//处理图片宽高
 -(NSString *)choice_staticContent{
     if([_choice_staticContent containsString:@"data:image/png;base64,"]){
         CGRect viewMaxRect = CGRectMake(0, 0, kScreenWidth-65, 1000000);

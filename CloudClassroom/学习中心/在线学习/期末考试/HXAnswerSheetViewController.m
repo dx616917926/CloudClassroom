@@ -217,6 +217,7 @@
                         contentHeight = qbtn.bottom;
                     }else{
                         //先绘制题号 横线+半圆的那个
+                        //横线
                         UILabel *fhTitle = [[UILabel alloc]initWithFrame:CGRectMake(20,contentHeight+10, kScreenWidth-40,30 )];
                         fhTitle.backgroundColor = [UIColor clearColor];
                         UIImage * fuheQImg2 = [UIImage imageNamed:@"exam_img2"];
@@ -224,7 +225,7 @@
                         UIImageView * fuheView2 = [[UIImageView alloc]initWithImage:fuheQImg2];
                         fuheView2.frame = fhTitle.frame;
                         [self.mainScrollView addSubview:fuheView2];
-                        
+                        //半圆
                         UIImage * fuheQImg1 = [UIImage imageNamed:@"exam_img1"];
                         UIImageView * fuheView1 = [[UIImageView alloc]initWithImage:fuheQImg1];
                         fuheView1.center = fhTitle.center;

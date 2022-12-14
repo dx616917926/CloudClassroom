@@ -16,7 +16,7 @@
              };
 }
 
-
+//处理图片宽高
 -(NSString *)sub_staticTitle{
     if([_sub_staticTitle containsString:@"data:image/png;base64,"]){
         CGRect viewMaxRect = CGRectMake(0, 0, kScreenWidth-20, 1000000);

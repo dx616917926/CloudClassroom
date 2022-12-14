@@ -55,7 +55,7 @@
 
 
 
-#pragma mark - Event
+#pragma mark - 登录
 -(void)loginButtonClick:(UIButton *)sender{
     
     self.loginBtn.userInteractionEnabled = NO;
@@ -65,7 +65,10 @@
     NSString *schoolDomainURL = [HXPublicParamTool sharedInstance].schoolDomainURL;
     if (schoolDomainURL.length<=0) {
         self.loginBtn.userInteractionEnabled = YES;
-        [self.view showTostWithMessage:@"请到学校网站扫面二维码进行验证"];
+        [self.view showTostWithMessage:@"请到学校网站扫面二维码进行验证" hideAfter:2];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self scan:nil];
+        });
         return;
     }
     
@@ -134,6 +137,7 @@
     
 }
 
+#pragma mark - 扫一扫
 -(void)scan:(UIButton *)sender{
     HXSchoolVerifyViewController *vc = [[HXSchoolVerifyViewController alloc]init];
     vc.sc_navigationBarHidden = YES;
@@ -142,7 +146,7 @@
     WeakSelf(weakSelf);
     vc.scanSuccessBlock = ^(HXSchoolModel * _Nonnull school) {
         [HXPublicParamTool sharedInstance].currentSchoolModel = school;
-        [HXPublicParamTool sharedInstance].schoolDomainURL = @"http://xueliapitest.edu-cj.com";
+        [HXPublicParamTool sharedInstance].schoolDomainURL = school.schoolDomainURL;
         [HXBaseURLSessionManager setBaseURLStr:[HXPublicParamTool sharedInstance].schoolDomainURL];
         weakSelf.bottomBgImageView.hidden = YES;
         weakSelf.pingTaiLabel.hidden = NO;
@@ -152,6 +156,7 @@
     };
 }
 
+#pragma mark - 找回密码
 -(void)findPwd:(UIButton *)sender{
     //默认有值
     NSString *schoolDomainURL = [HXPublicParamTool sharedInstance].schoolDomainURL;
@@ -349,7 +354,7 @@
         self.schoolNameLabel.text = defaultSchool.schoolName_Cn;
         [self.schoolLogoImageView sd_setImageWithURL:[NSURL URLWithString:defaultSchool.schoolLogoUrl] placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
         [self.schoolBgImageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"defaultshcoolbg_icon"] options:SDWebImageRefreshCached];
-        [HXPublicParamTool sharedInstance].schoolDomainURL = @"http://xueliapitest.edu-cj.com";// @"http://xueliapitest.edu-cj.com",@"https://369466q726.yicp.fun"
+        [HXPublicParamTool sharedInstance].schoolDomainURL = defaultSchool.schoolDomainURL;// @"http://xueliapitest.edu-cj.com",@"https://369466q726.yicp.fun"
         [HXBaseURLSessionManager setBaseURLStr:[HXPublicParamTool sharedInstance].schoolDomainURL];
     }
     

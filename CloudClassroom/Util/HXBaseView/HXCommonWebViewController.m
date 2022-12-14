@@ -188,77 +188,7 @@ static NSString * const kFunctionName      =   @"callFunctionName";
     NSLog(@"urlScheme:%@",navigationAction.request.URL.scheme);
     NSLog(@"urlStr:%@",navigationAction.request.URL.absoluteString);
     
-    //先判断一下，找到需要跳转的再做处理
-    if ([navigationAction.request.URL.scheme isEqualToString:@"alipay"]) {
-        //  1.以？号来切割字符串
-        NSArray * urlBaseArr = [navigationAction.request.URL.absoluteString componentsSeparatedByString:@"?"];
-        NSString * urlBaseStr = urlBaseArr.firstObject;
-        NSString * urlNeedDecode = urlBaseArr.lastObject;
-        //  2.将截取以后的Str，做一下解码，方便我们处理数据
-        NSMutableString * afterDecodeStr = [NSMutableString stringWithString:[HXCommonUtil strDecodedString:urlNeedDecode]];
-        //  3.替换里面的默认Scheme为自己的Scheme
-        NSString * afterHandleStr = [afterDecodeStr stringByReplacingOccurrencesOfString:@"alipays" withString:@"www.edu-edu.com"];
-        //  4.然后把处理后的，和最开始切割的做下拼接，就得到了最终的字符串
-        NSString * finalStr = [NSString stringWithFormat:@"%@?%@",urlBaseStr, [HXCommonUtil  stringEncoding:afterHandleStr]];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //  判断一下，是否安装了支付宝APP（也就是看看能不能打开这个URL）
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:finalStr]]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:finalStr]];
-            }else{
-                [self.view showTostWithMessage:@"未安装支付宝APP"];
-            }
-        });
-        
-        //  2.这里告诉页面不走了 -_-
-        decisionHandler(WKNavigationActionPolicyCancel);
-    }else if ([navigationAction.request.URL.scheme isEqualToString:@"weixin"]) {
-        //  1.以？号来切割字符串
-        NSArray * urlBaseArr = [navigationAction.request.URL.absoluteString componentsSeparatedByString:@"?"];
-        NSString * urlBaseStr = urlBaseArr.firstObject;
-        NSString * urlNeedDecode = urlBaseArr.lastObject;
-        //  2.将截取以后的Str，做一下解码，方便我们处理数据
-        NSMutableString * afterDecodeStr = [NSMutableString stringWithString:[HXCommonUtil strDecodedString:urlNeedDecode]];
-        //  3.替换里面的默认Scheme为自己的Scheme
-        NSString * afterHandleStr = [afterDecodeStr stringByReplacingOccurrencesOfString:@"weixin" withString:@"www.edu-edu.com"];
-        //  4.然后把处理后的，和最开始切割的做下拼接，就得到了最终的字符串
-        NSString * finalStr = [NSString stringWithFormat:@"%@?%@",urlBaseStr, [HXCommonUtil  stringEncoding:afterHandleStr]];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            //  判断一下，是否安装了支付宝APP（也就是看看能不能打开这个URL）
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:finalStr]]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:finalStr]];
-            }else{
-                [self.view showTostWithMessage:@"未安装微信APP"];
-            }
-        });
-        
-        //  2.这里告诉页面不走了 -_-
-        decisionHandler(WKNavigationActionPolicyCancel);
-    }else if([navigationAction.request.URL.absoluteString rangeOfString:@"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?"].location != NSNotFound){
-        //设置redirect_url，如果存在redirect_url，那么需要替换redirect_url对应的值（替换内容为，自已公司支付的网页域名）
-        NSString *absoluteUrl  = @"https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?";
-        NSString *redirect_url = @"&redirect_url=www.edu-edu.com";
-        NSString *newUrl = [NSString stringWithFormat:@"%@%@",absoluteUrl,redirect_url];
-        //字符串进行替换，让回调之后返回自己的app
-        newUrl = [newUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        NSLog(@"newUrl - - - - - - %@",newUrl);
-        NSDictionary *headers = [navigationAction.request allHTTPHeaderFields];
-        BOOL hasReferer = [headers objectForKey:@"Referer"]!=nil;
-        if (hasReferer) {
-            decisionHandler(WKNavigationActionPolicyAllow);
-        } else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:newUrl] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-                    [request setHTTPMethod:@"GET"];
-                    [request setValue:@"www.edu-edu.com://" forHTTPHeaderField: @"Referer"];
-                    [self.webView loadRequest:request];
-                });
-            });
-            decisionHandler(WKNavigationActionPolicyCancel);
-        }
-    }else{
-        decisionHandler(WKNavigationActionPolicyAllow);
-    }
+    decisionHandler(WKNavigationActionPolicyAllow);
     
 }
 

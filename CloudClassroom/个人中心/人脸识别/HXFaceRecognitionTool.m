@@ -23,7 +23,7 @@
     //判断是否需要弹框
     BOOL isShow = self.faceConfig.isFaceMatch;
     
-    if (self.faceConfig && !isShow) {
+    if (self.faceConfig && isShow) {
         //是否需要弹考试须知
         [self showExamPromiseView];
     }else{

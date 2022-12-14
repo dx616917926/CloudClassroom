@@ -299,8 +299,6 @@
     //拼接请求地址,并将中文转码
     NSString *pingDicUrl = [HXCommonUtil stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
     
-    [self showLoading];
-    
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
     manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回

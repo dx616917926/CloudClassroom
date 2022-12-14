@@ -11,6 +11,7 @@
 #import "HXPingShiZuoYeCell.h"
 #import "HXFaceConfigObject.h"
 #import "HXKeJianOrExamInfoModel.h"
+#import "HXFaceRecognitionTool.h"
 
 @interface HXPingShiZuoYeViewController ()<UITableViewDelegate,UITableViewDataSource,HXPingShiZuoYeCellDelegate>
 
@@ -242,14 +243,20 @@
         [self.view hideLoading];
         NSLog(@"%@",dictionary);
         if (dictionary) {
-            HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
-            examPaperModel.domain = self.keJianOrExamInfoModel.examPara.domain;
-            examPaperModel.userExamId = self.keJianOrExamInfoModel.userExamId;
-            HXExamViewController *examVC = [[HXExamViewController alloc] init];
-            examVC.sc_navigationBarHidden = YES;//隐藏导航栏
-            examVC.examPaperModel = examPaperModel;
-            [self.navigationController pushViewController:examVC animated:YES];
-
+            //判断是否需要人脸识别和采集
+            HXFaceRecognitionTool *tool = [[HXFaceRecognitionTool alloc] init];
+            self.faceConfigObject.termCourseID = (self.isBuKao?self.buKaoModel.bkCourse_id:self.courseInfoModel.termCourseID);
+            tool.faceConfig = self.faceConfigObject;
+            tool.successBlack = ^{
+                HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
+                examPaperModel.domain = self.keJianOrExamInfoModel.examPara.domain;
+                examPaperModel.userExamId = self.keJianOrExamInfoModel.userExamId;
+                HXExamViewController *examVC = [[HXExamViewController alloc] init];
+                examVC.sc_navigationBarHidden = YES;//隐藏导航栏
+                examVC.examPaperModel = examPaperModel;
+                [self.navigationController pushViewController:examVC animated:YES];
+            };
+            [tool showInViewController:self];
         }
     } failure:^(NSError * _Nullable error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
