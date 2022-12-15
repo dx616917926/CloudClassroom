@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamAnswerCell : UICollectionViewCell
 
+@property(nonatomic,strong) UIViewController *examVc;
+
 @property(nonatomic,strong) HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel;
 
 @end

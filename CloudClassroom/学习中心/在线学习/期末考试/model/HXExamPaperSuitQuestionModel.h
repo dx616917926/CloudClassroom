@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///复合题中小题的位置（从0 开始）
 @property (nonatomic,assign) NSInteger fuhe_position;
 
+//附件图片数组
+@property (nonatomic,strong) NSMutableArray *fuJianImages;
+
 
 /***************************接口返回数据***********************************/
 

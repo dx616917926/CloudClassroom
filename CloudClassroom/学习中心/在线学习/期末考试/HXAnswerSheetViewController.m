@@ -186,7 +186,8 @@
                         [qbtn setTitle:qInfo.psq_serial_no forState:UIControlStateNormal];
                         
                         if (self.isEnterExam) {
-                            if (![HXCommonUtil isNull:qInfo.answer]) {
+                            //有答案
+                            if (![HXCommonUtil isNull:qInfo.answer]||qInfo.fuJianImages.count>0) {
                                 [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
                                 [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                             }else{
@@ -251,7 +252,7 @@
                             [qbtn setTitle:subInfo.sub_serial_no forState:UIControlStateNormal];
                             
                             if (self.isEnterExam) {
-                                if (![HXCommonUtil isNull:subInfo.answer]) {
+                                if (![HXCommonUtil isNull:subInfo.answer]||qInfo.fuJianImages.count>0) {
                                     [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
                                     [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                                 }else{

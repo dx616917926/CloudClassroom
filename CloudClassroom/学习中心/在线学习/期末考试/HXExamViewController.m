@@ -501,6 +501,7 @@
         return fuHeCell;
     }else if (examPaperSuitQuestionModel.isWenDa) {
         HXExamAnswerCell *answerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamAnswerCell" forIndexPath:indexPath];
+        answerCell.examVc = self;
         return answerCell;
     }else{
         HXExamChoiceCell *choiceCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamChoiceCell" forIndexPath:indexPath];
