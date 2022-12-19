@@ -62,6 +62,36 @@
     return self;
 }
 
+#pragma mark - Setter
+-(void)setExamPaperSuitQuestionModel:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
+    
+    
+    _examPaperSuitQuestionModel = examPaperSuitQuestionModel;
+    
+    self.tiXingNameLabel.text = examPaperSuitQuestionModel.pqt_title;
+    
+    CGSize textSize = [self getAttributedTextHeightHtml:examPaperSuitQuestionModel.serialNoHtmlTitle  with_viewMaxRect:self.viewMaxRect];
+    self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
+    [self.attributedTitleLabel updateLayout];
+    self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
+    
+    //分数
+    self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
+    
+    self.textView.text = examPaperSuitQuestionModel.answer;
+    
+    //处理附件图片
+    if (self.examPaperSuitQuestionModel.fuJianImages.count==0) {//初始化
+        self.examPaperSuitQuestionModel.fuJianImages = [NSMutableArray array];
+    }
+    [self.photosArray removeAllObjects];
+    [self.photosArray addObjectsFromArray:self.examPaperSuitQuestionModel.fuJianImages];
+    [self refreshPhotosContainerViewLayout];
+    
+    
+}
+
+
 #pragma mark - 添加照片
 -(void)addPhoto:(UIButton *)button{
     if (self.photosArray.count>5) {
@@ -155,34 +185,6 @@
 
 
 
-#pragma mark - Setter
--(void)setExamPaperSuitQuestionModel:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
-    
-    
-    _examPaperSuitQuestionModel = examPaperSuitQuestionModel;
-    
-    self.tiXingNameLabel.text = examPaperSuitQuestionModel.pqt_title;
-    
-    CGSize textSize = [self getAttributedTextHeightHtml:examPaperSuitQuestionModel.serialNoHtmlTitle  with_viewMaxRect:self.viewMaxRect];
-    self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
-    [self.attributedTitleLabel updateLayout];
-    self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
-    
-    //分数
-    self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
-    
-    self.textView.text = examPaperSuitQuestionModel.answer;
-    
-    //处理附件图片
-    if (self.examPaperSuitQuestionModel.fuJianImages.count==0) {//初始化
-        self.examPaperSuitQuestionModel.fuJianImages = [NSMutableArray array];
-    }
-    [self.photosArray removeAllObjects];
-    [self.photosArray addObjectsFromArray:self.examPaperSuitQuestionModel.fuJianImages];
-    [self refreshPhotosContainerViewLayout];
-    
-    
-}
 
 #pragma mark - <UITextViewDelegate>
 - (void)textViewDidChange:(UITextView *)textView{
@@ -549,8 +551,14 @@
                 self.deletePhotoBtn.sd_layout
                 .rightSpaceToView(photoBrowser.contentView, 0)
                 .topSpaceToView(photoBrowser.contentView, kNavigationBarHeight-kStatusBarHeight)
-                .widthIs(100)
-                .heightIs(50);
+                .widthIs(60)
+                .heightIs(60);
+                
+                self.deletePhotoBtn.imageView.sd_layout
+                .centerXEqualToView(self.deletePhotoBtn)
+                .centerYEqualToView(self.deletePhotoBtn)
+                .widthIs(30)
+                .heightEqualToWidth();
             }
         }];
     }

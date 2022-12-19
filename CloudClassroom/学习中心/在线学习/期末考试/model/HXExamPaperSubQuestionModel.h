@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///答案
 @property(nonatomic, strong) NSString *answer;
 
+//附件图片数组
+@property (nonatomic,strong) NSMutableArray *fuJianImages;
+
 
 /***************************接口返回数据***********************************/
 ///子问题标题

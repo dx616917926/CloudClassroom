@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel;
 
+@property(nonatomic,strong) UIViewController *examVc;
+
 //点击答题卡，子题滑动到相应位置
 -(void)scrollSubPosition:(NSInteger)position;
 

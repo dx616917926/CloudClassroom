@@ -498,6 +498,7 @@
     HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray [indexPath.row];
     if (examPaperSuitQuestionModel.isFuHe) {
         HXExamFuHeCell *fuHeCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamFuHeCell" forIndexPath:indexPath];
+        fuHeCell.examVc = self;
         return fuHeCell;
     }else if (examPaperSuitQuestionModel.isWenDa) {
         HXExamAnswerCell *answerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamAnswerCell" forIndexPath:indexPath];

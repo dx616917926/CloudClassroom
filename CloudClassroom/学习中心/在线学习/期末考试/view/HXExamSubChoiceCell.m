@@ -8,6 +8,11 @@
 #import "HXExamSubChoiceCell.h"
 #import "IQTextView.h"
 #import "NSString+Base64.h"
+#import "HXPhotoManager.h"
+#import "SDWebImage.h"
+#import "GKPhotoBrowser.h"
+#import "GKCover.h"
+#import "UIViewController+HXExtension.h"
 
 @interface HXExamSubChoiceCell ()<DTAttributedTextContentViewDelegate,DTLazyImageViewDelegate,UITextViewDelegate>
 @property(nonatomic,assign) CGRect viewMaxRect;
@@ -53,7 +58,22 @@
 @property(nonatomic,strong) UIView *selectView;
 
 
-@property(nonatomic,assign) BOOL once;
+//照片容器试图
+@property(nonatomic,strong) UIView *photosContainerView;
+//添加照片
+@property(nonatomic,strong) UIButton *addPhotoBtn;
+@property(nonatomic,strong) UILabel *photoTipLabel;
+@property(nonatomic,strong) UIButton *deletePhotoBtn;
+
+@property(nonatomic,strong) NSMutableArray *photosArray;
+
+@property(nonatomic,strong) HXPhotoManager *photoManager;
+/** 这里用weak是防止GKPhotoBrowser被强引用，导致不能释放 */
+@property (nonatomic, weak) GKPhotoBrowser *browser;
+
+//当前照片索引
+@property (nonatomic, assign) NSInteger currentIndex;
+
 
 @end
 
@@ -67,6 +87,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.viewMaxRect = CGRectMake(0, 0, kScreenWidth-35, CGFLOAT_HEIGHT_UNKNOWN);
         self.choiceMaxRect = CGRectMake(0, 0, kScreenWidth-65, CGFLOAT_HEIGHT_UNKNOWN);
+        self.photosArray = [NSMutableArray array];
         [self createUI];
     }
     return self;
@@ -135,6 +156,9 @@
     self.dChoiceView.hidden = YES;
     self.eChoiceView.hidden = YES;
     self.grayView.hidden = YES;
+    self.photosContainerView.hidden = YES;
+    self.addPhotoBtn.hidden = YES;
+    self.photoTipLabel.hidden = YES;
     self.selectView = nil;
     
     self.aTapView.backgroundColor = ExamUnSelectColor;
@@ -150,8 +174,19 @@
         self.dChoiceView.hidden = YES;
         self.eChoiceView.hidden = YES;
         self.grayView.hidden = NO;
+        self.photosContainerView.hidden = NO;
+        self.addPhotoBtn.hidden = NO;
+        self.photoTipLabel.hidden = NO;
         self.selectView = nil;
         self.textView.text = examPaperSubQuestionModel.answer;
+        
+        //处理附件图片
+        if (examPaperSubQuestionModel.fuJianImages.count==0) {//初始化
+            examPaperSubQuestionModel.fuJianImages = [NSMutableArray array];
+        }
+        [self.photosArray removeAllObjects];
+        [self.photosArray addObjectsFromArray:examPaperSubQuestionModel.fuJianImages];
+        [self refreshPhotosContainerViewLayout];
         
     }else{//选择题
         self.grayView.hidden = YES;
@@ -234,6 +269,100 @@
         }
     }
 }
+
+
+#pragma mark - 添加照片
+-(void)addPhoto:(UIButton *)button{
+    if (self.photosArray.count>5) {
+        [self.examVc.view showTostWithMessage:@"图片数量不能超过5个!"];
+        return;
+    }
+    WeakSelf(weakSelf);
+    [self.examVc hx_presentSelectPhotoControllerWithManager:self.photoManager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
+        HXPhotoModel *photoModel = allList.firstObject;
+        // 因为是编辑过的照片所以直接取
+        UIImage *image = photoModel.photoEdit.editPreviewImage;
+        [weakSelf.photosArray addObject:image];
+        [weakSelf.examPaperSubQuestionModel.fuJianImages addObject:image];
+        [weakSelf refreshPhotosContainerViewLayout];
+    } cancel:nil];
+    
+}
+
+#pragma mark - 点击图片浏览
+-(void)tapImageView:(UITapGestureRecognizer *)tap{
+    [self endEditing:YES];
+    UIImageView *imageView = (UIImageView *)tap.view;
+    NSInteger index = imageView.tag-5000;
+    self.currentIndex = index;
+    NSMutableArray *photos = [NSMutableArray new];
+    GKPhoto *photo = [GKPhoto new];
+    photo.image = imageView.image;
+    photo.sourceImageView = imageView;
+    [photos addObject:photo];
+    [self.browser resetPhotoBrowserWithPhotos:photos];
+    [self.browser showFromVC:self.examVc];
+}
+
+#pragma mark - 删除照片
+-(void)deletePhoto:(UIButton *)sender{
+    [self.browser dismiss];
+    [self.examPaperSubQuestionModel.fuJianImages removeObjectAtIndex:self.currentIndex];
+    [self.photosArray removeObjectAtIndex:self.currentIndex];
+    //重新布局照片
+    [self refreshPhotosContainerViewLayout];
+}
+
+#pragma mark - 重新布局照片
+-(void)refreshPhotosContainerViewLayout{
+    ///移除重新布局
+    [self.photosContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    //记录布局的上一个视图
+    __block UIView *lastview = self.photosContainerView;
+    //记录高度
+    __block CGFloat contentHeight = 0;
+    [self.photosArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        UIImage *image = obj;
+        
+        UIImageView *imageView =[[UIImageView alloc] init];
+        imageView.tag = 5000+idx;
+        imageView.userInteractionEnabled = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.image = image;
+        [self.photosContainerView addSubview:imageView];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageView:)];
+        [imageView addGestureRecognizer:tap];
+        
+        CGSize size = image.size;
+        CGFloat heightPx = 0;
+        if (size.width>=self.viewMaxRect.size.width) {
+            CGFloat imgSizeScale = size.height/size.width;
+            heightPx = self.viewMaxRect.size.width * imgSizeScale;
+        }else{
+            heightPx = size.height;
+        }
+        
+        imageView.sd_layout
+            .topSpaceToView(lastview, 10)
+            .leftEqualToView(self.photosContainerView)
+            .rightEqualToView(self.photosContainerView)
+            .heightIs(heightPx);
+        
+        contentHeight += heightPx+10;
+        lastview = imageView;
+        
+    }];
+    //刷新布局
+    self.photosContainerView.sd_layout.heightIs(contentHeight);
+    [self.photosContainerView updateLayout];
+}
+
+
 
 #pragma mark - <UITextViewDelegate>
 - (void)textViewDidChange:(UITextView *)textView{
@@ -498,6 +627,10 @@
     [self.mainScrollView addSubview:self.grayView];
     [self.grayView addSubview:self.textView];
     
+    [self.mainScrollView addSubview:self.photosContainerView];
+    [self.mainScrollView addSubview:self.addPhotoBtn];
+    [self.mainScrollView addSubview:self.photoTipLabel];
+    
     self.mainScrollView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
     
     
@@ -635,9 +768,30 @@
     
     self.textView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(10, 10, 10, 10));
     
+    self.photosContainerView.sd_layout
+        .topSpaceToView(self.grayView, 10)
+        .leftSpaceToView(self.mainScrollView, 10)
+        .rightSpaceToView(self.mainScrollView, 10)
+        .heightIs(0);
     
-    [self.mainScrollView setupAutoContentSizeWithBottomView:self.eChoiceView bottomMargin:ExamSubChoiceCellHeight];
     
+    self.addPhotoBtn.sd_layout
+        .topSpaceToView(self.photosContainerView, 10)
+        .leftSpaceToView(self.mainScrollView, 10)
+        .rightSpaceToView(self.mainScrollView, 10)
+        .heightIs(40);
+    self.addPhotoBtn.sd_cornerRadius=@4;
+    
+    self.photoTipLabel.sd_layout
+        .topSpaceToView(self.addPhotoBtn, 10)
+        .leftSpaceToView(self.mainScrollView, 10)
+        .rightSpaceToView(self.mainScrollView, 10)
+        .autoHeightRatio(0);
+    
+    
+    [self.mainScrollView setupAutoContentSizeWithBottomView:self.photoTipLabel bottomMargin:ExamSubChoiceCellHeight];
+    
+
    
 }
 
@@ -902,6 +1056,110 @@
         _textView.placeholderTextColor = COLOR_WITH_ALPHA(0x999999, 1);
     }
     return _textView;
+}
+
+
+-(UIView *)photosContainerView{
+    if (!_photosContainerView) {
+        _photosContainerView = [[UIView alloc] init];
+        _photosContainerView.backgroundColor = UIColor.clearColor;
+    }
+    return _photosContainerView;
+}
+
+-(UIButton *)addPhotoBtn{
+    if (!_addPhotoBtn) {
+        _addPhotoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addPhotoBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        _addPhotoBtn.titleLabel.font = HXBoldFont(15);
+        [_addPhotoBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_addPhotoBtn setTitle:@"添加照片" forState:UIControlStateNormal];
+        _addPhotoBtn.backgroundColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
+        [_addPhotoBtn addTarget:self action:@selector(addPhoto:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _addPhotoBtn;
+}
+
+-(UILabel *)photoTipLabel{
+    if (!_photoTipLabel) {
+        _photoTipLabel = [[UILabel alloc] init];
+        _photoTipLabel.textAlignment = NSTextAlignmentLeft;
+        _photoTipLabel.font = HXFont(14);
+        _photoTipLabel.textColor = COLOR_WITH_ALPHA(0xEF5959, 1);
+        _photoTipLabel.numberOfLines = 0;
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentLeft;
+        paragraphStyle.lineSpacing = 10;//字体的行间距
+        paragraphStyle.minimumLineHeight = 10;//最低行高
+        paragraphStyle.minimumLineHeight = 18;//最大行高
+        paragraphStyle.paragraphSpacing = 10;//段与段之间的间距
+        paragraphStyle.firstLineHeadIndent = 0;//首行缩进
+        paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
+        NSMutableAttributedString *attributedString = [[[NSAttributedString alloc] initWithString:@"答题需要画图或者写计算过程的可以在纸张上完成，拍照成一张图片上传。如需删除图片，可以点击图片，右上角删除。"] mutableCopy];
+        [attributedString addAttributes:@{NSParagraphStyleAttributeName:paragraphStyle} range:NSMakeRange(0, attributedString.length)];
+        _photoTipLabel.attributedText = attributedString;
+        _photoTipLabel.isAttributedContent = YES;
+    }
+    return _photoTipLabel;
+}
+
+-(UIButton *)deletePhotoBtn{
+    if (!_deletePhotoBtn) {
+        _deletePhotoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_deletePhotoBtn setImage:[UIImage imageNamed:@"trash_green"] forState:UIControlStateNormal];
+        [_deletePhotoBtn addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _deletePhotoBtn;
+}
+
+
+- (HXPhotoManager *)photoManager {
+    if (!_photoManager) {
+        _photoManager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhoto];
+        _photoManager.selectPhotoFinishDismissAnimated = NO;
+        _photoManager.cameraFinishDismissAnimated = YES;
+        _photoManager.type = HXPhotoManagerSelectedTypePhoto;
+        _photoManager.configuration.singleJumpEdit = YES;
+        _photoManager.configuration.singleSelected = YES;
+        _photoManager.configuration.lookGifPhoto = NO;
+        _photoManager.configuration.lookLivePhoto = NO;
+        _photoManager.configuration.photoEditConfigur.aspectRatio = HXPhotoEditAspectRatioType_Custom;
+        _photoManager.configuration.photoEditConfigur.onlyCliping = YES;
+    }
+    return _photoManager;
+}
+
+-(GKPhotoBrowser *)browser{
+    if (!_browser) {
+        _browser = [GKPhotoBrowser photoBrowserWithPhotos:[NSArray array] currentIndex:0];
+        _browser.showStyle = GKPhotoBrowserShowStyleZoom;        // 缩放显示
+        _browser.hideStyle = GKPhotoBrowserHideStyleZoomScale;   // 缩放隐藏
+        _browser.loadStyle = GKPhotoBrowserLoadStyleIndeterminateMask; // 不明确的加载方式带阴影
+        _browser.maxZoomScale = 5.0f;
+        _browser.doubleZoomScale = 2.0f;
+        _browser.isAdaptiveSafeArea = YES;
+        _browser.hidesCountLabel = YES;
+        _browser.pageControl.hidden = YES;
+        _browser.isScreenRotateDisabled = YES;
+        _browser.isHideSourceView = NO;
+        //为浏览器添加自定义遮罩视图
+        [_browser setupCoverViews:@[self.deletePhotoBtn] layoutBlock:^(GKPhotoBrowser * _Nonnull photoBrowser, CGRect superFrame) {
+            if (self.deletePhotoBtn) {
+                self.deletePhotoBtn.sd_layout
+                .rightSpaceToView(photoBrowser.contentView, 0)
+                .topSpaceToView(photoBrowser.contentView, kNavigationBarHeight-kStatusBarHeight)
+                .widthIs(60)
+                .heightIs(60);
+                
+                self.deletePhotoBtn.imageView.sd_layout
+                .centerXEqualToView(self.deletePhotoBtn)
+                .centerYEqualToView(self.deletePhotoBtn)
+                .widthIs(30)
+                .heightEqualToWidth();
+            }
+        }];
+    }
+    return _browser;
 }
 
 

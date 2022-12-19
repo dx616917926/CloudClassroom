@@ -329,6 +329,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
     HXExamSubChoiceCell *choiceCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamSubChoiceCell" forIndexPath:indexPath];
+    choiceCell.examVc = self.examVc;
     return choiceCell;
 
 }
