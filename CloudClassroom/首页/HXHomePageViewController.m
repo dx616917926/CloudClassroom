@@ -223,6 +223,39 @@
     }];
 }
 
+#pragma mark - 是否可以申请学位英语
+-(void)canApplyDegreeEnglish{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_IsCanApply needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSDictionary *data = [dictionary dictionaryValueForKey:@"data"];
+            //是否可以进入申请学位 0表示不可以 1表示可以
+            BOOL isCan = [data boolValueForKey:@"isCan"];
+            //原因类型 1非本科生生，不能申请学位证书 2学位申请暂未开放报名 3未满足学位申请的条件
+            NSInteger type = [[data stringValueForKey:@"type"] integerValue];
+            if (!isCan) {
+                HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
+                if (type==1) {
+                    degreeEnglishShowView.type = FeiBenKeShengType;
+                }else if (type==2) {
+                    degreeEnglishShowView.type = WeiKaiFangBaoMingType;
+                }else if (type==3) {
+                    degreeEnglishShowView.type = WeiManZuTiaoJianType;
+                }
+                [degreeEnglishShowView show];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
 #pragma mark - 重新布局功能模块
 -(void)refreshHomeMenuLayout:(NSArray<HXHomeMenuModel*>*)list{
     ///移除重新布局
@@ -352,9 +385,8 @@
         
         
     }else if([moduleCode isEqualToString:@"DegreeEnglish"]){//学位英语
-        HXDegreeEnglishShowView *degreeEnglishShowView =[[HXDegreeEnglishShowView alloc] init];
-        degreeEnglishShowView.type = WeiKaiFangBaoMingType;
-        [degreeEnglishShowView show];
+        //是否可以申请学位英语
+        [self canApplyDegreeEnglish];
     }else if([moduleCode isEqualToString:@"ZBList"]){//我的直播
         HXLiveCourseViewController *vc = [[HXLiveCourseViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;

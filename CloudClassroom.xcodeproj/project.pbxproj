@@ -89,6 +89,7 @@
 		047959A528DAEF16001F8BC6 /* HXDegreeEnglishShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 047959A428DAEF16001F8BC6 /* HXDegreeEnglishShowView.m */; };
 		047959A828DAFB54001F8BC6 /* HXJieSuanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047959A728DAFB54001F8BC6 /* HXJieSuanViewController.m */; };
 		047959AB28DB098C001F8BC6 /* HXJieSuanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 047959AA28DB098C001F8BC6 /* HXJieSuanCell.m */; };
+		047AA2452950543F00FDFE32 /* LYLUnicode.m in Sources */ = {isa = PBXBuildFile; fileRef = 047AA2432950543F00FDFE32 /* LYLUnicode.m */; };
 		047BDB4928F56D1C003F3A69 /* HXFindPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047BDB4828F56D1C003F3A69 /* HXFindPasswordViewController.m */; };
 		047D23B728D1729000514C1C /* HXFaceRecognitionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 047D23B628D1729000514C1C /* HXFaceRecognitionView.m */; };
 		047D23C028D1746100514C1C /* idl-key.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = 047D23BA28D1746100514C1C /* idl-key.face-ios */; };
@@ -239,6 +240,8 @@
 		04AB5238292DC7B700A268DD /* HXMyMessageInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB5237292DC7B700A268DD /* HXMyMessageInfoModel.m */; };
 		04AB523C292E1F8D00A268DD /* HXFloatButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */; };
 		04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B782CE290683E6008AE8DB /* HXMoocViewController.m */; };
+		04B90CD6295D35C100A0A376 /* HXMaterialModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CD5295D35C100A0A376 /* HXMaterialModel.m */; };
+		04B90CD9295D36D900A0A376 /* HXImgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CD8295D36D900A0A376 /* HXImgModel.m */; };
 		04BB4826292F01930096C0CC /* HXExamErrorReportView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4824292F01920096C0CC /* HXExamErrorReportView.m */; };
 		04BB482A292F10340096C0CC /* HXCourseOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4829292F10340096C0CC /* HXCourseOrderModel.m */; };
 		04BB482D292F11300096C0CC /* HXCoursePayOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB482C292F11300096C0CC /* HXCoursePayOrderModel.m */; };
@@ -668,6 +671,8 @@
 		047959A728DAFB54001F8BC6 /* HXJieSuanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXJieSuanViewController.m; sourceTree = "<group>"; };
 		047959A928DB098C001F8BC6 /* HXJieSuanCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXJieSuanCell.h; sourceTree = "<group>"; };
 		047959AA28DB098C001F8BC6 /* HXJieSuanCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXJieSuanCell.m; sourceTree = "<group>"; };
+		047AA2432950543F00FDFE32 /* LYLUnicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYLUnicode.m; sourceTree = "<group>"; };
+		047AA2442950543F00FDFE32 /* LYLUnicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYLUnicode.h; sourceTree = "<group>"; };
 		047BDB4728F56D1C003F3A69 /* HXFindPasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFindPasswordViewController.h; sourceTree = "<group>"; };
 		047BDB4828F56D1C003F3A69 /* HXFindPasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXFindPasswordViewController.m; sourceTree = "<group>"; };
 		047D23B528D1729000514C1C /* HXFaceRecognitionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXFaceRecognitionView.h; sourceTree = "<group>"; };
@@ -968,6 +973,10 @@
 		04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXFloatButtonView.m; sourceTree = "<group>"; };
 		04B782CD290683E6008AE8DB /* HXMoocViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXMoocViewController.h; sourceTree = "<group>"; };
 		04B782CE290683E6008AE8DB /* HXMoocViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXMoocViewController.m; sourceTree = "<group>"; };
+		04B90CD4295D35C100A0A376 /* HXMaterialModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXMaterialModel.h; sourceTree = "<group>"; };
+		04B90CD5295D35C100A0A376 /* HXMaterialModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMaterialModel.m; sourceTree = "<group>"; };
+		04B90CD7295D36D900A0A376 /* HXImgModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXImgModel.h; sourceTree = "<group>"; };
+		04B90CD8295D36D900A0A376 /* HXImgModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXImgModel.m; sourceTree = "<group>"; };
 		04BB4824292F01920096C0CC /* HXExamErrorReportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXExamErrorReportView.m; sourceTree = "<group>"; };
 		04BB4825292F01930096C0CC /* HXExamErrorReportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXExamErrorReportView.h; sourceTree = "<group>"; };
 		04BB4828292F10340096C0CC /* HXCourseOrderModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseOrderModel.h; sourceTree = "<group>"; };
@@ -1897,6 +1906,15 @@
 			path = view;
 			sourceTree = "<group>";
 		};
+		047AA2422950543F00FDFE32 /* LYLUnicode */ = {
+			isa = PBXGroup;
+			children = (
+				047AA2442950543F00FDFE32 /* LYLUnicode.h */,
+				047AA2432950543F00FDFE32 /* LYLUnicode.m */,
+			);
+			path = LYLUnicode;
+			sourceTree = "<group>";
+		};
 		047D23B428D1726A00514C1C /* 人脸识别 */ = {
 			isa = PBXGroup;
 			children = (
@@ -2068,6 +2086,7 @@
 		048B7CBC28BDA209006EBAAE /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				047AA2422950543F00FDFE32 /* LYLUnicode */,
 				04E5573D2939E344009AC15B /* QBImagePickerController */,
 				04E5546F2939D600009AC15B /* BJLiveUI */,
 				04E554112939D5F6009AC15B /* BJPlaybackUI */,
@@ -2582,6 +2601,7 @@
 		049D570028E28CEE009F09F2 /* 资料上传 */ = {
 			isa = PBXGroup;
 			children = (
+				04B90CD3295D352A00A0A376 /* model */,
 				049D570128E28CEE009F09F2 /* view */,
 				049D570228E28D34009F09F2 /* HXZiLiaoUploadViewController.h */,
 				049D570328E28D34009F09F2 /* HXZiLiaoUploadViewController.m */,
@@ -2729,6 +2749,17 @@
 				04AB523B292E1F8C00A268DD /* HXFloatButtonView.m */,
 			);
 			path = HXFloatButtonView;
+			sourceTree = "<group>";
+		};
+		04B90CD3295D352A00A0A376 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				04B90CD4295D35C100A0A376 /* HXMaterialModel.h */,
+				04B90CD5295D35C100A0A376 /* HXMaterialModel.m */,
+				04B90CD7295D36D900A0A376 /* HXImgModel.h */,
+				04B90CD8295D36D900A0A376 /* HXImgModel.m */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 		04BB4827292F0FFD0096C0CC /* model */ = {
@@ -4156,10 +4187,12 @@
 				04E557052939D602009AC15B /* BJLYYTextWeakProxy.m in Sources */,
 				04E5568D2939D601009AC15B /* BJLScStickyMessageView.m in Sources */,
 				04E556642939D601009AC15B /* BJLScPPTQuickSlideCell.m in Sources */,
+				047AA2452950543F00FDFE32 /* LYLUnicode.m in Sources */,
 				0478DA6328D847A000B645DE /* HXXueFeiViewController.m in Sources */,
 				048B7D5628BDA20A006EBAAE /* NSString+HXString.m in Sources */,
 				04E556A02939D601009AC15B /* BJLHandWritingBoardDeviceViewController.m in Sources */,
 				04E5567B2939D601009AC15B /* BJLQuestionRecordCell.m in Sources */,
+				04B90CD6295D35C100A0A376 /* HXMaterialModel.m in Sources */,
 				049D570728E28DDF009F09F2 /* HXZiLiaoUploadCell.m in Sources */,
 				04E556A32939D601009AC15B /* BJLPopoverViewController.m in Sources */,
 				04E5566A2939D601009AC15B /* BJLLampConstructor.m in Sources */,
@@ -4462,6 +4495,7 @@
 				04E556EE2939D602009AC15B /* BJLDocumentFileManagerViewController.m in Sources */,
 				0470DC2A28DC0EB7007A25DC /* VICacheManager.m in Sources */,
 				04E556D32939D601009AC15B /* BJLCameraCheckView.m in Sources */,
+				04B90CD9295D36D900A0A376 /* HXImgModel.m in Sources */,
 				04E5575D2939E344009AC15B /* QBVideoIconView.m in Sources */,
 				048E432729373F5600EC043A /* HXFeeDetailInfoModel.m in Sources */,
 				04E556EF2939D602009AC15B /* BJLDocumentFile.m in Sources */,

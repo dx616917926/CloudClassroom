@@ -8,10 +8,11 @@
 #import "HXZiLiaoUploadViewController.h"
 #import "HXZiLiaoUploadCell.h"
 #import "HXPhotoManager.h"
-#import "SDWebImage.h"
 #import "GKPhotoBrowser.h"
 #import "GKCover.h"
 #import "UIViewController+HXExtension.h"
+#import "HXMaterialModel.h"
+
 
 @interface HXZiLiaoUploadViewController ()<UITableViewDelegate,UITableViewDataSource,HXZiLiaoUploadCellDelegate>
 
@@ -24,6 +25,10 @@
 @property(nonatomic,strong) NSArray *titles;
 @property(nonatomic,strong) NSArray *tips;
 
+@property(nonatomic,strong) HXMaterialModel *materialModel;
+
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation HXZiLiaoUploadViewController
@@ -34,73 +39,111 @@
     
     //UI
     [self createUI];
+    //获取新生材料
+    [self getMaterialList];
 }
 
 -(void)dealloc{
     
 }
 
--(void)loadData{
-    [self.mainTableView.mj_header endRefreshing];
+#pragma mark - 获取新生材料
+-(void)getMaterialList{
+  
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    
+    NSDictionary *dic =@{
+        @"studentid":HXSafeString(studentId)
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetMaterialList needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        [self.mainTableView.mj_header endRefreshing];
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            self.materialModel = [HXMaterialModel mj_objectArrayWithKeyValuesArray:[dictionary objectForKey:@"data"]].firstObject;
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:self.materialModel.imgList];
+            [self.mainTableView reloadData];
+            if (self.materialModel.imgList.count==0) {
+                [self.mainTableView addSubview:self.noDataTipView];
+            }else{
+                [self.noDataTipView removeFromSuperview];
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.mainTableView.mj_header endRefreshing];
+    }];
+}
+#pragma mark - 学生上传新生材料
+-(void)uploadStudentFile:(NSString *)encodedImageStr typeName:(NSString *)typeName{
+    
+    NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
+    NSDictionary *dic = @{
+        @"student_id":HXSafeString(studentId),
+        @"sourceimagebase64":HXSafeString(encodedImageStr),
+        @"typename":HXSafeString(typeName),
+        
+    };
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_SaveMaterial needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            [self.view showSuccessWithMessage:[dictionary stringValueForKey:@"message"]];
+            //刷新数据
+            [self getMaterialList];
+        }else{
+            [self.view hideLoading];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.view hideLoading];
+    }];
+}
+#pragma mark -- image转化成Base64位
+-(NSString *)imageChangeBase64: (UIImage *)image{
+    UIImage*compressImage = [HXCommonUtil compressImageSize:image toByte:250000];
+    NSData*imageData =  UIImageJPEGRepresentation(compressImage, 1);
+    NSLog(@"压缩后图片大小：%.2f M",(float)imageData.length/(1024*1024.0f));
+    return [NSString stringWithFormat:@"%@",[imageData base64EncodedStringWithOptions:0]];
 }
 
--(void)loadMoreData{
-    [self.mainTableView.mj_footer endRefreshing];
-}
 
-#pragma mark - UI
--(void)createUI{
-    
-    self.titles =@[@"上传准考证照片",@"学生本人拿着身份证所照照片",@"学信网专科学历备案表照片",@"证件照片"];
-    self.tips =@[@"",@"（专升本学生需要上传）",@"（专升本学生需要上传）",@""];
-    
-    self.sc_navigationBar.title = @"资料上传";
-   
-    [self.view addSubview:self.mainTableView];
-    
-    self.mainTableView.sd_layout
-    .topSpaceToView(self.view, kNavigationBarHeight)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .bottomEqualToView(self.view);
-    [self.mainTableView updateLayout];
-    
-    self.noDataTipView.tipTitle = @"暂无资料上传～";
-    self.noDataTipView.frame = self.mainTableView.frame;
-    
-    // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    header.automaticallyChangeAlpha = YES;
-    self.mainTableView.mj_header = header;
-    MJRefreshAutoNormalFooter * footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-    self.mainTableView.mj_footer = footer;
-    self.mainTableView.mj_footer.hidden = YES;
-    
-   
-   
-    
-}
+
+
 
 #pragma mark - <HXZiLiaoUploadCellDelegate>
--(void)addPhotoForZiLiaoImageView:(UIImageView *)ziLiaoImageView hiddenAddBtn:(nonnull UIButton *)button{
+-(void)addPhotoForZiLiaoImageView:(UIImageView *)ziLiaoImageView hiddenAddBtn:(nonnull UIButton *)button imgModel:(nonnull HXImgModel *)imgModel{
     WeakSelf(weakSelf);
     [self hx_presentSelectPhotoControllerWithManager:self.photoManager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
         HXPhotoModel *photoModel = allList.firstObject;
         // 因为是编辑过的照片所以直接取
         ziLiaoImageView.image = photoModel.photoEdit.editPreviewImage;
         button.hidden = YES;
+        //上传图片
+        [weakSelf uploadStudentFile:[self imageChangeBase64:photoModel.photoEdit.editPreviewImage] typeName:imgModel.typeName];
     } cancel:nil];
     
 }
 
--(void)tapZiLiaoImageView:(UIImageView *)ziLiaoImageView{
-    NSMutableArray *photos = [NSMutableArray new];
-    GKPhoto *photo = [GKPhoto new];
-    photo.image = ziLiaoImageView.image;
-    photo.sourceImageView =ziLiaoImageView;
-    [photos addObject:photo];
-    [self.browser resetPhotoBrowserWithPhotos:photos];
-    [self.browser showFromVC:self];
+-(void)tapZiLiaoImageView:(UIImageView *)ziLiaoImageView imgModel:(nonnull HXImgModel *)imgModel{
+    ///审核状态 0-待审核 1-审核通过 2-重新上传  (1-审核通过不能再上传了)
+    if (self.materialModel.checkStatus==1) {
+        NSMutableArray *photos = [NSMutableArray new];
+        GKPhoto *photo = [GKPhoto new];
+        photo.image = ziLiaoImageView.image;
+        photo.sourceImageView = ziLiaoImageView;
+        [photos addObject:photo];
+        [self.browser resetPhotoBrowserWithPhotos:photos];
+        [self.browser showFromVC:self];
+    }else{
+        WeakSelf(weakSelf);
+        [self hx_presentSelectPhotoControllerWithManager:self.photoManager didDone:^(NSArray<HXPhotoModel *> * _Nullable allList, NSArray<HXPhotoModel *> * _Nullable photoList, NSArray<HXPhotoModel *> * _Nullable videoList, BOOL isOriginal, UIViewController * _Nullable viewController, HXPhotoManager * _Nullable manager) {
+            HXPhotoModel *photoModel = allList.firstObject;
+            // 因为是编辑过的照片所以直接取
+            ziLiaoImageView.image = photoModel.photoEdit.editPreviewImage;
+            //上传图片
+            [weakSelf uploadStudentFile:[self imageChangeBase64:photoModel.photoEdit.editPreviewImage] typeName:imgModel.typeName];
+        } cancel:nil];
+    }
+    
 }
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>
@@ -109,9 +152,8 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.titles.count;
+    return self.dataArray.count;
 }
-
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -129,8 +171,7 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
-    cell.titleLabel.text = self.titles[indexPath.row];
-    cell.tipLabel.text = self.tips[indexPath.row];
+    cell.imgModel = self.dataArray[indexPath.row];
     return cell;
 }
 
@@ -140,7 +181,41 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - UI
+-(void)createUI{
+    
+    
+    
+    self.sc_navigationBar.title = @"资料上传";
+   
+    [self.view addSubview:self.mainTableView];
+    
+    self.mainTableView.sd_layout
+    .topSpaceToView(self.view, kNavigationBarHeight)
+    .leftEqualToView(self.view)
+    .rightEqualToView(self.view)
+    .bottomEqualToView(self.view);
+    [self.mainTableView updateLayout];
+    
+    self.noDataTipView.tipTitle = @"暂无资料上传～";
+    self.noDataTipView.frame = self.mainTableView.frame;
+    
+    // 刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getMaterialList)];
+    header.automaticallyChangeAlpha = YES;
+    self.mainTableView.mj_header = header;
+    
+    
+}
+
 #pragma mark -LazyLoad
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
 -(UITableView *)mainTableView{
     if (!_mainTableView) {
         _mainTableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];

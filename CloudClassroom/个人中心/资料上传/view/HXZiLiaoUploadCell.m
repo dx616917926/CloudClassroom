@@ -8,7 +8,8 @@
 #import "HXZiLiaoUploadCell.h"
 
 @interface HXZiLiaoUploadCell ()
-
+@property(nonatomic,strong) UILabel *titleLabel;
+@property(nonatomic,strong) UILabel *tipLabel;
 @property(nonatomic,strong) UIView *bigBackgroundView;
 @property(nonatomic,strong) UIImageView *ziLiaoImageView;
 @property(nonatomic,strong) UIButton *addBtn;
@@ -35,17 +36,27 @@
     }
     return self;
 }
-
+#pragma mark - Setter
+-(void)setImgModel:(HXImgModel *)imgModel{
+    _imgModel = imgModel;
+    
+    self.titleLabel.text = imgModel.imgTitle;
+    
+    [self.ziLiaoImageView sd_setImageWithURL:HXSafeURL(imgModel.imgUrl) placeholderImage:nil];
+    
+    self.addBtn.hidden = ![HXCommonUtil isNull:imgModel.imgUrl];
+    
+}
 #pragma mark - Event
 -(void)clickAddBtn:(UIButton *)sender{
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(addPhotoForZiLiaoImageView:hiddenAddBtn:)]) {
-        [self.delegate addPhotoForZiLiaoImageView:self.ziLiaoImageView hiddenAddBtn:sender];
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(addPhotoForZiLiaoImageView:hiddenAddBtn:imgModel:)]) {
+        [self.delegate addPhotoForZiLiaoImageView:self.ziLiaoImageView hiddenAddBtn:sender imgModel:self.imgModel];
     }
 }
 
 -(void)tapZiLiaoImageView:(UIGestureRecognizer *)tap{
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(tapZiLiaoImageView:)]) {
-        [self.delegate tapZiLiaoImageView:self.ziLiaoImageView];
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(tapZiLiaoImageView:imgModel:)]) {
+        [self.delegate tapZiLiaoImageView:self.ziLiaoImageView imgModel:self.imgModel];
     }
 }
 

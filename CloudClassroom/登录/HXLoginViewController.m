@@ -151,7 +151,7 @@
         weakSelf.bottomBgImageView.hidden = YES;
         weakSelf.pingTaiLabel.hidden = NO;
         weakSelf.schoolNameLabel.text = school.schoolName_Cn;
-        [weakSelf.schoolLogoImageView sd_setImageWithURL:[NSURL URLWithString:school.schoolLogoUrl] placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
+        [weakSelf.schoolLogoImageView sd_setImageWithURL:HXSafeURL(school.schoolLogoUrl) placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
         [weakSelf.schoolBgImageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"defaultshcoolbg_icon"] options:SDWebImageRefreshCached];
     };
 }
@@ -352,15 +352,15 @@
         self.bottomBgImageView.hidden = YES;
         self.pingTaiLabel.hidden = NO;
         self.schoolNameLabel.text = defaultSchool.schoolName_Cn;
-        [self.schoolLogoImageView sd_setImageWithURL:[NSURL URLWithString:defaultSchool.schoolLogoUrl] placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
+        [self.schoolLogoImageView sd_setImageWithURL:HXSafeURL(defaultSchool.schoolLogoUrl) placeholderImage:[UIImage imageNamed:@"defaultshcool_icon"]];
         [self.schoolBgImageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"defaultshcoolbg_icon"] options:SDWebImageRefreshCached];
         [HXPublicParamTool sharedInstance].schoolDomainURL = defaultSchool.schoolDomainURL;// @"http://xueliapitest.edu-cj.com",@"https://369466q726.yicp.fun"
         [HXBaseURLSessionManager setBaseURLStr:[HXPublicParamTool sharedInstance].schoolDomainURL];
     }
     
 #ifdef DEBUG
-    self.accountTextField.text = @"20190005";//20190005  2021080420
-    self.pwdTextField.text = @"dx123456";//dx123456
+    self.accountTextField.text = @"430529199306306274";//20190005  2021080420
+    self.pwdTextField.text = @"430529199306306274";//dx123456
 #endif
     
 }

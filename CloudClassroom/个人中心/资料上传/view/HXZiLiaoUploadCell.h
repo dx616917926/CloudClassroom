@@ -6,23 +6,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SDWebImage.h"
+#import "HXImgModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HXZiLiaoUploadCellDelegate <NSObject>
 
--(void)addPhotoForZiLiaoImageView:(UIImageView *)ziLiaoImageView hiddenAddBtn:(UIButton *)button;
+-(void)addPhotoForZiLiaoImageView:(UIImageView *)ziLiaoImageView hiddenAddBtn:(UIButton *)button imgModel:(HXImgModel *)imgModel;
 
--(void)tapZiLiaoImageView:(UIImageView *)ziLiaoImageView;
+-(void)tapZiLiaoImageView:(UIImageView *)ziLiaoImageView imgModel:(HXImgModel *)imgModel;
 
 @end
 
 @interface HXZiLiaoUploadCell : UITableViewCell
 
-@property(nonatomic,strong) UILabel *titleLabel;
-@property(nonatomic,strong) UILabel *tipLabel;
+
 
 @property(nonatomic,weak) id<HXZiLiaoUploadCellDelegate>delegate;
+
+@property(nonatomic,strong) HXImgModel *imgModel;
 
 @end
 

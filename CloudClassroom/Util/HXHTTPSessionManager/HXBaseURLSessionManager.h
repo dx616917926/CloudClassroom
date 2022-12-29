@@ -100,6 +100,15 @@ NS_ASSUME_NONNULL_BEGIN
 #define HXPOST_GetResource                                  @"/api/MyResource/GetResource"
 
 
+#pragma mark ----------------------------------------------资料上传-------------------------------------------------
+
+//获取新生材料
+#define HXPOST_GetMaterialList                             @"/api/NewStudentMaterialUpload/GetMaterialList"
+
+//学生上传新生材料
+#define HXPOST_SaveMaterial                                @"/api/NewStudentMaterialUpload/SaveMaterial"
+
+
 #pragma mark ----------------------------------------------人脸识别相关信息-------------------------------------------------
 
 //获取人脸识别设置
@@ -233,6 +242,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 //面授课表详情
 #define HXPOST_GetCourseArrangingDetai                            @"/api/CourseArrangingList/GetCourseArrangingDetai"
+
+
+#pragma mark ----------------------------------------------学位英语相关操作-------------------------------------------------
+
+//是否可以申请学位英语
+#define HXPOST_IsCanApply                                         @"/api/DegreeEnglish/IsCanApply"
+
+
 
 
 
