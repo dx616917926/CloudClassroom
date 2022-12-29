@@ -307,7 +307,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HXLiveDetailViewController *vc = [[HXLiveDetailViewController alloc] init];
     HXLiveDetailModel *liveDetailModel = self.dataArray[indexPath.row];
-    vc.liveDetailModel = liveDetailModel;
+    vc.dbType = liveDetailModel.dbType;
+    vc.student_id = liveDetailModel.student_id;
+    vc.detailID = liveDetailModel.detailID;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

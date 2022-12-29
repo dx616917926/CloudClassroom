@@ -36,6 +36,7 @@
 @property(nonatomic,strong) UILabel *introductionTitleLabel;
 @property(nonatomic,strong) UILabel *introductionContentLabel;
 
+@property(nonatomic,strong) HXLiveDetailModel *liveDetailModel;
 
 @end
 
@@ -53,17 +54,15 @@
 }
 
 #pragma mark - Setter
--(void)setLiveDetailModel:(HXLiveDetailModel *)liveDetailModel{
-    _liveDetailModel = liveDetailModel;
-}
+
 
 #pragma mark - 获取直播详情
 -(void)getLiveDetail{
     
     NSDictionary *dic =@{
-        @"detailid":HXSafeString(self.liveDetailModel.detailID),
-        @"dbtype":HXIntToString(self.liveDetailModel.dbType),
-        @"studentid":HXSafeString(self.liveDetailModel.student_id)
+        @"detailid":HXSafeString(self.detailID),
+        @"dbtype":HXIntToString(self.dbType),
+        @"studentid":HXSafeString(self.student_id)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetLiveDetail needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {
         [self.mainScrollView.mj_header endRefreshing];
@@ -215,10 +214,10 @@
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.bigBackgroundView bottomMargin:100];
     
     self.noDataTipView.tipTitle = @"暂无直播详情～";
-    self.noDataTipView.frame = self.mainScrollView.frame;
+    self.noDataTipView.frame = self.mainScrollView.bounds;
     
     // 刷新
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getBKList)];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getLiveDetail)];
     header.automaticallyChangeAlpha = YES;
     self.mainScrollView.mj_header = header;
  

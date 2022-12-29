@@ -104,8 +104,8 @@
     self.signImageView.sd_layout
     .centerYEqualToView(self.titleLabel)
     .rightSpaceToView(self.bigBackgroundView, 20)
-    .widthIs(100)
-    .heightIs(50);
+    .widthIs(80)
+    .heightIs(36);
     
     
     self.lineView.sd_layout
@@ -181,7 +181,11 @@
     if (!_signImageView) {
         _signImageView = [[UIImageView alloc] init];
         _signImageView.contentMode = UIViewContentModeScaleAspectFill;
-        _signImageView.clipsToBounds = YES;
+//        _signImageView.clipsToBounds = YES;
+        _signImageView.layer.shadowColor = COLOR_WITH_ALPHA(0x000000, 0.1).CGColor;
+        _signImageView.layer.shadowOffset = CGSizeMake(0,0);
+        _signImageView.layer.shadowOpacity = 1;
+        _signImageView.layer.shadowRadius = 4;
         _signImageView.userInteractionEnabled = YES;
         _signImageView.hidden = YES;
     }

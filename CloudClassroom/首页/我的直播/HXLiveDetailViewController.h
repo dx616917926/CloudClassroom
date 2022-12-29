@@ -12,8 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXLiveDetailViewController : HXBaseViewController
 
-@property(nonatomic,strong) HXLiveDetailModel *liveDetailModel;
 
+///直播类型 （1公开课 2非公开课）
+@property(nonatomic, assign) NSInteger dbType;
+///学生ID
+@property(nonatomic, copy) NSString *student_id;
+///每一次直播ID
+@property(nonatomic, copy) NSString *detailID;
 
 
 @end
