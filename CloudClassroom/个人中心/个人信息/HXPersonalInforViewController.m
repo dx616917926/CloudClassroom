@@ -6,6 +6,7 @@
 //
 
 #import "HXPersonalInforViewController.h"
+#import "HXGenerateSignatureViewController.h"
 #import "HXPersonalInforCell.h"
 #import "HXToSignCell.h"
 #import "HXXinXiYouWuShowView.h"
@@ -164,9 +165,10 @@
                         model.content = @"已签名";
                     }
                     model.signImgUrl = studentSignatureImg;
+                    *stop = YES;
+                    return;
                 }
-                *stop = YES;
-                return;
+               
             }];
            
             NSInteger isConfirmed = [[self.personalInfo stringValueForKey:@"isConfirmed"] integerValue];
@@ -227,9 +229,16 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-//跳转H5去签名
+//跳转去签名
 -(void)toSign:(UIButton *)sender{
-    [self.view showTostWithMessage:@"跳转H5去签名"];
+    HXGenerateSignatureViewController *vc = [[HXGenerateSignatureViewController alloc] init];
+    WeakSelf(weakSelf);
+    vc.generateSignatureCallBack = ^{
+        StrongSelf(strongSelf);
+        //获取签名照片
+        [strongSelf getStudentSignature];
+    };
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)showXinXiYouWuShowView{

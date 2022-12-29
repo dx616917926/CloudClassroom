@@ -172,9 +172,9 @@
                     }
                 }];
             }else{
-                if (![dictionary boolValueForKey:@"success"]) {
-                    [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message];
-                }
+//                if (![dictionary boolValueForKey:@"success"]) {
+//                    [[[UIApplication sharedApplication] keyWindow] showErrorWithMessage:message];
+//                }
                 success(dictionary);
             }
         }else{

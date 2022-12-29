@@ -198,7 +198,7 @@
     [self.mainTableView updateLayout];
     
     self.noDataTipView.tipTitle = @"暂无资料上传～";
-    self.noDataTipView.frame = self.mainTableView.frame;
+    self.noDataTipView.frame = self.mainTableView.bounds;
     
     // 刷新
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getMaterialList)];

@@ -104,8 +104,8 @@
     self.signImageView.sd_layout
     .centerYEqualToView(self.titleLabel)
     .rightSpaceToView(self.bigBackgroundView, 20)
-    .widthIs(80)
-    .heightIs(36);
+    .widthIs(100)
+    .heightIs(50);
     
     
     self.lineView.sd_layout

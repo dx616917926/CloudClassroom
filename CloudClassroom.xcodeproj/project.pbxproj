@@ -242,6 +242,8 @@
 		04B782CF290683E6008AE8DB /* HXMoocViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B782CE290683E6008AE8DB /* HXMoocViewController.m */; };
 		04B90CD6295D35C100A0A376 /* HXMaterialModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CD5295D35C100A0A376 /* HXMaterialModel.m */; };
 		04B90CD9295D36D900A0A376 /* HXImgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CD8295D36D900A0A376 /* HXImgModel.m */; };
+		04B90CDC295D68CF00A0A376 /* HXGenerateSignatureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CDB295D68CF00A0A376 /* HXGenerateSignatureViewController.m */; };
+		04B90CDF295D68FF00A0A376 /* HXSignView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B90CDE295D68FE00A0A376 /* HXSignView.m */; };
 		04BB4826292F01930096C0CC /* HXExamErrorReportView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4824292F01920096C0CC /* HXExamErrorReportView.m */; };
 		04BB482A292F10340096C0CC /* HXCourseOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB4829292F10340096C0CC /* HXCourseOrderModel.m */; };
 		04BB482D292F11300096C0CC /* HXCoursePayOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BB482C292F11300096C0CC /* HXCoursePayOrderModel.m */; };
@@ -977,6 +979,10 @@
 		04B90CD5295D35C100A0A376 /* HXMaterialModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXMaterialModel.m; sourceTree = "<group>"; };
 		04B90CD7295D36D900A0A376 /* HXImgModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXImgModel.h; sourceTree = "<group>"; };
 		04B90CD8295D36D900A0A376 /* HXImgModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXImgModel.m; sourceTree = "<group>"; };
+		04B90CDA295D68CF00A0A376 /* HXGenerateSignatureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXGenerateSignatureViewController.h; sourceTree = "<group>"; };
+		04B90CDB295D68CF00A0A376 /* HXGenerateSignatureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXGenerateSignatureViewController.m; sourceTree = "<group>"; };
+		04B90CDD295D68FE00A0A376 /* HXSignView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXSignView.h; sourceTree = "<group>"; };
+		04B90CDE295D68FE00A0A376 /* HXSignView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXSignView.m; sourceTree = "<group>"; };
 		04BB4824292F01920096C0CC /* HXExamErrorReportView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXExamErrorReportView.m; sourceTree = "<group>"; };
 		04BB4825292F01930096C0CC /* HXExamErrorReportView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HXExamErrorReportView.h; sourceTree = "<group>"; };
 		04BB4828292F10340096C0CC /* HXCourseOrderModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXCourseOrderModel.h; sourceTree = "<group>"; };
@@ -2625,6 +2631,8 @@
 				04A1FEB828C981A600626409 /* view */,
 				04A1FEB928C9820600626409 /* HXPersonalInforViewController.h */,
 				04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */,
+				04B90CDA295D68CF00A0A376 /* HXGenerateSignatureViewController.h */,
+				04B90CDB295D68CF00A0A376 /* HXGenerateSignatureViewController.m */,
 			);
 			path = "个人信息";
 			sourceTree = "<group>";
@@ -2636,6 +2644,8 @@
 				04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */,
 				0497EBAE294717FD00FF4174 /* HXToSignCell.h */,
 				0497EBAF294717FD00FF4174 /* HXToSignCell.m */,
+				04B90CDD295D68FE00A0A376 /* HXSignView.h */,
+				04B90CDE295D68FE00A0A376 /* HXSignView.m */,
 				049D570828E2C5FF009F09F2 /* HXXinXiYouWuShowView.h */,
 				049D570928E2C5FF009F09F2 /* HXXinXiYouWuShowView.m */,
 			);
@@ -4392,6 +4402,7 @@
 				04E556C02939D601009AC15B /* BJLAppearance.m in Sources */,
 				048B7D5528BDA20A006EBAAE /* NSDate+HXDate.m in Sources */,
 				0490DDAC28C1D6DF009BA325 /* HXQiMoKaoShiCell.m in Sources */,
+				04B90CDC295D68CF00A0A376 /* HXGenerateSignatureViewController.m in Sources */,
 				04E556772939D601009AC15B /* BJLQuestionResponderWindowViewController+historyList.m in Sources */,
 				04E5570D2939D602009AC15B /* BJLPhotoListViewController.m in Sources */,
 				04E557002939D602009AC15B /* BJLYYTextAsyncLayer.m in Sources */,
@@ -4564,6 +4575,7 @@
 				04E556E62939D602009AC15B /* BJLUploadingTask.m in Sources */,
 				045F218B28D05948007023D7 /* UIImage+QRCode.m in Sources */,
 				04E556B72939D601009AC15B /* BJLNoticeEditViewController.m in Sources */,
+				04B90CDF295D68FF00A0A376 /* HXSignView.m in Sources */,
 				04E556BD2939D601009AC15B /* BJLScQuestionDateSource.m in Sources */,
 				0470DC3228DC0EB7007A25DC /* VIResourceLoaderManager.m in Sources */,
 				04E5575E2939E344009AC15B /* QBVideoIndicatorView.m in Sources */,
