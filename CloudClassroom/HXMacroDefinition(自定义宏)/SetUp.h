@@ -18,7 +18,7 @@
 #define UNIVERSAL_LINK      @"https://xsjy.hlw-study.com/minedu/"
 
 //第三方应用返回APP需要的
-#define APPScheme           @"edu-gjj"
+#define APPScheme           @"edu-xljyykt"
 
 
 

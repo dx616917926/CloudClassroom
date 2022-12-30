@@ -62,7 +62,7 @@
             [self.dataArray addObjectsFromArray:list];
             
             if (list.count==0) {
-                [self.view addSubview:self.noDataTipView];
+                [self.mainTableView addSubview:self.noDataTipView];
             }else{
                 [self.noDataTipView removeFromSuperview];
             }

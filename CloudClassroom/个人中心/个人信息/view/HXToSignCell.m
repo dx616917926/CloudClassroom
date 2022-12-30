@@ -181,7 +181,7 @@
     if (!_signImageView) {
         _signImageView = [[UIImageView alloc] init];
         _signImageView.contentMode = UIViewContentModeScaleAspectFill;
-//        _signImageView.clipsToBounds = YES;
+        _signImageView.clipsToBounds = YES;
         _signImageView.layer.shadowColor = COLOR_WITH_ALPHA(0x000000, 0.1).CGColor;
         _signImageView.layer.shadowOffset = CGSizeMake(0,0);
         _signImageView.layer.shadowOpacity = 1;

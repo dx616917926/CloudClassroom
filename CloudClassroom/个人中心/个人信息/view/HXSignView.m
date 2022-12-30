@@ -80,6 +80,9 @@
 
 #pragma mark - 获取图片
 - (UIImage *)getSignatureImage {
+    if (self.beizerPath.isEmpty) {
+        return nil;
+    }
     //设置为NO，UIView是透明这里的图片就是透明的
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, [UIScreen mainScreen].scale);
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];

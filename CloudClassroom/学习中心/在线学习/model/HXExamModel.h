@@ -20,6 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *beginTime;
 ///
 @property(nonatomic, copy) NSString *endTime;
+///开始时间（课件和考试）
+@property(nonatomic, copy) NSString *finaltime;
+///结束时间（课件和考试）
+@property(nonatomic, copy) NSString *finaltimeEnd;
 ///能否考试
 @property (nonatomic,assign) BOOL canExam;
 ///

@@ -56,7 +56,7 @@
     
     self.courseNameLabel.text = examModel.examTitle;
     self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
-    self.timeContentLabel.text = [NSString stringWithFormat:@"%@   --   %@",[HXCommonUtil timestampSwitchTime:[examModel.beginTime integerValue]/1000 andFormatter:nil],[HXCommonUtil timestampSwitchTime:[examModel.endTime integerValue]/1000 andFormatter:nil]];
+    self.timeContentLabel.text = [NSString stringWithFormat:@"%@   --   %@",examModel.finaltime,examModel.finaltimeEnd];
     
     self.chechRecordBtn.hidden = (examModel.leftExamNum == examModel.maxExamNum);
     

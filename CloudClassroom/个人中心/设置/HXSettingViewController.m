@@ -138,8 +138,8 @@
     [self.containerView addSubview:self.aboutUsControl];
     [self.containerView addSubview:self.line2];
     [self.containerView addSubview:self.faceControl];
-    [self.containerView addSubview:self.line3];
-    [self.containerView addSubview:self.cancellationControl];
+//    [self.containerView addSubview:self.line3];
+//    [self.containerView addSubview:self.cancellationControl];
     
     [self.qinChuCachControl addSubview:self.qinChuCachImageView];
     [self.qinChuCachControl addSubview:self.qinChuCachTitleLabel];
@@ -160,9 +160,9 @@
     [self.faceControl addSubview:self.faceTitleLabel];
     [self.faceControl addSubview:self.faceBtn];
     
-    [self.cancellationControl addSubview:self.cancellationImageView];
-    [self.cancellationControl addSubview:self.cancellationTitleLabel];
-    [self.cancellationControl addSubview:self.cancellationArrow];
+//    [self.cancellationControl addSubview:self.cancellationImageView];
+//    [self.cancellationControl addSubview:self.cancellationTitleLabel];
+//    [self.cancellationControl addSubview:self.cancellationArrow];
     
     
     self.qinChuCachControl.sd_layout
@@ -209,19 +209,19 @@
     .rightEqualToView(self.containerView)
     .heightRatioToView(self.checkUpdateControl, 1);
     
-    self.line3.sd_layout
-    .topSpaceToView(self.faceControl, 0)
-    .leftEqualToView(self.line1)
-    .rightEqualToView(self.line1)
-    .heightRatioToView(self.line1, 1);
+//    self.line3.sd_layout
+//    .topSpaceToView(self.faceControl, 0)
+//    .leftEqualToView(self.line1)
+//    .rightEqualToView(self.line1)
+//    .heightRatioToView(self.line1, 1);
     
-    self.cancellationControl.sd_layout
-    .topSpaceToView(self.line3, 0)
-    .leftEqualToView(self.containerView)
-    .rightEqualToView(self.containerView)
-    .heightRatioToView(self.checkUpdateControl, 1);
+//    self.cancellationControl.sd_layout
+//    .topSpaceToView(self.line3, 0)
+//    .leftEqualToView(self.containerView)
+//    .rightEqualToView(self.containerView)
+//    .heightRatioToView(self.checkUpdateControl, 1);
     
-    [self.containerView setupAutoHeightWithBottomView:self.cancellationControl bottomMargin:0];
+    [self.containerView setupAutoHeightWithBottomView:self.faceControl bottomMargin:0];
     
     
     self.logOutBtn.sd_layout
@@ -322,23 +322,23 @@
     .heightIs(32);
     
     //注销账号
-    self.cancellationImageView.sd_layout
-    .centerYEqualToView(self.cancellationControl)
-    .leftSpaceToView(self.cancellationControl, 12)
-    .widthRatioToView(self.qinChuCachImageView, 1)
-    .heightRatioToView(self.qinChuCachImageView, 1);
-    
-    self.cancellationTitleLabel.sd_layout
-    .centerYEqualToView(self.cancellationControl)
-    .leftSpaceToView(self.cancellationImageView, 5)
-    .widthRatioToView(self.qinChuCachTitleLabel, 1)
-    .heightRatioToView(self.qinChuCachTitleLabel, 1);
-    
-    self.cancellationArrow.sd_layout
-    .centerYEqualToView(self.cancellationControl)
-    .rightSpaceToView(self.cancellationControl, 12)
-    .widthRatioToView(self.qinChuCachArrow, 1)
-    .heightRatioToView(self.qinChuCachArrow, 1);
+//    self.cancellationImageView.sd_layout
+//    .centerYEqualToView(self.cancellationControl)
+//    .leftSpaceToView(self.cancellationControl, 12)
+//    .widthRatioToView(self.qinChuCachImageView, 1)
+//    .heightRatioToView(self.qinChuCachImageView, 1);
+//
+//    self.cancellationTitleLabel.sd_layout
+//    .centerYEqualToView(self.cancellationControl)
+//    .leftSpaceToView(self.cancellationImageView, 5)
+//    .widthRatioToView(self.qinChuCachTitleLabel, 1)
+//    .heightRatioToView(self.qinChuCachTitleLabel, 1);
+//
+//    self.cancellationArrow.sd_layout
+//    .centerYEqualToView(self.cancellationControl)
+//    .rightSpaceToView(self.cancellationControl, 12)
+//    .widthRatioToView(self.qinChuCachArrow, 1)
+//    .heightRatioToView(self.qinChuCachArrow, 1);
     
     
    

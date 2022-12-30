@@ -9,7 +9,8 @@
 #import "HXSignView.h"
 
 @interface HXGenerateSignatureViewController ()
-
+//
+@property(nonatomic,strong) UILabel *tipLabel;
 //画布
 @property(nonatomic,strong) UIView *backView;
 @property(nonatomic,strong) HXSignView *signView;
@@ -55,6 +56,10 @@
 #pragma mark - 生成签名图片
 - (void)generateBtnClick{
     UIImage *image  =  [self.signView getSignatureImage];
+    if (image==nil) {
+        [self.view showTostWithMessage:@"请在上方区域签名"];
+        return;
+    }
     NSString *encodedImageStr = [self imageChangeBase64:image];
     
     NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
@@ -94,14 +99,20 @@
 -(void)createUI{
     
     self.sc_navigationBar.title = @"签名";
-    
+    [self.view addSubview:self.tipLabel];
     [self.view addSubview:self.backView];
     [self.backView addSubview:self.signView];
     [self.view addSubview:self.clearBtn];
     [self.view addSubview:self.generateBtn];
     
-    self.backView.sd_layout
+    self.tipLabel.sd_layout
     .topSpaceToView(self.view, kNavigationBarHeight+50)
+    .leftEqualToView(self.view).offset(8)
+    .rightEqualToView(self.view)
+    .heightIs(20);
+    
+    self.backView.sd_layout
+    .topSpaceToView(self.tipLabel, 6)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .heightIs(200);
@@ -126,6 +137,15 @@
 }
 
 #pragma mark - LazyLoad
+-(UILabel *)tipLabel{
+    if (!_tipLabel) {
+        _tipLabel  = [[UILabel alloc] init];
+        _tipLabel.textColor = COLOR_WITH_ALPHA(0xEF5959, 1);
+        _tipLabel.font = HXFont(14);
+        _tipLabel.text = @"请在下方区域签名:";
+    }
+    return _tipLabel;
+}
 -(UIView *)backView{
     if (!_backView) {
         _backView = [[UIView alloc] init];

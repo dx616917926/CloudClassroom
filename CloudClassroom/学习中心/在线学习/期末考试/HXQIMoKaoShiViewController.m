@@ -332,6 +332,8 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
     HXExamModel *examModel = self.dataArray[indexPath.row];
+    examModel.finaltime = self.keJianOrExamInfoModel.finaltime;
+    examModel.finaltimeEnd = self.keJianOrExamInfoModel.finaltimeEnd;
     examModel.showMessage = self.keJianOrExamInfoModel.showMessage;
     cell.examModel = examModel;
     return cell;
