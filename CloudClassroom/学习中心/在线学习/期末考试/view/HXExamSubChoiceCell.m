@@ -273,6 +273,7 @@
 
 #pragma mark - 添加照片
 -(void)addPhoto:(UIButton *)button{
+    [self endEditing:YES];
     if (self.photosArray.count>5) {
         [self.examVc.view showTostWithMessage:@"图片数量不能超过5个!"];
         return;
@@ -340,9 +341,10 @@
         
         CGSize size = image.size;
         CGFloat heightPx = 0;
-        if (size.width>=self.viewMaxRect.size.width) {
+        CGFloat maxWidth = kScreenWidth-20;
+        if (size.width>=maxWidth) {
             CGFloat imgSizeScale = size.height/size.width;
-            heightPx = self.viewMaxRect.size.width * imgSizeScale;
+            heightPx = maxWidth * imgSizeScale;
         }else{
             heightPx = size.height;
         }
