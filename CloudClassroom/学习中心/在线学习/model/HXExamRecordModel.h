@@ -36,8 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *score;
 ///
 @property(nonatomic, copy) NSString *serverId;
-///
+///查看试卷链接
 @property(nonatomic, copy) NSString *viewUrl;
+///继续考试链接
+@property(nonatomic, copy) NSString *continueExamUrl;
 
 ///
 @property (nonatomic,assign) NSInteger  index;

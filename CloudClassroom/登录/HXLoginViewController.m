@@ -359,8 +359,8 @@
     }
     
 #ifdef DEBUG
-    self.accountTextField.text = @"430529199306306274";//20190005  2021080420
-    self.pwdTextField.text = @"430529199306306274";//dx123456
+    self.accountTextField.text = @"20190003";//20190005  2021080420  430529199306306274
+    self.pwdTextField.text = @"20190003";//dx123456
 #endif
     
 }

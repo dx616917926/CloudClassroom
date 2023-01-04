@@ -12,6 +12,7 @@
 
 @property(nonatomic,strong) UIView *navBarView;
 @property(nonatomic,strong) UILabel *titleLabel;
+@property(nonatomic,strong) UIButton *backBtn;
 @property(nonatomic,strong) UIButton *jiaoJuanBtn;
 @property(nonatomic,strong) UIButton *rightBtn;
 
@@ -41,15 +42,24 @@
 }
 
 
-#pragma mark - 交卷
--(void)close:(UIButton *)sender{
+
+#pragma mark - 返回
+-(void)popBack{
     
     [self dismissViewControllerAnimated:NO completion:^{
-            
+        [self.examVc.navigationController popViewControllerAnimated:YES];
     }];
 }
 
-//交卷
+#pragma mark - 关闭答题卡
+-(void)close:(UIButton *)sender{
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+        
+    }];
+}
+
+#pragma mark -交卷
 -(void)jiaoJuan:(UIButton *)sender{
     
     [self dismissViewControllerAnimated:NO completion:^{
@@ -58,7 +68,7 @@
     
 }
 
-//点击题目
+#pragma mark - 点击题目
 -(void)qbtnClicked:(UIButton *)sender{
     HXQuestionBtn *qBtn = (HXQuestionBtn *)sender;
     WeakSelf(weakSelf);
@@ -77,6 +87,7 @@
    
     
     [self.navBarView addSubview:self.titleLabel];
+    [self.navBarView addSubview:self.backBtn];
     [self.navBarView addSubview:self.jiaoJuanBtn];
     [self.navBarView addSubview:self.rightBtn];
     
@@ -101,6 +112,19 @@
     .widthIs(65)
     .heightIs(30);
     
+    self.backBtn.sd_layout
+        .centerYEqualToView(self.titleLabel)
+        .leftSpaceToView(self.navBarView, 0)
+        .widthIs(70)
+        .heightIs(40);
+    
+    self.backBtn.imageView.sd_layout
+        .centerYEqualToView(self.backBtn)
+        .leftSpaceToView(self.backBtn, 12)
+        .widthIs(15)
+        .heightIs(20);
+    [self.backBtn.imageView updateLayout];
+    
     
     self.rightBtn.sd_layout
     .centerYEqualToView(self.titleLabel)
@@ -115,6 +139,9 @@
     .bottomEqualToView(self.view);
     
     [self.mainScrollView updateLayout];
+    
+    self.backBtn.hidden = self.examPaperModel.isContinuerExam;
+    self.jiaoJuanBtn.hidden = !self.examPaperModel.isContinuerExam;
     
     //绘制答题卡
     [self drawTheMenuList];
@@ -185,7 +212,7 @@
                         //判断是考试 还是查看试卷
                         [qbtn setTitle:qInfo.psq_serial_no forState:UIControlStateNormal];
                         
-                        if (self.isEnterExam) {
+                        if (self.examPaperModel.isContinuerExam) {//开始考试或者继续考试
                             //有答案
                             if (![HXCommonUtil isNull:qInfo.answer]||qInfo.fuJianImages.count>0) {
                                 [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
@@ -195,20 +222,18 @@
                                 [qbtn setTitleColor:COLOR_WITH_ALPHA(0x62a4f7, 1) forState:UIControlStateNormal];
                             }
                             
-                        }else{
-//                            NSDictionary *answer = [self.userAnswers objectForKey:[NSString stringWithFormat:@"%d",qInfo._id]];
-//                            if (answer) {
-//                                [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//                                if ([[answer objectForKey:@"right"] boolValue]) {
-//                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img5"] forState:UIControlStateNormal];
-//                                }else{
-//                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img6"] forState:UIControlStateNormal];
-//                                }
-//                            }else
-//                            {
-//                                [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img4"] forState:UIControlStateNormal];
-//                                [qbtn setTitleColor:[UIColor colorWithRed:0.38 green:0.64 blue:0.97 alpha:1.00] forState:UIControlStateNormal];//@"#62a4f7"
-//                            }
+                        }else{//查看答卷
+                            if (qInfo.answerModel!=nil) {
+                                [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                                if (qInfo.answerModel.right) {
+                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img5"] forState:UIControlStateNormal];
+                                }else{
+                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img6"] forState:UIControlStateNormal];
+                                }
+                            }else{
+                                [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img4"] forState:UIControlStateNormal];
+                                [qbtn setTitleColor:[UIColor colorWithRed:0.38 green:0.64 blue:0.97 alpha:1.00] forState:UIControlStateNormal];//@"#62a4f7"
+                            }
                         }
                         
                         [qbtn addTarget:self action:@selector(qbtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -251,7 +276,7 @@
                             //判断是考试 还是查看试卷
                             [qbtn setTitle:subInfo.sub_serial_no forState:UIControlStateNormal];
                             
-                            if (self.isEnterExam) {
+                            if (self.examPaperModel.isContinuerExam) {//开始考试或者继续考试
                                 if (![HXCommonUtil isNull:subInfo.answer]||qInfo.fuJianImages.count>0) {
                                     [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
                                     [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -259,23 +284,18 @@
                                     [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img4"] forState:UIControlStateNormal];
                                     [qbtn setTitleColor:COLOR_WITH_ALPHA(0x62a4f7, 1) forState:UIControlStateNormal];
                                 }
-                            }else{
-                                
-//                                NSDictionary *answer = [self.userAnswers objectForKey:[NSString stringWithFormat:@"%d",q3Info._id]];
-//                                if (answer) {
-//
-//                                    [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//                                    if ([[answer objectForKey:@"right"] boolValue]) {
-//                                        [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img5"] forState:UIControlStateNormal];
-//                                    }else{
-//                                        [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img6"] forState:UIControlStateNormal];
-//                                    }
-//
-//                                }else
-//                                {
-//                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img4"] forState:UIControlStateNormal];
-//                                    [qbtn setTitleColor:[UIColor colorWithRed:0.38 green:0.64 blue:0.97 alpha:1.00] forState:UIControlStateNormal];//@"#62a4f7"
-//                                }
+                            }else{//查看答卷
+                                if (qInfo.answerModel!=nil) {
+                                    [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                                    if (qInfo.answerModel.right) {
+                                        [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img5"] forState:UIControlStateNormal];
+                                    }else{
+                                        [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img6"] forState:UIControlStateNormal];
+                                    }
+                                }else{
+                                    [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img4"] forState:UIControlStateNormal];
+                                    [qbtn setTitleColor:[UIColor colorWithRed:0.38 green:0.64 blue:0.97 alpha:1.00] forState:UIControlStateNormal];//@"#62a4f7"
+                                }
                             }
                             
                             
@@ -320,6 +340,15 @@
         _titleLabel.text = @"答题卡";
     }
     return _titleLabel;
+}
+
+-(UIButton *)backBtn{
+    if (!_backBtn) {
+        _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_backBtn setImage:[UIImage imageNamed:@"navi_whiteback"] forState:UIControlStateNormal];
+        [_backBtn addTarget:self action:@selector(popBack) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backBtn;
 }
 
 -(UIButton *)jiaoJuanBtn{

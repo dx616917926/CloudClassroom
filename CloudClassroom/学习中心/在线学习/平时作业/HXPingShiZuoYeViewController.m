@@ -249,6 +249,7 @@
             tool.faceConfig = self.faceConfigObject;
             tool.successBlack = ^{
                 HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
+                examPaperModel.isContinuerExam = YES;
                 examPaperModel.domain = self.keJianOrExamInfoModel.examPara.domain;
                 examPaperModel.userExamId = self.keJianOrExamInfoModel.userExamId;
                 HXExamViewController *examVC = [[HXExamViewController alloc] init];

@@ -17,8 +17,7 @@ typedef void (^AnswerSheetBlock)(NSInteger position,NSInteger fuhe_position,BOOL
 
 @property(nonatomic,strong) HXExamPaperModel *examPaperModel;
 
-//开始考试或查看答题记录
-@property(nonatomic,assign)  BOOL isEnterExam;
+
 
 @property (nonatomic, copy) AnswerSheetBlock  answerSheetBlock;
 

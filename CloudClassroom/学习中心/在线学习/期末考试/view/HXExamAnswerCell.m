@@ -37,6 +37,11 @@
 @property(nonatomic,strong) UILabel *photoTipLabel;
 @property(nonatomic,strong) UIButton *deletePhotoBtn;
 
+
+//解析
+@property(nonatomic,strong) UIView *jieXiView;
+@property(nonatomic,strong) DTAttributedLabel *jieXiLabel;
+
 @property(nonatomic,strong) NSMutableArray *photosArray;
 
 @property(nonatomic,strong) HXPhotoManager *photoManager;
@@ -87,6 +92,33 @@
     [self.photosArray removeAllObjects];
     [self.photosArray addObjectsFromArray:self.examPaperSuitQuestionModel.fuJianImages];
     [self refreshPhotosContainerViewLayout];
+    
+    
+    if (examPaperSuitQuestionModel.isContinuerExam) {
+        self.textView.placeholder = @"请填写答案";
+        //解析
+        self.jieXiLabel.sd_layout.heightIs(0);
+        [self.jieXiLabel updateLayout];
+        
+        self.addPhotoBtn.hidden = self.photoTipLabel.hidden = NO;
+        self.jieXiView.hidden  = YES;
+        self.addPhotoBtn.userInteractionEnabled = self.textView.editable = YES;
+        [self.mainScrollView setupAutoContentSizeWithBottomView:self.photoTipLabel bottomMargin:50];
+    }else{
+        self.textView.placeholder = @"";
+        //解析
+        NSString *answerStr = [NSString stringWithFormat:@"答案:%@",examPaperSuitQuestionModel.hintModel.answer];
+        CGSize jieXiTextSize = [self getAttributedTextHeightHtml:answerStr  with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
+        self.jieXiLabel.sd_layout.heightIs(jieXiTextSize.height);
+        [self.jieXiLabel updateLayout];
+        self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:answerStr];
+        [self.jieXiLabel relayoutText];
+        
+        self.addPhotoBtn.hidden = self.photoTipLabel.hidden = YES;
+        self.jieXiView.hidden  = NO;
+        self.addPhotoBtn.userInteractionEnabled = self.textView.editable = NO;
+        [self.mainScrollView setupAutoContentSizeWithBottomView:self.jieXiView bottomMargin:50];
+    }
     
     
 }
@@ -249,6 +281,16 @@
         }
     }
     
+    for (DTTextAttachment *oneAttachment in [self.jieXiLabel.layoutFrame textAttachmentsWithPredicate:pred])
+    {
+        // update attachments that have no original size, that also sets the display size
+        if (CGSizeEqualToSize(oneAttachment.originalSize, CGSizeZero))
+        {
+            oneAttachment.originalSize = imageSize;
+            [self configNoSizeImageView:url.absoluteString size:imageSize attributedLabel:self.jieXiLabel];
+            didUpdate = YES;
+        }
+    }
     
     
 }
@@ -281,6 +323,16 @@
             self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
             [self.attributedTitleLabel updateLayout];
             self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
+        }
+    }else if (attributedLabel == self.jieXiLabel) {
+        if ([self.examPaperSuitQuestionModel.hintModel.answer containsString:imageInfo]) {
+            NSString *answerStr = [NSString stringWithFormat:@"答案:%@",self.examPaperSuitQuestionModel.hintModel.answer];
+            NSString *newHtml = [answerStr stringByReplacingOccurrencesOfString:imageInfo withString:newImageInfo];
+            // reload newHtml
+            CGSize textSize = [self getAttributedTextHeightHtml:newHtml with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
+            self.jieXiLabel.sd_layout.heightIs(textSize.height);
+            [self.jieXiLabel updateLayout];
+            self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
         }
     }
     
@@ -336,6 +388,9 @@
     [self.mainScrollView addSubview:self.addPhotoBtn];
     [self.mainScrollView addSubview:self.photoTipLabel];
     
+    [self.mainScrollView addSubview:self.jieXiView];
+    [self.jieXiView addSubview:self.jieXiLabel];
+    
     self.mainScrollView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
     
     self.tiXingNameLabel.sd_layout
@@ -368,6 +423,8 @@
     
     self.textView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(10, 10, 10, 10));
     
+    
+    
     self.photosContainerView.sd_layout
         .topSpaceToView(self.grayView, 10)
         .leftSpaceToView(self.mainScrollView, 10)
@@ -388,6 +445,18 @@
         .rightSpaceToView(self.mainScrollView, 10)
         .autoHeightRatio(0);
     
+    self.jieXiView.sd_layout
+        .topSpaceToView(self.photosContainerView, 10)
+        .leftSpaceToView(self.mainScrollView, 10)
+        .rightSpaceToView(self.mainScrollView, 10);
+    
+    self.jieXiLabel.sd_layout
+        .topSpaceToView(self.jieXiView, 10)
+        .leftSpaceToView(self.jieXiView, 10)
+        .rightSpaceToView(self.jieXiView, 10)
+        .heightIs(50);
+    [self.jieXiView setupAutoHeightWithBottomView:self.jieXiLabel bottomMargin:10];
+    self.jieXiView.sd_cornerRadius = @4;
     
     [self.mainScrollView setupAutoContentSizeWithBottomView:self.photoTipLabel bottomMargin:50];
     
@@ -517,6 +586,27 @@
     return _deletePhotoBtn;
 }
 
+
+-(UIView *)jieXiView{
+    if (!_jieXiView) {
+        _jieXiView = [[UIView alloc] init];
+        _jieXiView.clipsToBounds = YES;
+        _jieXiView.backgroundColor =  COLOR_WITH_ALPHA(0xF2F2F2, 1);
+        _jieXiView.layer.borderColor = COLOR_WITH_ALPHA(0xC6C8D0, 1).CGColor;
+        _jieXiView.layer.borderWidth = 1;
+    }
+    return _jieXiView;
+}
+
+-(DTAttributedLabel *)jieXiLabel{
+    if (!_jieXiLabel) {
+        _jieXiLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _jieXiLabel.delegate = self;
+        _jieXiLabel.backgroundColor = UIColor.clearColor;
+        
+    }
+    return _jieXiLabel;
+}
 
 - (HXPhotoManager *)photoManager {
     if (!_photoManager) {

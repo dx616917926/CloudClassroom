@@ -272,7 +272,10 @@
 
 #pragma mark - 提交试题答案
 -(void)saveQuestion:(HXExamPaperSubQuestionModel *)examPaperSubQuestionModel{
-    
+    //开始考试或继续考试才提交答案
+    if (!examPaperSubQuestionModel.isContinuerExam) {
+        return;
+    }
     //答案非空才保存
     if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
         return;

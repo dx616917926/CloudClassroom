@@ -8,12 +8,15 @@
 #import <Foundation/Foundation.h>
 #import "HXExamQuestionChoiceModel.h"
 #import "HXExamPaperSubQuestionModel.h"
+#import "HXExamAnswerHintModel.h"
+#import "HXExamAnswerModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXExamPaperSuitQuestionModel : NSObject
 
 /***************************自定义数据***********************************/
-
+//开始考试或继续考试
+@property(nonatomic,assign)  BOOL isContinuerExam;
 ///考试系统域名
 @property(nonatomic, copy) NSString *domain;
 ///试卷ID
@@ -28,6 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL isFuHe;
 ///答案
 @property(nonatomic, strong) NSString *answer;
+///学生答案
+@property(nonatomic, strong) HXExamAnswerModel *answerModel;
+///解析
+@property(nonatomic, strong) HXExamAnswerHintModel *hintModel;
 ///复合题中小题的位置（从0 开始）
 @property (nonatomic,assign) NSInteger fuhe_position;
 

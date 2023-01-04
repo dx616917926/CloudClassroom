@@ -39,8 +39,8 @@
     
 }
 
--(void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     //开启全局滑动手势
     HXNavigationController * navigationController = (HXNavigationController *)self.navigationController;
     navigationController.enableInnerInactiveGesture = YES;

@@ -216,6 +216,7 @@
 		04A07D8328F7BFD700F5F18D /* HXExamParaModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A07D8228F7BFD700F5F18D /* HXExamParaModel.m */; };
 		04A07D8628F7F2DB00F5F18D /* HXMajorModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A07D8528F7F2DB00F5F18D /* HXMajorModel.m */; };
 		04A07D8928F7F4BB00F5F18D /* HXScoreBatchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A07D8828F7F4BB00F5F18D /* HXScoreBatchModel.m */; };
+		04A111DF2964323C00AD4CE3 /* HXExamAnswerHintModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A111DE2964323C00AD4CE3 /* HXExamAnswerHintModel.m */; };
 		04A1FEBB28C9820600626409 /* HXPersonalInforViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */; };
 		04A1FEBE28C98B0400626409 /* HXPersonalInforCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A1FEBD28C98B0400626409 /* HXPersonalInforCell.m */; };
 		04A1FEC128C98EB900626409 /* personalInfor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04A1FEC028C98EB900626409 /* personalInfor.plist */; };
@@ -927,6 +928,8 @@
 		04A07D8528F7F2DB00F5F18D /* HXMajorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HXMajorModel.m; sourceTree = "<group>"; };
 		04A07D8728F7F4BB00F5F18D /* HXScoreBatchModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXScoreBatchModel.h; sourceTree = "<group>"; };
 		04A07D8828F7F4BB00F5F18D /* HXScoreBatchModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXScoreBatchModel.m; sourceTree = "<group>"; };
+		04A111DD2964323C00AD4CE3 /* HXExamAnswerHintModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXExamAnswerHintModel.h; sourceTree = "<group>"; };
+		04A111DE2964323C00AD4CE3 /* HXExamAnswerHintModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXExamAnswerHintModel.m; sourceTree = "<group>"; };
 		04A1FEB928C9820600626409 /* HXPersonalInforViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforViewController.h; sourceTree = "<group>"; };
 		04A1FEBA28C9820600626409 /* HXPersonalInforViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HXPersonalInforViewController.m; sourceTree = "<group>"; };
 		04A1FEBC28C98B0400626409 /* HXPersonalInforCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HXPersonalInforCell.h; sourceTree = "<group>"; };
@@ -2725,6 +2728,8 @@
 				04A67BA629238A390035C294 /* HXExamPaperModel.m */,
 				046631632941D583002C7911 /* HXExamAnswerModel.h */,
 				046631642941D583002C7911 /* HXExamAnswerModel.m */,
+				04A111DD2964323C00AD4CE3 /* HXExamAnswerHintModel.h */,
+				04A111DE2964323C00AD4CE3 /* HXExamAnswerHintModel.m */,
 				04A67BA829238B970035C294 /* HXExamQuestionTypeModel.h */,
 				04A67BA929238B970035C294 /* HXExamQuestionTypeModel.m */,
 				04A67BAB29238DEA0035C294 /* HXExamPaperSuitQuestionModel.h */,
@@ -4508,6 +4513,7 @@
 				04E556D32939D601009AC15B /* BJLCameraCheckView.m in Sources */,
 				04B90CD9295D36D900A0A376 /* HXImgModel.m in Sources */,
 				04E5575D2939E344009AC15B /* QBVideoIconView.m in Sources */,
+				04A111DF2964323C00AD4CE3 /* HXExamAnswerHintModel.m in Sources */,
 				048E432729373F5600EC043A /* HXFeeDetailInfoModel.m in Sources */,
 				04E556EF2939D602009AC15B /* BJLDocumentFile.m in Sources */,
 				0497EBB0294717FD00FF4174 /* HXToSignCell.m in Sources */,

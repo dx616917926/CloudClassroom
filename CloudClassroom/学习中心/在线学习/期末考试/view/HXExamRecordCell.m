@@ -46,15 +46,25 @@
     
     _examRecordModel = examRecordModel;
     
-//    self.checkAnswerBtn.hidden = !examRecordModel.allowSeeAnswer;
-//    
-//    self.continueExamBtn.hidden = !examRecordModel.canContinue;
+
+    if ([HXCommonUtil isNull:examRecordModel.continueExamUrl]) {
+        self.continueExamBtn.sd_layout.rightSpaceToView(self.bigBackgroundView, 0).widthIs(0);
+    }else{
+        self.continueExamBtn.sd_layout.rightSpaceToView(self.bigBackgroundView, 14).widthIs(84);
+    }
     
+    if ([HXCommonUtil isNull:examRecordModel.viewUrl]) {
+        self.checkAnswerBtn.sd_layout.rightSpaceToView(self.continueExamBtn, 0).widthIs(0);
+    }else{
+        self.checkAnswerBtn.sd_layout.rightSpaceToView(self.continueExamBtn, 14).widthIs(84);
+    }
     self.titleLabel.text = [NSString stringWithFormat:@"第%ld次考试",(long)examRecordModel.index];
     
     self.timeLabel.text = [HXCommonUtil timestampSwitchTime:[examRecordModel.beginTime integerValue]/1000 andFormatter:@"yyyy.MM.dd HH:mm:ss"];
     if ([examRecordModel.score integerValue]==-1) {
         self.scoreLabel.text = @"交白卷";
+    }else if ([examRecordModel.score integerValue]==0) {
+        self.scoreLabel.text = @"处理中...";
     }else{
         self.scoreLabel.text = [examRecordModel.score stringByAppendingString:@"分"];
     }
@@ -121,9 +131,9 @@
     
     self.checkAnswerBtn.sd_layout
     .centerYEqualToView(self.continueExamBtn)
-    .rightSpaceToView(self.continueExamBtn, 12)
-    .widthRatioToView(self.continueExamBtn, 1)
-    .heightRatioToView(self.continueExamBtn, 1);
+    .rightSpaceToView(self.continueExamBtn, 14)
+    .widthIs(84)
+    .heightIs(36);
     self.checkAnswerBtn.sd_cornerRadiusFromHeightRatio = @0.5;
     
     self.scoreLabel.sd_layout

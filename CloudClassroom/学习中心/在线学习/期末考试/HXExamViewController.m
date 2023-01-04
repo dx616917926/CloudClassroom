@@ -18,6 +18,7 @@
 
 @property(nonatomic,strong) UIView *navBarView;
 @property(nonatomic,strong) UILabel *titleLabel;
+@property(nonatomic,strong) UIButton *backBtn;
 @property(nonatomic,strong) UIButton *jiaoJuanBtn;
 @property(nonatomic,strong) UIButton *answerSheetBtn;
 
@@ -88,6 +89,7 @@
         
         [examQuestionTypeModel.paperSuitQuestions enumerateObjectsUsingBlock:^(HXExamPaperSuitQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = obj;
+            examPaperSuitQuestionModel.isContinuerExam = examPaperModel.isContinuerExam;
             //赋值这两项便于后面提交保存
             examPaperSuitQuestionModel.domain =self.examPaperModel.domain;
             examPaperSuitQuestionModel.userExamId =self.examPaperModel.userExamId;
@@ -101,6 +103,7 @@
             if (examPaperSuitQuestionModel.isFuHe) {
                 [examPaperSuitQuestionModel.subQuestions enumerateObjectsUsingBlock:^(HXExamPaperSubQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
+                    examPaperSubQuestionModel.isContinuerExam = examPaperModel.isContinuerExam;
                     //赋值这两项便于后面提交保存
                     examPaperSubQuestionModel.domain =self.examPaperModel.domain;
                     examPaperSubQuestionModel.userExamId =self.examPaperModel.userExamId;
@@ -111,17 +114,21 @@
         
     }];
     
-    //继续作答进来的，要根据题目id找到对应题目，赋值答案
-    if (examPaperModel.isContinuerExam) {
+    //查看答卷进来的，要根据题目id找到对应题目，赋值答案
+    if (!examPaperModel.isContinuerExam) {
         [examPaperModel.answers enumerateObjectsUsingBlock:^(HXExamAnswerModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [self giveAnswer:obj];
+        }];
+        //赋值解析
+        [examPaperModel.jieXis enumerateObjectsUsingBlock:^(HXExamAnswerHintModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self giveHintModel:obj];
         }];
     }
     
     NSLog(@"------");
 }
 
-//赋值答案
+#pragma mark - 赋值答案
 -(void)giveAnswer:(HXExamAnswerModel *)answerModel{
     
     NSString *qId = [@"q_" stringByAppendingString:answerModel.pqt_id];
@@ -137,13 +144,14 @@
                 HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
                 
                 if ([examPaperSubQuestionModel.sub_id isEqualToString:qId]) {
-
+                    examPaperSuitQuestionModel.answerModel = answerModel;
                     //复合题里的选择题
                     if (examPaperSubQuestionModel.subQuestionChoices.count>0) {
                         [examPaperSubQuestionModel.subQuestionChoices enumerateObjectsUsingBlock:^(HXExamSubQuestionChoicesModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                             HXExamSubQuestionChoicesModel *examSubQuestionChoicesModel = obj;
                             if ([answerModel.answer containsString:examSubQuestionChoicesModel.subChoice_order]) {
                                 examSubQuestionChoicesModel.isSelected = YES;
+                                examPaperSubQuestionModel.answer = answerModel.answer;
                             }
                         }];
                         *stop = YES;
@@ -164,11 +172,12 @@
         //多选题里找
         if (examPaperSuitQuestionModel.isDuoXuan) {
             if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
-                
+                examPaperSuitQuestionModel.answerModel = answerModel;
                 [examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
                     if ([answerModel.answer containsString:examQuestionChoiceModel.choice_order]) {
                         examQuestionChoiceModel.isSelected = YES;
+                        examPaperSuitQuestionModel.answer = answerModel.answer;
                     }
                 }];
                 *stop = YES;
@@ -179,6 +188,7 @@
         //问答题里找
         if (examPaperSuitQuestionModel.isWenDa) {
             if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+                examPaperSuitQuestionModel.answerModel = answerModel;
                 examPaperSuitQuestionModel.answer = answerModel.answer;
                 *stop = YES;
                 return;
@@ -187,10 +197,12 @@
         
         //最后选择题
         if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+            examPaperSuitQuestionModel.answerModel = answerModel;
             [examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
                 if ([answerModel.answer containsString:examQuestionChoiceModel.choice_order]) {
                     examQuestionChoiceModel.isSelected = YES;
+                    examPaperSuitQuestionModel.answer = answerModel.answer;
                     *stop = YES;
                     return;
                 }
@@ -205,8 +217,73 @@
     
 }
 
+#pragma mark - 赋值解析
+-(void)giveHintModel:(HXExamAnswerHintModel *)hintModel{
+    
+    NSString *qId = [@"q_" stringByAppendingString:hintModel.questionId];
+    
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = obj;
+        //先从复合题里找
+        if (examPaperSuitQuestionModel.isFuHe) {
+            
+            [examPaperSuitQuestionModel.subQuestions enumerateObjectsUsingBlock:^(HXExamPaperSubQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
+                
+                if ([examPaperSubQuestionModel.sub_id isEqualToString:qId]) {
+                    examPaperSubQuestionModel.hintModel = hintModel;
+                    *stop = YES;
+                    return;
+                }
+                
+            }];
+        }
+        
+        //多选题里找
+        if (examPaperSuitQuestionModel.isDuoXuan) {
+            if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+                examPaperSuitQuestionModel.hintModel = hintModel;
+                *stop = YES;
+                return;
+            }
+        }
+        
+        //问答题里找
+        if (examPaperSuitQuestionModel.isWenDa) {
+            if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+                examPaperSuitQuestionModel.hintModel = hintModel;
+                *stop = YES;
+                return;
+            }
+        }
+        
+        //最后选择题
+        if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
+            examPaperSuitQuestionModel.hintModel = hintModel;
+            *stop = YES;
+            return;
+        }
+        
+    }];
+    
+    
+}
+
+
+#pragma mark - 返回
+-(void)popBack{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - 提交试题答案
 -(void)saveQuestion:(HXExamPaperSuitQuestionModel *)examPaperSuitQuestionModel{
+    
+    //开始考试或继续考试才提交答案
+    if (!self.examPaperModel.isContinuerExam) {
+        return;
+    }
     
     //复合题保存当前子题答案
     if (examPaperSuitQuestionModel.isFuHe) {
@@ -265,7 +342,6 @@
 
 #pragma mark - 提交复合子题试题答案
 -(void)saveSubQuestion:(HXExamPaperSubQuestionModel *)examPaperSubQuestionModel{
-    
     //答案非空才保存
     if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
         return;
@@ -352,7 +428,11 @@
 
 #pragma mark - 点击答题卡
 -(void)clickAnswerSheet:(UIButton *)sender{
-    
+    //接口没有数据，直接返回防止崩溃
+    if (self.dataArray.count==0) {
+        [self.view showTostWithMessage:@"获取数据失败"];
+        return;
+    }
     //每次切换答题卡保存一下当前问题答案
     HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
     [self saveQuestion:examPaperSuitQuestionModel];
@@ -360,7 +440,6 @@
     
     HXAnswerSheetViewController *vc = [[HXAnswerSheetViewController alloc] init];
     vc.examPaperModel = self.examPaperModel;
-    vc.isEnterExam = YES;
     vc.examVc = self;
     //点击答题卡题目回调
     WeakSelf(weakSelf);
@@ -386,6 +465,11 @@
 
 #pragma mark - 滑动切换题目
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    if (self.dataArray.count==0) {
+        [self.view showTostWithMessage:@"获取数据失败"];
+        return;
+    }
     
     CGPoint pInView = [self.view convertPoint:self.mainCollectionView.center toView:self.mainCollectionView];
     self.indexPathNow = [self.mainCollectionView indexPathForItemAtPoint:pInView];
@@ -421,7 +505,11 @@
 
 #pragma mark - 上一题
 - (void)upClick {
-    
+    //接口没有数据，直接返回防止崩溃
+    if (self.dataArray.count==0) {
+        [self.view showTostWithMessage:@"获取数据失败"];
+        return;
+    }
     if (self.indexPathNow.row > 0) {
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item - 1 inSection:self.indexPathNow.section];
@@ -445,6 +533,10 @@
 
 #pragma mark - 下一题
 - (void)downClick {
+    if (self.dataArray.count==0) {
+        [self.view showTostWithMessage:@"获取数据失败"];
+        return;
+    }
     if (self.indexPathNow.row < self.dataArray.count - 1) {
         [self.mainCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section] atScrollPosition:(UICollectionViewScrollPositionNone) animated:YES];
         self.indexPathNow = [NSIndexPath indexPathForItem:self.indexPathNow.item + 1 inSection:self.indexPathNow.section];
@@ -540,6 +632,7 @@
     
     
     [self.navBarView addSubview:self.titleLabel];
+    [self.navBarView addSubview:self.backBtn];
     [self.navBarView addSubview:self.jiaoJuanBtn];
     [self.navBarView addSubview:self.answerSheetBtn];
     
@@ -573,6 +666,18 @@
         .leftSpaceToView(self.navBarView, 12)
         .widthIs(65)
         .heightIs(30);
+    
+    self.backBtn.sd_layout
+        .centerYEqualToView(self.titleLabel)
+        .leftSpaceToView(self.navBarView, 0)
+        .widthIs(70)
+        .heightIs(40);
+    
+    self.backBtn.imageView.sd_layout
+        .centerYEqualToView(self.backBtn)
+        .leftSpaceToView(self.backBtn, 12)
+        .widthIs(15)
+        .heightIs(20);
     
     
     self.answerSheetBtn.sd_layout
@@ -631,6 +736,9 @@
     
     [self.view bringSubviewToFront:self.navBarView];
     [self.view bringSubviewToFront:self.bottomView];
+    
+    self.backBtn.hidden = self.examPaperModel.isContinuerExam;
+    self.jiaoJuanBtn.hidden = !self.examPaperModel.isContinuerExam;
 }
 
 // 创建错题反馈按钮
@@ -670,6 +778,15 @@
         _titleLabel.text = self.examPaperModel.paper_title;
     }
     return _titleLabel;
+}
+
+-(UIButton *)backBtn{
+    if (!_backBtn) {
+        _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_backBtn setImage:[UIImage imageNamed:@"navi_whiteback"] forState:UIControlStateNormal];
+        [_backBtn addTarget:self action:@selector(popBack) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backBtn;
 }
 
 -(UIButton *)jiaoJuanBtn{

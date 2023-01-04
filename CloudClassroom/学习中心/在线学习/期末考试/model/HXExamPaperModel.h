@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "HXExamQuestionTypeModel.h"
 #import "HXExamAnswerModel.h"
+#import "HXExamAnswerHintModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,8 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///试卷题型数组
 @property(nonatomic, strong) NSArray<HXExamQuestionTypeModel *> *questionGroups;
 
-///已达的题目答案
+///已答的题目答案
 @property(nonatomic, strong) NSArray<HXExamAnswerModel *> *answers;
+
+///试卷题目详情解析
+@property(nonatomic, strong) NSArray<HXExamAnswerHintModel *> *jieXis;
+
 
 @end
 

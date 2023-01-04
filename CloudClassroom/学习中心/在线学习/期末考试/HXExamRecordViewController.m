@@ -100,27 +100,6 @@
     }];
 }
 
-#pragma mark - 查看答卷
--(void)checkAnswer:(HXExamRecordModel *)examRecordModel{
-    
-    [self.view showLoading];
-    [HXExamSessionManager getDataWithNSString:examRecordModel.viewUrl withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
-        
-        if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
-            NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
-            //获取考试答案
-            [self getEaxmAnswersWithUserExamId:[userExam stringValueForKey:@"id"]];
-        }else{
-            [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
-        }
-    } failure:^(NSError * _Nullable error) {
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
-    }];
-}
-
-
-
 #pragma mark - 继续作答
 -(void)continueExam:(HXExamRecordModel *)examRecordModel{
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.examPara.domain,examRecordModel.examId];
@@ -133,7 +112,7 @@
         [self.view hideLoading];
         NSDictionary *dic = responseObject;
         self.currentExamRecordModel = examRecordModel;
-        [self getExamUrl: [dic stringValueForKey:@"resultUrl"]];
+//        [self getExamUrl: [dic stringValueForKey:@"resultUrl"]];
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
@@ -141,19 +120,20 @@
     
 }
 
-#pragma mark - 1.获取考试的链接
--(void)getExamUrl:(NSString *)examStartPath{
+#pragma mark - 查看答卷
+-(void)checkAnswer:(HXExamRecordModel *)examRecordModel{
     
     [self.view showLoading];
-    [HXExamSessionManager getDataWithNSString:examStartPath withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
+    [HXExamSessionManager getDataWithNSString:examRecordModel.viewUrl withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
             [self.view hideLoading];
-            NSString *examUrl = [dictionary objectForKey:@"url"];
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
+            NSString *examUrl = [dictionary objectForKey:@"url"];
             
+            NSString *userExamId = [userExam stringValueForKey:@"id"];
             //获取考试的HTMLStr参数
-            [self getEaxmHTMLStr:examUrl];
+            [self getEaxmHTMLStr:examUrl userExamId:userExamId];
         }else{
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
@@ -162,8 +142,13 @@
     }];
 }
 
-#pragma mark - 2.获取考试的HTMLStr参数
--(void)getEaxmHTMLStr:(NSString *)examUrl{
+
+
+
+
+
+#pragma mark - 1.获取考试的HTMLStr参数
+-(void)getEaxmHTMLStr:(NSString *)examUrl userExamId:(NSString *)userExamId{
     
     [self.view showLoading];
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -175,14 +160,14 @@
         [self.view hideLoading];
         NSString *htmlStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"%@",htmlStr);
-        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
+        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr userExamId:userExamId];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
-#pragma mark - 3.用html作为参数去获取试卷json数据
--(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
+#pragma mark - 2.用html作为参数去获取试卷json数据
+-(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr userExamId:(NSString *)userExamId{
     
     NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
     NSString *t = tempA.lastObject;
@@ -200,8 +185,8 @@
             examPaperModel.domain = self.examPara.domain;
             examPaperModel.userExamId = self.currentExamRecordModel.examId;
             self.examPaperModel = examPaperModel;
-            //获取当前继续作答的答案链接
-            [self getAnswersUer];
+            //获取考试答案
+            [self getEaxmAnswersWithUserExamId:userExamId];
             
         }
     } failure:^(NSError * _Nullable error) {
@@ -210,27 +195,7 @@
     
 }
 
-
-#pragma mark - 4.获取当前继续作答的答案链接
--(void)getAnswersUer{
-    
-    [self.view showLoading];
-    [HXExamSessionManager getDataWithNSString:self.currentExamRecordModel.viewUrl withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
-        
-        if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
-            NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
-            //获取考试答案
-            [self getEaxmAnswersWithUserExamId:[userExam stringValueForKey:@"id"]];
-        }else{
-            [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
-        }
-    } failure:^(NSError * _Nullable error) {
-        [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
-    }];
-}
-
-#pragma mark - 获取考试答案
+#pragma mark - 3.获取考试答案
 -(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId{
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.examPara.domain,userExamId];
@@ -245,8 +210,34 @@
         NSLog(@"%@",responseObject);
         NSDictionary *dic = responseObject;
         NSArray *list = [HXExamAnswerModel mj_objectArrayWithKeyValuesArray:[dic objectForKey:@"answers"]];
-        self.examPaperModel.isContinuerExam = YES;
+        self.examPaperModel.isContinuerExam = NO;
         self.examPaperModel.answers = list;
+        //获取试卷解析
+        [self getEaxmJieXiWithUserExamId:userExamId];
+       
+       
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [self.view showErrorWithMessage:error.description.lowercaseString];
+    }];
+}
+
+#pragma mark - 4.获取试卷解析
+-(void)getEaxmJieXiWithUserExamId:(NSString *)userExamId{
+    
+    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/answer/%@",self.examPara.domain,userExamId];
+    
+    [self.view showLoading];
+    AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+
+    [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        NSLog(@"");
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.view hideLoading];
+        NSLog(@"%@",responseObject);
+        NSDictionary *dic = responseObject;
+        NSArray *list = [HXExamAnswerHintModel mj_objectArrayWithKeyValuesArray:[dic objectForKey:@"answers"]];
+        self.examPaperModel.isContinuerExam = NO;
+        self.examPaperModel.jieXis = list;
         HXExamViewController *examVC = [[HXExamViewController alloc] init];
         examVC.sc_navigationBarHidden = YES;//隐藏导航栏
         examVC.examPaperModel = self.examPaperModel;
@@ -256,6 +247,8 @@
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
+
+
 
 
 #pragma mark - <UITableViewDelegate,UITableViewDataSource>

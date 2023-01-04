@@ -16,8 +16,12 @@
 @property(nonatomic,strong) UIScrollView *mainScrollView;
 //题型（单选提，判断题，简答题.....）
 @property(nonatomic,strong) UILabel *tiXingNameLabel;
+
+
 //问题标题
 @property(nonatomic,strong) DTAttributedLabel *attributedTitleLabel;
+//作答情况
+@property(nonatomic,strong) UILabel *answerTipLabel;
 //分数
 @property(nonatomic,strong) UIImageView *fenShuBgImageView;
 @property(nonatomic,strong) UILabel *fenShuLabel;
@@ -50,6 +54,10 @@
 @property(nonatomic,strong) UIView *selectView;
 
 @property (nonatomic,copy)  NSString *html;
+
+//解析
+@property(nonatomic,strong) UIView *jieXiView;
+@property(nonatomic,strong) DTAttributedLabel *jieXiLabel;
 
 @end
 
@@ -194,6 +202,13 @@
     //分数
     self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
     
+    
+    self.answerTipLabel.sd_layout
+    .topSpaceToView(self.attributedTitleLabel, 20)
+    .leftSpaceToView(self.mainScrollView, 10)
+    .rightSpaceToView(self.mainScrollView, 10)
+    .heightIs(20);
+    
     //选项
     self.aChoiceView.hidden = YES;
     self.bChoiceView.hidden = YES;
@@ -206,6 +221,8 @@
     self.cTapView.backgroundColor = ExamUnSelectColor;
     self.dTapView.backgroundColor = ExamUnSelectColor;
     self.eTapView.backgroundColor = ExamUnSelectColor;
+    //查看答卷，不能作答，禁用选择
+    self.aTapView.userInteractionEnabled = self.bTapView.userInteractionEnabled = self.cTapView.userInteractionEnabled = self.dTapView.userInteractionEnabled = self.eTapView.userInteractionEnabled = examPaperSuitQuestionModel.isContinuerExam;
 
     
     BOOL isDuoXuan= self.examPaperSuitQuestionModel.isDuoXuan;
@@ -227,21 +244,30 @@
             self.aTapView.backgroundColor = (aModel.isSelected?ExamSelectColor:ExamUnSelectColor);
         }
         
-        //B
-        self.bChoiceView.hidden = NO;
-        HXExamQuestionChoiceModel *bModel = examPaperSuitQuestionModel.questionChoices[1];
-        CGSize BtextSize = [self getAttributedTextHeightHtml:bModel.choice_staticContent  with_viewMaxRect:self.choiceMaxRect];
-        self.bChoiceLabel.sd_layout.heightIs(BtextSize.height);
-        [self.bChoiceLabel updateLayout];
-        self.bChoiceLabel.attributedString = [self getAttributedStringWithHtml:bModel.choice_staticContent];
-        [self.bChoiceLabel relayoutText];
-        self.bImageView.image = [UIImage imageNamed:(bModel.isSelected?@"select_icon":@"noselect_icon")];
-        if (bModel.isSelected&&!isDuoXuan) {
-            self.selectView = self.bTapView;
-            self.bTapView.backgroundColor =  ExamSelectColor;
+        if (examPaperSuitQuestionModel.questionChoices.count>=2) {
+            //B
+            self.bChoiceView.hidden = NO;
+            HXExamQuestionChoiceModel *bModel = examPaperSuitQuestionModel.questionChoices[1];
+            CGSize BtextSize = [self getAttributedTextHeightHtml:bModel.choice_staticContent  with_viewMaxRect:self.choiceMaxRect];
+            self.bChoiceLabel.sd_layout.heightIs(BtextSize.height);
+            [self.bChoiceLabel updateLayout];
+            self.bChoiceLabel.attributedString = [self getAttributedStringWithHtml:bModel.choice_staticContent];
+            [self.bChoiceLabel relayoutText];
+            self.bImageView.image = [UIImage imageNamed:(bModel.isSelected?@"select_icon":@"noselect_icon")];
+            if (bModel.isSelected&&!isDuoXuan) {
+                self.selectView = self.bTapView;
+                self.bTapView.backgroundColor =  ExamSelectColor;
+            }else{
+                self.bTapView.backgroundColor = (bModel.isSelected?ExamSelectColor:ExamUnSelectColor);
+            }
         }else{
-            self.bTapView.backgroundColor = (bModel.isSelected?ExamSelectColor:ExamUnSelectColor);
+            self.bChoiceLabel.sd_layout.topSpaceToView(self.bChoiceView, 0).heightIs(0);
+            [self.bChoiceLabel updateLayout];
         }
+        
+        
+        
+        
         
         //C
         if (examPaperSuitQuestionModel.questionChoices.count>=3) {
@@ -259,6 +285,9 @@
             }else{
                 self.cTapView.backgroundColor = (cModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
+        }else{
+            self.cChoiceLabel.sd_layout.topSpaceToView(self.cChoiceView, 0).heightIs(0);
+            [self.cChoiceLabel updateLayout];
         }
         
         //D
@@ -277,6 +306,9 @@
             }else{
                 self.dTapView.backgroundColor = (dModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
+        }else{
+            self.dChoiceLabel.sd_layout.topSpaceToView(self.dChoiceView, 0).heightIs(0);
+            [self.dChoiceLabel updateLayout];
         }
         
         //E
@@ -295,9 +327,43 @@
             }else{
                 self.eTapView.backgroundColor = (eModel.isSelected?ExamSelectColor:ExamUnSelectColor);
             }
+        }else{
+            self.eChoiceLabel.sd_layout.topSpaceToView(self.eChoiceView, 0).heightIs(0);
+            [self.eChoiceLabel updateLayout];
         }
     }
    
+    
+    
+    //查看答卷
+    if (!examPaperSuitQuestionModel.isContinuerExam) {
+        //解析
+        CGSize jieXiTextSize = [self getAttributedTextHeightHtml:examPaperSuitQuestionModel.hintModel.hint  with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
+        self.jieXiLabel.sd_layout.heightIs(jieXiTextSize.height);
+        [self.jieXiLabel updateLayout];
+        self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.hintModel.hint];
+        [self.jieXiLabel relayoutText];
+        
+        self.jieXiView.hidden = NO;
+        self.answerTipLabel.sd_layout.topSpaceToView(self.attributedTitleLabel, 20).heightIs(20);
+        if (examPaperSuitQuestionModel.answerModel == nil) {//未作答
+            self.answerTipLabel.textColor =COLOR_WITH_ALPHA(0xED4F4F, 1);
+            self.answerTipLabel.text = @"您没有作答";
+        }else{
+            if (examPaperSuitQuestionModel.answerModel.right) {
+                self.answerTipLabel.textColor =COLOR_WITH_ALPHA(0x00e205, 1);
+                self.answerTipLabel.text = @"您答对了";
+            }else{
+                self.answerTipLabel.textColor =COLOR_WITH_ALPHA(0xED4F4F, 1);
+                self.answerTipLabel.text = @"您答错了";
+            }
+        }
+    }else{
+        self.jieXiLabel.sd_layout.heightIs(0);
+        [self.jieXiLabel updateLayout];
+        self.jieXiView.hidden = YES;
+        self.answerTipLabel.sd_layout.topSpaceToView(self.attributedTitleLabel, 0).heightIs(0);
+    }
     
     
 }
@@ -501,6 +567,16 @@
             self.eChoiceLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
             [self.eChoiceLabel relayoutText];
         }
+    }else if (attributedLabel == self.jieXiLabel) {
+        if ([self.examPaperSuitQuestionModel.hintModel.hint containsString:imageInfo]) {
+            NSString *newHtml = [self.examPaperSuitQuestionModel.hintModel.hint stringByReplacingOccurrencesOfString:imageInfo withString:newImageInfo];
+            // reload newHtml
+            CGSize textSize = [self getAttributedTextHeightHtml:newHtml with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
+            self.jieXiLabel.sd_layout.heightIs(textSize.height);
+            [self.jieXiLabel updateLayout];
+            self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
+            [self.jieXiLabel relayoutText];
+        }
     }
     
     
@@ -546,12 +622,16 @@
     [self.mainScrollView addSubview:self.tiXingNameLabel];
     [self.mainScrollView addSubview:self.attributedTitleLabel];
     [self.mainScrollView addSubview:self.fenShuBgImageView];
+    [self.mainScrollView addSubview:self.answerTipLabel];
     
     [self.mainScrollView addSubview:self.aChoiceView];
     [self.mainScrollView addSubview:self.bChoiceView];
     [self.mainScrollView addSubview:self.cChoiceView];
     [self.mainScrollView addSubview:self.dChoiceView];
     [self.mainScrollView addSubview:self.eChoiceView];
+    
+    [self.mainScrollView addSubview:self.jieXiView];
+    [self.jieXiView addSubview:self.jieXiLabel];
     
     self.mainScrollView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
     
@@ -575,9 +655,15 @@
     
     self.fenShuLabel.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 5, 0, 0));
     
+    self.answerTipLabel.sd_layout
+    .topSpaceToView(self.attributedTitleLabel, 20)
+    .leftSpaceToView(self.mainScrollView, 10)
+    .rightSpaceToView(self.mainScrollView, 10)
+    .heightIs(20);
+    
     //A
     self.aChoiceView.sd_layout
-    .topSpaceToView(self.attributedTitleLabel, 10)
+    .topSpaceToView(self.answerTipLabel, 10)
     .leftSpaceToView(self.mainScrollView, 10)
     .rightSpaceToView(self.mainScrollView, 10);
     
@@ -681,7 +767,21 @@
     self.eTapView.sd_layout.spaceToSuperView(UIEdgeInsetsMake(0, 0, 0, 0));
     self.eTapView.sd_cornerRadius = @4;
     
-    [self.mainScrollView setupAutoContentSizeWithBottomView:self.eChoiceView bottomMargin:50];
+    self.jieXiView.sd_layout
+    .topSpaceToView(self.eChoiceView, 10)
+    .leftSpaceToView(self.mainScrollView, 10)
+    .rightSpaceToView(self.mainScrollView, 10);
+    
+    
+    self.jieXiLabel.sd_layout
+    .topSpaceToView(self.jieXiView, 10)
+    .leftSpaceToView(self.jieXiView, 10)
+    .rightSpaceToView(self.jieXiView, 10)
+    .heightIs(50);
+    [self.jieXiView setupAutoHeightWithBottomView:self.jieXiLabel bottomMargin:10];
+    self.jieXiView.sd_cornerRadius = @4;
+    
+    [self.mainScrollView setupAutoContentSizeWithBottomView:self.jieXiView bottomMargin:50];
     
    
 }
@@ -705,6 +805,16 @@
         _tiXingNameLabel.font = HXBoldFont(17);
     }
     return _tiXingNameLabel;
+}
+
+-(UILabel *)answerTipLabel{
+    if (!_answerTipLabel) {
+        _answerTipLabel = [[UILabel alloc] init];
+        _answerTipLabel.numberOfLines=1;
+        _answerTipLabel.textColor = COLOR_WITH_ALPHA(0x333333, 1);
+        _answerTipLabel.font = HXBoldFont(17);
+    }
+    return _answerTipLabel;
 }
 
 - (DTAttributedLabel *)attributedTitleLabel{
@@ -935,6 +1045,26 @@
         _eChoiceLabel.userInteractionEnabled = NO;
     }
     return _eChoiceLabel;
+}
+
+-(UIView *)jieXiView{
+    if (!_jieXiView) {
+        _jieXiView = [[UIView alloc] init];
+        _jieXiView.clipsToBounds = YES;
+        _jieXiView.backgroundColor =  COLOR_WITH_ALPHA(0xF2F2F2, 1);
+        _jieXiView.layer.borderColor = COLOR_WITH_ALPHA(0xC6C8D0, 1).CGColor;
+        _jieXiView.layer.borderWidth = 1;
+    }
+    return _jieXiView;
+}
+
+-(DTAttributedLabel *)jieXiLabel{
+    if (!_jieXiLabel) {
+        _jieXiLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectZero];
+        _jieXiLabel.delegate = self;
+        _jieXiLabel.backgroundColor= UIColor.clearColor;
+    }
+    return _jieXiLabel;
 }
 
 @end
