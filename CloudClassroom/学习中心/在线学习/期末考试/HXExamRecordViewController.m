@@ -150,7 +150,7 @@
 #pragma mark - 1.获取考试的HTMLStr参数
 -(void)getEaxmHTMLStr:(NSString *)examUrl userExamId:(NSString *)userExamId{
     
-    [self.view showLoading];
+    
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     //返回的数据不是json
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -175,7 +175,7 @@
     NSDictionary *dic = @{@"paperHtml":htmlStr};
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.examPara.domain,tempB[0],tempB[1],tempB[2]];
     
-    [self.view showLoading];
+   
   
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         [self.view hideLoading];
@@ -200,7 +200,7 @@
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.examPara.domain,userExamId];
     
-    [self.view showLoading];
+    
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
 
     [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {

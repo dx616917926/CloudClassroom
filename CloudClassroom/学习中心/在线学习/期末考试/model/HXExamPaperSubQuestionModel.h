@@ -23,6 +23,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *userExamId;
 ///带问题序号加空格的html问题标题(自己加的)
 @property(nonatomic, strong) NSString *serialNoHtmlTitle;
+//是否是多选题
+@property(nonatomic, assign) BOOL isDuoXuan;
+//是否是问答题
+@property(nonatomic, assign) BOOL isWenDa;
 ///答案
 @property(nonatomic, strong) NSString *answer;
 ///学生答案
@@ -41,8 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *sub_code;
 ///子问题id
 @property(nonatomic, copy) NSString *sub_id;
-///子问题所属题型类
-@property(nonatomic, copy) NSString *sub_baseType;
+///子问题所属题型类。 1.单选      2.多选       3.问答
+@property(nonatomic, assign) NSInteger sub_baseType;
 ///子问题答对所得分数
 @property(nonatomic, copy) NSString *sub_scoreStr;
 ///子问题序号

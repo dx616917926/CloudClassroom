@@ -68,6 +68,8 @@
 @property(nonatomic,strong) NSMutableArray *majorArray;
 @property(nonatomic,strong) NSMutableArray *dataArray;
 
+@property(nonatomic,strong) HXNoDataTipView *noDataView;
+
 @end
 
 @implementation HXHomePageViewController
@@ -86,15 +88,44 @@
 }
 
 -(void)loadData{
-    
-    //获取首页信息
-    [self getHomeStudentInfo];
     //获取首页专业信息
     [self getHomeMajorInfo];
+    //获取首页信息
+    [self getHomeStudentInfo];
     //获取首页菜单
     [self getHomeMenu];
 }
 
+#pragma mark - 获取首页专业信息
+-(void)getHomeMajorInfo{
+    
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMajorInfo needMd5:YES  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *list = [HXMajorInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
+            [self.majorArray removeAllObjects];
+            [self.majorArray addObjectsFromArray:list];
+            //登录获得的major_id
+            NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
+             __block HXMajorInfoModel *selectMajorInfoModel = list.firstObject;
+            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                HXMajorInfoModel *majorInfoModel = obj;
+                if([majorInfoModel.major_Id isEqualToString:major_id]){
+                    selectMajorInfoModel = majorInfoModel;
+                    *stop = YES;
+                    return;
+                }
+            }];
+            [HXPublicParamTool sharedInstance].currentSemesterid = selectMajorInfoModel.semesterid;
+            [HXPublicParamTool sharedInstance].student_id = selectMajorInfoModel.student_id;
+            //获取当前学期学习列表
+            [self getOnlineCourseList:selectMajorInfoModel.semesterid];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
 
 #pragma mark - 获取首页信息
 -(void)getHomeStudentInfo{
@@ -121,35 +152,7 @@
     
 }
 
-#pragma mark - 获取首页专业信息
--(void)getHomeMajorInfo{
-    
-    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetHomeMajorInfo needMd5:YES  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
-        
-        BOOL success = [dictionary boolValueForKey:@"success"];
-        if (success) {
-            NSArray *list = [HXMajorInfoModel mj_objectArrayWithKeyValuesArray:[dictionary dictionaryValueForKey:@"data"]];
-            [self.majorArray removeAllObjects];
-            [self.majorArray addObjectsFromArray:list];
-            //登录获得的major_id
-            NSString *major_id = [HXPublicParamTool sharedInstance].major_id;
-             __block HXMajorInfoModel *selectMajorInfoModel = list.firstObject;
-            [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                HXMajorInfoModel *majorInfoModel = obj;
-                if([majorInfoModel.major_Id isEqualToString:major_id]){
-                    selectMajorInfoModel = majorInfoModel;
-                    *stop = YES;
-                    return;
-                }
-            }];
-            [HXPublicParamTool sharedInstance].currentSemesterid = selectMajorInfoModel.semesterid;
-            //获取当前学期学习列表
-            [self getOnlineCourseList:selectMajorInfoModel.semesterid];
-        }
-    } failure:^(NSError * _Nonnull error) {
-        
-    }];
-}
+
 
 #pragma mark - 获取学习列表(当前学期和全部学期)
 -(void)getOnlineCourseList:(NSString *)semesterid{
@@ -170,6 +173,11 @@
             [self.dataArray removeAllObjects];
             [self.dataArray addObjectsFromArray:semesterModel.courseList];
             [self.mainTableView reloadData];
+            if (self.dataArray.count==0) {
+                self.mainTableView.tableFooterView = self.noDataView;
+            }else{
+                self.mainTableView.tableFooterView = nil;
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         
@@ -400,7 +408,7 @@
     
 }
 
-//选择考专业
+#pragma mark -切换专业
 -(void)selectMajor:(UIButton *)sender{
     if (self.majorArray.count<=0) return;
     self.showMajorView.dataArray = self.majorArray;
@@ -414,8 +422,11 @@
             HXMajorInfoModel *majorInfoModel = weakSelf.majorArray[idx];
             [weakSelf.bkMajorContentBtn setTitle:majorInfoModel.majorLongName forState:UIControlStateNormal];
             [HXPublicParamTool sharedInstance].currentSemesterid = majorInfoModel.semesterid;
+            [HXPublicParamTool sharedInstance].student_id = majorInfoModel.student_id;;
             //获取学习列表(当前学期和全部学期)
             [weakSelf getOnlineCourseList:majorInfoModel.semesterid];
+            //重新获取首页信息
+            [weakSelf getHomeStudentInfo];
             //修改专业通知
             [HXNotificationCenter postNotificationName:kChangeMajorSuccessNotification object:nil];
         }
@@ -980,6 +991,14 @@
         _showMajorView = [[HXShowMajorView alloc] init];
     }
     return _showMajorView;
+}
+
+-(HXNoDataTipView *)noDataView{
+    if (!_noDataView) {
+        _noDataView = [[HXNoDataTipView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, 400)];
+        _noDataView.tipTitle = @"没开通网课";
+    }
+    return _noDataView;
 }
 
 @end

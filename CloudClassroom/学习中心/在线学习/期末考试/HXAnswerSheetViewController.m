@@ -285,9 +285,9 @@
                                     [qbtn setTitleColor:COLOR_WITH_ALPHA(0x62a4f7, 1) forState:UIControlStateNormal];
                                 }
                             }else{//查看答卷
-                                if (qInfo.answerModel!=nil) {
+                                if (subInfo.answerModel!=nil) {
                                     [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                                    if (qInfo.answerModel.right) {
+                                    if (subInfo.answerModel.right) {
                                         [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img5"] forState:UIControlStateNormal];
                                     }else{
                                         [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img6"] forState:UIControlStateNormal];

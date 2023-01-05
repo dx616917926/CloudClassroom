@@ -52,8 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *psq_code;
 ///问题id
 @property(nonatomic, copy) NSString *psq_id;
-///问题所属题型类
-@property(nonatomic, copy) NSString *psq_baseType;
+///问题所属题型类 1.单选    2.多选     3.问答      4.复合
+@property(nonatomic, assign) NSInteger psq_baseType;
 ///问题答对所得分数
 @property(nonatomic, copy) NSString *psq_scoreStr;
 ///问题序号

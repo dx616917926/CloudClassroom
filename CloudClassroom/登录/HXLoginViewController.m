@@ -512,7 +512,7 @@
     if (!_pwdTextField) {
         _pwdTextField = [[UITextField alloc] init];
         _pwdTextField.backgroundColor = COLOR_WITH_ALPHA(0xF6F6F6, 1);
-        //        _pwdTextField.secureTextEntry = YES;
+        _pwdTextField.secureTextEntry = YES;
         _pwdTextField.delegate = self;
         _pwdTextField.placeholder = @"请输入密码";
         _pwdTextField.clearButtonMode = UITextFieldViewModeWhileEditing;

@@ -78,7 +78,7 @@
     CGSize textSize = [self getAttributedTextHeightHtml:examPaperSuitQuestionModel.serialNoHtmlTitle  with_viewMaxRect:self.viewMaxRect];
     self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
     [self.attributedTitleLabel updateLayout];
-    self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle];
+    self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:examPaperSuitQuestionModel.serialNoHtmlTitle fontColor:nil];
     
     //分数
     self.fenShuLabel.text = [examPaperSuitQuestionModel.psq_scoreStr stringByAppendingString:@"'"];
@@ -111,7 +111,7 @@
         CGSize jieXiTextSize = [self getAttributedTextHeightHtml:answerStr  with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
         self.jieXiLabel.sd_layout.heightIs(jieXiTextSize.height);
         [self.jieXiLabel updateLayout];
-        self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:answerStr];
+        self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:answerStr fontColor:ExamJieXiColor];
         [self.jieXiLabel relayoutText];
         
         self.addPhotoBtn.hidden = self.photoTipLabel.hidden = YES;
@@ -322,7 +322,7 @@
             CGSize textSize = [self getAttributedTextHeightHtml:newHtml with_viewMaxRect:self.viewMaxRect];
             self.attributedTitleLabel.sd_layout.heightIs(textSize.height);
             [self.attributedTitleLabel updateLayout];
-            self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
+            self.attributedTitleLabel.attributedString = [self getAttributedStringWithHtml:newHtml fontColor:nil];
         }
     }else if (attributedLabel == self.jieXiLabel) {
         if ([self.examPaperSuitQuestionModel.hintModel.answer containsString:imageInfo]) {
@@ -332,7 +332,7 @@
             CGSize textSize = [self getAttributedTextHeightHtml:newHtml with_viewMaxRect:CGRectMake(0, 0, kScreenWidth-40, CGFLOAT_HEIGHT_UNKNOWN)];
             self.jieXiLabel.sd_layout.heightIs(textSize.height);
             [self.jieXiLabel updateLayout];
-            self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:newHtml];
+            self.jieXiLabel.attributedString = [self getAttributedStringWithHtml:newHtml fontColor:ExamJieXiColor];
         }
     }
     
@@ -342,7 +342,7 @@
 //使用HtmlString,和最大左右间距，计算视图的高度
 - (CGSize)getAttributedTextHeightHtml:(NSString *)htmlString with_viewMaxRect:(CGRect)_viewMaxRect{
     //获取富文本
-    NSAttributedString *attributedString =  [self getAttributedStringWithHtml:htmlString];
+    NSAttributedString *attributedString =  [self getAttributedStringWithHtml:htmlString fontColor:nil];
     //获取布局器
     DTCoreTextLayouter *layouter = [[DTCoreTextLayouter alloc] initWithAttributedString:attributedString];
     NSRange entireString = NSMakeRange(0, [attributedString length]);
@@ -354,9 +354,13 @@
 }
 
 //Html->富文本NSAttributedString
-- (NSAttributedString *)getAttributedStringWithHtml:(NSString *)htmlString{
+- (NSAttributedString *)getAttributedStringWithHtml:(NSString *)htmlString fontColor:(UIColor *)color{
     //获取富文本
     NSData *data = [htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    if (color==nil) {
+        color = COLOR_WITH_ALPHA(0x333333, 1);
+    }
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentLeft;
@@ -367,7 +371,7 @@
     paragraphStyle.firstLineHeadIndent = 0;//首行缩进
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
     NSMutableAttributedString *attributedString = [[[NSAttributedString alloc] initWithHTMLData:data documentAttributes:NULL] mutableCopy];
-    [attributedString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSParagraphStyleAttributeName:paragraphStyle} range:NSMakeRange(0, attributedString.length)];
+    [attributedString addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:color,NSParagraphStyleAttributeName:paragraphStyle} range:NSMakeRange(0, attributedString.length)];
     return attributedString;
 }
 
@@ -591,7 +595,7 @@
     if (!_jieXiView) {
         _jieXiView = [[UIView alloc] init];
         _jieXiView.clipsToBounds = YES;
-        _jieXiView.backgroundColor =  COLOR_WITH_ALPHA(0xF2F2F2, 1);
+        _jieXiView.backgroundColor =  COLOR_WITH_ALPHA(0xF9F9F9, 1);
         _jieXiView.layer.borderColor = COLOR_WITH_ALPHA(0xC6C8D0, 1).CGColor;
         _jieXiView.layer.borderWidth = 1;
     }

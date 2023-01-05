@@ -290,6 +290,7 @@
     
     
     NSString *answer = HXSafeString(examPaperSubQuestionModel.answer);
+    NSLog(@"子题答案：%@",answer);
     //获取当前时间戳
     NSString *stime = [HXCommonUtil getNowTimeTimestamp];
     //用于加密的参数,生成m

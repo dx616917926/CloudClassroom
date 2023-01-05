@@ -96,9 +96,10 @@
             
             
             examPaperSuitQuestionModel.pqt_title = examQuestionTypeModel.pqt_title;
-            examPaperSuitQuestionModel.isDuoXuan = (examPaperSuitQuestionModel.subQuestions.count==0&&[examPaperSuitQuestionModel.pqt_title containsString:@"多选题"]);
-            examPaperSuitQuestionModel.isWenDa = (examPaperSuitQuestionModel.subQuestions.count==0&&examPaperSuitQuestionModel.questionChoices.count==0);
-            examPaperSuitQuestionModel.isFuHe = (examPaperSuitQuestionModel.subQuestions.count>0&&examPaperSuitQuestionModel.questionChoices.count==0);
+            //1.单选    2.多选     3.问答      4.复合
+            examPaperSuitQuestionModel.isDuoXuan = (examPaperSuitQuestionModel.psq_baseType==2?YES:NO);
+            examPaperSuitQuestionModel.isWenDa = (examPaperSuitQuestionModel.psq_baseType==3?YES:NO);
+            examPaperSuitQuestionModel.isFuHe = (examPaperSuitQuestionModel.psq_baseType==4?YES:NO);
             //复合题型给子题这两项也赋值
             if (examPaperSuitQuestionModel.isFuHe) {
                 [examPaperSuitQuestionModel.subQuestions enumerateObjectsUsingBlock:^(HXExamPaperSubQuestionModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -107,6 +108,8 @@
                     //赋值这两项便于后面提交保存
                     examPaperSubQuestionModel.domain =self.examPaperModel.domain;
                     examPaperSubQuestionModel.userExamId =self.examPaperModel.userExamId;
+                    examPaperSubQuestionModel.isDuoXuan = (examPaperSubQuestionModel.sub_baseType==2?YES:NO);
+                    examPaperSubQuestionModel.isWenDa = (examPaperSubQuestionModel.sub_baseType==3?YES:NO);
                 }];
             }
             [self.dataArray addObject:obj];
@@ -144,7 +147,7 @@
                 HXExamPaperSubQuestionModel *examPaperSubQuestionModel = obj;
                 
                 if ([examPaperSubQuestionModel.sub_id isEqualToString:qId]) {
-                    examPaperSuitQuestionModel.answerModel = answerModel;
+                    examPaperSubQuestionModel.answerModel = answerModel;
                     //复合题里的选择题
                     if (examPaperSubQuestionModel.subQuestionChoices.count>0) {
                         [examPaperSubQuestionModel.subQuestionChoices enumerateObjectsUsingBlock:^(HXExamSubQuestionChoicesModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -156,16 +159,13 @@
                         }];
                         *stop = YES;
                         return;
-                    }
-                    
-                    //复合题里的问答题
-                    if (examPaperSubQuestionModel.subQuestionChoices.count==0) {
+                    }else{//复合题里的问答题
                         examPaperSubQuestionModel.answer = answerModel.answer;
                         *stop = YES;
                         return;
                     }
                 }
-                
+               
             }];
         }
         
@@ -173,11 +173,11 @@
         if (examPaperSuitQuestionModel.isDuoXuan) {
             if ([examPaperSuitQuestionModel.psq_id isEqualToString:qId]) {
                 examPaperSuitQuestionModel.answerModel = answerModel;
+                examPaperSuitQuestionModel.answer = answerModel.answer;
                 [examPaperSuitQuestionModel.questionChoices enumerateObjectsUsingBlock:^(HXExamQuestionChoiceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     HXExamQuestionChoiceModel *examQuestionChoiceModel = obj;
                     if ([answerModel.answer containsString:examQuestionChoiceModel.choice_order]) {
                         examQuestionChoiceModel.isSelected = YES;
-                        examPaperSuitQuestionModel.answer = answerModel.answer;
                     }
                 }];
                 *stop = YES;
@@ -588,15 +588,15 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray [indexPath.row];
-    if (examPaperSuitQuestionModel.isFuHe) {
+    if (examPaperSuitQuestionModel.isFuHe) {//复合题
         HXExamFuHeCell *fuHeCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamFuHeCell" forIndexPath:indexPath];
         fuHeCell.examVc = self;
         return fuHeCell;
-    }else if (examPaperSuitQuestionModel.isWenDa) {
+    }else if (examPaperSuitQuestionModel.isWenDa) {//问答题
         HXExamAnswerCell *answerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamAnswerCell" forIndexPath:indexPath];
         answerCell.examVc = self;
         return answerCell;
-    }else{
+    }else{//选择题（单选和多选）
         HXExamChoiceCell *choiceCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HXExamChoiceCell" forIndexPath:indexPath];
         return choiceCell;
     }

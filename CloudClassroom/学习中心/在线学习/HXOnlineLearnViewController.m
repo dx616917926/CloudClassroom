@@ -48,6 +48,7 @@
     [self loadData];
     //监听修改专业通知
     [HXNotificationCenter addObserver:self selector:@selector(loadData) name:kChangeMajorSuccessNotification object:nil];
+    
 }
 
 -(void)dealloc{

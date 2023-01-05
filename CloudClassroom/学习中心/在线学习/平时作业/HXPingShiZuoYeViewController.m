@@ -189,7 +189,7 @@
 #pragma mark - 4.获取考试的链接
 -(void)getExamUrl:(NSString *)examStartPath{
     
-    [self.view showLoading];
+    
     [HXExamSessionManager getDataWithNSString:examStartPath withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
@@ -211,7 +211,7 @@
 #pragma mark - 5.获取考试的HTMLStr参数
 -(void)getEaxmHTMLStr:(NSString *)examUrl{
     
-    [self.view showLoading];
+   
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager GET:examUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {

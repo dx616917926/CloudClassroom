@@ -3,7 +3,7 @@
 //  CloudClassroom
 //
 //  Created by mac on 2022/10/10.
-//
+// 
 
 #import <Foundation/Foundation.h>
 #import "HXSemesterModel.h"
@@ -22,7 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *majorLongName;
 //当前学期id
 @property(nonatomic, copy) NSString *semesterid;
-
+//当前专业学生id
+@property(nonatomic, copy) NSString *student_id;
 //学期数组
 @property(nonatomic, strong) NSArray<HXSemesterModel *> *semesters;
 
