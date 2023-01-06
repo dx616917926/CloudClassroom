@@ -25,7 +25,7 @@
         NSString *baseUreStr = [HXPublicParamTool sharedInstance].schoolDomainURL;
         _sharedClient = [[HXBaseURLSessionManager alloc] initWithBaseURL:HXSafeURL(baseUreStr)];
         _sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
-        _sharedClient.requestSerializer.timeoutInterval = 15;
+        _sharedClient.requestSerializer.timeoutInterval = 20;
         
     });
     

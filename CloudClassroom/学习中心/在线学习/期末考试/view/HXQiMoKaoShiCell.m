@@ -51,7 +51,10 @@
 -(void)setExamModel:(HXExamModel *)examModel{
     _examModel = examModel;
     
-    [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+    [self.stateBtn setTitle:(examModel.canExam?@"进行中":@"已结束") forState:UIControlStateNormal];
+    self.stateBtn.backgroundColor = (examModel.canExam?COLOR_WITH_ALPHA(0xEAFBEC, 1):COLOR_WITH_ALPHA(0xF2F2F2, 1));
+    [self.stateBtn setTitleColor:(examModel.canExam?COLOR_WITH_ALPHA(0x5DC367, 1):COLOR_WITH_ALPHA(0x999999, 1)) forState:UIControlStateNormal];
+    
     
     self.courseNameLabel.text = examModel.examTitle;
     self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
@@ -74,8 +77,8 @@
 }
 
 -(void)startKaoShi:(UIButton *)sender{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:)]) {
-        [self.delegate startExam:self.examModel];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:startKaoShiBtn:)]) {
+        [self.delegate startExam:self.examModel startKaoShiBtn:self.startKaoShiBtn];
     }
 }
 
@@ -200,10 +203,7 @@
 - (UIButton *)stateBtn{
     if (!_stateBtn) {
         _stateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _stateBtn.backgroundColor = COLOR_WITH_ALPHA(0xEAFBEC, 1);
         _stateBtn.titleLabel.font = HXFont(12);
-        [_stateBtn setTitleColor:COLOR_WITH_ALPHA(0x5DC367, 1) forState:UIControlStateNormal];
-        [_stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
     }
     return _stateBtn;
 }

@@ -52,7 +52,9 @@
 -(void)setExamModel:(HXExamModel *)examModel{
     _examModel = examModel;
     
-    [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+    [self.stateBtn setTitle:(examModel.canExam?@"进行中":@"已结束") forState:UIControlStateNormal];
+    self.stateBtn.backgroundColor = (examModel.canExam?COLOR_WITH_ALPHA(0xEAFBEC, 1):COLOR_WITH_ALPHA(0xF2F2F2, 1));
+    [self.stateBtn setTitleColor:(examModel.canExam?COLOR_WITH_ALPHA(0x5DC367, 1):COLOR_WITH_ALPHA(0x999999, 1)) forState:UIControlStateNormal];
     
     self.courseNameLabel.text = examModel.examTitle;
     self.ciShuContentLabel.text = HXIntToString(examModel.leftExamNum);
@@ -72,8 +74,8 @@
 #pragma mark - Event
 
 -(void)startZuoYe:(UIButton *)sender{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:)]) {
-        [self.delegate startExam:self.examModel];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(startExam:startZuoYeBtn:)]) {
+        [self.delegate startExam:self.examModel startZuoYeBtn:self.stateBtn];
     }
 }
 

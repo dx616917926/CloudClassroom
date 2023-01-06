@@ -13,10 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HXExamRecordCellDelegate <NSObject>
 
 ///查看答卷
--(void)checkAnswer:(HXExamRecordModel *)examRecordModel;
+-(void)checkAnswer:(HXExamRecordModel *)examRecordModel checkAnswerBtn:(UIButton *)checkAnswerBtn;
 
 ///继续作答
--(void)continueExam:(HXExamRecordModel *)examRecordModel;
+-(void)continueExam:(HXExamRecordModel *)examRecordModel continueExamBtn:(UIButton *)continueExamBtn;
 
 @end
 

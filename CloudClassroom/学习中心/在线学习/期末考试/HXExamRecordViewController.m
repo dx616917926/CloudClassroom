@@ -101,7 +101,7 @@
 }
 
 #pragma mark - 继续作答
--(void)continueExam:(HXExamRecordModel *)examRecordModel{
+-(void)continueExam:(HXExamRecordModel *)examRecordModel continueExamBtn:(nonnull UIButton *)continueExamBtn{
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/finished/json/%@",self.examPara.domain,examRecordModel.examId];
     
     [self.view showLoading];
@@ -121,23 +121,24 @@
 }
 
 #pragma mark - 查看答卷
--(void)checkAnswer:(HXExamRecordModel *)examRecordModel{
-    
+-(void)checkAnswer:(HXExamRecordModel *)examRecordModel checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
+    checkAnswerBtn.userInteractionEnabled = NO;
     [self.view showLoading];
     [HXExamSessionManager getDataWithNSString:examRecordModel.viewUrl withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
-        
+        checkAnswerBtn.userInteractionEnabled = YES;
         if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
             NSString *examUrl = [dictionary objectForKey:@"url"];
             
             NSString *userExamId = [userExam stringValueForKey:@"id"];
             //获取考试的HTMLStr参数
-            [self getEaxmHTMLStr:examUrl userExamId:userExamId];
+            [self getEaxmHTMLStr:examUrl userExamId:userExamId checkAnswerBtn:checkAnswerBtn];
         }else{
+            checkAnswerBtn.userInteractionEnabled = YES;
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
+        checkAnswerBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
@@ -148,7 +149,7 @@
 
 
 #pragma mark - 1.获取考试的HTMLStr参数
--(void)getEaxmHTMLStr:(NSString *)examUrl userExamId:(NSString *)userExamId{
+-(void)getEaxmHTMLStr:(NSString *)examUrl userExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -157,17 +158,18 @@
     [manager GET:examUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
+        
         NSString *htmlStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"%@",htmlStr);
-        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr userExamId:userExamId];
+        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr userExamId:userExamId checkAnswerBtn:checkAnswerBtn];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        checkAnswerBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
 #pragma mark - 2.用html作为参数去获取试卷json数据
--(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr userExamId:(NSString *)userExamId{
+-(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr userExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
     NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
     NSString *t = tempA.lastObject;
@@ -178,7 +180,7 @@
    
   
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
-        [self.view hideLoading];
+       
         NSLog(@"%@",dictionary);
         if (dictionary) {
             HXExamPaperModel *examPaperModel = [HXExamPaperModel mj_objectWithKeyValues:dictionary];
@@ -186,17 +188,17 @@
             examPaperModel.userExamId = self.currentExamRecordModel.examId;
             self.examPaperModel = examPaperModel;
             //获取考试答案
-            [self getEaxmAnswersWithUserExamId:userExamId];
-            
+            [self getEaxmAnswersWithUserExamId:userExamId checkAnswerBtn:checkAnswerBtn];
         }
     } failure:^(NSError * _Nullable error) {
+        checkAnswerBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
 }
 
 #pragma mark - 3.获取考试答案
--(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId{
+-(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.examPara.domain,userExamId];
     
@@ -206,32 +208,34 @@
     [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.view hideLoading];
+        
         NSLog(@"%@",responseObject);
         NSDictionary *dic = responseObject;
         NSArray *list = [HXExamAnswerModel mj_objectArrayWithKeyValuesArray:[dic objectForKey:@"answers"]];
         self.examPaperModel.isContinuerExam = NO;
         self.examPaperModel.answers = list;
         //获取试卷解析
-        [self getEaxmJieXiWithUserExamId:userExamId];
+        [self getEaxmJieXiWithUserExamId:userExamId checkAnswerBtn:checkAnswerBtn];
        
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        checkAnswerBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
 #pragma mark - 4.获取试卷解析
--(void)getEaxmJieXiWithUserExamId:(NSString *)userExamId{
+-(void)getEaxmJieXiWithUserExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/answer/%@",self.examPara.domain,userExamId];
     
-    [self.view showLoading];
+    
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
 
     [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"");
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        checkAnswerBtn.userInteractionEnabled = YES;
         [self.view hideLoading];
         NSLog(@"%@",responseObject);
         NSDictionary *dic = responseObject;

@@ -187,29 +187,30 @@
 }
 
 #pragma mark - 4.获取考试的链接
--(void)getExamUrl:(NSString *)examStartPath{
+-(void)getExamUrl:(NSString *)examStartPath startZuoYeBtn:(nonnull UIButton *)startZuoYeBtn{
     
     
     [HXExamSessionManager getDataWithNSString:examStartPath withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
             NSString *examUrl = [dictionary objectForKey:@"url"];
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
             self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
             //获取考试的HTMLStr参数
-            [self getEaxmHTMLStr:examUrl];
+            [self getEaxmHTMLStr:examUrl startZuoYeBtn:startZuoYeBtn];
             
         }else{
+            startZuoYeBtn.userInteractionEnabled = YES;
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {
+        startZuoYeBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
     }];
 }
 
 #pragma mark - 5.获取考试的HTMLStr参数
--(void)getEaxmHTMLStr:(NSString *)examUrl{
+-(void)getEaxmHTMLStr:(NSString *)examUrl startZuoYeBtn:(nonnull UIButton *)startZuoYeBtn{
     
    
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -220,14 +221,15 @@
         [self.view hideLoading];
         NSString *htmlStr = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"%@",htmlStr);
-        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr];
+        [self getEaxmJsonWithExamUrl:examUrl htmlStr:htmlStr startZuoYeBtn:startZuoYeBtn];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        startZuoYeBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
 }
 
 #pragma mark - 6.用html作为参数去获取试卷json数据
--(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr {
+-(void)getEaxmJsonWithExamUrl:(NSString *)examUrl htmlStr:(NSString *)htmlStr startZuoYeBtn:(nonnull UIButton *)startZuoYeBtn{
     
     NSArray *tempA = [examUrl componentsSeparatedByString:@"/resource/"];
     NSString *t = tempA.lastObject;
@@ -236,10 +238,11 @@
     NSDictionary *dic = @{@"paperHtml":htmlStr};
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.keJianOrExamInfoModel.examPara.domain,tempB[0],tempB[1],tempB[2]];
     
-    [self.view showLoading];
+   
   
     
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
+        startZuoYeBtn.userInteractionEnabled = YES;
         [self.view hideLoading];
         NSLog(@"%@",dictionary);
         if (dictionary) {
@@ -260,6 +263,7 @@
             [tool showInViewController:self];
         }
     } failure:^(NSError * _Nullable error) {
+        startZuoYeBtn.userInteractionEnabled = YES;
         [self.view showErrorWithMessage:error.description.lowercaseString];
     }];
     
@@ -279,19 +283,21 @@
 }
 
 #pragma mark - 3.开始考试
--(void)startExam:(HXExamModel *)examModel{
+-(void)startExam:(HXExamModel *)examModel startZuoYeBtn:(nonnull UIButton *)startZuoYeBtn{
     //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
+    startZuoYeBtn.userInteractionEnabled = NO;
     [self.view showLoading];
     NSString * url = [NSString stringWithFormat:HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
     
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
-            [self.view hideLoading];
+            
             NSString *examStartPath = [dictionary objectForKey:@"url"];
             //获取考试的链接
-            [self getExamUrl:examStartPath];
+            [self getExamUrl:examStartPath startZuoYeBtn:startZuoYeBtn];
         }else{
+            startZuoYeBtn.userInteractionEnabled = YES;
             [self.view showErrorWithMessage:@"获取数据失败,请重试!"];
         }
     } failure:^(NSError * _Nullable error) {

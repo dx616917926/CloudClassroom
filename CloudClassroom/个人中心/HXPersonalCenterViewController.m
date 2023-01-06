@@ -543,6 +543,7 @@
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
     header.automaticallyChangeAlpha = YES;
     self.mainScrollView.mj_header = header;
+    [self.mainScrollView.mj_header beginRefreshing];
 }
 
 #pragma mark - LazyLoad

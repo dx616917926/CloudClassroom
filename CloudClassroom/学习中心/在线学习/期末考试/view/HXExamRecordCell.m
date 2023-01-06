@@ -73,14 +73,14 @@
 
 #pragma mark - Event
 -(void)clickCheckAnswerBtn:(UIButton *)sender{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(checkAnswer:)]) {
-        [self.delegate checkAnswer:self.examRecordModel];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(checkAnswer:checkAnswerBtn:)]) {
+        [self.delegate checkAnswer:self.examRecordModel checkAnswerBtn:self.checkAnswerBtn];
     }
 }
 
 -(void)clickContinueExamBtn:(UIButton *)sender{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(continueExam:)]) {
-        [self.delegate continueExam:self.examRecordModel];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(continueExam:continueExamBtn:)]) {
+        [self.delegate continueExam:self.examRecordModel continueExamBtn:self.continueExamBtn];
     }
 }
 

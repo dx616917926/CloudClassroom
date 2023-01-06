@@ -651,6 +651,7 @@
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
     header.automaticallyChangeAlpha = YES;
     self.mainTableView.mj_header = header;
+    [self.mainTableView.mj_header beginRefreshing];
     
 }
 

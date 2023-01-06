@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HXPingShiZuoYeCellDelegate <NSObject>
 
 ///开始作业
--(void)startExam:(HXExamModel *)examModel;
+-(void)startExam:(HXExamModel *)examModel startZuoYeBtn:(UIButton *)startZuoYeBtn;
 
 ///查看考试记录
 -(void)chechExamRecord:(HXExamModel *)examModel;

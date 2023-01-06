@@ -16,6 +16,26 @@
 @property(nonatomic,strong) UIButton *jiaoJuanBtn;
 @property(nonatomic,strong) UIButton *rightBtn;
 
+//提示
+@property(nonatomic,strong) UIView *tipView;
+//正确提示
+@property(nonatomic,strong) UIView *rightView;
+@property(nonatomic,strong) UIImageView *rightImageView;
+@property(nonatomic,strong) UILabel *rightLabel;
+//错误提示
+@property(nonatomic,strong) UIView *errorView;
+@property(nonatomic,strong) UIImageView *errorImageView;
+@property(nonatomic,strong) UILabel *errorLabel;
+
+//已作答提示
+@property(nonatomic,strong) UIView *answerView;
+@property(nonatomic,strong) UIImageView *answerImageView;
+@property(nonatomic,strong) UILabel *answerLabel;
+//未作答提示
+@property(nonatomic,strong) UIView *noAnswerView;
+@property(nonatomic,strong) UIImageView *noAnswerImageView;
+@property(nonatomic,strong) UILabel *noAnswerLabel;
+
 @property(nonatomic,strong) UIScrollView *mainScrollView;
 
 @property(nonatomic,strong) NSMutableArray *dataArray;
@@ -83,7 +103,13 @@
 -(void)createUI{
     
     [self.view addSubview:self.navBarView];
+    [self.view addSubview:self.tipView];
     [self.view addSubview:self.mainScrollView];
+   
+    [self.tipView addSubview:self.rightView];
+    [self.tipView addSubview:self.errorView];
+    [self.tipView addSubview:self.answerView];
+    [self.tipView addSubview:self.noAnswerView];
    
     
     [self.navBarView addSubview:self.titleLabel];
@@ -132,16 +158,110 @@
     .widthIs(60)
     .heightIs(44);
     
+    self.tipView.sd_layout
+     .topSpaceToView(self.navBarView , 0)
+     .leftEqualToView(self.view)
+     .rightEqualToView(self.view)
+     .heightIs(30);
+    
+    self.noAnswerView.sd_layout
+    .rightSpaceToView(self.tipView, 16)
+    .centerYEqualToView(self.tipView)
+    .heightIs(25);
+    
+    self.noAnswerImageView.sd_layout
+    .leftEqualToView(self.noAnswerView)
+    .centerYEqualToView(self.noAnswerView)
+    .widthIs(20)
+    .heightEqualToWidth();
+    self.noAnswerImageView.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    self.noAnswerLabel.sd_layout
+    .leftSpaceToView(self.noAnswerImageView, 3)
+    .centerYEqualToView(self.noAnswerView)
+    .heightIs(15);
+    [self.noAnswerLabel setSingleLineAutoResizeWithMaxWidth:60];
+    
+    [self.noAnswerView setupAutoWidthWithRightView:self.noAnswerLabel rightMargin:5];
+    
+    
+    self.answerView.sd_layout
+    .rightSpaceToView(self.noAnswerView, 10)
+    .centerYEqualToView(self.tipView)
+    .heightRatioToView(self.noAnswerView, 1);
+    
+    self.answerImageView.sd_layout
+    .leftEqualToView(self.answerView)
+    .centerYEqualToView(self.answerView)
+    .widthRatioToView(self.noAnswerImageView, 1)
+    .heightEqualToWidth();
+    self.answerImageView.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    self.answerLabel.sd_layout
+    .leftSpaceToView(self.answerImageView, 3)
+    .centerYEqualToView(self.answerView)
+    .heightRatioToView(self.noAnswerLabel, 1);
+    [self.answerLabel setSingleLineAutoResizeWithMaxWidth:60];
+    
+    [self.answerView setupAutoWidthWithRightView:self.answerLabel rightMargin:5];
+    
+    
+    self.errorView.sd_layout
+    .rightSpaceToView(self.noAnswerView, 10)
+    .centerYEqualToView(self.tipView)
+    .heightRatioToView(self.noAnswerView, 1);
+    
+    self.errorImageView.sd_layout
+    .leftEqualToView(self.errorView)
+    .centerYEqualToView(self.errorView)
+    .widthRatioToView(self.noAnswerImageView, 1)
+    .heightEqualToWidth();
+    self.errorImageView.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    self.errorLabel.sd_layout
+    .leftSpaceToView(self.errorImageView, 3)
+    .centerYEqualToView(self.errorView)
+    .heightRatioToView(self.noAnswerLabel, 1);
+    [self.errorLabel setSingleLineAutoResizeWithMaxWidth:60];
+    
+    [self.errorView setupAutoWidthWithRightView:self.errorLabel rightMargin:5];
+    
+    
+    self.rightView.sd_layout
+    .rightSpaceToView(self.errorView, 10)
+    .centerYEqualToView(self.tipView)
+    .heightRatioToView(self.noAnswerView, 1);
+    
+    self.rightImageView.sd_layout
+    .leftEqualToView(self.rightView)
+    .centerYEqualToView(self.rightView)
+    .widthRatioToView(self.noAnswerImageView, 1)
+    .heightEqualToWidth();
+    self.rightImageView.sd_cornerRadiusFromHeightRatio=@0.5;
+    
+    self.rightLabel.sd_layout
+    .leftSpaceToView(self.rightImageView, 3)
+    .centerYEqualToView(self.rightView)
+    .heightRatioToView(self.noAnswerLabel, 1);
+    [self.rightLabel setSingleLineAutoResizeWithMaxWidth:60];
+    
+    [self.rightView setupAutoWidthWithRightView:self.rightLabel rightMargin:5];
+    
+    
+    
+    
+    
+    
    self.mainScrollView.sd_layout
-    .topSpaceToView(self.navBarView , 0)
+    .topSpaceToView(self.tipView , 0)
     .leftEqualToView(self.view)
     .rightEqualToView(self.view)
     .bottomEqualToView(self.view);
     
     [self.mainScrollView updateLayout];
     
-    self.backBtn.hidden = self.examPaperModel.isContinuerExam;
-    self.jiaoJuanBtn.hidden = !self.examPaperModel.isContinuerExam;
+    self.backBtn.hidden = self.rightView.hidden = self.errorView.hidden = self.examPaperModel.isContinuerExam;
+    self.jiaoJuanBtn.hidden = self.answerView.hidden = !self.examPaperModel.isContinuerExam;
     
     //绘制答题卡
     [self drawTheMenuList];
@@ -368,6 +488,133 @@
     }
     return _rightBtn;
 }
+
+-(UIView *)tipView{
+    if (!_tipView) {
+        _tipView = [[UIView alloc] init];
+        _tipView.backgroundColor = COLOR_WITH_ALPHA(0xffffff, 1);
+    }
+    return _tipView;
+}
+
+
+-(UIView *)rightView{
+    if (!_rightView) {
+        _rightView = [[UIView alloc] init];
+        [_rightView addSubview:self.rightImageView];
+        [_rightView addSubview:self.rightLabel];
+        _rightView.hidden = YES;
+    }
+    return _rightView;
+}
+
+-(UIImageView *)rightImageView{
+    if (!_rightImageView) {
+        _rightImageView = [[UIImageView alloc] init];
+        _rightImageView.backgroundColor=COLOR_WITH_ALPHA(0x4ed838, 1);
+        _rightImageView.clipsToBounds = YES;
+    }
+    return _rightImageView;
+}
+
+-(UILabel *)rightLabel{
+    if (!_rightLabel) {
+        _rightLabel = [[UILabel alloc] init];
+        _rightLabel.font = HXFont(13);
+        _rightLabel.textColor = COLOR_WITH_ALPHA(0xA4A4A4, 1);
+        _rightLabel.text = @"作答正确";
+    }
+    return _rightLabel;
+}
+
+-(UIView *)errorView{
+    if (!_errorView) {
+        _errorView = [[UIView alloc] init];
+        [_errorView addSubview:self.errorImageView];
+        [_errorView addSubview:self.errorLabel];
+        _errorView.hidden = YES;
+    }
+    return _errorView;
+}
+
+-(UIImageView *)errorImageView{
+    if (!_errorImageView) {
+        _errorImageView = [[UIImageView alloc] init];
+        _errorImageView.backgroundColor= COLOR_WITH_ALPHA(0xfe624b, 1);
+        _errorImageView.clipsToBounds = YES;
+    }
+    return _errorImageView;
+}
+
+-(UILabel *)errorLabel{
+    if (!_errorLabel) {
+        _errorLabel = [[UILabel alloc] init];
+        _errorLabel.font = HXFont(13);
+        _errorLabel.textColor = COLOR_WITH_ALPHA(0xA4A4A4, 1);
+        _errorLabel.text = @"作答错误";
+    }
+    return _errorLabel;
+}
+
+-(UIView *)noAnswerView{
+    if (!_noAnswerView) {
+        _noAnswerView = [[UIView alloc] init];
+        [_noAnswerView addSubview:self.noAnswerImageView];
+        [_noAnswerView addSubview:self.noAnswerLabel];
+    }
+    return _noAnswerView;
+}
+
+-(UIImageView *)noAnswerImageView{
+    if (!_noAnswerImageView) {
+        _noAnswerImageView = [[UIImageView alloc] init];
+        _noAnswerImageView.backgroundColor= COLOR_WITH_ALPHA(0xffffff, 1);
+        _noAnswerImageView.layer.borderWidth=1;
+        _noAnswerImageView.layer.borderColor = COLOR_WITH_ALPHA(0x4ba4fe, 1).CGColor;
+        _noAnswerImageView.clipsToBounds = YES;
+    }
+    return _noAnswerImageView;
+}
+
+-(UILabel *)noAnswerLabel{
+    if (!_noAnswerLabel) {
+        _noAnswerLabel = [[UILabel alloc] init];
+        _noAnswerLabel.font = HXFont(13);
+        _noAnswerLabel.textColor = COLOR_WITH_ALPHA(0xA4A4A4, 1);
+        _noAnswerLabel.text = @"未作答";
+    }
+    return _noAnswerLabel;
+}
+
+-(UIView *)answerView{
+    if (!_answerView) {
+        _answerView = [[UIView alloc] init];
+        [_answerView addSubview:self.answerImageView];
+        [_answerView addSubview:self.answerLabel];
+        _answerView.hidden = YES;
+    }
+    return _answerView;
+}
+
+-(UIImageView *)answerImageView{
+    if (!_answerImageView) {
+        _answerImageView = [[UIImageView alloc] init];
+        _answerImageView.backgroundColor= COLOR_WITH_ALPHA(0x4ba4fe, 1);
+        _answerImageView.clipsToBounds = YES;
+    }
+    return _answerImageView;
+}
+
+-(UILabel *)answerLabel{
+    if (!_answerLabel) {
+        _answerLabel = [[UILabel alloc] init];
+        _answerLabel.font = HXFont(13);
+        _answerLabel.textColor = COLOR_WITH_ALPHA(0xA4A4A4, 1);
+        _answerLabel.text = @"已作答";
+    }
+    return _answerLabel;
+}
+
 
 -(UIScrollView *)mainScrollView{
     if (!_mainScrollView) {

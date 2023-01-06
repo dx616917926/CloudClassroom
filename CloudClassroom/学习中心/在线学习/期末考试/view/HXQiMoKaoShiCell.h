@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HXQiMoKaoShiCellDelegate <NSObject>
 
 ///开始考试
--(void)startExam:(HXExamModel *)examModel;
+-(void)startExam:(HXExamModel *)examModel startKaoShiBtn:(UIButton *)startKaoShiBtn;
 
 ///查看考试记录
 -(void)chechExamRecord:(HXExamModel *)examModel;
