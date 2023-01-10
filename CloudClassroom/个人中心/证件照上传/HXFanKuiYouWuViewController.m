@@ -31,7 +31,7 @@
     NSString *student_id = [HXPublicParamTool sharedInstance].student_id;
     NSDictionary *dic =@{
         @"student_id":HXSafeString(student_id),
-        @"comstatus":@(1),
+        @"comstatus":@(2),
         @"comments":HXSafeString(self.textView.text)
     };
     [HXBaseURLSessionManager postDataWithNSString:HXPOST_ComfirmPhoto needMd5:YES  withDictionary:dic success:^(NSDictionary * _Nonnull dictionary) {

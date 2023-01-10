@@ -131,6 +131,8 @@
     NSLog(@"------");
 }
 
+
+
 #pragma mark - 赋值答案
 -(void)giveAnswer:(HXExamAnswerModel *)answerModel{
     
@@ -290,12 +292,18 @@
         HXExamPaperSubQuestionModel *examPaperSubQuestionModel = examPaperSuitQuestionModel.subQuestions[examPaperSuitQuestionModel.fuhe_position];
         [self saveSubQuestion:examPaperSubQuestionModel];
         return;
+    }else if (examPaperSuitQuestionModel.isWenDa) {//问答题非空才保存
+        if (examPaperSuitQuestionModel.attach.count==0&&[HXCommonUtil isNull:examPaperSuitQuestionModel.answer]) {
+            return;
+        }
+    }else{//非空才保存
+        if ([HXCommonUtil isNull:examPaperSuitQuestionModel.answer]) {
+            return;
+        }
     }
     
-    //非复合题答案非空才保存
-    if ([HXCommonUtil isNull:examPaperSuitQuestionModel.answer]&&!examPaperSuitQuestionModel.isFuHe) {
-        return;
-    }
+    
+
     
     
     //问题id截掉"q_"
@@ -307,19 +315,46 @@
     
     
     NSString *answer = HXSafeString(examPaperSuitQuestionModel.answer);
+   
+   
+    
     //获取当前时间戳
     NSString *stime = [HXCommonUtil getNowTimeTimestamp];
     //用于加密的参数,生成m
-    NSDictionary *md5Dic= @{
-        @"answer":answer,
-        @"psqId":psqId,
-        @"stime":stime,
-    };
+    NSDictionary *md5Dic;
+    if (examPaperSuitQuestionModel.attach.count>0) {
+        if ([HXCommonUtil isNull:answer]) {
+            md5Dic =@{
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSuitQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }else{
+            md5Dic =@{
+                @"answer":answer,
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSuitQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }
+        
+    }else{
+        md5Dic =@{
+            @"answer":answer,
+            @"psqId":psqId,
+            @"stime":stime
+        };
+    }
+    
     NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
     //拼接请求地址
-    NSString *pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
-    
-    
+    NSString *pingDicUrl;
+    if (examPaperSuitQuestionModel.attach.count!=0) {
+        NSString *attachStr = [examPaperSuitQuestionModel.attach componentsJoinedByString:@","];
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@&attach=%@",url,answer,psqId,stime,md5Str,attachStr]];
+    }else{
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    }
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
     manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回
@@ -342,9 +377,20 @@
 
 #pragma mark - 提交复合子题试题答案
 -(void)saveSubQuestion:(HXExamPaperSubQuestionModel *)examPaperSubQuestionModel{
-    //答案非空才保存
-    if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+    //开始考试或继续考试才提交答案
+    if (!self.examPaperModel.isContinuerExam) {
         return;
+    }
+    
+    //问答题保存当前子题答案
+    if (examPaperSubQuestionModel.isWenDa) {//问答题非空才保存
+        if (examPaperSubQuestionModel.attach.count==0&&[HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+            return;
+        }
+    }else{//非空才保存
+        if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+            return;
+        }
     }
     
     //问题id截掉"q_"
@@ -359,17 +405,41 @@
     //获取当前时间戳
     NSString *stime = [HXCommonUtil getNowTimeTimestamp];
     //用于加密的参数,生成m
-    NSDictionary *md5Dic= @{
-        @"answer":answer,
-        @"psqId":psqId,
-        @"stime":stime,
-    };
+    NSDictionary *md5Dic;
+    if (examPaperSubQuestionModel.attach.count>0) {
+        if ([HXCommonUtil isNull:answer]) {
+            md5Dic =@{
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSubQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }else{
+            md5Dic =@{
+                @"answer":answer,
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSubQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }
+        
+    }else{
+        md5Dic =@{
+            @"answer":answer,
+            @"psqId":psqId,
+            @"stime":stime
+        };
+    }
     NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
-    //拼接请求地址,并将中文转码
-    NSString *pingDicUrl = [HXCommonUtil stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    //拼接请求地址
+    NSString *pingDicUrl;
+    if (examPaperSubQuestionModel.attach.count!=0) {
+        NSString *attachStr = [examPaperSubQuestionModel.attach componentsJoinedByString:@","];
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@&attach=%@",url,answer,psqId,stime,md5Str,attachStr]];
+    }else{
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    }
     
-    
-    
+
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求
     manager.responseSerializer = [AFJSONResponseSerializer serializer];//json返回

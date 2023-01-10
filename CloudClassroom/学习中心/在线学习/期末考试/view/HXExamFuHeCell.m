@@ -281,6 +281,17 @@
         return;
     }
     
+    //问答题保存当前子题答案
+    if (examPaperSubQuestionModel.isWenDa) {//问答题非空才保存
+        if (examPaperSubQuestionModel.attach.count==0&&[HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+            return;
+        }
+    }else{//非空才保存
+        if ([HXCommonUtil isNull:examPaperSubQuestionModel.answer]) {
+            return;
+        }
+    }
+    
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSubQuestionModel.sub_id substringFromIndex:2]);
     
@@ -290,18 +301,42 @@
     
     
     NSString *answer = HXSafeString(examPaperSubQuestionModel.answer);
-    NSLog(@"子题答案：%@",answer);
     //获取当前时间戳
     NSString *stime = [HXCommonUtil getNowTimeTimestamp];
     //用于加密的参数,生成m
-    NSDictionary *md5Dic= @{
-        @"answer":answer,
-        @"psqId":psqId,
-        @"stime":stime,
-    };
+    NSDictionary *md5Dic;
+    if (examPaperSubQuestionModel.attach.count>0) {
+        if ([HXCommonUtil isNull:answer]) {
+            md5Dic =@{
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSubQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }else{
+            md5Dic =@{
+                @"answer":answer,
+                @"psqId":psqId,
+                @"stime":stime,
+                @"attach":HXSafeString([examPaperSubQuestionModel.attach componentsJoinedByString:@","])
+            };
+        }
+        
+    }else{
+        md5Dic =@{
+            @"answer":answer,
+            @"psqId":psqId,
+            @"stime":stime
+        };
+    }
     NSString *md5Str = [HXCommonUtil getMd5String:md5Dic pingKey:[NSString stringWithFormat:@"key=%@",keyStr]];
-    //拼接请求地址,并将中文转码
-    NSString *pingDicUrl = [HXCommonUtil stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    //拼接请求地址
+    NSString *pingDicUrl;
+    if (examPaperSubQuestionModel.attach.count!=0) {
+        NSString *attachStr = [examPaperSubQuestionModel.attach componentsJoinedByString:@","];
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@&attach=%@",url,answer,psqId,stime,md5Str,attachStr]];
+    }else{
+        pingDicUrl = [HXCommonUtil  stringEncoding:[NSString stringWithFormat:@"%@?answer=%@&psqId=%@&stime=%@&m=%@",url,answer,psqId,stime,md5Str]];
+    }
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//json请求

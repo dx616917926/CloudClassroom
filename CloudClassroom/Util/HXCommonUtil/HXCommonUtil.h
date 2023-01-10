@@ -98,6 +98,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark -  md5=所有请求参数（除md5外）,按照ASIIC码升序排列，然后通过&拼接，最后加上密钥Md5Key，生成md5值。
 + (NSString *)getMd5String:(NSDictionary *)dic pingKey:(NSString *_Nullable)pingKey;
 
+#pragma mark -  将包含Base64图片的富文本里的图片宽高替换成合适的宽高
++ (NSString *)getReplaceStringFromBase64ImageStr:(NSString *)base64ImageStr maxSize:(CGSize)maxSize;
+
 @end
 
 NS_ASSUME_NONNULL_END

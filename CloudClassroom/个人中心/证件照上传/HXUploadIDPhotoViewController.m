@@ -86,8 +86,8 @@
         self.photoImageView.hidden = self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;
         self.addPhotoBtn.hidden = self.goUploadBtn.hidden = YES;
         [self.photoImageView sd_setImageWithURL:HXSafeURL(self.photoInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
-        ///照片确认状态    0:未确认       1:已确认
-        if (self.photoInfoModel.comStatus==1) {
+        ///照片确认状态    0:未确认       1:已确认   2:确认有无
+        if (self.photoInfoModel.comStatus>0) {
             self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = YES;
         }else{
             self.fanKuiYouWuBtn.hidden = self.confirmBtn.hidden = NO;

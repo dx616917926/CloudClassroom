@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HXPhotoInfoModel : NSObject
 
-///照片确认状态    0:未确认       1:已确认
+///照片确认状态    0:未确认       1:已确认    2:确认有无
 @property(nonatomic, assign) NSInteger comStatus;
 ///审核状态         0:未审核       1:已审核
 @property(nonatomic, assign) NSInteger auditStatus;

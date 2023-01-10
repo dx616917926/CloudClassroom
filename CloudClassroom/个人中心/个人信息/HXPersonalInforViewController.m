@@ -100,7 +100,7 @@
                 }else if ([model.title isEqualToString:@"民族"]) {
                     model.content = [personalInfo stringValueForKey:@"nationality"];
                 }else if ([model.title isEqualToString:@"政治面貌"]) {
-                    model.content = [personalInfo stringValueForKey:@"politicalStateName"];
+                    model.content = [personalInfo stringValueForKey:@"politicalName"];
                 }else if ([model.title isEqualToString:@"电子邮箱"]) {
                     model.content = [personalInfo stringValueForKey:@"email"];
                 }else if ([model.title isEqualToString:@"工作单位"]) {

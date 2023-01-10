@@ -213,6 +213,7 @@
         NSDictionary *dic = responseObject;
         NSArray *list = [HXExamAnswerModel mj_objectArrayWithKeyValuesArray:[dic objectForKey:@"answers"]];
         self.examPaperModel.isContinuerExam = NO;
+        self.examPaperModel.userExamId = userExamId;
         self.examPaperModel.answers = list;
         //获取试卷解析
         [self getEaxmJieXiWithUserExamId:userExamId checkAnswerBtn:checkAnswerBtn];
@@ -242,6 +243,7 @@
         NSArray *list = [HXExamAnswerHintModel mj_objectArrayWithKeyValuesArray:[dic objectForKey:@"answers"]];
         self.examPaperModel.isContinuerExam = NO;
         self.examPaperModel.jieXis = list;
+       
         HXExamViewController *examVC = [[HXExamViewController alloc] init];
         examVC.sc_navigationBarHidden = YES;//隐藏导航栏
         examVC.examPaperModel = self.examPaperModel;

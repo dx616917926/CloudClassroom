@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///3、查看考试记录 考试域名: {domain}   ,考试模块id: {examId}
 #define   HXEXAM_CheckRecord       @"%@/exam-admin/home/my/exam/view/result/json/%@"
 
+///提交答案 考试域名: {domain}   ,考试模块id: {userExamId}
+#define   HXEXAM_SubmitAnswer       @"%@/exam/student/exam/myanswer/newSave/%@"
+
+//把问题附件上传到临时服务器，返回一个tempFIleName 路径值。
+#define   HXPOST_Answer_FILE       @"/exam/student/exam/question/attaches/upload/filePath/form"
+
 @interface HXExamSessionManager : AFHTTPSessionManager
 
 

@@ -272,15 +272,47 @@
         self.selectView = nil;
         self.textView.text = examPaperSubQuestionModel.answer;
         
+        ///移除重新布局
+        [self.photosContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj removeFromSuperview];
+            obj = nil;
+        }];
+        //刷新布局
+        self.photosContainerView.sd_layout.heightIs(0);
+        [self.photosContainerView updateLayout];
         
-        
-        //处理附件图片
-        if (examPaperSubQuestionModel.fuJianImages.count==0) {//初始化
-            examPaperSubQuestionModel.fuJianImages = [NSMutableArray array];
+        //处理答题和查看答卷时，图片布局
+        if (examPaperSubQuestionModel.isContinuerExam) {
+            self.deletePhotoBtn.hidden = NO;
+            //处理附件图片
+            if (examPaperSubQuestionModel.fuJianImages.count==0) {//初始化
+                examPaperSubQuestionModel.fuJianImages = [NSMutableArray array];
+            }
+            //处理附件图片
+            if (examPaperSubQuestionModel.attach.count==0) {//初始化
+                examPaperSubQuestionModel.attach = [NSMutableArray array];
+            }
+            
+            
+            [self.photosArray removeAllObjects];
+            [self.photosArray addObjectsFromArray:self.examPaperSubQuestionModel.fuJianImages];
+            [self refreshPhotosContainerViewLayout];
+            
+        }else{
+            self.deletePhotoBtn.hidden = YES;
+            //答案附件,格式: fileId/fileName 多个用逗号分割;
+            if (![HXCommonUtil isNull:examPaperSubQuestionModel.answerModel.file]) {
+                __block NSMutableArray *imageUrls = [NSMutableArray array];
+                NSArray *files = [examPaperSubQuestionModel.answerModel.file componentsSeparatedByString:@","];
+                [files enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSString *file = obj;
+                    NSArray *tempArray = [file componentsSeparatedByString:@"/"];
+                    NSString *imageStr = [NSString stringWithFormat:@"%@/exam/student/exam/question/attaches/upload/file/%@/filePath?inline&__id=%@&__name=%@&__userExamId=%@",examPaperSubQuestionModel.domain,examPaperSubQuestionModel.answerModel.pqt_id,tempArray.firstObject,tempArray.lastObject,examPaperSubQuestionModel.userExamId];
+                    [imageUrls addObject:imageStr];
+                }];
+                [self refreshPhotosContainerViewLayoutImagsUrls:imageUrls];
+            }
         }
-        [self.photosArray removeAllObjects];
-        [self.photosArray addObjectsFromArray:examPaperSubQuestionModel.fuJianImages];
-        [self refreshPhotosContainerViewLayout];
         
         
         if (examPaperSubQuestionModel.isContinuerExam) {
@@ -484,11 +516,60 @@
         HXPhotoModel *photoModel = allList.firstObject;
         // 因为是编辑过的照片所以直接取
         UIImage *image = photoModel.photoEdit.editPreviewImage;
-        [weakSelf.photosArray addObject:image];
-        [weakSelf.examPaperSubQuestionModel.fuJianImages addObject:image];
-        [weakSelf refreshPhotosContainerViewLayout];
+        [weakSelf uploadImageWithData:photoModel.photoEdit.editPreviewData image:image];
     } cancel:nil];
     
+}
+
+
+#pragma mark - 上传图片
+-(void)uploadImageWithData:(NSData *)fileData image:(UIImage *)image
+{
+    if (fileData) {
+        
+        NSLog(@"准备提交图片");
+        [self showLoadingWithMessage:@"上传中……"];
+        NSString *name = [NSString stringWithFormat:@"image%.0f.jpg",[[NSDate date] timeIntervalSince1970]*1000];
+        NSString *url =[NSString stringWithFormat:@"%@%@",self.examPaperSubQuestionModel.domain,HXPOST_Answer_FILE];
+
+        AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [manager POST:url parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            [formData appendPartWithFileData:fileData name:@"file" fileName:name mimeType:@"image/JPG"];
+        }
+        progress:^(NSProgress * _Nonnull uploadProgress) {
+            //上传进度
+            CGFloat progress =100.0* uploadProgress.completedUnitCount/ uploadProgress.totalUnitCount;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showLoadingWithMessage:[NSString stringWithFormat:@"上传进度%.0f%%",progress]];
+            });
+            
+            NSLog(@"上传进度：%f%%",progress);
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            //NSLog(@"Success: %@", responseObject);
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            if ([dic boolValueForKey:@"success"]){
+                [self showSuccessWithMessage:@"上传成功！"];
+                //刷新布局
+                [self.photosArray addObject:image];
+                [self.examPaperSubQuestionModel.fuJianImages addObject:image];
+                [self refreshPhotosContainerViewLayout];
+                NSString * tmpFileName = [NSString stringWithFormat:@"%@/%@",[dic stringValueForKey:@"tmpFileName"],name];
+                [self.examPaperSubQuestionModel.attach addObject:tmpFileName];
+                NSLog(@"%@",tmpFileName);
+            
+            }else{
+                [self showErrorWithMessage:@"上传图片失败，请重试！"];
+            }
+            
+            
+        } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+            [self showErrorWithMessage:error.description];
+        }];
+    }else{
+        [self showErrorWithMessage:@"上传图片失败，请重试！"];
+    }
 }
 
 #pragma mark - 点击图片浏览
@@ -516,6 +597,8 @@
 }
 
 #pragma mark - 重新布局照片
+
+//答题时布局，可以知道图片尺寸大小
 -(void)refreshPhotosContainerViewLayout{
     ///移除重新布局
     [self.photosContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -559,6 +642,49 @@
         contentHeight += heightPx+10;
         lastview = imageView;
         
+    }];
+    //刷新布局
+    self.photosContainerView.sd_layout.heightIs(contentHeight);
+    [self.photosContainerView updateLayout];
+}
+
+//查看答卷时布局，不知道图片尺寸大小
+-(void)refreshPhotosContainerViewLayoutImagsUrls:(NSArray *)imagsUrls{
+    ///移除重新布局
+    [self.photosContainerView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+        obj = nil;
+    }];
+    
+    //记录布局的上一个视图
+    __block UIView *lastview = self.photosContainerView;
+    //记录高度
+    __block CGFloat contentHeight = 0;
+    [imagsUrls enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSString *imageUrl = obj;
+        
+        UIImageView *imageView =[[UIImageView alloc] init];
+        imageView.tag = 5000+idx;
+        imageView.userInteractionEnabled = YES;
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.photosContainerView addSubview:imageView];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageView:)];
+        [imageView addGestureRecognizer:tap];
+        
+        [imageView sd_setImageWithURL:HXSafeURL(imageUrl) placeholderImage:nil];
+        
+        CGFloat maxWidth = kScreenWidth-20;
+        CGFloat heightPx = maxWidth;
+        imageView.sd_layout
+            .topSpaceToView(lastview, 10)
+            .leftEqualToView(self.photosContainerView)
+            .rightEqualToView(self.photosContainerView)
+            .heightIs(heightPx);
+        
+        contentHeight += heightPx+10;
+        lastview = imageView;
     }];
     //刷新布局
     self.photosContainerView.sd_layout.heightIs(contentHeight);

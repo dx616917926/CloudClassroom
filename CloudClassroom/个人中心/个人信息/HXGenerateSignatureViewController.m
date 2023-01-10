@@ -48,6 +48,8 @@
 }
 
 
+
+
 #pragma mark - 清除签名
 - (void)clearBtnClick{
     [self.signView clearSignature];

@@ -488,4 +488,43 @@
     
 }
 
+
+#pragma mark -  将包含Base64图片的富文本里的图片宽高替换成合适的宽高
++ (NSString *)getReplaceStringFromBase64ImageStr:(NSString *)base64ImageStr maxSize:(CGSize)maxSize{
+
+    __block NSMutableArray *k = [NSMutableArray array];
+    //多个图片“\n”分割
+    NSArray *t = [base64ImageStr componentsSeparatedByString:@"\n"];
+    [t enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *tempStr = obj;
+        if([tempStr containsString:@"data:image/png;base64,"]){
+            NSString *a = [tempStr stringByReplacingOccurrencesOfString:@"width=" withString:@"FG="];
+            NSString *b = [a stringByReplacingOccurrencesOfString:@"height=" withString:@"FG="];
+            NSArray *c = [b componentsSeparatedByString:@"FG="];
+            NSArray *w = [c[1] componentsSeparatedByString:@"\""];
+            NSArray *h = [c[2] componentsSeparatedByString:@"\""];
+            CGFloat width = [w[1] floatValue];
+            CGFloat height = [h[1] floatValue];
+            //图片大小处理
+            CGFloat widthPx = 0;
+            CGFloat heightPx = 0;
+            if (width>=maxSize.width) {//超过规定宽度，等比例缩放
+                CGFloat imgSizeScale = height/width;
+                widthPx = maxSize.width;
+                heightPx = widthPx * imgSizeScale;
+            }else{
+                widthPx = width;
+                heightPx = height;
+            }
+            NSString *newImageInfo = [NSString stringWithFormat:@"%@width=\"%.f\" height=\"%.f\">",c.firstObject,widthPx,heightPx];
+            [k addObject:newImageInfo];
+        }else{
+            [k addObject:tempStr];
+        }
+        
+    }];
+    NSString *zuiStr = [k componentsJoinedByString:@"\n"];
+    return  zuiStr;
+}
+
 @end
