@@ -494,8 +494,6 @@
 
 
 
-
-
 #pragma mark - 点击答题卡
 -(void)clickAnswerSheet:(UIButton *)sender{
     //接口没有数据，直接返回防止崩溃

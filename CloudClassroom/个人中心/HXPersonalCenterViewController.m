@@ -106,7 +106,7 @@
             [[SDImageCache sharedImageCache] clearDiskOnCompletion:nil];
             [self.headImageView sd_setImageWithURL:HXSafeURL(self.homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
             self.nameLabel.text = self.homeStudentInfoModel.name;
-            
+            self.xueHaoLabel.text = [NSString stringWithFormat:@"学号 %@",self.homeStudentInfoModel.personId];//[NSString stringWithFormat:@"学号 %@",[HXPublicParamTool sharedInstance].studentNo]
             self.benQiNumLabel.text = self.homeStudentInfoModel.termQuaCourseCount;
             self.leiJiNumLabel.text = self.homeStudentInfoModel.totalQuaCourseCount;
         }
@@ -626,7 +626,6 @@
         _xueHaoLabel = [[UILabel alloc] init];
         _xueHaoLabel.font = HXFont(13);
         _xueHaoLabel.textColor = COLOR_WITH_ALPHA(0x2E5BFD, 1);
-        _xueHaoLabel.text = [NSString stringWithFormat:@"学号 %@",[HXPublicParamTool sharedInstance].studentNo];
     }
     return _xueHaoLabel;
 }

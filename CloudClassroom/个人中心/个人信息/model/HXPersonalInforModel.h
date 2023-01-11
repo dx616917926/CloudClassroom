@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *title;
 @property(nonatomic,copy) NSString *content;
+
+//能否编辑
+@property(nonatomic,assign) BOOL canedit;
 //签名图片
 @property(nonatomic, copy) NSString *signImgUrl;
 

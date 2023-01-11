@@ -26,7 +26,12 @@
 }
 
 -(NSString *)serialNoHtmlTitle{
-    NSString *html = [NSString stringWithFormat:@"%@&nbsp;&nbsp;%@",self.sub_serial_no,self.sub_staticTitle];
+    NSString *html;
+    if (_isDuoXuan) {
+        html=  [NSString stringWithFormat:@"(多选题)%@&nbsp;&nbsp;%@",self.sub_serial_no,self.sub_staticTitle];
+    }else{
+        html=  [NSString stringWithFormat:@"%@&nbsp;&nbsp;%@",self.sub_serial_no,self.sub_staticTitle];
+    }
     return html;
 }
 

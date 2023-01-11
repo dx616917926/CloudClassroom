@@ -6,14 +6,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IQTextView.h"
 #import "HXPersonalInforModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HXPersonalInforCell : UITableViewCell
 
+@property(nonatomic,strong) IQTextView *contentTextView;
 
 @property(nonatomic,strong)  HXPersonalInforModel *personalInforModel;
+
+
 
 @end
 

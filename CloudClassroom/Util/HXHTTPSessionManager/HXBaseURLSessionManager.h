@@ -93,6 +93,12 @@ NS_ASSUME_NONNULL_BEGIN
 //显示签名照片
 #define HXPOST_GetStudentSignature                                  @"/api/PersonalInfo/GetStudentSignature"
 
+//获取民族列表
+#define HXPOST_GetNationList                                        @"/api/Familymember/GetNationList"
+
+//获取政治面貌列表
+#define HXPOST_GetPoliticalList                                     @"/api/Familymember/GetPoliticalList"
+
 
 #pragma mark ----------------------------------------------资源下载-------------------------------------------------
 

@@ -334,7 +334,7 @@
                         
                         if (self.examPaperModel.isContinuerExam) {//开始考试或者继续考试
                             //有答案
-                            if (![HXCommonUtil isNull:qInfo.answer]||qInfo.fuJianImages.count>0) {
+                            if (![HXCommonUtil isNull:qInfo.answer]||qInfo.attach.count>0) {
                                 [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
                                 [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                             }else{
@@ -397,7 +397,7 @@
                             [qbtn setTitle:subInfo.sub_serial_no forState:UIControlStateNormal];
                             
                             if (self.examPaperModel.isContinuerExam) {//开始考试或者继续考试
-                                if (![HXCommonUtil isNull:subInfo.answer]||qInfo.fuJianImages.count>0) {
+                                if (![HXCommonUtil isNull:subInfo.answer]||subInfo.attach.count>0) {
                                     [qbtn setBackgroundImage:[UIImage imageNamed:@"exam_img3"] forState:UIControlStateNormal];
                                     [qbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
                                 }else{

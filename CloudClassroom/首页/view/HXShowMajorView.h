@@ -16,9 +16,9 @@ typedef void (^SelectMajorCallBack)(BOOL isRefresh,HXMajorInfoModel *selectMajor
 
 @property(nonatomic,strong) NSArray<HXMajorInfoModel *> *dataArray;
 
--(void)show;
-
 @property(nonatomic,copy) SelectMajorCallBack selectMajorCallBack;
+
+-(void)show;
 
 @end
 

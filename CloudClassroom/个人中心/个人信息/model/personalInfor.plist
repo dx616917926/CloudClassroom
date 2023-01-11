@@ -9,60 +9,88 @@
 			<string>姓名</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>性别</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>出生日期</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>身份证号</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>邮政编码</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>民族</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>政治面貌</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>电子邮箱</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>联系电话</string>
+			<key>content</key>
+			<string></string>
+			<key>canedit</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>工作单位</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>联系地址</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<true/>
 		</dict>
 	</array>
 	<key>xuexiInfoArray</key>
@@ -72,60 +100,80 @@
 			<string>学号</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>考生号</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学籍状态</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>年级</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学习形式</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>层次</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>专业名称</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>学制</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>函授站</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>
 			<string>入学日期</string>
 			<key>content</key>
 			<string></string>
+			<key>canedit</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>title</key>

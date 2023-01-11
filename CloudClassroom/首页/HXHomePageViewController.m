@@ -142,7 +142,7 @@
             self.homeStudentInfoModel = [HXHomeStudentInfoModel mj_objectWithKeyValues:[dictionary dictionaryValueForKey:@"data"]];
             [self.headImageView sd_setImageWithURL:HXSafeURL(self.homeStudentInfoModel.imgUrl) placeholderImage:[UIImage imageNamed:@"defaulthead_icon"] options:SDWebImageRefreshCached];
             self.nameLabel.text = self.homeStudentInfoModel.name;
-            self.personIdLabel.text =self.homeStudentInfoModel.personId;
+            self.personIdLabel.text = self.homeStudentInfoModel.personId;
             self.bkSchooldContentLabel.text = self.homeStudentInfoModel.subSchoolName;
             [self.bkMajorContentBtn setTitle:self.homeStudentInfoModel.majorlongName forState:UIControlStateNormal];
         }

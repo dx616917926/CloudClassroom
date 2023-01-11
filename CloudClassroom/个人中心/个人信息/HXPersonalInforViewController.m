@@ -10,6 +10,7 @@
 #import "HXPersonalInforCell.h"
 #import "HXToSignCell.h"
 #import "HXXinXiYouWuShowView.h"
+#import "HXCommonSelectView.h"
 
 
 @interface HXPersonalInforViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -32,9 +33,21 @@
 //已提交反馈
 @property(nonatomic,strong) UIButton *fanKuiResultBtn;
 
+
+@property(nonatomic,strong) HXCommonSelectView *commonSelectView;
+
 @property(nonatomic,strong) NSArray *basicInfoArray;
 @property(nonatomic,strong) NSArray *xuexiInfoArray;
 
+
+///民族数据
+@property(nonatomic,strong) NSMutableArray *nationArray;
+@property(nonatomic,strong) NSString *selectNation;
+
+///政治面貌数据
+@property(nonatomic,strong) NSMutableArray *politicalArray;
+@property(nonatomic,strong) NSString *selectPolitical;
+@property(nonatomic,strong) NSString *selectpoliticalStateId;
 
 @property(nonatomic,strong) NSDictionary *personalInfo;
 
@@ -53,6 +66,10 @@
     [self dataInitialization];
     //获取个人信息
     [self getPersonalInfoList];
+    //获取民族列表
+    [self getNationList];
+    //获取政治面貌列表
+    [self getPoliticalList];
     
     
 }
@@ -71,6 +88,35 @@
     [self.mainTableView reloadData];
 }
 
+#pragma mark - 获取民族列表
+-(void)getNationList{
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetNationList needMd5:nil  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *array = [HXCommonSelectModel mj_objectArrayWithKeyValuesArray:[dictionary objectForKey:@"data"]];
+            [self.nationArray removeAllObjects];
+            [self.nationArray addObjectsFromArray:array];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+#pragma mark - 获取政治面貌列表
+-(void)getPoliticalList{
+    [HXBaseURLSessionManager postDataWithNSString:HXPOST_GetPoliticalList needMd5:nil  withDictionary:nil success:^(NSDictionary * _Nonnull dictionary) {
+        
+        BOOL success = [dictionary boolValueForKey:@"success"];
+        if (success) {
+            NSArray *array = [HXCommonSelectModel mj_objectArrayWithKeyValuesArray:[dictionary objectForKey:@"data"]];
+            [self.politicalArray removeAllObjects];
+            [self.politicalArray addObjectsFromArray:array];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
 
 #pragma mark - 获取个人信息
 -(void)getPersonalInfoList{
@@ -85,6 +131,7 @@
             NSArray *array = [dictionary objectForKey:@"data"];
             NSDictionary *personalInfo = array.firstObject;
             self.personalInfo = personalInfo;
+            
             [self.basicInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 HXPersonalInforModel *model = obj;
                 if ([model.title isEqualToString:@"姓名"]) {
@@ -99,8 +146,13 @@
                     model.content = [personalInfo stringValueForKey:@"postCode"];
                 }else if ([model.title isEqualToString:@"民族"]) {
                     model.content = [personalInfo stringValueForKey:@"nationality"];
+                    self.selectNation = [personalInfo stringValueForKey:@"nationality"];
                 }else if ([model.title isEqualToString:@"政治面貌"]) {
                     model.content = [personalInfo stringValueForKey:@"politicalName"];
+                    self.selectPolitical = [personalInfo stringValueForKey:@"politicalName"];
+                    self.selectpoliticalStateId = [personalInfo stringValueForKey:@"politicalState_id"];
+                }else if ([model.title isEqualToString:@"联系电话"]) {
+                    model.content = [personalInfo stringValueForKey:@"contactTel"];
                 }else if ([model.title isEqualToString:@"电子邮箱"]) {
                     model.content = [personalInfo stringValueForKey:@"email"];
                 }else if ([model.title isEqualToString:@"工作单位"]) {
@@ -187,25 +239,42 @@
 #pragma mark - 信息确认
 -(void)confirmPersonalInfo:(NSString *)errorInfo isConfirmed:(NSInteger)isConfirmed{
     NSString *studentId = [HXPublicParamTool sharedInstance].student_id;
-    NSString *politicalState_id = [self.personalInfo stringValueForKey:@"politicalState_id"];
-    NSString *nationality = [self.personalInfo stringValueForKey:@"nationality"];
-    NSString *postCode = [self.personalInfo stringValueForKey:@"postCode"];
-    NSString *contactTel = [self.personalInfo stringValueForKey:@"contactTel"];
-    NSString *email = [self.personalInfo stringValueForKey:@"email"];
-    NSString *contactAddr = [self.personalInfo stringValueForKey:@"contactAddr"];
-    NSString *company = [self.personalInfo stringValueForKey:@"company"];
+    NSString *politicalState_id = self.selectpoliticalStateId;
+    __block NSString *nationality;
+    __block NSString *postCode;
+    __block NSString *contactTel;
+    __block NSString *email;
+    __block NSString *contactAddr;
+    __block NSString *company;
+    
+    [self.basicInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        HXPersonalInforModel *model = obj;
+        if ([model.title isEqualToString:@"民族"]) {
+            nationality = model.content;
+        }else if ([model.title isEqualToString:@"邮政编码"]) {
+            postCode = model.content;
+        }else if ([model.title isEqualToString:@"联系电话"]) {
+            contactTel = model.content;
+        }else if ([model.title isEqualToString:@"电子邮箱"]) {
+            email = model.content;
+        }else if ([model.title isEqualToString:@"联系地址"]) {
+            contactAddr = model.content;
+        }else if ([model.title isEqualToString:@"工作单位"]) {
+            company = model.content;
+        }
+    }];
     
     
     NSDictionary *dic =@{
         @"isconfirmed":@(isConfirmed),//1表示确认无误 2表示确认有误
         @"studentid":HXSafeString(studentId),
-        @"politicalstate_id":politicalState_id,
-        @"nationality":nationality,
-        @"postcode":postCode,
-        @"contacttel":contactTel,
-        @"email":email,
-        @"contactaddr":contactAddr,
-        @"company":company,
+        @"politicalstate_id":HXSafeString(politicalState_id),
+        @"nationality":HXSafeString(nationality),
+        @"postcode":HXSafeString(postCode),
+        @"contacttel":HXSafeString(contactTel),
+        @"email":HXSafeString(email),
+        @"contactaddr":HXSafeString(contactAddr),
+        @"company":HXSafeString(company),
         @"errorinfo":HXSafeString(errorInfo)
         
     };
@@ -338,6 +407,7 @@
             cell = [[HXPersonalInforCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:personalInforCellIdentifier];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentTextView.editable = !self.xinXiWuWuBtn.hidden;
         cell.personalInforModel = personalInforModel;
         return cell;
     }
@@ -346,6 +416,54 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //确认后不能选择
+    if (self.xinXiWuWuBtn.hidden) {
+        return;
+    }
+    HXPersonalInforModel *personalInforModel =(indexPath.section==0?self.basicInfoArray[indexPath.row]:self.xuexiInfoArray[indexPath.row]);
+    if ([personalInforModel.title isEqualToString:@"民族"]) {
+        
+        [self.nationArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            HXCommonSelectModel *model = obj;
+            if ([model.content isEqualToString:self.selectNation]) {
+                model.isSelected = YES;
+            }else{
+                model.isSelected = NO;
+            }
+        }];
+        if (self.nationArray.count<=0) return;
+        self.commonSelectView.dataArray = self.nationArray;
+        self.commonSelectView.title = @"请选择民族";
+        [self.commonSelectView show];
+        WeakSelf(weakSelf);
+        self.commonSelectView.seletConfirmBlock = ^(BOOL isRefresh, HXCommonSelectModel * _Nonnull selectModel, NSInteger idx) {
+            StrongSelf(strongSelf);
+            strongSelf.selectNation = selectModel.content;
+            personalInforModel.content = selectModel.content;
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        };
+    }else if ([personalInforModel.title isEqualToString:@"政治面貌"]) {
+        [self.politicalArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            HXCommonSelectModel *model = obj;
+            if ([model.content isEqualToString:self.selectPolitical]) {
+                model.isSelected = YES;
+            }else{
+                model.isSelected = NO;
+            }
+        }];
+        if (self.politicalArray.count<=0) return;
+        self.commonSelectView.dataArray = self.politicalArray;
+        self.commonSelectView.title = @"请选择政治面貌";
+        [self.commonSelectView show];
+        WeakSelf(weakSelf);
+        self.commonSelectView.seletConfirmBlock = ^(BOOL isRefresh, HXCommonSelectModel * _Nonnull selectModel, NSInteger idx) {
+            StrongSelf(strongSelf);
+            strongSelf.selectNation = selectModel.content;
+            personalInforModel.content = selectModel.content;
+            strongSelf.selectpoliticalStateId = selectModel.contentId;
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        };
+    }
 }
 
 
@@ -385,6 +503,20 @@
 }
 
 #pragma mark - LazyLoad
+-(NSMutableArray *)nationArray{
+    if (!_nationArray) {
+        _nationArray = [NSMutableArray array];
+    }
+    return _nationArray;
+}
+
+-(NSMutableArray *)politicalArray{
+    if (!_politicalArray) {
+        _politicalArray = [NSMutableArray array];
+    }
+    return _politicalArray;
+}
+
 -(UIView *)navBarView{
     if (!_navBarView) {
         _navBarView = [[UIView alloc] init];
@@ -626,6 +758,13 @@
         _fanKuiResultBtn.hidden = YES;
     }
     return _fanKuiResultBtn;
+}
+
+-(HXCommonSelectView *)commonSelectView{
+    if (!_commonSelectView) {
+        _commonSelectView = [[HXCommonSelectView alloc] init];
+    }
+    return _commonSelectView;
 }
 
 

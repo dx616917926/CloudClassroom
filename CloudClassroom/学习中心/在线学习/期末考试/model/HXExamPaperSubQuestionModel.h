@@ -34,8 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 ///解析
 @property(nonatomic, strong) HXExamAnswerHintModel *hintModel;
 
-//附件图片数组
-@property (nonatomic,strong) NSMutableArray *fuJianImages;
 
 //附件,调用上传附件接口后返回的“tmpFileName”,多个逗号分割
 @property (nonatomic,strong) NSMutableArray *attach;
