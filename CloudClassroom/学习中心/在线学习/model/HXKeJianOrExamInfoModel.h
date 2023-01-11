@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *examId;
 ///
 @property(nonatomic, copy) NSString *paperId;
-///
+///用户考试id
 @property(nonatomic, copy) NSString *userExamId;
 ///
 @property(nonatomic, copy) NSString *userId;

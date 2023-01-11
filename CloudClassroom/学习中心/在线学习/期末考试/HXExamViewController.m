@@ -302,22 +302,13 @@
         }
     }
     
-    
-
-    
-    
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSuitQuestionModel.psq_id substringFromIndex:2]);
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",self.examPaperModel.domain,self.examPaperModel.userExamId,psqId];
-   
+    NSString *url = [NSString stringWithFormat:HXEXAM_SubmitAnswer,self.examPaperModel.domain,self.examPaperModel.userExamId,psqId];
     NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,self.examPaperModel.userExamId];
-    
-    
     NSString *answer = HXSafeString(examPaperSuitQuestionModel.answer);
    
-   
-    
     //获取当前时间戳
     NSString *stime = [HXCommonUtil getNowTimeTimestamp];
     //用于加密的参数,生成m
@@ -396,7 +387,7 @@
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSubQuestionModel.sub_id substringFromIndex:2]);
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_SubmitAnswer,examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
    
     NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,examPaperSubQuestionModel.userExamId];
     
@@ -466,7 +457,7 @@
     HXExamPaperSuitQuestionModel *examPaperSuitQuestionModel = self.dataArray[self.indexPathNow.row];
     [self saveQuestion:examPaperSuitQuestionModel];
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/submit/%@",self.examPaperModel.domain,self.examPaperModel.userExamId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_Submit,self.examPaperModel.domain,self.examPaperModel.userExamId];
    
     [self.view showLoading];
     
@@ -524,8 +515,7 @@
         }
     };
     [self presentViewController:vc animated:NO completion:nil];
-    
-    
+
 }
 
 

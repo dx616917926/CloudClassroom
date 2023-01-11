@@ -200,7 +200,7 @@
 #pragma mark - 3.获取考试答案
 -(void)getEaxmAnswersWithUserExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/list/%@",self.examPara.domain,userExamId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_GetMyanswer,self.examPara.domain,userExamId];
     
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];
@@ -228,7 +228,7 @@
 #pragma mark - 4.获取试卷解析
 -(void)getEaxmJieXiWithUserExamId:(NSString *)userExamId checkAnswerBtn:(nonnull UIButton *)checkAnswerBtn{
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/answer/%@",self.examPara.domain,userExamId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_GetJieXi,self.examPara.domain,userExamId];
     
     
     AFHTTPSessionManager *manager =[AFHTTPSessionManager manager];

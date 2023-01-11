@@ -295,7 +295,7 @@
     //问题id截掉"q_"
     NSString *psqId = HXSafeString([examPaperSubQuestionModel.sub_id substringFromIndex:2]);
     
-    NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/myanswer/newSave/%@/%@",examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
+    NSString *url = [NSString stringWithFormat:HXEXAM_SubmitAnswer,examPaperSubQuestionModel.domain,examPaperSubQuestionModel.userExamId,psqId];
    
     NSString *keyStr =[NSString stringWithFormat:@"%@%@",psqId,examPaperSubQuestionModel.userExamId];
     

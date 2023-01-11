@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 @property (nonatomic,assign) BOOL  checked;
 
-///
+///用户ID
 @property(nonatomic, copy) NSString *accountId;
 ///开始时间
 @property(nonatomic, copy) NSString *beginTime;
@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *context;
 ///
 @property(nonatomic, copy) NSString *examId;
-///
+///(结束时间戳-开始时间戳)(分钟)
 @property(nonatomic, copy) NSString *limitTime;
 ///
 @property(nonatomic, copy) NSString *paperId;

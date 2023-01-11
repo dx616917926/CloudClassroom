@@ -186,14 +186,16 @@
     }];
 }
 
-#pragma mark - 4.获取考试的链接
+#pragma mark - 4.获取考试参数和考试试卷(考试试卷页面url)
 -(void)getExamUrl:(NSString *)examStartPath startZuoYeBtn:(nonnull UIButton *)startZuoYeBtn{
     
     
     [HXExamSessionManager getDataWithNSString:examStartPath withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
+            //考试试卷页面url
             NSString *examUrl = [dictionary objectForKey:@"url"];
+            //考试参数
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
             self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
             //获取考试的HTMLStr参数
@@ -237,10 +239,7 @@
 //    NSString *url = @"https://eplatform.edu-edu.com.cn/exam/student/exam/resource/htmlToJson/paper/19745/88111";
     NSDictionary *dic = @{@"paperHtml":htmlStr};
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.keJianOrExamInfoModel.examPara.domain,tempB[0],tempB[1],tempB[2]];
-    
-   
-  
-    
+
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         startZuoYeBtn.userInteractionEnabled = YES;
         [self.view hideLoading];
@@ -292,9 +291,9 @@
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
-            
+            //开始考试链接
             NSString *examStartPath = [dictionary objectForKey:@"url"];
-            //获取考试的链接
+            //获取考试参数和考试试卷(考试试卷页面url)
             [self getExamUrl:examStartPath startZuoYeBtn:startZuoYeBtn];
         }else{
             startZuoYeBtn.userInteractionEnabled = YES;

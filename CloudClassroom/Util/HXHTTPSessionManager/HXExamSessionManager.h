@@ -11,20 +11,29 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-///1、获取考试列表   考试域名: {domain} ， 班级里已开通模块:{moduleCode}
-#define    HXEXAM_MODULES_LIST     @"%@/exam-admin/home/module/exams/mobile/code/%@"  //
+///1、获取考试列表                                           考试域名: {domain} ， 班级里已开通模块:{moduleCode}
+#define    HXEXAM_MODULES_LIST     @"%@/exam-admin/home/module/exams/mobile/code/%@"
 
-///2、开始考试  用于考试数据的初始化，考试域名: {domain}  ,  考试模块id: {examId}
+///2、开始考试 ,用于考试数据的初始化            考试域名: {domain}  ,  考试模块id: {examId}
 #define   HXEXAM_START_JSON        @"%@/exam-admin/home/my/exam/start/json/%@?credit=true&site_preference=mobile&ct=client"
 
-///3、查看考试记录 考试域名: {domain}   ,考试模块id: {examId}
+///3、查看考试记录                                            考试域名: {domain} ，考试模块id: {examId}
 #define   HXEXAM_CheckRecord       @"%@/exam-admin/home/my/exam/view/result/json/%@"
 
-///提交答案 考试域名: {domain}   ,考试模块id: {userExamId}
-#define   HXEXAM_SubmitAnswer       @"%@/exam/student/exam/myanswer/newSave/%@"
+///获取试卷题目作答答案                                   考试域名: {domain}，用户考试id: {userExamId}
+#define   HXEXAM_GetMyanswer       @"%@/exam/student/exam/myanswer/list/%@"
 
-//把问题附件上传到临时服务器，返回一个tempFIleName 路径值。
+///获取试卷题目解析                                          考试域名: {domain}，用户考试id: {userExamId}
+#define   HXEXAM_GetJieXi          @"%@/exam/student/exam/answer/%@"
+
+///提交问题答案                                                 考试域名: {domain} ，用户考试id: {userExamId}，问题id: {questionId}
+#define   HXEXAM_SubmitAnswer      @"%@/exam/student/exam/myanswer/newSave/%@/%@"
+
+//把问题附件上传到临时服务器，返回一个tempFIleName 路径值
 #define   HXPOST_Answer_FILE       @"/exam/student/exam/question/attaches/upload/filePath/form"
+
+///交卷                                                                考试域名: {domain}，用户考试id: {userExamId}
+#define   HXEXAM_Submit            @"%@/exam/student/exam/submit/%@"
 
 @interface HXExamSessionManager : AFHTTPSessionManager
 

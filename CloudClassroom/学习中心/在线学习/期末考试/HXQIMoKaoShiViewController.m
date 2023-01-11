@@ -187,15 +187,16 @@
     }];
 }
 
-#pragma mark - 4.获取考试的链接
+#pragma mark - 4.获取考试参数和考试试卷(考试试卷页面url)
 -(void)getExamUrl:(NSString *)examStartPath startKaoShiBtn:(nonnull UIButton *)startKaoShiBtn{
     
     
     [HXExamSessionManager getDataWithNSString:examStartPath withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
-            
+            //考试试卷页面url
             NSString *examUrl = [dictionary objectForKey:@"url"];
+            //考试参数
             NSDictionary*userExam = [dictionary dictionaryValueForKey:@"userExam"];
             self.keJianOrExamInfoModel.userExamId = [userExam stringValueForKey:@"userExamId"];
             //获取考试的HTMLStr参数
@@ -240,8 +241,7 @@
     NSDictionary *dic = @{@"paperHtml":htmlStr};
     NSString *url = [NSString stringWithFormat:@"%@/exam/student/exam/resource/htmlToJson/%@/%@/%@",self.keJianOrExamInfoModel.examPara.domain,tempB[0],tempB[1],tempB[2]];
     
-    
-  
+
     [HXExamSessionManager postDataWithNSString:url needMd5:NO pingKey:nil withDictionary:dic success:^(NSDictionary * _Nullable dictionary) {
         startKaoShiBtn.userInteractionEnabled = YES;
         [self.view hideLoading];
@@ -286,8 +286,7 @@
 
 #pragma mark - 3.开始考试
 -(void)startExam:(HXExamModel *)examModel startKaoShiBtn:(nonnull UIButton *)startKaoShiBtn{
-   
-    //开始考试  用于考试数据的初始化，得到考试试卷和考试服务器的url
+
     startKaoShiBtn.userInteractionEnabled = NO;
     [self.view showLoading];
     NSString * url = [NSString stringWithFormat:HXEXAM_START_JSON,self.keJianOrExamInfoModel.examPara.domain,examModel.examId];
@@ -295,8 +294,9 @@
     [HXExamSessionManager getDataWithNSString:url withDictionary:nil success:^(NSDictionary * _Nullable dictionary) {
         
         if ([dictionary boolValueForKey:@"success"]) {
+            //开始考试链接
             NSString *examStartPath = [dictionary objectForKey:@"url"];
-            //获取考试的链接
+            //获取考试参数和考试试卷(考试试卷页面url)
             [self getExamUrl:examStartPath startKaoShiBtn:startKaoShiBtn];
         }else{
             startKaoShiBtn.userInteractionEnabled = YES;
